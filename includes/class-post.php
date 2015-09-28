@@ -78,8 +78,11 @@ class Kanban_Post
 		}
 		else
 		{
-			$orig_post->postmeta = (array) Kanban_Post::get_postmeta_for_posts(array($orig_post->ID), $post_type)[$orig_post->ID];
-			$orig_post->terms = (array) Kanban_Terms::get_terms_for_posts(array($orig_post->ID), $post_type)[$orig_post->ID];
+			$postmeta = Kanban_Post::get_postmeta_for_posts(array($orig_post->ID), $post_type);
+			$orig_post->postmeta = (array) $postmeta[$orig_post->ID];
+
+			$terms = Kanban_Terms::get_terms_for_posts(array($orig_post->ID), $post_type);
+			$orig_post->terms = (array) $terms[$orig_post->ID];
 
 			// only save if changed
 			if ( $orig_post->post_title != $post_data->post_title || $orig_post->post_content != $post_data->post_content )

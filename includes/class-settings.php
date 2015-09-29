@@ -135,8 +135,8 @@ class Kanban_Settings
 
 			$post_type_label = ucfirst($post_type_slug);
 
-			// if ( defined('KANBAN_DEBUG') && KANBAN_DEBUG === TRUE )
-			// {
+			if ( defined('KANBAN_DEBUG') && KANBAN_DEBUG === TRUE )
+			{
 				add_submenu_page(
 					Kanban::$instance->settings->basename,
 					sprintf('All %s', str_replace('_', ' ', Kanban_Utils::make_word_plural($post_type_label))),
@@ -147,7 +147,7 @@ class Kanban_Settings
 						Kanban_Post_Types::format_post_type ($post_type_slug)
 					)
 				);
-			// }
+			}
 
 			foreach ($post_type_data['taxonomies'] as $taxonomy_slug => $values)
 			{

@@ -148,8 +148,10 @@ class Kanban_Post
 
 		// reload it, just in case
 		$post = get_post($post_id);
-		$post->postmeta = Kanban_Post::get_postmeta_for_posts(array($post_id), $post_type)[$post_id];
-		$post->terms = Kanban_Terms::get_terms_for_posts(array($post_id), $post_type)[$post_id];
+		$postmeta = Kanban_Post::get_postmeta_for_posts(array($post_id), $post_type);
+		$post->postmeta = $postmeta[$post_id];
+		$terms = Kanban_Terms::get_terms_for_posts(array($post_id), $post_type);
+		$post->terms = $terms[$post_id];
 
 
 

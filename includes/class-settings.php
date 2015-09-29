@@ -72,27 +72,27 @@ class Kanban_Settings
 		?>
 		<div class="wrap">
 			<h1>
-				About Kanban
+				<?php _e( 'About Kanban', Kanban::get_text_domain() ); ?>
 			</h1>
 
 			<?php if ( isset($_GET['activation']) ) : ?>
 				<div class="updated notice is-dismissible below-h2">
-					<p>Thanks for using Kanban for WordPress!</p>
+					<p><?php _e( 'Thanks for using Kanban for WordPress!', Kanban::get_text_domain() ); ?></p>
 					<button type="button" class="notice-dismiss">
-						<span class="screen-reader-text">Dismiss this notice.</span>
+						<span class="screen-reader-text"><?php _e( 'Dismiss this notice.', Kanban::get_text_domain() ); ?></span>
 					</button>
 				</div>
 			<?php endif ?>
 
 			<p>
 				<a href="<?php echo sprintf('/%s/board', Kanban::$slug) ?>" class="button" target="_blank">
-					Go to your board
+					<?php _e( 'Go to your board', Kanban::get_text_domain() ); ?>
 				</a>
 			</p>
 
 			<p>
 				<a href="http://kanbanwp.com/documentation" target="_blank">
-					Documentation
+					<?php _e( 'Documentation', Kanban::get_text_domain() ); ?>
 				</a>
 			</p>
 		</div>

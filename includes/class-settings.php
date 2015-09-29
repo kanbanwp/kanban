@@ -419,7 +419,9 @@ class Kanban_Settings
 		exit;
 	}
 
-
+	public static function get_slug() {
+		return self::$slug;
+	}
 
 	static function get_instance()
 	{

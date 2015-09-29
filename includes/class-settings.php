@@ -421,7 +421,7 @@ class Kanban_Settings
 
 
 
-	public static function get_instance()
+	static function get_instance()
 	{
 		if ( ! self::$instance )
 		{

@@ -13,7 +13,7 @@ Kanban_Comment::init();
 
 class Kanban_Comment
 {
-	private static $instance = false;
+	static $instance = false;
 	static $slug = 'comment';
 
 
@@ -101,7 +101,7 @@ class Kanban_Comment
 
 
 
-	public static function get_instance()
+	static function get_instance()
 	{
 		if ( ! self::$instance )
 		{

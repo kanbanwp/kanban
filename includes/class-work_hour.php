@@ -13,7 +13,7 @@ Kanban_Work_Hour::init();
 
 class Kanban_Work_Hour
 {
-	private static $instance = false;
+	static $instance = false;
 	static $slug = 'work_hour';
 
 
@@ -110,7 +110,7 @@ class Kanban_Work_Hour
 
 
 
-	public static function get_instance()
+	static function get_instance()
 	{
 		if ( ! self::$instance )
 		{

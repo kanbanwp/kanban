@@ -12,7 +12,7 @@ Kanban_Task::init();
 
 class Kanban_Task
 {
-	private static $instance = false;
+	static $instance = false;
 	static $slug = 'task';
 
 
@@ -213,7 +213,7 @@ class Kanban_Task
 	}
 
 
-	public static function get_instance()
+	static function get_instance()
 	{
 		if ( ! self::$instance )
 		{

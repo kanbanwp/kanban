@@ -180,7 +180,7 @@ class Kanban
 
 
 	public static function get_slug() {
-		return Kanban::get_slug();
+		return self::$slug;
 	}
 	
 	public static function get_instance()

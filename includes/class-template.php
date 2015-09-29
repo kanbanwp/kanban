@@ -13,7 +13,7 @@ Kanban_Template::init();
 
 class Kanban_Template
 {
-	static $instance = false;
+	private static $instance = false;
 
 	static $page_slugs = array(
 		'board' => array(
@@ -248,7 +248,7 @@ class Kanban_Template
 
 
 
-	static function get_instance()
+	public static function get_instance()
 	{
 		if ( ! self::$instance )
 		{

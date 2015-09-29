@@ -259,7 +259,10 @@ class Kanban_User
 			return false;
 		}
 	}
-
+	
+	public static function get_slug() {
+		return self::$slug;
+	}
 
 	static function get_instance()
 	{

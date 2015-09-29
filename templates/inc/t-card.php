@@ -8,7 +8,7 @@
 				<li>
 					<a href="#" class="delete-task text-danger">
 						<span class="glyphicon glyphicon-remove text-danger"></span>
-						Delete this task
+						<?php _e( 'Delete this task:', Kanban::get_text_domain() ); ?>
 					</a>
 				</li>
 			</ul>
@@ -16,7 +16,7 @@
 		<p class="wrapper-task-project">
 		</p>
 		<h3 class="h4 wrapper-task-title">
-			<textarea class="editable-input task_title resize" rows="1" placeholder="Task name" readonly>{{=post_title}}</textarea>
+			<textarea class="editable-input task_title resize" rows="1" placeholder="<?php _e( 'Task name', Kanban::get_text_domain() ); ?>" readonly>{{=post_title}}</textarea>
 		</h3>
 
 		<div class="row row-worked">

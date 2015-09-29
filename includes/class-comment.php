@@ -75,7 +75,7 @@ class Kanban_Comment
 
 
 		wp_send_json_success(array(
-			'message' => sprintf('%s saved', $comment_type)
+			'message' => __( sprintf('%s saved', $comment_type), Kanban::get_text_domain() ),
 		));
 	}
 

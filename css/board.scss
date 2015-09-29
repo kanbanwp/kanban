@@ -1,4 +1,3 @@
-
 $screen-xs-min: 480px;
 $screen-xs-max: 479px;
 $screen-sm-min: 768px;
@@ -8,31 +7,32 @@ $screen-md-max: 991px;
 $screen-lg-min: 1200px;
 $screen-lg-max: 1199px;
 
-$color-blue-wp:  #21759b;
-$color-orange-wp:  #d54e21;
-$color-grey-wp:  #464646;
+$color-blue-wp: #21759b;
+$color-orange-wp: #d54e21;
+$color-grey-wp: #464646;
 $color-yellow: #ffff99;
-
 
 $margin: 15px;
 
 * {
-	color: $color-grey-wp;
+    color: $color-grey-wp;
 }
 
-*:focus {outline:0;}
+*:focus {
+    outline: 0;
+}
 
 body.view-compact {
-	.project_title,
-	.row-worked {
-		display: none;
-	}
+    .project_title,
+    .row-worked {
+        display: none;
+    }
 }
 
 .btn {
-	.glyphicon {
-		color: inherit;
-	}
+    .glyphicon {
+        color: inherit;
+    }
 }
 
 .glyphicon-refresh-animate {
@@ -41,484 +41,485 @@ body.view-compact {
 }
 
 @-webkit-keyframes spin2 {
-    from { -webkit-transform: rotate(0deg);}
-    to { -webkit-transform: rotate(360deg);}
+    from {
+        -webkit-transform: rotate(0deg);
+    }
+    to {
+        -webkit-transform: rotate(360deg);
+    }
 }
 
 @keyframes spin {
-    from { transform: scale(1) rotate(0deg);}
-    to { transform: scale(1) rotate(360deg);}
+    from {
+        transform: scale(1) rotate(0deg);
+    }
+    to {
+        transform: scale(1) rotate(360deg);
+    }
 }
 
 .ui-autocomplete {
-	background: white;
-	border-bottom: 1px solid lighten($color-grey-wp, 45);
-	list-style: none;
-	max-width: $margin*20;
-	padding: 0;
+    background: white;
+    border-bottom: 1px solid lighten($color-grey-wp, 45);
+    list-style: none;
+    max-width: $margin*20;
+    padding: 0;
 
-	.ui-menu-item {
-		background: white;
-		border: 1px solid lighten($color-grey-wp, 45);
-		border-width: 1px 1px 0;
-		cursor: pointer;
-		padding: $margin/3;
+    .ui-menu-item {
+        background: white;
+        border: 1px solid lighten($color-grey-wp, 45);
+        border-width: 1px 1px 0;
+        cursor: pointer;
+        padding: $margin/3;
 
-		&:hover {
-			background: lighten($color-grey-wp, 65);
-		}
+        &:hover {
+            background: lighten($color-grey-wp, 65);
+        }
 
-		&:first-child {
-			border-radius: $margin/3 $margin/3 0 0;
-		}
+        &:first-child {
+            border-radius: $margin/3 $margin/3 0 0;
+        }
 
-		&:last-child {
-			border-radius: 0 0 $margin/3 $margin/3;
-		}
-	}
+        &:last-child {
+            border-radius: 0 0 $margin/3 $margin/3;
+        }
+    }
 
-	.ui-state-focus {
-		background: lighten($color-grey-wp, 45);
-	}
+    .ui-state-focus {
+        background: lighten($color-grey-wp, 45);
+    }
 }
 
 .ui-helper-hidden-accessible {
-	display: none;
+    display: none;
 }
 
 #wrapper-footer {
-	background: lighten($color-grey-wp, 45);
-	bottom: 0;
-	left: 0;
-	padding: $margin/2 0;
-	position: fixed;
-	text-align: center;
-	width: 100%;
-	z-index: 1;
+    background: lighten($color-grey-wp, 45);
+    bottom: 0;
+    left: 0;
+    padding: $margin/2 0;
+    position: fixed;
+    text-align: center;
+    width: 100%;
+    z-index: 1;
 
-	#filter-wrapper {
-		display: inline-block;
+    #filter-wrapper {
+        display: inline-block;
 
-		position: fixed;
-		/* center the element */
-		right: 0;
-		left: 0;
-		margin-right: auto;
-		margin-left: auto;
-		overflow: visible;
-		top: $margin/2;
-		white-space: nowrap;
-		width: 20%;
+        position: fixed;
+        /* center the element */
+        right: 0;
+        left: 0;
+        margin-right: auto;
+        margin-left: auto;
+        overflow: visible;
+        top: $margin/2;
+        white-space: nowrap;
+        width: 20%;
 
-		.dropdown-menu {
-			bottom: auto;
-		}
+        .dropdown-menu {
+            bottom: auto;
+        }
 
-		.dropdown-toggle {
-			max-width: 10em;
-			overflow: hidden;
-		}
+        .dropdown-toggle {
+            max-width: 10em;
+            overflow: hidden;
+        }
 
-		@media screen and (max-width: $screen-sm-max) {
-			display: block;
-			margin-bottom: $margin/2;
-			position: static;
-			width: 100%;
+        @media screen and (max-width: $screen-sm-max) {
+            display: block;
+            margin-bottom: $margin/2;
+            position: static;
+            width: 100%;
 
-			.dropdown-menu {
-				bottom: 100%;
-			}
+            .dropdown-menu {
+                bottom: 100%;
+            }
 
-		}
+        }
 
-	}
+    }
 
-	#search-wrapper {
-		display: inline-block;
-		margin: 0 $margin*2;
+    #search-wrapper {
+        display: inline-block;
+        margin: 0 $margin*2;
 
-		input {
-			display: inline;
-			max-width: 50%;
-		}
+        input {
+            display: inline;
+            max-width: 50%;
+        }
 
-		@media screen and (max-width: $screen-sm-max) {
-			display: block;
-			margin-bottom: $margin/2;
-		}
-	}
+        @media screen and (max-width: $screen-sm-max) {
+            display: block;
+            margin-bottom: $margin/2;
+        }
+    }
 }
 
 #wrapper-board {
-	overflow-x: hidden;
-	width: 100%;
-
-	#row-statuses {
-		/* Permalink - use to edit and share this gra/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#ffffff+0,ffffff+62,ffffff+100&amp;1+0,1+75,0+100 */
-		background: -moz-linear-gradient(top,  rgba(255,255,255,1) 0%, rgba(255,255,255,1) 62%, rgba(255,255,255,1) 75%, rgba(255,255,255,0) 100%); /* FF3.6+ */
-		background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(255,255,255,1)), color-stop(62%,rgba(255,255,255,1)), color-stop(75%,rgba(255,255,255,1)), color-stop(100%,rgba(255,255,255,0))); /* Chrome,Safari4+ */
-		background: -webkit-linear-gradient(top,  rgba(255,255,255,1) 0%,rgba(255,255,255,1) 62%,rgba(255,255,255,1) 75%,rgba(255,255,255,0) 100%); /* Chrome10+,Safari5.1+ */
-		background: -o-linear-gradient(top,  rgba(255,255,255,1) 0%,rgba(255,255,255,1) 62%,rgba(255,255,255,1) 75%,rgba(255,255,255,0) 100%); /* Opera 11.10+ */
-		background: -ms-linear-gradient(top,  rgba(255,255,255,1) 0%,rgba(255,255,255,1) 62%,rgba(255,255,255,1) 75%,rgba(255,255,255,0) 100%); /* IE10+ */
-		background: linear-gradient(to bottom,  rgba(255,255,255,1) 0%,rgba(255,255,255,1) 62%,rgba(255,255,255,1) 75%,rgba(255,255,255,0) 100%); /* W3C */
-		filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#00ffffff',GradientType=0 ); /* IE6-9 */
-
-
-		margin: 0;
-		padding-top: $margin/2;
-		position: fixed;
-		top: 0px;
-		z-index: 1;
-
-		.col-status {
-			padding: $margin*3 $margin/5 0;
-
-			.toggle-sidebar {
-				display: none;
-			}
-
-			&:first-child {
-				.toggle-sidebar {
-					display: inline-block;
-					margin-left: $margin;
-					position: absolute;
-					top: 0;
-					z-index: 1;
-
-					&.toggle-sidebar-open {
-						left: 0%;
-					}
-					&.toggle-sidebar-close {
-						left: 100%;
-					}
-				}
-			}
-
-			&:last-child {
-				.toggle-sidebar {
-					display: inline-block;
-					margin-right: $margin;
-					position: absolute;
-					top: 0;
-					z-index: 1;
-
-					&.toggle-sidebar-open {
-						right: 100%;
-					}
-					&.toggle-sidebar-close {
-						right: 0%;
-					}
-				}
-			}
-
-
-			h2 {
-				border-top: $margin/2 solid lighten($color-grey-wp, 45);
-				margin: 0 0 $margin;
-				text-align: center;
-			}
-
-			.btn-group-status-actions {
-				display: none;
-				right: $margin/3;
-				position: absolute;
-				bottom: 0;
-				z-index: 1;
-
-				.glyphicon {
-					color: white;
-				}
-			}
-
-			&:hover,
-			&.hover {
-				.btn-group-status-actions {
-					display: block;
-				}
-			}
-
-			@media screen and (max-width: $screen-sm-max) {
-				display :none;
-				padding: 0;
-				width: 100%;
-
-				&:first-child {
-					display: block;
-				}
-
-				.btn-group-status-actions {
-					display: none;
-				}
-
-				.toggle-sidebar {
-					display: none !important;
-				}
-
-				h2 {
-					&:before,
-					&:after {
-						cursor: pointer;
-						display: block;
-						height: 100%;
-						padding-top: $margin/2;
-						position: absolute;
-						top: 0;
-						display: block;
-						font-family: 'Glyphicons Halflings';
-						font-style: normal;
-						font-weight: 400;
-						line-height: 1;
-						-webkit-font-smoothing: antialiased;
-						width: 50%;
-						z-index: 1;
-					}
-
-					&:before {
-						content: "\e079";
-						left: 0;
-					}
-
-					&:after {
-						content: "\e080";
-						right: 0;
-					}
-				}
-
-
-			}
-
-		} // col-status
-
-
-		@media screen and (max-width: $screen-sm-max) {
-			left: 0% !important;
-			padding: 0;
-			width: 100%;
-		}
-
-	} // #row-statuses
-
-
-
-	#row-tasks {
-		margin: 0;
-		position: relative;
-		z-index: 0;
-
-		> .col-tasks {
-			padding: 100px 5px 200px;
-			position: relative;
-
-			&:hover,
-			&.hover {
-				background: lighten($color-blue-wp, 60);
-			}
-
-			> h2 {
-				display: none;
-			}
-
-			.task-placeholder {
-				background: white;
-				border: 1px dashed lighten($color-grey-wp, 10);
-				margin-bottom: $margin;
-				opacity: .618;
-				min-height: $margin*10;
-			}
-
-			@media screen and (max-width: $screen-sm-max) {
-				display: none;
-				height: auto !important;
-				padding: 6em 0 0;
-				width: 100%;
-
-				&:first-child {
-					display: block;
-				}
-
-				> h2 {
-					left: 0;
-					position: absolute;
-					text-align: center;
-					top: 0;
-					width: 100%;
-				}
-			}
-
-		}
-
-		.task {
-			margin-bottom: $margin;
-			padding-left: $margin/2;
-			position: relative;
-
-			.panel-body {
-				padding: $margin/3 $margin/2;
-			}
-
-			.task-id {
-				font-weight: normal;
-				position: absolute;
-				right: $margin/3;
-				top: $margin/3;
-
-				.badge {
-					cursor: pointer;
-				}
-			}
-
-			.wrapper-task-project {
-				margin: 0 (-$margin/5);
-				padding: 0;
-			}
-
-			.wrapper-task-title {
-				margin: 0 (-$margin/5) $margin/5;
-				padding: 0;
-
-				.task_title {
-					// font-size: .82em;
-					font-weight: normal;
-				}
-			}
-
-			.row-worked {
-				margin: 0 0 $margin/3;
-
-				small {
-					display: block;
-				}
-
-				> .col {
-					padding: 0;
-				}
-
-				.col > .btn {
-					border: 0;
-					padding: $margin/3;
-					width: 100%;
-				}
-
-				.dropdown-menu {
-					.btn {
-						background: transparent;
-						border-bottom: 1px solid lighten($color-grey-wp, 45);
-						border-radius: 0;
-						text-align: left;
-
-						&:hover {
-							background: lighten($color-grey-wp, 65);
-						}
-					}
-
-					li:last-child .btn {
-						border-bottom-width: 0;
-					}
-				}
-
-			}
-
-			.task-assigned-to-initials {
-				background: black;
-				border-radius: 50%;
-				color: white;
-				display: block;
-				height: 2em;
-				line-height: 2;
-				margin: 0 auto;
-				width: 2em;
-
-				img {
-					height: 2em;
-				width: 2em;
-				}
-
-				&.empty {
-					background: lighten($color-grey-wp, 45);
-					color: lighten($color-grey-wp, 45);
-				}
-			}
-
-			.col-work-hours {
-				position: relative;
-
-				.work-hours-operators {
-					display: none;
-					left: 0;
-					position: absolute;
-					top: 100%;
-					width: 100%;
-
-					&.active {
-						display: block;
-					}
-
-					.btn {
-						width: 50%;
-					}
-				}
-
-				&:hover {
-					.work-hours-operators {
-						display: block;
-					}
-				}
-			}
-
-			.task-estimate,
-			.task-work-hours {
-				font-size: 1.618em;
-				line-height: 1;
-			}
-
-			.progress {
-				height: $margin/3;
-				margin-bottom: 0;
-			}
-
-			.task-handle {
-				background-color: lighten($color-grey-wp, 45);
-				cursor: move;
-				height: 100%;
-				left: 0;
-				position: absolute;
-				top: 0;
-				width: $margin/2;
-			}
-
-			@media screen and (max-width: $screen-sm-max) {
-				margin-left: $margin/3;
-				margin-right: $margin/3;
-			}
-
-		}
-
-
-		@media screen and (max-width: $screen-sm-max) {
-			left: 0% !important;
-			width: 100%;
-		}
-
-	} // row-tasks
+    overflow-x: hidden;
+    width: 100%;
+
+    #row-statuses {
+        /* Permalink - use to edit and share this gra/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#ffffff+0,ffffff+62,ffffff+100&amp;1+0,1+75,0+100 */
+        background: -moz-linear-gradient(top, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 1) 62%, rgba(255, 255, 255, 1) 75%, rgba(255, 255, 255, 0) 100%); /* FF3.6+ */
+        background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(255, 255, 255, 1)), color-stop(62%, rgba(255, 255, 255, 1)), color-stop(75%, rgba(255, 255, 255, 1)), color-stop(100%, rgba(255, 255, 255, 0))); /* Chrome,Safari4+ */
+        background: -webkit-linear-gradient(top, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 1) 62%, rgba(255, 255, 255, 1) 75%, rgba(255, 255, 255, 0) 100%); /* Chrome10+,Safari5.1+ */
+        background: -o-linear-gradient(top, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 1) 62%, rgba(255, 255, 255, 1) 75%, rgba(255, 255, 255, 0) 100%); /* Opera 11.10+ */
+        background: -ms-linear-gradient(top, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 1) 62%, rgba(255, 255, 255, 1) 75%, rgba(255, 255, 255, 0) 100%); /* IE10+ */
+        background: linear-gradient(to bottom, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 1) 62%, rgba(255, 255, 255, 1) 75%, rgba(255, 255, 255, 0) 100%); /* W3C */
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#00ffffff', GradientType=0); /* IE6-9 */
+
+        margin: 0;
+        padding-top: $margin/2;
+        position: fixed;
+        top: 0px;
+        z-index: 1;
+
+        .col-status {
+            padding: $margin*3 $margin/5 0;
+
+            .toggle-sidebar {
+                display: none;
+            }
+
+            &:first-child {
+                .toggle-sidebar {
+                    display: inline-block;
+                    margin-left: $margin;
+                    position: absolute;
+                    top: 0;
+                    z-index: 1;
+
+                    &.toggle-sidebar-open {
+                        left: 0%;
+                    }
+                    &.toggle-sidebar-close {
+                        left: 100%;
+                    }
+                }
+            }
+
+            &:last-child {
+                .toggle-sidebar {
+                    display: inline-block;
+                    margin-right: $margin;
+                    position: absolute;
+                    top: 0;
+                    z-index: 1;
+
+                    &.toggle-sidebar-open {
+                        right: 100%;
+                    }
+                    &.toggle-sidebar-close {
+                        right: 0%;
+                    }
+                }
+            }
+
+            h2 {
+                border-top: $margin/2 solid lighten($color-grey-wp, 45);
+                margin: 0 0 $margin;
+                text-align: center;
+            }
+
+            .btn-group-status-actions {
+                display: none;
+                right: $margin/3;
+                position: absolute;
+                bottom: 0;
+                z-index: 1;
+
+                .glyphicon {
+                    color: white;
+                }
+            }
+
+            &:hover,
+            &.hover {
+                .btn-group-status-actions {
+                    display: block;
+                }
+            }
+
+            @media screen and (max-width: $screen-sm-max) {
+                display: none;
+                padding: 0;
+                width: 100%;
+
+                &:first-child {
+                    display: block;
+                }
+
+                .btn-group-status-actions {
+                    display: none;
+                }
+
+                .toggle-sidebar {
+                    display: none !important;
+                }
+
+                h2 {
+                    &:before,
+                    &:after {
+                        cursor: pointer;
+                        display: block;
+                        height: 100%;
+                        padding-top: $margin/2;
+                        position: absolute;
+                        top: 0;
+                        display: block;
+                        font-family: 'Glyphicons Halflings';
+                        font-style: normal;
+                        font-weight: 400;
+                        line-height: 1;
+                        -webkit-font-smoothing: antialiased;
+                        width: 50%;
+                        z-index: 1;
+                    }
+
+                    &:before {
+                        content: "\e079";
+                        left: 0;
+                    }
+
+                    &:after {
+                        content: "\e080";
+                        right: 0;
+                    }
+                }
+
+            }
+
+        }
+        // col-status
+
+        @media screen and (max-width: $screen-sm-max) {
+            left: 0% !important;
+            padding: 0;
+            width: 100%;
+        }
+
+    }
+    // #row-statuses
+
+    #row-tasks {
+        margin: 0;
+        position: relative;
+        z-index: 0;
+
+        > .col-tasks {
+            padding: 100px 5px 200px;
+            position: relative;
+
+            &:hover,
+            &.hover {
+                background: lighten($color-blue-wp, 60);
+            }
+
+            > h2 {
+                display: none;
+            }
+
+            .task-placeholder {
+                background: white;
+                border: 1px dashed lighten($color-grey-wp, 10);
+                margin-bottom: $margin;
+                opacity: .618;
+                min-height: $margin*10;
+            }
+
+            @media screen and (max-width: $screen-sm-max) {
+                display: none;
+                height: auto !important;
+                padding: 6em 0 0;
+                width: 100%;
+
+                &:first-child {
+                    display: block;
+                }
+
+                > h2 {
+                    left: 0;
+                    position: absolute;
+                    text-align: center;
+                    top: 0;
+                    width: 100%;
+                }
+            }
+
+        }
+
+        .task {
+            margin-bottom: $margin;
+            padding-left: $margin/2;
+            position: relative;
+
+            .panel-body {
+                padding: $margin/3 $margin/2;
+            }
+
+            .task-id {
+                font-weight: normal;
+                position: absolute;
+                right: $margin/3;
+                top: $margin/3;
+
+                .badge {
+                    cursor: pointer;
+                }
+            }
+
+            .wrapper-task-project {
+                margin: 0 (-$margin/5);
+                padding: 0;
+            }
+
+            .wrapper-task-title {
+                margin: 0 (-$margin/5) $margin/5;
+                padding: 0;
+
+                .task_title {
+                    // font-size: .82em;
+                    font-weight: normal;
+                }
+            }
+
+            .row-worked {
+                margin: 0 0 $margin/3;
+
+                small {
+                    display: block;
+                }
+
+                > .col {
+                    padding: 0;
+                }
+
+                .col > .btn {
+                    border: 0;
+                    padding: $margin/3;
+                    width: 100%;
+                }
+
+                .dropdown-menu {
+                    .btn {
+                        background: transparent;
+                        border-bottom: 1px solid lighten($color-grey-wp, 45);
+                        border-radius: 0;
+                        text-align: left;
+
+                        &:hover {
+                            background: lighten($color-grey-wp, 65);
+                        }
+                    }
+
+                    li:last-child .btn {
+                        border-bottom-width: 0;
+                    }
+                }
+
+            }
+
+            .task-assigned-to-initials {
+                background: black;
+                border-radius: 50%;
+                color: white;
+                display: block;
+                height: 2em;
+                line-height: 2;
+                margin: 0 auto;
+                width: 2em;
+
+                img {
+                    height: 2em;
+                    width: 2em;
+                }
+
+                &.empty {
+                    background: lighten($color-grey-wp, 45);
+                    color: lighten($color-grey-wp, 45);
+                }
+            }
+
+            .col-work-hours {
+                position: relative;
+
+                .work-hours-operators {
+                    display: none;
+                    left: 0;
+                    position: absolute;
+                    top: 100%;
+                    width: 100%;
+
+                    &.active {
+                        display: block;
+                    }
+
+                    .btn {
+                        width: 50%;
+                    }
+                }
+
+                &:hover {
+                    .work-hours-operators {
+                        display: block;
+                    }
+                }
+            }
+
+            .task-estimate,
+            .task-work-hours {
+                font-size: 1.618em;
+                line-height: 1;
+            }
+
+            .progress {
+                height: $margin/3;
+                margin-bottom: 0;
+            }
+
+            .task-handle {
+                background-color: lighten($color-grey-wp, 45);
+                cursor: move;
+                height: 100%;
+                left: 0;
+                position: absolute;
+                top: 0;
+                width: $margin/2;
+            }
+
+            @media screen and (max-width: $screen-sm-max) {
+                margin-left: $margin/3;
+                margin-right: $margin/3;
+            }
+
+        }
+
+        @media screen and (max-width: $screen-sm-max) {
+            left: 0% !important;
+            width: 100%;
+        }
+
+    }
+    // row-tasks
 }
 
-
-
-
 .editable-input {
-	cursor: pointer;
-	border: 1px solid lighten($color-grey-wp, 45);
-	box-shadow: none;
-	font-size: inherit;
-	height: auto;
-	padding: $margin/5 $margin/5 0;
-	width: 100%;
+    cursor: pointer;
+    border: 1px solid lighten($color-grey-wp, 45);
+    box-shadow: none;
+    font-size: inherit;
+    height: auto;
+    padding: $margin/5 $margin/5 0;
+    width: 100%;
 
-	&[readonly] {
-		border: 1px solid transparent;
-		&:hover {
-			background: lighten($color-grey-wp, 65);
-		}
-	}
+    &[readonly] {
+        border: 1px solid transparent;
+        &:hover {
+            background: lighten($color-grey-wp, 65);
+        }
+    }
 
 }

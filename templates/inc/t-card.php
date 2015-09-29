@@ -15,14 +15,17 @@
 		</div>
 		<p class="wrapper-task-project">
 		</p>
+
 		<h3 class="h4 wrapper-task-title">
-			<textarea class="editable-input task_title resize" rows="1" placeholder="Task name" readonly>{{=post_title}}</textarea>
+			<textarea class="editable-input task_title resize" rows="1" placeholder="Task name"
+			          readonly>{{=post_title}}</textarea>
 		</h3>
 
 		<div class="row row-worked">
 			<div class="col col-xs-4 col-work-hours">
 				<div class="btn btn-default btn-work-hours">
-				</div><!-- btn -->
+				</div>
+				<!-- btn -->
 				<div class="btn-group work-hours-operators">
 					<button type="button" class="btn btn-default btn-sm" value="+1">
 						<span class="glyphicon glyphicon-plus"></span>
@@ -31,27 +34,34 @@
 						<span class="glyphicon glyphicon-minus"></span>
 					</button>
 				</div>
-			</div><!-- col -->
+			</div>
+			<!-- col -->
 
 			<div class="col col-xs-4 col-assigned-to">
 				<div class="btn btn-default btn-assigned-to" data-toggle="dropdown">
 				</div>
 				<ul class="dropdown-menu dropdown-menu-allowed-users">
 				</ul>
-			</div><!-- col -->
+			</div>
+			<!-- col -->
 
 			<div class="col col-xs-4 col-estimate">
 				<div class="btn btn-default btn-estimate" data-toggle="dropdown">
 				</div>
 				<ul class="dropdown-menu dropdown-menu-estimates">
 				</ul>
-			</div><!-- col -->
-		</div><!-- row -->
+			</div>
+			<!-- col -->
+		</div>
+		<!-- row -->
 		<div class="progress">
 			<div class="progress-bar  progress-bar-success" style="width: 0%;">
-			</div><!-- progress bar -->
-		</div><!-- progress -->
-	</div><!-- panel body -->
+			</div>
+			<!-- progress bar -->
+		</div>
+		<!-- progress -->
+	</div>
+	<!-- panel body -->
 	<div class="task-handle" style="background: {{=status_color}};">
 	</div>
 </div>

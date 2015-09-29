@@ -41,6 +41,7 @@ Kanban::init();
 class Kanban
 {
 	static $instance = false;
+	private static $text_domain = 'kanban';
 	static $slug = 'kanban';
 
 
@@ -188,11 +189,12 @@ class Kanban
 		}
 		return Kanban::$instance;
 	}
+	
+	public static function get_text_domain() {
+		return Kanban::$text_domain;
+	}
 
 
 
 	private function __construct() { }
 } // Kanban
-
-
-

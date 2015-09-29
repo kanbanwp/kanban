@@ -13,7 +13,7 @@ Kanban_Terms::init();
 
 class Kanban_Terms
 {
-	static $instance = false;
+	private static $instance = false;
 
 	static function init()
 	{
@@ -147,7 +147,7 @@ class Kanban_Terms
 
 
 
-	static function get_instance()
+	public static function get_instance()
 	{
 		if ( ! self::$instance )
 		{

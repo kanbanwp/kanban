@@ -40,7 +40,7 @@ Kanban::init();
 
 class Kanban
 {
-	static $instance = false;
+	private static $instance = false;
 	static $slug = 'kanban';
 
 

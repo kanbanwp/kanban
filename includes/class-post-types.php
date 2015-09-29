@@ -68,6 +68,9 @@ class Kanban_Post_Types
 
 
 		add_action('init', array(__CLASS__, 'custom_post_types'), 0);
+		
+		// Hook into gettext ASAP to set proper translation string for estimate
+		add_action( 'gettext', array( __CLASS__, 'estimate_slug' ), 0, 3 );
 
 
 
@@ -105,6 +108,40 @@ class Kanban_Post_Types
 				}
 			}
 		}
+	}
+	
+	/**
+	 * Over-ride the slug default translation string for estimates taxonomy.
+	 *
+	 * @param string $translation Current translated string of $text.
+	 * @param string $text Original string to be translated.
+	 * @param string $domain Domain originating the string.
+	 */
+	public static function estimate_slug( $translation, $text, $domain ) {
+		
+		if (
+			'default' !== $domain ||
+			!isset( $_GET['post_type'] ) ||
+			( isset( $_GET['post_type'] ) && Kanban_Post_Types::format_post_type( 'task' ) !== $_GET['post_type'] ) ||
+			!isset( $_GET['taxonomy'] ) ||
+			( isset( $_GET['taxonomy'] ) && Kanban_Utils::format_key( 'task', 'estimate' ) !== $_GET['taxonomy'] )
+		) {
+			return $translation;
+		}
+		
+		$kanban_translation = __( 'The &#8220;slug&#8221; is the URL-friendly version of the name. For estimates, it should be the number of working hours.', Kanban::$slug );
+		switch( $text ) {
+			case 'The &#8220;slug&#8221; is the URL-friendly version of the name. It is usually all lowercase and contains only letters, numbers, and hyphens.':
+				return $kanban_translation;
+				break;
+			case '<strong>Slug</strong> &mdash; The &#8220;slug&#8221; is the URL-friendly version of the name. It is usually all lowercase and contains only letters, numbers, and hyphens.':
+				return sprintf( '<strong>%s</strong> &mdash; %s', __( 'Slug', Kanban::$slug ), $kanban_translation );
+				break;
+			default:
+				break;
+		}
+		
+		return $translation;
 	}
 
 

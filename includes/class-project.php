@@ -14,7 +14,7 @@ Kanban_Project::init();
 class Kanban_Project
 {
 	static $instance = false;
-	static $slug = 'project';
+	private static $slug = 'project';
 
 
 
@@ -124,7 +124,9 @@ class Kanban_Project
 		return self::$instance->all_projects;
 	}
 
-
+	public static function get_slug() {
+		return self::$slug;
+	}
 
 	static function get_instance()
 	{

@@ -41,7 +41,7 @@ Kanban::init();
 class Kanban
 {
 	static $instance = false;
-	static $slug = 'kanban';
+	private static $slug = 'kanban';
 
 
 
@@ -179,7 +179,10 @@ class Kanban
 	}
 
 
-
+	public static function get_slug() {
+		return Kanban::get_slug();
+	}
+	
 	public static function get_instance()
 	{
 		if ( ! Kanban::$instance )

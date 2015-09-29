@@ -134,7 +134,7 @@ class Kanban_Post_Types
 				'not_found_in_trash'  => 'Not found in Trash',
 			);
 			$rewrite = array(
-				'slug'                => NULL, // sprintf('%s/%s', Kanban::$slug, Kanban_Utils::make_word_plural($post_type_slug)),
+				'slug'                => NULL, // sprintf('%s/%s', Kanban::get_slug(), Kanban_Utils::make_word_plural($post_type_slug)),
 				'with_front'          => true,
 				'pages'               => true,
 				'feeds'               => true,
@@ -151,7 +151,7 @@ class Kanban_Post_Types
 				'show_in_admin_bar'   => false,
 				'show_in_nav_menus'   => false,
 				'can_export'          => true,
-				'has_archive'         => false, //sprintf('%s/%s', Kanban::$slug, Kanban_Utils::make_word_plural($post_type_slug)),
+				'has_archive'         => false, //sprintf('%s/%s', Kanban::get_slug(), Kanban_Utils::make_word_plural($post_type_slug)),
 				'exclude_from_search' => true,
 				'publicly_queryable'  => false,
 				'rewrite'             => false, // $rewrite,
@@ -189,7 +189,7 @@ class Kanban_Post_Types
 					'not_found'                  => 'Not Found',
 				);
 				$rewrite = array(
-					'slug'                       => sprintf('%s/%s/%s', Kanban::$slug, Kanban_Utils::make_word_plural($post_type_slug), Kanban_Utils::make_word_plural($taxonomy_slug)),
+					'slug'                       => sprintf('%s/%s/%s', Kanban::get_slug(), Kanban_Utils::make_word_plural($post_type_slug), Kanban_Utils::make_word_plural($taxonomy_slug)),
 					'with_front'                 => true,
 					'hierarchical'               => false,
 				);

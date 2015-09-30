@@ -108,7 +108,7 @@ class Kanban_User
 
 
 
-		wp_redirect(sprintf('/%s/board', Kanban::$slug));
+		wp_redirect(sprintf('/%s/board', Kanban::get_slug()));
 		exit;
 
 
@@ -259,7 +259,10 @@ class Kanban_User
 			return false;
 		}
 	}
-
+	
+	public static function get_slug() {
+		return self::$slug;
+	}
 
 	static function get_instance()
 	{

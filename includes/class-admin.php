@@ -65,7 +65,7 @@ class Kanban_Admin
 	// Remove Admin bar
 	static function remove_admin_bar()
 	{
-		if ( strpos($_SERVER['REQUEST_URI'], sprintf('/%s/', Kanban::$slug)) === FALSE ) return;
+		if ( strpos($_SERVER['REQUEST_URI'], sprintf('/%s/', Kanban::get_slug())) === FALSE ) return;
 
 	    return false;
 	}

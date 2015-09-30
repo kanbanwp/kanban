@@ -85,7 +85,7 @@ class Kanban_Settings
 			<?php endif ?>
 
 			<p>
-				<a href="<?php echo sprintf('/%s/board', Kanban::$slug) ?>" class="button" target="_blank">
+				<a href="<?php echo sprintf('/%s/board', Kanban::get_slug()) ?>" class="button" target="_blank">
 					Go to your board
 				</a>
 			</p>
@@ -419,7 +419,9 @@ class Kanban_Settings
 		exit;
 	}
 
-
+	public static function get_slug() {
+		return self::$slug;
+	}
 
 	static function get_instance()
 	{

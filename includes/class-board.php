@@ -13,7 +13,7 @@ Kanban_Board::init();
 
 class Kanban_Board
 {
-	static $slug = 'board';
+	private static $slug = 'board';
 
 
 

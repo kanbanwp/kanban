@@ -145,7 +145,9 @@ class Kanban_Terms
 		return array_filter(array_merge($terms_in_order, $terms));
 	}
 
-
+	public static function get_slug() {
+		return self::$slug;
+	}
 
 	static function get_instance()
 	{

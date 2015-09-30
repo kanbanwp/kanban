@@ -61,7 +61,7 @@ class Kanban_Template
 	static function protect_slug ()
 	{
 		// only protect pages with our slug
-	    if ( strpos($_SERVER['REQUEST_URI'], sprintf('/%s', Kanban::$slug)) === FALSE ) return;
+	    if ( strpos($_SERVER['REQUEST_URI'], sprintf('/%s', Kanban::get_slug())) === FALSE ) return;
 
 
 		// admins can see anything
@@ -78,9 +78,9 @@ class Kanban_Template
 		if ( in_array($current_user_id, array_keys($allowed_user_ids)) )
 		{
 			// redirect away from login
-		    if ( strpos($_SERVER['REQUEST_URI'], sprintf('/%s/login', Kanban::$slug)) !== FALSE )
+		    if ( strpos($_SERVER['REQUEST_URI'], sprintf('/%s/login', Kanban::get_slug())) !== FALSE )
 		    {
-		    	wp_redirect(sprintf('/%s/board', Kanban::$slug));
+		    	wp_redirect(sprintf('/%s/board', Kanban::get_slug()));
 				exit;
 		    }
 		    else
@@ -94,10 +94,10 @@ class Kanban_Template
 		do_action( sprintf('%s_protect_slug', Kanban::$instance->settings->basename) );
 
 		// anyone can see login screen
-	    if ( strpos($_SERVER['REQUEST_URI'], sprintf('/%s/login', Kanban::$slug)) !== FALSE ) return;
+	    if ( strpos($_SERVER['REQUEST_URI'], sprintf('/%s/login', Kanban::get_slug())) !== FALSE ) return;
 
 	    // otherwise redirect to login
-		wp_redirect(sprintf('/%s/login', Kanban::$slug));
+		wp_redirect(sprintf('/%s/login', Kanban::get_slug()));
 		exit;
 	}
 
@@ -110,7 +110,7 @@ class Kanban_Template
 
 
 		// if url doesn't include our slug, return
-		if ( strpos($_SERVER['REQUEST_URI'], sprintf('/%s/', Kanban::$slug)) === FALSE ) return $template;
+		if ( strpos($_SERVER['REQUEST_URI'], sprintf('/%s/', Kanban::get_slug())) === FALSE ) return $template;
 
 
 
@@ -121,7 +121,7 @@ class Kanban_Template
 
 		foreach (self::$page_slugs as $slug => $data)
 		{
-	 		if ( strpos(strtok($_SERVER["REQUEST_URI"],'?'), sprintf('%s/%s', Kanban::$slug, $slug)) !== FALSE )
+	 		if ( strpos(strtok($_SERVER["REQUEST_URI"],'?'), sprintf('%s/%s', Kanban::get_slug(), $slug)) !== FALSE )
 			{
 				$template = Kanban_Template::find_template($slug);
 
@@ -246,7 +246,9 @@ class Kanban_Template
 		}
 	}
 
-
+	public static function get_slug() {
+		return self::$slug;
+	}
 
 	static function get_instance()
 	{

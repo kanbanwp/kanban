@@ -20,17 +20,12 @@ class Kanban_Flash
 
 	static function setup_flash_messages()
 	{
-		if ( version_compare( phpversion(), '5.4.0', '>=' ) )
-		{
-			if( session_status() == PHP_SESSION_NONE )
-			{
+		if ( version_compare( phpversion(), '5.4.0', '>=' ) ) {
+			if( session_status() == PHP_SESSION_NONE ) {
 				session_start();
 			}
-		} 
-		else
-		{
-			if ( session_id() == '' )
-			{
+		} else {
+			if ( session_id() == '' ) {
 				session_start();
 			}
 		}

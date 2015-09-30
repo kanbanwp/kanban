@@ -20,10 +20,19 @@ class Kanban_Flash
 
 	static function setup_flash_messages()
 	{
-		if (session_status() == PHP_SESSION_NONE)
+		if ( version_compare( phpversion(), '5.4.0', '>=' ) )
 		{
-			session_start();
+			if( session_status() == PHP_SESSION_NONE )
+			{
+				session_start();
+			}
+		} else {
+			if ( session_id() == '' )
+			{
+				session_start();
+			}
 		}
+		
 
 		Kanban::$instance->flash = new Kanban\Messages();
 

@@ -27,7 +27,7 @@ class Kanban_Settings
 
 		add_action( 'admin_init', array(__CLASS__, 'admin_init') );
 		add_action( 'admin_menu', array(__CLASS__, 'admin_menu') );
-
+		add_action('parent_file', array(__CLASS__, 'parent_file'), 0);
 	}
 
 
@@ -184,6 +184,38 @@ class Kanban_Settings
 		);
 
 	} // admin_menu
+
+
+
+	public static function get_submenu_file( $post_type_slug, $taxonomy_slug )
+	{
+		return sprintf( 'edit-tags.php?taxonomy=%s&post_type=%s', Kanban_Utils::format_key( $post_type_slug, $taxonomy_slug ), Kanban_Post_Types::format_post_type($post_type_slug ) );
+	}
+
+
+
+	public static function parent_file( $parent_file )
+	{
+		global $submenu_file;
+
+		$current_screen = get_current_screen();
+
+        // Set the submenu as active/current while anywhere in your Custom Post Type (nwcm_news)
+        if ( Kanban_Post_Types::format_post_type ('task') === $current_screen->post_type ) {
+
+            if ( Kanban_Utils::format_key('task', 'status') === $current_screen->taxonomy ) {
+                $submenu_file = self::get_submenu_file( 'task', 'status' );
+            }
+            if ( Kanban_Utils::format_key('task', 'estimate') === $current_screen->taxonomy ) {
+				$submenu_file = self::get_submenu_file( 'task', 'estimate' );
+            }
+
+            $parent_file = Kanban::$instance->settings->basename;
+
+        }
+
+        return $parent_file;
+	}
 
 
 

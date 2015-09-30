@@ -26,7 +26,9 @@ class Kanban_Flash
 			{
 				session_start();
 			}
-		} else {
+		} 
+		else
+		{
 			if ( session_id() == '' )
 			{
 				session_start();

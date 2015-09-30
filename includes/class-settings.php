@@ -85,7 +85,7 @@ class Kanban_Settings
 			<?php endif ?>
 
 			<p>
-				<a href="<?php echo sprintf('/%s/board', Kanban::$slug) ?>" class="button" target="_blank">
+				<a href="<?php echo sprintf('%s/%s/board', home_url(), Kanban::$slug) ?>" class="button" target="_blank">
 					Go to your board
 				</a>
 			</p>

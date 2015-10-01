@@ -18,11 +18,26 @@ class Kanban_Flash
 		add_action('init', array(__CLASS__, 'setup_flash_messages'));
 	}
 
+
+
 	static function setup_flash_messages()
 	{
-		if (session_status() == PHP_SESSION_NONE) session_start();
+		if ( version_compare( phpversion(), '5.4.0', '>=' ) )
+		{
+			if( session_status() == PHP_SESSION_NONE )
+			{
+				session_start();
+			}
+		}
+		else
+		{
+			if ( session_id() == '' )
+			{
+				session_start();
+			}
+		}
 
-		Kanban::$instance->flash = new Kanban\Messages();
+		Kanban::$instance->flash = new Kanban_Messages();
 
 		Kanban::$instance->flash->msgTypes = array( 'default', 'info', 'warning', 'success', 'danger' );
 		Kanban::$instance->flash->msgClass = 'alert alert-';

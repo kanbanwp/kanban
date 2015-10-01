@@ -38,10 +38,7 @@
 
 
 
-Namespace Kanban;
-
-
-class Messages {
+class Kanban_Messages {
 	
 	//-----------------------------------------------------------------------------------------------
 	// Class Variables

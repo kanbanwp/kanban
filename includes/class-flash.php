@@ -39,6 +39,8 @@ class Kanban_Flash
 
 		Kanban::$instance->flash = new Kanban_Messages();
 
+
+
 		Kanban::$instance->flash->msgTypes = array( 'default', 'info', 'warning', 'success', 'danger' );
 		Kanban::$instance->flash->msgClass = 'alert alert-';
 		Kanban::$instance->flash->msgWrapper = '<div class="%s%s alert-dismissible">

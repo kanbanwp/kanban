@@ -102,21 +102,15 @@ class Kanban_Project
 	{
 		if ( !isset(self::$instance->all_projects) )
 		{
-			global $wpdb;
+			$post_type_key = Kanban_Post_Types::format_post_type(self::$slug);
 
-			$post_type_key = Kanban_Post_Types::format_post_type('project');
-			$sql = "SELECT `{$wpdb->prefix}posts`.*
-					FROM `{$wpdb->prefix}posts`
-					WHERE `{$wpdb->prefix}posts`.`post_type` = '$post_type_key'
-					AND `{$wpdb->prefix}posts`.`post_status` IN ('publish')
-			;";
-
-			$sql = apply_filters(
-				sprintf('%s_sql_%s_get_all', Kanban::$instance->settings->basename, self::$slug),
-				$sql
+			$args = array(
+				'posts_per_page'   => -1,
+				'post_type'        => $post_type_key,
+				'post_status'      => 'publish',
 			);
 
-			$posts = $wpdb->get_results($sql);
+			$posts = get_posts( $args );
 
 			self::$instance->all_projects = Kanban_Post::apply_postmeta_and_terms_to_posts($posts);
 		}

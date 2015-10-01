@@ -305,8 +305,15 @@ class Kanban_Post
 		// apply post meta and terms to projects
 		foreach ($posts as $post)
 		{
-			$post->postmeta = $postmeta[$post->ID];
-			$post->terms = $terms[$post->ID];
+			if ( isset($postmeta[$post->ID]) )
+			{
+				$post->postmeta = $postmeta[$post->ID];
+			}
+
+			if ( isset($terms[$post->ID]) )
+			{
+				$post->terms = $terms[$post->ID];
+			}
 		}
 
 

@@ -72,27 +72,27 @@ class Kanban_Settings
 		?>
 		<div class="wrap">
 			<h1>
-				About Kanban
+				<?php echo __('About', Kanban::$instance->settings->file) ?> <?php echo Kanban::$instance->settings->pretty_name ?>
 			</h1>
 
 			<?php if ( isset($_GET['activation']) ) : ?>
 				<div class="updated notice is-dismissible below-h2">
-					<p>Thanks for using Kanban for WordPress!</p>
+					<p><?php echo __('Thanks for using Kanban for WordPress!', Kanban::$instance->settings->file) ?></p>
 					<button type="button" class="notice-dismiss">
-						<span class="screen-reader-text">Dismiss this notice.</span>
+						<span class="screen-reader-text"><?php echo __('Dismiss this notice.', Kanban::$instance->settings->file) ?></span>
 					</button>
 				</div>
 			<?php endif ?>
 
 			<p>
 				<a href="<?php echo sprintf( '%s/%s/board', home_url(), Kanban::$slug ) ?>" class="button" target="_blank">
-					Go to your board
+					<?php echo __('Go to your board', Kanban::$instance->settings->file) ?>
 				</a>
 			</p>
 
 			<p>
 				<a href="http://kanbanwp.com/documentation" target="_blank">
-					Documentation
+					<?php echo __('Documentation', Kanban::$instance->settings->file) ?>
 				</a>
 			</p>
 		</div>

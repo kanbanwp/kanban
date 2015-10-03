@@ -71,7 +71,6 @@ class Kanban_Task
 
 		$post_data = Kanban_Post::save($_POST[self::$slug]);
 
-
 		if ( !$post_data ) wp_send_json_error();
 
 

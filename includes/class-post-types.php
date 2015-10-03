@@ -36,13 +36,13 @@ class Kanban_Post_Types
 				'project_id' => 0,
 				'user_id_assigned' => 0,
 				'work_hour_count' => 0,
-			),
+			)
 		),
 		'project' => array(
 			'taxonomies' => array(),
 			'postmeta_fields' => array(
 				'color' => 'lightblue'
-			),
+			)
 		),
 		'work_hour' => array(
 			'taxonomies' => array(),
@@ -52,7 +52,14 @@ class Kanban_Post_Types
 				'project_id' => 0,
 				'user_id_logged' => 0,
 				'operator' => '+1',
-			),
+			)
+		),
+		'status_change' => array(
+			'taxonomies' => array(),
+			'postmeta_fields' => array(
+				'status_id_old' => 0,
+				'status_id_new' => 0
+			)
 		)
 	); // post_types
 
@@ -68,7 +75,7 @@ class Kanban_Post_Types
 
 
 		add_action('init', array(__CLASS__, 'custom_post_types'), 0);
-		
+
 		// Hook into gettext ASAP to set proper translation string for estimate
 		add_action( 'gettext', array( __CLASS__, 'estimate_slug' ), 0, 3 );
 
@@ -109,7 +116,9 @@ class Kanban_Post_Types
 			}
 		}
 	}
-	
+
+
+
 	/**
 	 * Over-ride the slug default translation string for estimates taxonomy.
 	 *
@@ -117,20 +126,22 @@ class Kanban_Post_Types
 	 * @param string $text Original string to be translated.
 	 * @param string $domain Domain originating the string.
 	 */
-	public static function estimate_slug( $translation, $text, $domain ) {
-		
+	public static function estimate_slug( $translation, $text, $domain )
+	{
 		if (
 			'default' !== $domain ||
 			!isset( $_GET['post_type'] ) ||
 			( isset( $_GET['post_type'] ) && Kanban_Post_Types::format_post_type( 'task' ) !== $_GET['post_type'] ) ||
 			!isset( $_GET['taxonomy'] ) ||
 			( isset( $_GET['taxonomy'] ) && Kanban_Utils::format_key( 'task', 'estimate' ) !== $_GET['taxonomy'] )
-		) {
+		)
+		{
 			return $translation;
 		}
-		
+
 		$kanban_translation = __( 'The &#8220;slug&#8221; is the URL-friendly version of the name. For estimates, it should be the number of working hours.', Kanban::$slug );
-		switch( $text ) {
+		switch( $text )
+		{
 			case 'The &#8220;slug&#8221; is the URL-friendly version of the name. It is usually all lowercase and contains only letters, numbers, and hyphens.':
 				return $kanban_translation;
 				break;
@@ -140,7 +151,7 @@ class Kanban_Post_Types
 			default:
 				break;
 		}
-		
+
 		return $translation;
 	}
 

@@ -113,6 +113,29 @@ $.fn.board_task = function(task)
 		);
 
 
+		$task.on(
+			'status_change',
+			function(e, status_id_old, status_id_new)
+			{
+				var data = {
+					'action': 'add_status_change',
+					'kanban_nonce': $('#kanban_nonce').val(),
+					'task_id': task.ID,
+					'status_id_old': status_id_old,
+					'status_id_new': status_id_new
+				};
+
+				$.ajax({
+					method: "POST",
+					url: ajaxurl,
+					data: data
+				});
+			} // function
+		);
+
+
+
+
 		var add_work_hour = function(operator)
 		{
 			var task_data = tasks[task.ID].__export();

@@ -54,7 +54,7 @@ class Kanban
 		Kanban::$instance->settings->file = basename(__FILE__, '.php');
 		Kanban::$instance->settings->basename = strtolower(__CLASS__);
 		Kanban::$instance->settings->uri = plugin_dir_url(__FILE__);
-		Kanban::$instance->settings->pretty_name = 'Kanban';
+		Kanban::$instance->settings->pretty_name = __('Kanban', Kanban::$instance->settings->file);
 
 
 

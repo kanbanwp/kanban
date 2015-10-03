@@ -45,8 +45,11 @@ class Kanban_Post
 
 
 
+		$orig_post = NULL;
+
+
+
 		// load it if it already exists
-		$orig_post;
 		if ( isset($post_data->ID) )
 		{
 			$orig_post = get_post($post_data->ID);
@@ -106,7 +109,7 @@ class Kanban_Post
 		{
 			if ( isset($post_data->postmeta[$field_name]) && strpos($field_name, $post_type) !== FALSE )
 			{
-				if ( $post_data->postmeta[$field_name] !== $orig_post->postmeta[$field_name] )
+				if ( !$orig_post || ($orig_post && $post_data->postmeta[$field_name] !== $orig_post->postmeta[$field_name]) )
 				{
 					update_post_meta($post_id, $field_name, $post_data->postmeta[$field_name]);
 				}
@@ -151,7 +154,7 @@ class Kanban_Post
 		$postmeta = Kanban_Post::get_postmeta_for_posts(array($post_id), $post_type);
 		$post->postmeta = $postmeta[$post_id];
 		$terms = Kanban_Terms::get_terms_for_posts(array($post_id), $post_type);
-		$post->terms = $terms[$post_id];
+		$post->terms = isset($terms[$post_id]) ? $terms[$post_id] : array();
 
 
 

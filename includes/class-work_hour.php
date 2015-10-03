@@ -23,7 +23,6 @@ class Kanban_Work_Hour
 		self::$instance = self::get_instance();
 
 		add_action( sprintf('wp_ajax_add_%s', self::$slug), array(__CLASS__, 'ajax_save') );
-		add_action( sprintf('wp_ajax_remove_%s', self::$slug), array(__CLASS__, 'ajax_remove') );
 	}
 
 

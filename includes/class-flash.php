@@ -22,16 +22,17 @@ class Kanban_Flash
 
 	static function setup_flash_messages()
 	{
-		if ( version_compare( phpversion(), '5.4.0', '>=' ) )
+		// @link http://stackoverflow.com/a/28377350/38241
+		if(version_compare(phpversion(), "5.4.0") != -1)
 		{
-			if( session_status() == PHP_SESSION_NONE )
+			if (session_status() == PHP_SESSION_NONE)
 			{
 				session_start();
 			}
 		}
 		else
 		{
-			if ( session_id() == '' )
+			if(session_id() == '')
 			{
 				session_start();
 			}

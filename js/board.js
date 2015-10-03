@@ -232,10 +232,14 @@ jQuery(function($)
 		{
 			var task_id = ui.item.attr('data-id');
 			var $col = ui.item.closest('.col-tasks');
-			var status_id = $col.attr('data-status-id');
+			var status_id_new = $col.attr('data-status-id');
 			var status_color = $col.attr('data-color');
+			var status_id_old = tasks[task_id].task.terms.kanban_task_status + '';
+
+			ui.item.trigger('status_change', [status_id_old, status_id_new]);
+
 			tasks[task_id].task.status_color = status_color;
-			tasks[task_id].task.terms.kanban_task_status = [status_id]; // make sure there's only ever one
+			tasks[task_id].task.terms.kanban_task_status = [status_id_new]; // make sure there's only ever one
 
 			ui.item.trigger(
 				'add_comment',

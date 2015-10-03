@@ -64,9 +64,7 @@ class Kanban_Comment
 
 
 
-		// $comment_type = Kanban_Utils::format_key ($_POST['post_type'], 'comment');
-
-		// update_comment_meta( $comment_id, 'comment_type', $comment_type);
+		$comment_type = Kanban_Utils::format_key ($_POST['post_type'], 'comment');
 
 
 

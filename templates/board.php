@@ -64,8 +64,30 @@
 	<a href="/wp-admin/admin.php?page=<?php echo Kanban::$instance->settings->basename ?>" class="btn btn-default" target="_blank">
 		<?php echo __('Settings', Kanban::$instance->settings->file) ?>
 	</a>
-
 </div>
+
+
+
+
+<div class="modal fade" id="modal-projects" data-keyboard="false">
+	<div class="modal-dialog modal-lg" role="document">
+		<div class="modal-content">
+			<div class="modal-body">
+				<button type="button" class=" btn btn-default btn-close" data-dismiss="modal">
+					Close
+				</button>
+
+				<div class="panel-group" id="accordion-projects">
+				</div><!-- panel-group -->
+
+
+			</div><!-- body -->
+		</div><!-- content -->
+	</div><!-- dialog -->
+</div><!-- modal -->
+
+
+
 
 <div id="screen-size">
 	<div class="visible-xs" data-size="xs"></div>
@@ -91,10 +113,7 @@ var allowed_users = <?php echo json_encode($wp_query->query_vars['kanban']->boar
 var estimates = <?php echo json_encode($wp_query->query_vars['kanban']->board->estimates) ?>;
 var current_user = <?php echo json_encode($wp_query->query_vars['kanban']->board->current_user->data) ?>;
 
-var tasks = [];
 var statuses = [];
-var projects = {projects: []};
-var users = [];
 
 var col_percent_w = <?php echo $wp_query->query_vars['kanban']->board->col_percent_w ?>;
 var sidebar_w = <?php echo $wp_query->query_vars['kanban']->board->sidebar_w ?>;

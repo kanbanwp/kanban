@@ -13,8 +13,18 @@
 				</li>
 			</ul>
 		</div>
-		<p class="wrapper-task-project">
-		</p>
+
+		<div class="project">
+			<input type="text" class="editable-input project_title" data-id="" value="" placeholder="Task project" readonly>
+			<ul class="list-group" style="display: none;">
+				<li class="list-group-edit">
+					<a href="#" class="btn btn-xs btn-edit-projects" data-toggle="modal" data-target="#modal-projects">
+						Edit
+					</a>
+				</li>
+			</ul>
+		</div>
+
 		<h3 class="h4 wrapper-task-title">
 			<textarea class="editable-input task_title resize" rows="1" placeholder="Task name" readonly>{{=post_title}}</textarea>
 		</h3>

@@ -43,7 +43,8 @@ class Kanban_Status_Change
 		// build post data
 		$post_data = array(
 			'post_type' => Kanban_Post_Types::format_post_type (self::$slug),
-			'post_title' => sprintf('changed from %s to %s', $_POST['status_id_old'], $_POST['status_id_new']),
+			'post_title' => sprintf('changed task ID %s from %s to %s', $_POST['task_id'], $_POST['status_id_old'], $_POST['status_id_new']),
+			'post_parent' => $_POST['task_id'],
 			'postmeta' => array(
 				$status_id_old => $_POST['status_id_old'],
 				$status_id_new => $_POST['status_id_new']

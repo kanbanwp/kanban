@@ -5,18 +5,44 @@ $.fn.board_filter = function(task)
     {
     	var $wrapper = $(this);
 
+    	var t_filter_project = new t($('#t-filter-project').html());
+    	var t_filter_user = new t($('#t-filter-user').html());
+
+    	var $projects_dropdown = $('#filter-projects-dropdown', $wrapper);
+    	var $users_dropdown = $('#filter-users-dropdown', $wrapper);
+
+
+    	$('#filter-projects', $wrapper).on(
+    		'show.bs.dropdown',
+    		function()
+    		{
+    			$projects_dropdown.empty();
+
+				for ( var i in project_records )
+				{
+					var $project = $(t_filter_project.render(project_records[i]));
+					$project.appendTo($projects_dropdown);
+				}
+
+    		}
+    	);
 
 
 
-
-		$('#filter-projects-dropdown', $wrapper).on(
+		$projects_dropdown.on(
 			'click',
 			'a',
 			function()
 			{
 				var $a = $(this);
 				var project_id = $a.attr('data-id');
+
 				var project = project_records[project_id];
+
+				if ( typeof project === 'undefined' )
+				{
+					return false;
+				}
 
 				var $dropdown = $a.closest('.dropup');
 				var $label = $('.btn-label', $dropdown);
@@ -34,7 +60,24 @@ $.fn.board_filter = function(task)
 
 
 
-		$('#filter-users-dropdown', $wrapper).on(
+    	$('#filter-users', $wrapper).on(
+    		'show.bs.dropdown',
+    		function()
+    		{
+    			$users_dropdown.empty();
+
+				for ( var i in allowed_users )
+				{
+					var $user = $(t_filter_user.render(allowed_users[i]));
+					$user.appendTo($users_dropdown);
+				}
+
+    		}
+    	);
+
+
+
+		$users_dropdown.on(
 			'click',
 			'a',
 			function()

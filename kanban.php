@@ -32,7 +32,33 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // Exit if accessed directly
 if ( ! defined( 'ABSPATH' ) ) exit;
 
+#region Freemius
 
+// Create a helper function for easy SDK access.
+function kan_fs() {
+    global $kan_fs;
+    if ( ! isset( $kan_fs ) ) {
+        // Include Freemius SDK.
+        require_once dirname(__FILE__) . '/freemius/start.php';
+
+        $kan_fs = fs_dynamic_init( array(
+            'id'                => '70',
+            'slug'              => 'kanban',
+            'menu_slug'         => 'kanban',
+            'public_key'        => 'pk_79c5063358baad9d6247046db9a6b',
+            'is_live'           => true,
+            'is_premium'        => false,
+            'has_paid_plans'    => false,
+        ) );
+    }
+
+    return $kan_fs;
+}
+
+// Init Freemius.
+kan_fs();
+
+#endregion Freemius
 
 Kanban::init();
 

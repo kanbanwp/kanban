@@ -100,21 +100,25 @@ class Kanban
 
 
 		// add current user to board
-		$current_user_id = get_current_user_id();
-
 		$users_field_name = sprintf('%s_user', Kanban::$instance->settings->basename);
 		$user_settings = Kanban_Settings::get_option($users_field_name, null, array());
-		if ( !isset($user_settings['allowed_users']) )
-		{
-			$user_settings['allowed_users'] = array();
-		}
 
-		if ( !in_array($current_user_id, $user_settings['allowed_users']) )
+		if ( empty($user_settings) )
 		{
-			$user_settings['allowed_users'][$current_user_id] = $current_user_id;
-		}
+			$current_user_id = get_current_user_id();
 
-		update_option( $users_field_name, $user_settings);
+			if ( !isset($user_settings['allowed_users']) )
+			{
+				$user_settings['allowed_users'] = array();
+			}
+
+			if ( !in_array($current_user_id, $user_settings['allowed_users']) )
+			{
+				$user_settings['allowed_users'][$current_user_id] = $current_user_id;
+			}
+
+			update_option($users_field_name, $user_settings);
+		}
 
 
 
@@ -123,16 +127,19 @@ class Kanban
 		$field_name = sprintf('%s_order', $tax_key);
 		$settings = Kanban_Settings::get_option($field_name, null, array());
 
-		$slugs_in_order = array_keys(Kanban_Post_Types::$post_types['task']['taxonomies']['status']);
-
-		$term_ids_in_order = array();
-		foreach ($slugs_in_order as $order => $slug)
+		if ( empty($settings) )
 		{
-			$term = get_term_by('slug', $slug, $tax_key);
-			$term_ids_in_order[$term->term_id] = $order;
-		}
+			$slugs_in_order = array_keys(Kanban_Post_Types::$post_types['task']['taxonomies']['status']);
 
-		update_option( $field_name, $term_ids_in_order);
+			$term_ids_in_order = array();
+			foreach ($slugs_in_order as $order => $slug)
+			{
+				$term = get_term_by('slug', $slug, $tax_key);
+				$term_ids_in_order[$term->term_id] = $order;
+			}
+
+			update_option( $field_name, $term_ids_in_order);
+		}
 
 
 
@@ -141,28 +148,39 @@ class Kanban
 		$field_name = sprintf('%s_order', $tax_key);
 		$settings = Kanban_Settings::get_option($field_name, null, array());
 
-		$slugs_in_order = array_keys(Kanban_Post_Types::$post_types['task']['taxonomies']['estimate']);
-
-		$term_ids_in_order = array();
-		foreach ($slugs_in_order as $order => $slug)
+		if ( empty($settings) )
 		{
-			$term = get_term_by('slug', $slug, $tax_key);
-			$term_ids_in_order[$term->term_id] = $order;
+			$slugs_in_order = array_keys(Kanban_Post_Types::$post_types['task']['taxonomies']['estimate']);
+
+			$term_ids_in_order = array();
+			foreach ($slugs_in_order as $order => $slug)
+			{
+				$term = get_term_by('slug', $slug, $tax_key);
+				$term_ids_in_order[$term->term_id] = $order;
+			}
+
+			update_option( $field_name, $term_ids_in_order);
 		}
 
-		update_option( $field_name, $term_ids_in_order);
 
-
-
-		// add an example task
-		$post = array(
-			'post_status'    => 'publish',
-			'post_type'      => Kanban_Post_Types::format_post_type('task'),
-			'post_author'    => $current_user_id
+		// check for existing tasks
+		$args = array(
+			'post_type' => Kanban_Post_Types::format_post_type('task')
 		);
+		$posts_array = get_posts( $args );
 
-		$post_id = wp_insert_post($post);
 
+		if ( empty($posts_array) )
+		{
+			// add an example task
+			$post = array(
+				'post_status'    => 'publish',
+				'post_type'      => Kanban_Post_Types::format_post_type('task'),
+				'post_author'    => $current_user_id
+			);
+
+			$post_id = wp_insert_post($post);
+		}
 
 
 

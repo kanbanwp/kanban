@@ -384,72 +384,72 @@ class Kanban_Settings
 
 
 
-	static function post_save_users ()
-	{
-		if (  !isset( $_POST[Kanban_Utils::get_nonce()] ) || ! wp_verify_nonce( $_POST[Kanban_Utils::get_nonce()], 'save_users') || !is_user_logged_in() ) return;
+	// static function post_save_users ()
+	// {
+	// 	if (  !isset( $_POST[Kanban_Utils::get_nonce()] ) || ! wp_verify_nonce( $_POST[Kanban_Utils::get_nonce()], 'save_users') || !is_user_logged_in() ) return;
 
-		self::update_option('allowed_users', $_POST['allowed_users']);
+	// 	self::update_option('allowed_users', $_POST['allowed_users']);
 
-		Kanban::$instance->flash->add('success', 'The users have been updated');
+	// 	Kanban::$instance->flash->add('success', 'The users have been updated');
 
-		wp_redirect($_POST['_wp_http_referer']);
-		exit;
-	}
-
-
-
-	static function post_save_status ()
-	{
-		if (  !isset( $_POST[Kanban_Utils::get_nonce()] ) || ! wp_verify_nonce( $_POST[Kanban_Utils::get_nonce()], 'save_status_order') || !is_user_logged_in() ) return;
-
-		$tax_key = Kanban_Utils::format_key ('task', 'status');
-
-		// save names
-		$name_field = sprintf('%s_name', $tax_key);
-
-		foreach ($_POST[$name_field] as $term_id => $name)
-		{
-			wp_update_term(
-				$term_id,
-				$tax_key,
-				array(
-				  'name' => $name
-				)
-			);
-		}
-
-		// save order
-		$order_name = sprintf('%s_order', $tax_key);
-		self::update_option($order_name, $_POST[$order_name]);
-
-		// save colors
-		// https://pippinsplugins.com/adding-custom-meta-fields-to-taxonomies/
-		$color_name = sprintf('%s_colors', $tax_key);
-		self::update_option($color_name, $_POST[$color_name]);
-
-		Kanban::$instance->flash->add('success', 'Status order has been saved');
-
-		wp_redirect($_POST['_wp_http_referer']);
-		exit;
-	}
+	// 	wp_redirect($_POST['_wp_http_referer']);
+	// 	exit;
+	// }
 
 
 
-	static function post_save_estimate_order ()
-	{
-		if (  !isset( $_POST[Kanban_Utils::get_nonce()] ) || ! wp_verify_nonce( $_POST[Kanban_Utils::get_nonce()], 'save_estimate_order') || !is_user_logged_in() ) return;
+	// static function post_save_status ()
+	// {
+	// 	if (  !isset( $_POST[Kanban_Utils::get_nonce()] ) || ! wp_verify_nonce( $_POST[Kanban_Utils::get_nonce()], 'save_status_order') || !is_user_logged_in() ) return;
 
-		$tax_key = Kanban_Utils::format_key ('task', 'estimate');
-		$field_name = sprintf('%s_order', $tax_key);
+	// 	$tax_key = Kanban_Utils::format_key ('task', 'status');
 
-		self::update_option($field_name, $_POST[$field_name]);
+	// 	// save names
+	// 	$name_field = sprintf('%s_name', $tax_key);
+
+	// 	foreach ($_POST[$name_field] as $term_id => $name)
+	// 	{
+	// 		wp_update_term(
+	// 			$term_id,
+	// 			$tax_key,
+	// 			array(
+	// 			  'name' => $name
+	// 			)
+	// 		);
+	// 	}
+
+	// 	// save order
+	// 	$order_name = sprintf('%s_order', $tax_key);
+	// 	self::update_option($order_name, $_POST[$order_name]);
+
+	// 	// save colors
+	// 	// https://pippinsplugins.com/adding-custom-meta-fields-to-taxonomies/
+	// 	$color_name = sprintf('%s_colors', $tax_key);
+	// 	self::update_option($color_name, $_POST[$color_name]);
+
+	// 	Kanban::$instance->flash->add('success', 'Status order has been saved');
+
+	// 	wp_redirect($_POST['_wp_http_referer']);
+	// 	exit;
+	// }
 
 
-		Kanban::$instance->flash->add('success', 'Estimates order has been saved');
 
-		wp_redirect($_POST['_wp_http_referer']);
-		exit;
-	}
+	// static function post_save_estimate_order ()
+	// {
+	// 	if (  !isset( $_POST[Kanban_Utils::get_nonce()] ) || ! wp_verify_nonce( $_POST[Kanban_Utils::get_nonce()], 'save_estimate_order') || !is_user_logged_in() ) return;
+
+	// 	$tax_key = Kanban_Utils::format_key ('task', 'estimate');
+	// 	$field_name = sprintf('%s_order', $tax_key);
+
+	// 	self::update_option($field_name, $_POST[$field_name]);
+
+
+	// 	Kanban::$instance->flash->add('success', 'Estimates order has been saved');
+
+	// 	wp_redirect($_POST['_wp_http_referer']);
+	// 	exit;
+	// }
 
 
 

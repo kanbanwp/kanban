@@ -65,12 +65,21 @@ class Kanban_Post
 
 
 
+		// make sure there's a post parent sent
+		if ( !isset($post_data->post_parent) )
+		{
+			$post_data->post_parent = 0;
+		}
+
+
+
 		// insert
 		if ( empty($orig_post->ID) )
 		{
 			$post = array(
 				'post_content'   => sanitize_text_field($post_data->post_content),
 				'post_title'     => sanitize_text_field($post_data->post_title),
+				'post_parent'    => $post_data->post_parent,
 				'post_status'    => 'publish',
 				'post_type'      => $post_type,
 				'post_author'    => $post_data->post_author
@@ -82,10 +91,10 @@ class Kanban_Post
 		else
 		{
 			$postmeta = Kanban_Post::get_postmeta_for_posts(array($orig_post->ID), $post_type);
-			$orig_post->postmeta = (array) $postmeta[$orig_post->ID];
+			$orig_post->postmeta = isset($postmeta[$orig_post->ID]) ?  (array) $postmeta[$orig_post->ID] : array();
 
 			$terms = Kanban_Terms::get_terms_for_posts(array($orig_post->ID), $post_type);
-			$orig_post->terms = (array) $terms[$orig_post->ID];
+			$orig_post->terms = isset($terms[$orig_post->ID]) ? (array) $terms[$orig_post->ID] : array();
 
 			// only save if changed
 			if ( $orig_post->post_title != $post_data->post_title || $orig_post->post_content != $post_data->post_content )

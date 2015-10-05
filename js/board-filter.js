@@ -5,18 +5,47 @@ $.fn.board_filter = function(task)
     {
     	var $wrapper = $(this);
 
+    	var t_filter_project = new t($('#t-filter-project').html());
+    	var t_filter_user = new t($('#t-filter-user').html());
+
+    	var $projects_dropdown = $('#filter-projects-dropdown', $wrapper);
+    	var $users_dropdown = $('#filter-users-dropdown', $wrapper);
+
+
+    	$('#filter-projects', $wrapper).on(
+    		'show.bs.dropdown',
+    		function()
+    		{
+    			$('.project', $projects_dropdown).remove();
+
+				for ( var i in project_records )
+				{
+					var $project = $(t_filter_project.render(project_records[i]));
+					$project.prependTo($projects_dropdown);
+				}
+
+    		}
+    	);
 
 
 
-
-		$('#filter-projects-dropdown', $wrapper).on(
+		$projects_dropdown.on(
 			'click',
 			'a',
 			function()
 			{
 				var $a = $(this);
 				var project_id = $a.attr('data-id');
+
 				var project = project_records[project_id];
+
+				// if not found
+				if ( typeof project === 'undefined' )
+				{
+					project = {
+						post_title: $a.text()
+					};
+				}
 
 				var $dropdown = $a.closest('.dropup');
 				var $label = $('.btn-label', $dropdown);
@@ -29,12 +58,32 @@ $.fn.board_filter = function(task)
 				$label
 				.text(project.post_title)
 				.attr('data-id', project_id);
+
+				$('#btn-filter-apply', $wrapper).trigger('click');
+
+				return false;
 			}
 		);
 
 
 
-		$('#filter-users-dropdown', $wrapper).on(
+    	$('#filter-users', $wrapper).on(
+    		'show.bs.dropdown',
+    		function()
+    		{
+    			$('.user', $users_dropdown).remove();
+
+				for ( var i in allowed_users )
+				{
+					var $user = $(t_filter_user.render(allowed_users[i]));
+					$user.prependTo($users_dropdown);
+				}
+    		}
+    	);
+
+
+
+		$users_dropdown.on(
 			'click',
 			'a',
 			function()
@@ -42,6 +91,16 @@ $.fn.board_filter = function(task)
 				var $a = $(this);
 				var user_id = $a.attr('data-id');
 				var user = allowed_users[user_id];
+
+				// if not found
+				if ( typeof user === 'undefined' )
+				{
+					user = {
+						data: {
+							long_name_email: $a.text()
+						}
+					};
+				}
 
 				var $dropdown = $a.closest('.dropup');
 				var $label = $('.btn-label', $dropdown);
@@ -54,6 +113,10 @@ $.fn.board_filter = function(task)
 				$label
 				.text(user.data.long_name_email)
 				.attr('data-id', user_id);
+
+				$('#btn-filter-apply', $wrapper).trigger('click');
+
+				return false;
 			}
 		);
 
@@ -65,10 +128,10 @@ $.fn.board_filter = function(task)
 			{
 				$('#btn-filter-reset').show();
 
-				var project_id = $('#filter-projects .btn-label').attr('data-id');
 				var selector = '';
-				var hash = '';
+				var hash = '#';
 
+				var project_id = $('#filter-projects .btn-label').attr('data-id');
 				if ( typeof project_id !== 'undefined' && project_id != '' )
 				{
 					selector += '[data-project-id=' + project_id + ']';
@@ -83,8 +146,7 @@ $.fn.board_filter = function(task)
 				}
 				var $tasks_to_show = $('.task' + selector);
 
-				// update url for deep linking
-				window.location.hash = hash;
+				location.hash = hash;
 
 				$('.task').not($tasks_to_show).slideUp('fast');
 
@@ -109,7 +171,7 @@ $.fn.board_filter = function(task)
 					.text( $label.attr('data-orig') );
 				});
 
-				window.location.hash = '';
+				location.hash = '#';
 			}
 		);
 

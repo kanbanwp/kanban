@@ -25,30 +25,6 @@ body.view-compact .row-worked {
     transform: scale(1) rotate(0deg); }
   to {
     transform: scale(1) rotate(360deg); } }
-.ui-autocomplete {
-  background: white;
-  border-bottom: 1px solid #b9b9b9;
-  list-style: none;
-  max-width: 300px;
-  padding: 0; }
-  .ui-autocomplete .ui-menu-item {
-    background: white;
-    border: 1px solid #b9b9b9;
-    border-width: 1px 1px 0;
-    cursor: pointer;
-    padding: 5px; }
-    .ui-autocomplete .ui-menu-item:hover {
-      background: #ececec; }
-    .ui-autocomplete .ui-menu-item:first-child {
-      border-radius: 5px 5px 0 0; }
-    .ui-autocomplete .ui-menu-item:last-child {
-      border-radius: 0 0 5px 5px; }
-  .ui-autocomplete .ui-state-focus {
-    background: #b9b9b9; }
-
-.ui-helper-hidden-accessible {
-  display: none; }
-
 #wrapper-footer {
   background: #b9b9b9;
   bottom: 0;
@@ -70,6 +46,8 @@ body.view-compact .row-worked {
     top: 7.5px;
     white-space: nowrap;
     width: 20%; }
+    #wrapper-footer #filter-wrapper #btn-filter-apply {
+      display: none; }
     #wrapper-footer #filter-wrapper .dropdown-menu {
       bottom: auto; }
     #wrapper-footer #filter-wrapper .dropdown-toggle {
@@ -237,9 +215,34 @@ body.view-compact .row-worked {
         top: 5px; }
         #wrapper-board #row-tasks .task .task-id .badge {
           cursor: pointer; }
-      #wrapper-board #row-tasks .task .wrapper-task-project {
+      #wrapper-board #row-tasks .task .project {
         margin: 0 -3px;
-        padding: 0; }
+        padding: 0;
+        position: relative;
+        width: 66%;
+        z-index: 1; }
+        #wrapper-board #row-tasks .task .project .list-group {
+          -webkit-box-shadow: 0px 3px 10px 0px rgba(0, 0, 0, 0.75);
+          -moz-box-shadow: 0px 3px 10px 0px rgba(0, 0, 0, 0.75);
+          box-shadow: 0px 3px 10px 0px rgba(0, 0, 0, 0.75);
+          left: 0;
+          list-style: none;
+          position: absolute;
+          top: 100%;
+          z-index: 1;
+          width: 100%; }
+          #wrapper-board #row-tasks .task .project .list-group .list-group-edit {
+            position: absolute;
+            right: 3px;
+            top: 3px;
+            z-index: 1; }
+            #wrapper-board #row-tasks .task .project .list-group .list-group-edit a {
+              font-size: .82em;
+              text-decoration: underline; }
+          #wrapper-board #row-tasks .task .project .list-group .list-group-item {
+            cursor: pointer; }
+            #wrapper-board #row-tasks .task .project .list-group .list-group-item:hover {
+              background: #DDD; }
       #wrapper-board #row-tasks .task .wrapper-task-title {
         margin: 0 -3px 3px;
         padding: 0; }
@@ -316,6 +319,13 @@ body.view-compact .row-worked {
       #wrapper-board #row-tasks {
         left: 0% !important;
         width: 100%; } }
+
+.modal .panel-heading {
+  display: block; }
+.modal .btn-close {
+  position: absolute;
+  right: 0;
+  top: 0; }
 
 .editable-input {
   cursor: pointer;

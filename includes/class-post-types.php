@@ -190,7 +190,7 @@ class Kanban_Post_Types
 			$args = array(
 				'label'               => $post_type_label,
 				'labels'              => $labels,
-				'supports'            => array( 'title', 'editor', 'custom-fields', ),
+				'supports'            => array( 'title', 'editor', 'custom-fields', 'author'),
 				'hierarchical'        => true,
 				'public'              => false,
 				'show_ui'             => false,

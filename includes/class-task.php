@@ -55,7 +55,7 @@ class Kanban_Task
 
 	static function ajax_save ()
 	{
-		if (  !isset( $_POST[Kanban_Utils::get_nonce()] ) || ! wp_verify_nonce( $_POST[Kanban_Utils::get_nonce()], sprintf('%s-save', Kanban::$instance->settings->basename)) || !isset($_POST[self::$slug]) || !is_user_logged_in() ) wp_send_json_error();
+		if (  !isset( $_POST[Kanban_Utils::get_nonce()] ) || ! wp_verify_nonce( $_POST[Kanban_Utils::get_nonce()], sprintf('%s-save', Kanban::$instance->settings->basename)) || $_POST['post_type'] !== Kanban_Post_Types::format_post_type(self::$slug) || !is_user_logged_in() ) wp_send_json_error();
 
 
 
@@ -66,10 +66,10 @@ class Kanban_Task
 		if ( !isset($_POST[self::$slug]['post_type']) )
 		{
 			$post_type = Kanban_Post_Types::format_post_type (self::$slug);
-			$_POST[self::$slug]['post_type'] = $post_type;
+			$_POST['post_type'] = $post_type;
 		}
 
-		$post_data = Kanban_Post::save($_POST[self::$slug]);
+		$post_data = Kanban_Post::save($_POST);
 
 		if ( !$post_data ) wp_send_json_error();
 
@@ -89,7 +89,7 @@ class Kanban_Task
 
 	static function ajax_delete ()
 	{
-		if (  !isset( $_POST[Kanban_Utils::get_nonce()] ) || ! wp_verify_nonce( $_POST[Kanban_Utils::get_nonce()], sprintf('%s-save', Kanban::$instance->settings->basename)) || !isset($_POST[self::$slug]) || !is_user_logged_in() ) wp_send_json_error();
+		if (  !isset( $_POST[Kanban_Utils::get_nonce()] ) || ! wp_verify_nonce( $_POST[Kanban_Utils::get_nonce()], sprintf('%s-save', Kanban::$instance->settings->basename)) || $_POST['post_type'] !== Kanban_Post_Types::format_post_type(self::$slug) || !is_user_logged_in() ) wp_send_json_error();
 
 
 
@@ -97,7 +97,7 @@ class Kanban_Task
 
 
 
-		$is_successful = Kanban_Post::delete($_POST[self::$slug]);
+		$is_successful = Kanban_Post::delete($_POST);
 
 
 

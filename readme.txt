@@ -21,5 +21,9 @@ Run a complete kanban board inside your WordPress site. You can also create a de
 
 == Changelog ==
 
-= 0.4 =
+= 0.4.2 =
+* removing bind.js
+* lots of code cleanup and bug fixes from github
+
+= 0.4.1 =
 * The first stable beta of the plugin.

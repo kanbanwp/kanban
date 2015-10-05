@@ -129,59 +129,67 @@ class Kanban_Settings
 		);
 
 
-
-		foreach ( Kanban_Post_Types::$post_types as $post_type_slug => $post_type_data )
+		// don't show settings page if user doesn't have permission to manage plugins
+		if ( current_user_can('manage_options') )
 		{
 
-			$post_type_label = ucfirst($post_type_slug);
-
-			if ( defined('KANBAN_DEBUG') && KANBAN_DEBUG === TRUE )
+			foreach ( Kanban_Post_Types::$post_types as $post_type_slug => $post_type_data )
 			{
-				add_submenu_page(
-					Kanban::$instance->settings->basename,
-					sprintf('All %s', str_replace('_', ' ', Kanban_Utils::make_word_plural($post_type_label))),
-					sprintf('All %s', str_replace('_', ' ', Kanban_Utils::make_word_plural($post_type_label))),
-					'manage_options',
-					sprintf(
-						'edit.php?post_type=%s',
-						Kanban_Post_Types::format_post_type ($post_type_slug)
-					)
-				);
-			}
 
-			foreach ($post_type_data['taxonomies'] as $taxonomy_slug => $values)
-			{
-				$taxonomy_key = Kanban_Utils::format_key ($post_type_slug, $taxonomy_slug);
-				$taxonomy_label = ucwords(sprintf('%s %s', $post_type_slug, Kanban_Utils::make_word_plural($taxonomy_slug)));
+				$post_type_label = ucfirst($post_type_slug);
 
-				add_submenu_page(
-					Kanban::$instance->settings->basename,
-					$taxonomy_label,
-					$taxonomy_label,
-					'manage_options',
-					sprintf(
-						'edit-tags.php?taxonomy=%s&post_type=%s',
-						$taxonomy_key,
-						Kanban_Post_Types::format_post_type ($post_type_slug)
-					)
-				);
-			}
+				if ( defined('KANBAN_DEBUG') && KANBAN_DEBUG === TRUE )
+				{
+					add_submenu_page(
+						Kanban::$instance->settings->basename,
+						sprintf('All %s', str_replace('_', ' ', Kanban_Utils::make_word_plural($post_type_label))),
+						sprintf('All %s', str_replace('_', ' ', Kanban_Utils::make_word_plural($post_type_label))),
+						'manage_options',
+						sprintf(
+							'edit.php?post_type=%s',
+							Kanban_Post_Types::format_post_type ($post_type_slug)
+						)
+					);
+				} // DEBUG
+
+				foreach ($post_type_data['taxonomies'] as $taxonomy_slug => $values)
+				{
+					$taxonomy_key = Kanban_Utils::format_key ($post_type_slug, $taxonomy_slug);
+					$taxonomy_label = ucwords(sprintf('%s %s', $post_type_slug, Kanban_Utils::make_word_plural($taxonomy_slug)));
+
+					add_submenu_page(
+						Kanban::$instance->settings->basename,
+						$taxonomy_label,
+						$taxonomy_label,
+						'manage_options',
+						sprintf(
+							'edit-tags.php?taxonomy=%s&post_type=%s',
+							$taxonomy_key,
+							Kanban_Post_Types::format_post_type ($post_type_slug)
+						)
+					);
+				} // taxonomies
+			} // post_types
+		} // activate_plugins
+
+
+
+		// don't show settings page if user doesn't have permission to manage plugins
+		if ( current_user_can('manage_options') )
+		{
+			// @link https://codex.wordpress.org/Function_Reference/add_submenu_page#Inside_menu_created_with_add_menu_page.28.29
+			add_submenu_page(
+				Kanban::$instance->settings->basename,
+				'Settings',
+				'Settings',
+				'manage_options',
+				sprintf(
+					'admin.php?page=%s',
+					Kanban::$instance->settings->basename
+				),
+				array(__CLASS__, 'plugin_page')
+			);
 		}
-
-
-
-		// @link https://codex.wordpress.org/Function_Reference/add_submenu_page#Inside_menu_created_with_add_menu_page.28.29
-		add_submenu_page(
-			Kanban::$instance->settings->basename,
-			'Settings',
-			'Settings',
-			'manage_options',
-			sprintf(
-				'admin.php?page=%s',
-				Kanban::$instance->settings->basename
-			),
-			array(__CLASS__, 'plugin_page')
-		);
 
 	} // admin_menu
 
@@ -384,72 +392,72 @@ class Kanban_Settings
 
 
 
-	static function post_save_users ()
-	{
-		if (  !isset( $_POST[Kanban_Utils::get_nonce()] ) || ! wp_verify_nonce( $_POST[Kanban_Utils::get_nonce()], 'save_users') || !is_user_logged_in() ) return;
+	// static function post_save_users ()
+	// {
+	// 	if (  !isset( $_POST[Kanban_Utils::get_nonce()] ) || ! wp_verify_nonce( $_POST[Kanban_Utils::get_nonce()], 'save_users') || !is_user_logged_in() ) return;
 
-		self::update_option('allowed_users', $_POST['allowed_users']);
+	// 	self::update_option('allowed_users', $_POST['allowed_users']);
 
-		Kanban::$instance->flash->add('success', 'The users have been updated');
+	// 	Kanban::$instance->flash->add('success', 'The users have been updated');
 
-		wp_redirect($_POST['_wp_http_referer']);
-		exit;
-	}
-
-
-
-	static function post_save_status ()
-	{
-		if (  !isset( $_POST[Kanban_Utils::get_nonce()] ) || ! wp_verify_nonce( $_POST[Kanban_Utils::get_nonce()], 'save_status_order') || !is_user_logged_in() ) return;
-
-		$tax_key = Kanban_Utils::format_key ('task', 'status');
-
-		// save names
-		$name_field = sprintf('%s_name', $tax_key);
-
-		foreach ($_POST[$name_field] as $term_id => $name)
-		{
-			wp_update_term(
-				$term_id,
-				$tax_key,
-				array(
-				  'name' => $name
-				)
-			);
-		}
-
-		// save order
-		$order_name = sprintf('%s_order', $tax_key);
-		self::update_option($order_name, $_POST[$order_name]);
-
-		// save colors
-		// https://pippinsplugins.com/adding-custom-meta-fields-to-taxonomies/
-		$color_name = sprintf('%s_colors', $tax_key);
-		self::update_option($color_name, $_POST[$color_name]);
-
-		Kanban::$instance->flash->add('success', 'Status order has been saved');
-
-		wp_redirect($_POST['_wp_http_referer']);
-		exit;
-	}
+	// 	wp_redirect($_POST['_wp_http_referer']);
+	// 	exit;
+	// }
 
 
 
-	static function post_save_estimate_order ()
-	{
-		if (  !isset( $_POST[Kanban_Utils::get_nonce()] ) || ! wp_verify_nonce( $_POST[Kanban_Utils::get_nonce()], 'save_estimate_order') || !is_user_logged_in() ) return;
+	// static function post_save_status ()
+	// {
+	// 	if (  !isset( $_POST[Kanban_Utils::get_nonce()] ) || ! wp_verify_nonce( $_POST[Kanban_Utils::get_nonce()], 'save_status_order') || !is_user_logged_in() ) return;
 
-		$tax_key = Kanban_Utils::format_key ('task', 'estimate');
-		$field_name = sprintf('%s_order', $tax_key);
+	// 	$tax_key = Kanban_Utils::format_key ('task', 'status');
 
-		self::update_option($field_name, $_POST[$field_name]);
+	// 	// save names
+	// 	$name_field = sprintf('%s_name', $tax_key);
+
+	// 	foreach ($_POST[$name_field] as $term_id => $name)
+	// 	{
+	// 		wp_update_term(
+	// 			$term_id,
+	// 			$tax_key,
+	// 			array(
+	// 			  'name' => $name
+	// 			)
+	// 		);
+	// 	}
+
+	// 	// save order
+	// 	$order_name = sprintf('%s_order', $tax_key);
+	// 	self::update_option($order_name, $_POST[$order_name]);
+
+	// 	// save colors
+	// 	// https://pippinsplugins.com/adding-custom-meta-fields-to-taxonomies/
+	// 	$color_name = sprintf('%s_colors', $tax_key);
+	// 	self::update_option($color_name, $_POST[$color_name]);
+
+	// 	Kanban::$instance->flash->add('success', 'Status order has been saved');
+
+	// 	wp_redirect($_POST['_wp_http_referer']);
+	// 	exit;
+	// }
 
 
-		Kanban::$instance->flash->add('success', 'Estimates order has been saved');
 
-		wp_redirect($_POST['_wp_http_referer']);
-		exit;
-	}
+	// static function post_save_estimate_order ()
+	// {
+	// 	if (  !isset( $_POST[Kanban_Utils::get_nonce()] ) || ! wp_verify_nonce( $_POST[Kanban_Utils::get_nonce()], 'save_estimate_order') || !is_user_logged_in() ) return;
+
+	// 	$tax_key = Kanban_Utils::format_key ('task', 'estimate');
+	// 	$field_name = sprintf('%s_order', $tax_key);
+
+	// 	self::update_option($field_name, $_POST[$field_name]);
+
+
+	// 	Kanban::$instance->flash->add('success', 'Estimates order has been saved');
+
+	// 	wp_redirect($_POST['_wp_http_referer']);
+	// 	exit;
+	// }
 
 
 

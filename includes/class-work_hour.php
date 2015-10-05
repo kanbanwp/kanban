@@ -29,7 +29,7 @@ class Kanban_Work_Hour
 
 	static function ajax_save ()
 	{
-		if (  !isset( $_POST[Kanban_Utils::get_nonce()] ) || ! wp_verify_nonce( $_POST[Kanban_Utils::get_nonce()], sprintf('%s-save', Kanban::$instance->settings->basename)) || !isset($_POST[Kanban_Task::$slug]) || !is_user_logged_in() ) wp_send_json_error();
+		if (  !isset( $_POST[Kanban_Utils::get_nonce()] ) || ! wp_verify_nonce( $_POST[Kanban_Utils::get_nonce()], sprintf('%s-save', Kanban::$instance->settings->basename)) || $_POST['post_type'] !== Kanban_Post_Types::format_post_type(self::$slug) || !is_user_logged_in() ) wp_send_json_error();
 
 
 
@@ -40,7 +40,7 @@ class Kanban_Work_Hour
 		// build post data
 		$post_data = array(
 			'post_type' => Kanban_Post_Types::format_post_type ('work_hour'),
-			'post_title' => sanitize_text_field($_POST[Kanban_Task::$slug]['post_title']),
+			'post_title' => sanitize_text_field($_POST['post_title']),
 			'postmeta' => array(),
 			'terms' => array()
 		);
@@ -55,16 +55,16 @@ class Kanban_Work_Hour
 		// set assignee as author of work hour
 		$task_user_id_assigned_to = Kanban_Utils::format_key ('task', 'user_id_assigned');
 
-		if ( $_POST[Kanban_Task::$slug]['postmeta'][$task_user_id_assigned_to] > 0 )
+		if ( $_POST['postmeta'][$task_user_id_assigned_to] > 0 )
 		{
-			$post_data['post_author'] = $_POST[Kanban_Task::$slug]['postmeta'][$task_user_id_assigned_to];
+			$post_data['post_author'] = $_POST['postmeta'][$task_user_id_assigned_to];
 		}
 
 
 
 		// link task to hour
 		$hour_task_id = Kanban_Utils::format_key ('work_hour', 'project_id');
-		$post_data['postmeta'][$hour_task_id] = $_POST[Kanban_Task::$slug]['ID'];
+		$post_data['postmeta'][$hour_task_id] = $_POST['ID'];
 
 
 
@@ -77,14 +77,14 @@ class Kanban_Work_Hour
 		// set task project as work project
 		$task_project_id = Kanban_Utils::format_key ('task', 'project_id');
 		$hour_project_id = Kanban_Utils::format_key ('work_hour', 'project_id');
-		$post_data['postmeta'][$hour_project_id] = $_POST[Kanban_Task::$slug]['postmeta'][$task_project_id];
+		$post_data['postmeta'][$hour_project_id] = $_POST['postmeta'][$task_project_id];
 
 
 
 		// set current task status for work hour
 		$task_status = Kanban_Utils::format_key ('task', 'status');
 		$hour_status_id = Kanban_Utils::format_key ('work_hour', 'task_status_id');
-		$post_data['postmeta'][$hour_status_id] = $_POST[Kanban_Task::$slug]['terms'][$task_status][0];
+		$post_data['postmeta'][$hour_status_id] = $_POST['terms'][$task_status][0];
 
 
 

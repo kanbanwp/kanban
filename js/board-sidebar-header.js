@@ -109,6 +109,7 @@ $.fn.board_sidebar_header = function()
 
 				var task_data = {task: ['']};
 				task_data.action = 'save_task';
+				task_data.post_type = 'kanban_task';
 				task_data.kanban_nonce = $('#kanban_nonce').val();
 
 				$.ajax({

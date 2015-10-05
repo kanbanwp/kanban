@@ -27,7 +27,8 @@ class Kanban_Template
 				'autoresize' => "%s/js/jquery.textarea.autoresize.js",
 				'same-height' => "%s/js/jquery.same-height.js",
 				't' => "%s/js/t.min.js",
-				'bind' => "%s/js/bind.min.js",
+				// 'bind' => "%s/js/bind.min.js",
+				'board-modal-projects' => "%s/js/board-modal-projects.js",
 				'board-sidebar-header' => "%s/js/board-sidebar-header.js",
 				'board-search' => "%s/js/board-search.js",
 				'board-filter' => "%s/js/board-filter.js",
@@ -36,7 +37,7 @@ class Kanban_Template
 				'board' => "%s/js/board.js"
 			)
 		),
-		'login'
+		'login' => array()
 	);
 
 
@@ -117,8 +118,6 @@ class Kanban_Template
 		// allow for additional pages
 		self::$page_slugs = apply_filters( sprintf('%s_template_pages', Kanban::$instance->settings->basename), self::$page_slugs );
 
-
-
 		foreach (self::$page_slugs as $slug => $data)
 		{
 	 		if ( strpos(strtok($_SERVER["REQUEST_URI"],'?'), sprintf('%s/%s', Kanban::$slug, $slug)) !== FALSE )
@@ -129,36 +128,41 @@ class Kanban_Template
 				{
 					self::$instance->slug = $slug;
 
-					foreach ($data['style'] as $handle => $path)
+					if ( isset($data['style']) )
 					{
-						if ( !isset(self::$instance->style) || !is_array(self::$instance->style) )
+						foreach ($data['style'] as $handle => $path)
 						{
-							self::$instance->style = array();
-						}
+							if ( !isset(self::$instance->style) || !is_array(self::$instance->style) )
+							{
+								self::$instance->style = array();
+							}
 
-						if ( strpos($path, '%s') !== FALSE )
-						{
-							$path = sprintf($path, Kanban::$instance->settings->uri);
-						}
+							if ( strpos($path, '%s') !== FALSE )
+							{
+								$path = sprintf($path, Kanban::$instance->settings->uri);
+							}
 
-						self::$instance->style[$handle] = $path;
+							self::$instance->style[$handle] = $path;
+						}
 					}
 
-					foreach ($data['script'] as $handle => $path)
+					if ( isset($data['script']) )
 					{
-						if ( !isset(self::$instance->script) || !is_array(self::$instance->script) )
+						foreach ($data['script'] as $handle => $path)
 						{
-							self::$instance->script = array();
-						}
+							if ( !isset(self::$instance->script) || !is_array(self::$instance->script) )
+							{
+								self::$instance->script = array();
+							}
 
-						if ( strpos($path, '%s') !== FALSE )
-						{
-							$path = sprintf($path, Kanban::$instance->settings->uri);
-						}
+							if ( strpos($path, '%s') !== FALSE )
+							{
+								$path = sprintf($path, Kanban::$instance->settings->uri);
+							}
 
-						self::$instance->script[$handle] = $path;
+							self::$instance->script[$handle] = $path;
+						}
 					}
-					// return $template;
 				}
 			}
 		}
@@ -218,7 +222,7 @@ class Kanban_Template
 
 	static function add_style()
 	{
-		if ( !is_array(self::$instance->style) ) return;
+		if ( !isset(self::$instance->style) || !is_array(self::$instance->style) ) return;
 
 		foreach (self::$instance->style as $handle => $path)
 		{
@@ -234,7 +238,7 @@ class Kanban_Template
 
 	static function add_script()
 	{
-		if ( !is_array(self::$instance->script) ) return;
+		if ( !isset(self::$instance->script) || !is_array(self::$instance->script) ) return;
 
 		foreach (self::$instance->script as $handle => $path)
 		{

@@ -129,59 +129,67 @@ class Kanban_Settings
 		);
 
 
-
-		foreach ( Kanban_Post_Types::$post_types as $post_type_slug => $post_type_data )
+		// don't show settings page if user doesn't have permission to manage plugins
+		if ( current_user_can('manage_options') )
 		{
 
-			$post_type_label = ucfirst($post_type_slug);
-
-			if ( defined('KANBAN_DEBUG') && KANBAN_DEBUG === TRUE )
+			foreach ( Kanban_Post_Types::$post_types as $post_type_slug => $post_type_data )
 			{
-				add_submenu_page(
-					Kanban::$instance->settings->basename,
-					sprintf('All %s', str_replace('_', ' ', Kanban_Utils::make_word_plural($post_type_label))),
-					sprintf('All %s', str_replace('_', ' ', Kanban_Utils::make_word_plural($post_type_label))),
-					'manage_options',
-					sprintf(
-						'edit.php?post_type=%s',
-						Kanban_Post_Types::format_post_type ($post_type_slug)
-					)
-				);
-			}
 
-			foreach ($post_type_data['taxonomies'] as $taxonomy_slug => $values)
-			{
-				$taxonomy_key = Kanban_Utils::format_key ($post_type_slug, $taxonomy_slug);
-				$taxonomy_label = ucwords(sprintf('%s %s', $post_type_slug, Kanban_Utils::make_word_plural($taxonomy_slug)));
+				$post_type_label = ucfirst($post_type_slug);
 
-				add_submenu_page(
-					Kanban::$instance->settings->basename,
-					$taxonomy_label,
-					$taxonomy_label,
-					'manage_options',
-					sprintf(
-						'edit-tags.php?taxonomy=%s&post_type=%s',
-						$taxonomy_key,
-						Kanban_Post_Types::format_post_type ($post_type_slug)
-					)
-				);
-			}
+				if ( defined('KANBAN_DEBUG') && KANBAN_DEBUG === TRUE )
+				{
+					add_submenu_page(
+						Kanban::$instance->settings->basename,
+						sprintf('All %s', str_replace('_', ' ', Kanban_Utils::make_word_plural($post_type_label))),
+						sprintf('All %s', str_replace('_', ' ', Kanban_Utils::make_word_plural($post_type_label))),
+						'manage_options',
+						sprintf(
+							'edit.php?post_type=%s',
+							Kanban_Post_Types::format_post_type ($post_type_slug)
+						)
+					);
+				} // DEBUG
+
+				foreach ($post_type_data['taxonomies'] as $taxonomy_slug => $values)
+				{
+					$taxonomy_key = Kanban_Utils::format_key ($post_type_slug, $taxonomy_slug);
+					$taxonomy_label = ucwords(sprintf('%s %s', $post_type_slug, Kanban_Utils::make_word_plural($taxonomy_slug)));
+
+					add_submenu_page(
+						Kanban::$instance->settings->basename,
+						$taxonomy_label,
+						$taxonomy_label,
+						'manage_options',
+						sprintf(
+							'edit-tags.php?taxonomy=%s&post_type=%s',
+							$taxonomy_key,
+							Kanban_Post_Types::format_post_type ($post_type_slug)
+						)
+					);
+				} // taxonomies
+			} // post_types
+		} // activate_plugins
+
+
+
+		// don't show settings page if user doesn't have permission to manage plugins
+		if ( current_user_can('manage_options') )
+		{
+			// @link https://codex.wordpress.org/Function_Reference/add_submenu_page#Inside_menu_created_with_add_menu_page.28.29
+			add_submenu_page(
+				Kanban::$instance->settings->basename,
+				'Settings',
+				'Settings',
+				'manage_options',
+				sprintf(
+					'admin.php?page=%s',
+					Kanban::$instance->settings->basename
+				),
+				array(__CLASS__, 'plugin_page')
+			);
 		}
-
-
-
-		// @link https://codex.wordpress.org/Function_Reference/add_submenu_page#Inside_menu_created_with_add_menu_page.28.29
-		add_submenu_page(
-			Kanban::$instance->settings->basename,
-			'Settings',
-			'Settings',
-			'manage_options',
-			sprintf(
-				'admin.php?page=%s',
-				Kanban::$instance->settings->basename
-			),
-			array(__CLASS__, 'plugin_page')
-		);
 
 	} // admin_menu
 

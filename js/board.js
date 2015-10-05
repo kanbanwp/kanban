@@ -332,9 +332,9 @@ jQuery(function($)
 
 
 	var hash = [];
-	if (window.location.hash)
+	if (location.hash)
 	{
-		var params = (window.location.hash.substr(1)).split("&");
+		var params = (location.hash.substr(1)).split("&");
 		for ( var i in params )
 		{
 			var param = params[i].split("=");

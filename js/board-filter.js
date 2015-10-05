@@ -16,12 +16,12 @@ $.fn.board_filter = function(task)
     		'show.bs.dropdown',
     		function()
     		{
-    			$projects_dropdown.empty();
+    			$('.project', $projects_dropdown).remove();
 
 				for ( var i in project_records )
 				{
 					var $project = $(t_filter_project.render(project_records[i]));
-					$project.appendTo($projects_dropdown);
+					$project.prependTo($projects_dropdown);
 				}
 
     		}
@@ -39,9 +39,12 @@ $.fn.board_filter = function(task)
 
 				var project = project_records[project_id];
 
+				// if not found
 				if ( typeof project === 'undefined' )
 				{
-					return false;
+					project = {
+						post_title: $a.text()
+					};
 				}
 
 				var $dropdown = $a.closest('.dropup');
@@ -55,6 +58,10 @@ $.fn.board_filter = function(task)
 				$label
 				.text(project.post_title)
 				.attr('data-id', project_id);
+
+				$('#btn-filter-apply', $wrapper).trigger('click');
+
+				return false;
 			}
 		);
 
@@ -64,14 +71,13 @@ $.fn.board_filter = function(task)
     		'show.bs.dropdown',
     		function()
     		{
-    			$users_dropdown.empty();
+    			$('.user', $users_dropdown).remove();
 
 				for ( var i in allowed_users )
 				{
 					var $user = $(t_filter_user.render(allowed_users[i]));
-					$user.appendTo($users_dropdown);
+					$user.prependTo($users_dropdown);
 				}
-
     		}
     	);
 
@@ -86,6 +92,16 @@ $.fn.board_filter = function(task)
 				var user_id = $a.attr('data-id');
 				var user = allowed_users[user_id];
 
+				// if not found
+				if ( typeof user === 'undefined' )
+				{
+					user = {
+						data: {
+							long_name_email: $a.text()
+						}
+					};
+				}
+
 				var $dropdown = $a.closest('.dropup');
 				var $label = $('.btn-label', $dropdown);
 
@@ -97,6 +113,10 @@ $.fn.board_filter = function(task)
 				$label
 				.text(user.data.long_name_email)
 				.attr('data-id', user_id);
+
+				$('#btn-filter-apply', $wrapper).trigger('click');
+
+				return false;
 			}
 		);
 
@@ -108,10 +128,10 @@ $.fn.board_filter = function(task)
 			{
 				$('#btn-filter-reset').show();
 
-				var project_id = $('#filter-projects .btn-label').attr('data-id');
 				var selector = '';
-				var hash = '';
+				var hash = '#';
 
+				var project_id = $('#filter-projects .btn-label').attr('data-id');
 				if ( typeof project_id !== 'undefined' && project_id != '' )
 				{
 					selector += '[data-project-id=' + project_id + ']';
@@ -126,8 +146,7 @@ $.fn.board_filter = function(task)
 				}
 				var $tasks_to_show = $('.task' + selector);
 
-				// update url for deep linking
-				window.location.hash = hash;
+				location.hash = hash;
 
 				$('.task').not($tasks_to_show).slideUp('fast');
 
@@ -152,7 +171,7 @@ $.fn.board_filter = function(task)
 					.text( $label.attr('data-orig') );
 				});
 
-				window.location.hash = '';
+				location.hash = '#';
 			}
 		);
 

@@ -111,6 +111,10 @@ body.view-compact {
 		white-space: nowrap;
 		width: 20%;
 
+		#btn-filter-apply {
+			display: none;
+		}
+
 		.dropdown-menu {
 			bottom: auto;
 		}

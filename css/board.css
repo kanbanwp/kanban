@@ -46,6 +46,8 @@ body.view-compact .row-worked {
     top: 7.5px;
     white-space: nowrap;
     width: 20%; }
+    #wrapper-footer #filter-wrapper #btn-filter-apply {
+      display: none; }
     #wrapper-footer #filter-wrapper .dropdown-menu {
       bottom: auto; }
     #wrapper-footer #filter-wrapper .dropdown-toggle {

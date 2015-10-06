@@ -13,7 +13,7 @@ Kanban_Project::init();
 
 class Kanban_Project
 {
-	static $instance = false;
+	private static $instance = false;
 	static $slug = 'project';
 
 
@@ -120,7 +120,7 @@ class Kanban_Project
 
 
 
-	static function get_instance()
+	public static function get_instance()
 	{
 		if ( ! self::$instance )
 		{

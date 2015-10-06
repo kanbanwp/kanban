@@ -13,7 +13,7 @@ Kanban_User::init();
 
 class Kanban_User
 {
-	static $instance = false;
+	private static $instance = false;
 
 	static function init()
 	{
@@ -261,7 +261,7 @@ class Kanban_User
 	}
 
 
-	static function get_instance()
+	public static function get_instance()
 	{
 		if ( ! self::$instance )
 		{

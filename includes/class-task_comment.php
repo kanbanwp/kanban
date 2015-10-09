@@ -7,32 +7,22 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 
 
 
-Kanban_Comment::init();
+Kanban_Task_Comment::init();
 
 
 
-class Kanban_Comment
+class Kanban_Task_Comment
 {
 	static $instance = false;
-	static $slug = 'comment';
+	static $slug = 'task_comment';
 
 
 
 	static function init()
 	{
-		self::$instance = self::get_instance();
+		// self::$instance = self::get_instance();
 
 		add_action( sprintf('wp_ajax_save_%s', self::$slug), array(__CLASS__, 'ajax_save') );
-
-		//Before getting the comments, on the WP_Comment_Query object for each comment
-		add_action('pre_get_comments', array(__CLASS__, 'wpse56652_filt_comm'));
-
-		//Applied on the comments SQL Query, you can modify the 'Where' part of the query
-		add_filter('comments_clauses', array(__CLASS__, 'wpse56652_filt_comm'));
-
-		//After the comments are fetched, you can modify the comments array
-		add_filter('the_comments', array(__CLASS__, 'wpse56652_filt_comm'));
-
 	}
 
 
@@ -51,20 +41,28 @@ class Kanban_Comment
 
 
 
-		$data = array(
-			'comment_type' => Kanban_Utils::format_key ($_POST['post_type'], 'comment'),
-			'comment_author' => Kanban::$instance->settings->pretty_name,
-			'comment_post_ID' => $_POST['id'],
-			'comment_content' => sanitize_text_field(str_replace("\n", '', $_POST['comment_content'])),
-			'user_id' => $current_user_id,
-			'comment_approved' => 1
+		$comment_type_field = Kanban_Utils::format_key (self::$slug, 'comment_type');
+
+
+		// build post data
+		$post_data = array(
+			'post_type' => Kanban_Post_Types::format_post_type (self::$slug),
+			'post_title' => sprintf('%s comment for task %s', $_POST['comment_type'], $_POST['id']),
+			'post_content' => sanitize_text_field(str_replace("\n", '', $_POST['post_content'])),
+			'post_parent' => $_POST['id'],
+			'postmeta' => array(
+				$comment_type_field => $_POST['comment_type']
+			)
 		);
 
-		$comment_id = wp_insert_comment($data);
+
+
+		// save our work_hour
+		$post_data = Kanban_Post::save($post_data);
 
 
 
-		$comment_type = Kanban_Utils::format_key ($_POST['post_type'], 'comment');
+		if ( !$post_data ) wp_send_json_error();
 
 
 
@@ -73,10 +71,11 @@ class Kanban_Comment
 
 
 		wp_send_json_success(array(
-			'message' => sprintf('%s saved', $comment_type)
+			'message' => sprintf('%s saved', self::$slug),
+			self::$slug => $post_data
 		));
-	}
 
+	}
 
 
 

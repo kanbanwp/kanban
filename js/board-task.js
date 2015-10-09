@@ -84,11 +84,11 @@ $.fn.board_task = function(task)
 				}
 
 				var data = {
-					id: task.ID,
-					action: 'save_comment',
-					post_type: 'task',
+					action: 'save_task_comment',
 					kanban_nonce: $('#kanban_nonce').val(),
-					comment_content: comment_content
+					post_content: comment_content,
+					id: task.ID,
+					comment_type: 'system'
 				};
 
 				$.ajax({

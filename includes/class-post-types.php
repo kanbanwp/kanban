@@ -44,6 +44,12 @@ class Kanban_Post_Types
 				'color' => 'lightblue'
 			)
 		),
+		'task_comment' => array(
+			'taxonomies' => array(),
+			'postmeta_fields' => array(
+				'comment_type' => 'system'
+			)
+		),
 		'work_hour' => array(
 			'taxonomies' => array(),
 			'postmeta_fields' => array(

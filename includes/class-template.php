@@ -62,7 +62,7 @@ class Kanban_Template
 	static function protect_slug ()
 	{
 		// only protect pages with our slug
-	    if ( strpos($_SERVER['REQUEST_URI'], sprintf('/%s', Kanban::$slug)) === FALSE ) return;
+	    if ( strpos($_SERVER['REQUEST_URI'], sprintf('/%s/', Kanban::$slug)) === FALSE ) return;
 
 
 		// admins can see anything

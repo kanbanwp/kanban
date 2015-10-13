@@ -1,35 +1,21 @@
-# Kanban for WordPress
+# [Kanban for WordPress](http://kanbanwp.com/)
 
-Contributors: gelform
+Welcome to the Kanban for WordPress repository on GitHub. Here you can browse the source, look at open issues and keep track of development. We recommend all developers to follow the [Kanban for WordPress development blog](https://kanbanwp.com/blog) to stay up to date about everything happening in the project. You can also [follow @KanbanWP](https://twitter.com/kanbanwp) on Twitter for the latest development updates.
 
-Tags: kanban board, agile, scrum, project management, productivity, Trello
+If you are not a developer, please use the [Kanban plugin page](https://wordpress.org/plugins/kanban/) on WordPress.org.
 
-Requires at least: 4
+**Documentation:**  The [Kanban for WordPress documentation site](http://kanbanwp.com/documentation/)
 
-Tested up to: 4.3
+**Changelog:**  The [Kanban for WordPress changelog page](http://kanbanwp.com/changelog/)
 
-License: GPLv2 or later
 
-License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-A complete kanban board for agile project management inside your WordPress site.
+## Support
+This repository is not suitable for support. Please don't use our issue tracker for support requests, but for core Kanban issues only. Support can take place in the appropriate channels:
 
-## Description
-Run a complete kanban board inside your WordPress site. You can also create a dedicated site for project management.
+* The [Kanban for WordPress support portal](https://wordpress.org/support/plugin/kanban) on WordPress.org
 
-## Installation
-1. Download the plugin
-2. Unzip into /wp-content/plugins
-3. Visit the Plugins page in the WordPress admin
-4. Click "activate" under "Kanban for WordPress" to activate the plugin
-5. Visit the "Kanban" menu item that appears in the WordPress Admin menu. You can manage settings for your kanban board here.
-6. Click "Go to your board" to visit your kanban board and start adding tasks!
+Support requests in issues on this repository will be closed on sight.
 
-## Changelog
-
-### 0.4.2
-* removing bind.js
-* lots of code cleanup and bug fixes from github
-
-### 0.4.1
-* The first stable beta of the plugin.
+## Contributing to Kanban for WordPress
+If you have a patch, or stumbled upon an issue with Kanban core, you can contribute this back to the code. Please read our [contributor guidelines](https://github.com/gelform/kanban/blob/master/CONTRIBUTING.md) for more information how you can do this.

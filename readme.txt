@@ -1,4 +1,5 @@
 === Kanban for WordPress ===
+
 Contributors: gelform
 Tags: kanban board, agile, scrum, project management, productivity, Trello
 Requires at least: 4
@@ -37,7 +38,8 @@ Kanban for WordPress lets you run a complete kanban board on your WordPress site
 == Screenshots ==
 1. An example of the kanban board
 2. The kanban board on a mobile tablet
-3. The settings page, where you set the color of each status column (or swimlane)
+3. The projects edit screen on the kanban board
+4. The settings page, where you set the color of each status column (or swimlane)
 
 
 

@@ -162,7 +162,7 @@ $.fn.modal_projects = function()
 					var $project = $(t_modal_projects_panel.render(project));
 					$panel.replaceWith($project);
 					$('.collapse', $project).addClass('in');
-					$('.project_title', $project).focus();
+					// $('.project_title', $project).focus();
 
 				})
 				// .fail(function() {

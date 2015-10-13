@@ -8,6 +8,7 @@ Author:			Gelform Inc
 Author URI:		http://gelwp.com
 License:		GPL2
 Text Domain:	kanban
+Domain Path: 	/languages/
 
 
 

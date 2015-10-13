@@ -260,6 +260,8 @@ body.view-compact {
 				}
 
 				h2 {
+					padding-top: $margin/2;
+
 					&:before,
 					&:after {
 						cursor: pointer;
@@ -267,7 +269,7 @@ body.view-compact {
 						height: 100%;
 						padding-top: $margin/2;
 						position: absolute;
-						top: 0;
+						top: $margin/2;
 						display: block;
 						font-family: 'Glyphicons Halflings';
 						font-style: normal;
@@ -417,8 +419,12 @@ body.view-compact {
 				padding: 0;
 
 				.task_title {
-					// font-size: .82em;
 					font-weight: normal;
+
+					@media screen and (max-width: $screen-sm-max) {
+						height: 2.382em !important;
+						font-size: 2em;
+					}
 				}
 			}
 

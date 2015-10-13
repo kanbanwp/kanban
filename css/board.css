@@ -145,27 +145,29 @@ body.view-compact .row-worked {
             display: none; }
           #wrapper-board #row-statuses .col-status .toggle-sidebar {
             display: none !important; }
-          #wrapper-board #row-statuses .col-status h2:before, #wrapper-board #row-statuses .col-status h2:after {
-            cursor: pointer;
-            display: block;
-            height: 100%;
-            padding-top: 7.5px;
-            position: absolute;
-            top: 0;
-            display: block;
-            font-family: 'Glyphicons Halflings';
-            font-style: normal;
-            font-weight: 400;
-            line-height: 1;
-            -webkit-font-smoothing: antialiased;
-            width: 50%;
-            z-index: 1; }
-          #wrapper-board #row-statuses .col-status h2:before {
-            content: "\e079";
-            left: 0; }
-          #wrapper-board #row-statuses .col-status h2:after {
-            content: "\e080";
-            right: 0; } }
+          #wrapper-board #row-statuses .col-status h2 {
+            padding-top: 7.5px; }
+            #wrapper-board #row-statuses .col-status h2:before, #wrapper-board #row-statuses .col-status h2:after {
+              cursor: pointer;
+              display: block;
+              height: 100%;
+              padding-top: 7.5px;
+              position: absolute;
+              top: 7.5px;
+              display: block;
+              font-family: 'Glyphicons Halflings';
+              font-style: normal;
+              font-weight: 400;
+              line-height: 1;
+              -webkit-font-smoothing: antialiased;
+              width: 50%;
+              z-index: 1; }
+            #wrapper-board #row-statuses .col-status h2:before {
+              content: "\e079";
+              left: 0; }
+            #wrapper-board #row-statuses .col-status h2:after {
+              content: "\e080";
+              right: 0; } }
     @media screen and (max-width: 767px) {
       #wrapper-board #row-statuses {
         left: 0% !important;
@@ -248,6 +250,10 @@ body.view-compact .row-worked {
         padding: 0; }
         #wrapper-board #row-tasks .task .wrapper-task-title .task_title {
           font-weight: normal; }
+          @media screen and (max-width: 767px) {
+            #wrapper-board #row-tasks .task .wrapper-task-title .task_title {
+              height: 2.382em !important;
+              font-size: 2em; } }
       #wrapper-board #row-tasks .task .row-worked {
         margin: 0 0 5px; }
         #wrapper-board #row-tasks .task .row-worked small {

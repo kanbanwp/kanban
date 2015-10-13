@@ -36,7 +36,7 @@ Kanban for WordPress lets you run a complete kanban board on your WordPress site
 
 == Screenshots ==
 1. An example of the kanban board
-2. The kanban boardon mobile
+2. The kanban board on a mobile tablet
 3. The settings page, where you set the color of each status column (or swimlane)
 
 

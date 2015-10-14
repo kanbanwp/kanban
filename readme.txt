@@ -1,4 +1,5 @@
 === Kanban for WordPress ===
+
 Contributors: gelform, mkrdip, freemius
 Tags: kanban board, agile, scrum, project management, productivity, Trello
 Requires at least: 4.0

@@ -17,7 +17,7 @@ Kanban for WordPress lets you run a complete kanban board on your WordPress site
 * Customize the board to work for your team, including custom swim lanes
 * Create tasks and projects quickly, right from the board. Most editing is "edit in place" for quick updating.
 * Assign tasks to team members as you complete tasks
-* set estimates on how long you think tasks will take
+* Set estimates on how long you think tasks will take
 * Track hours, and see the progress of tasks as they get done
 * Create custom views by filtering and searching for tasks
 * Manage the users who have access to the board, in case some team members don't need to see it

@@ -104,7 +104,97 @@ $.fn.board_task = function(task)
 				// 	show_growl_msg(response);
 				// });
 			}
-		);
+		); // add comment
+
+
+
+		$task.on(
+			'add_project',
+			function ()
+			{
+				// delay, in case a project is selected
+				setTimeout(function()
+				{
+					var $input = $('.project_title', $task);
+					var project_title = $input.val();
+
+					if ( typeof project_title === 'undefined' || project_title == '' )
+					{
+						return;
+					}
+
+
+					// see if typed value matches existing project
+					var is_new_project = true;
+					for ( var i in project_records )
+					{
+						var project = project_records[i];
+
+						// it is NOT a new project
+						if ( project_title == project.post_title )
+						{
+							is_new_project = false;
+							break;
+						}
+					}
+
+					// if it IS a new project
+					if ( is_new_project )
+					{
+						var data = {
+							action: 'save_project',
+							post_type: 'kanban_project',
+							kanban_nonce: $('#kanban_nonce').val(),
+							post_title: project_title
+						};
+
+						// save new project
+						$.ajax({
+							method: "POST",
+							url: ajaxurl,
+							data: data
+						})
+						.done(function(response )
+						{
+							if ( typeof response.data !== 'undefined' )
+							{
+								if ( typeof response.data.project !== 'undefined' )
+								{
+									// add project to available projects
+									project_records[response.data.project.ID] = response.data.project;
+
+									// assign new project id to task
+									task.postmeta.kanban_task_project_id = response.data.project.ID;
+
+									// save task
+									$task
+									.trigger('save')
+									.trigger('populate_project');
+
+									// add comment for log
+									$task.trigger(
+										'add_comment',
+										[
+											'{0} added the task to the project "{1}"'.sprintf (
+												current_user.short_name,
+												response.data.project.post_title
+											)
+										]
+									);
+								}
+							}
+						})
+						.always(function(response)
+						{
+							show_growl_msg(response);
+						});
+					} // is_new_project
+
+				}, 500);
+
+			} // function
+		); // add project
+
 
 
 		$task.on(
@@ -462,72 +552,23 @@ $.fn.board_task = function(task)
 			function(e)
 			{
 				var $input = $(this);
+				var val = $input.val();
+
+
 
 				// enter
 				if(e.keyCode==13)
 				{
 					$projects_dropdown.hide();
-
-					var data = {
-						action: 'save_project',
-						post_type: 'kanban_project',
-						kanban_nonce: $('#kanban_nonce').val(),
-						post_title: $input.val()
-					};
-
-					// save new project
-					$.ajax({
-						method: "POST",
-						url: ajaxurl,
-						data: data
-					})
-					.done(function(response )
-					{
-						if ( typeof response.data !== 'undefined' )
-						{
-							if ( typeof response.data.project !== 'undefined' )
-							{
-								// add project to available projects
-								project_records[response.data.project.ID] = response.data.project;
-
-								// assign new project id to task
-								task.postmeta.kanban_task_project_id = response.data.project.ID;
-
-								// save task
-								$task
-								.trigger('save')
-								.trigger('populate_project');
-
-								$input.trigger('blur');
-
-								// add comment for log
-								$task.trigger(
-									'add_comment',
-									[
-										'{0} added the task to the project "{1}"'.sprintf (
-											current_user.short_name,
-											response.data.project.post_title
-										)
-									]
-								);
-							}
-						}
-					})
-					.always(function(response)
-					{
-						show_growl_msg(response);
-					});
-
 					return;
 				}
+
+
 
 				// escape
 				if(e.keyCode==27)
 				{
 					$projects_dropdown.hide();
-
-					$input.trigger('blur');
-
 					return;
 				}
 
@@ -557,6 +598,35 @@ $.fn.board_task = function(task)
 				{
 					$projects_dropdown.hide();
 				}
+			} // function
+		);
+
+
+
+		$task.on(
+			'blur',
+			'.project_title',
+			function(e)
+			{
+				var $btn_project_edit = $('.btn-edit-projects', $task);
+
+				// don't save if "edit projects" was clicked
+				if ( $last_clicked[0] == $btn_project_edit[0] )
+				{
+					// trigger escape
+					var e = jQuery.Event("keyup");
+					e.which = 27; //choose the one you want
+					e.keyCode = 27;
+					$(this).trigger(e);
+
+					// show modal, if it didn't
+					var target_id = $btn_project_edit.attr('data-target');
+					$(target_id).modal('show');
+				}
+				else
+				{
+					$task.trigger('add_project');
+				}
 			}
 		);
 
@@ -584,9 +654,12 @@ $.fn.board_task = function(task)
 				var project_id = $(this).attr('data-id');
 
 				task.postmeta.kanban_task_project_id = project_id;
-				$task.attr('data-project-id', project_id);
+				// $task.attr('data-project-id', project_id);
+				// $('.project_title', $task).attr('data-id', project_id);
 
-				$task.trigger('save');
+				$task
+				.trigger('save')
+				.trigger('populate_project');
 
 
 
@@ -597,7 +670,7 @@ $.fn.board_task = function(task)
 					return false;
 				}
 
-				$('.project_title', $task).val(project.post_title);
+				// $('.project_title', $task).val(project.post_title);
 
 
 				// add comment for log

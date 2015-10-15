@@ -17,7 +17,7 @@ var t_card_estimates_dropdown = new t($('#t-card-estimates-dropdown').html());
 var t_card_projects_dropdown = new t($('#t-card-projects-dropdown').html());
 var t_modal_projects_panel = new t($('#t-modal-projects-panel').html());
 
-var sidebar_w;
+var sidebar_w, $last_clicked;
 var timers = [];
 
 
@@ -116,27 +116,27 @@ var add_task_to_status_col = function(task, status_id)
 
 
 
-var project_save = function (project_id)
-{
-	var data = JSON.parse(JSON.stringify(project_records[project_id]));
-	data.action = 'save_project';
-	data.kanban_nonce = $('#kanban_nonce').val();
+// var project_save = function (project_id)
+// {
+// 	var data = JSON.parse(JSON.stringify(project_records[project_id]));
+// 	data.action = 'save_project';
+// 	data.kanban_nonce = $('#kanban_nonce').val();
 
-	$.ajax({
-		method: "POST",
-		url: ajaxurl,
-		data: data
-	})
-	// .done(function(response )
-	// {
-	// })
-	// .fail(function() {
-	// })
-	.always(function(response)
-	{
-		show_growl_msg(response);
-	});
-}
+// 	$.ajax({
+// 		method: "POST",
+// 		url: ajaxurl,
+// 		data: data
+// 	})
+// 	// .done(function(response )
+// 	// {
+// 	// })
+// 	// .fail(function() {
+// 	// })
+// 	.always(function(response)
+// 	{
+// 		show_growl_msg(response);
+// 	});
+// }
 
 
 
@@ -146,6 +146,14 @@ jQuery(function($)
 	$('#search-wrapper').board_search();
 	$('#btn-group-view-compact').board_view();
 	$('#modal-projects').modal_projects();
+
+
+
+	$(document).mousedown(function(e)
+	{
+		// The latest element clicked
+		$last_clicked = $(e.target);
+	});
 
 
 	// var project_records_array = obj_to_arr(project_records);

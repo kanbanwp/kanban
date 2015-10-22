@@ -15,16 +15,20 @@ class Kanban_Admin
 {
 	static function init ()
 	{
-		add_filter('show_admin_bar', array(__CLASS__, 'remove_admin_bar'));
-
 		// // add settings link
 		add_filter(
 			'plugin_action_links_' . Kanban::get_instance()->settings->file,
 			array(__CLASS__, 'add_plugin_settings_link')
 		);
 
-
 		add_action( 'admin_init',array(__CLASS__, 'welcome_screen_do_activation_redirect') );
+
+		// Remove Admin bar
+
+		if ( strpos($_SERVER['REQUEST_URI'], sprintf('/%s/', Kanban::$slug)) !== FALSE )
+		{
+			add_filter('show_admin_bar', '__return_false');
+		}
 	}
 
 
@@ -58,16 +62,6 @@ class Kanban_Admin
 				admin_url( 'admin.php' )
 			)
 		);
-	}
-
-
-
-	// Remove Admin bar
-	static function remove_admin_bar()
-	{
-		if ( strpos($_SERVER['REQUEST_URI'], sprintf('/%s/', Kanban::$slug)) !== FALSE ) return false;
-
-	    return true;
 	}
 
 

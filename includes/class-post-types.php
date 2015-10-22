@@ -74,7 +74,7 @@ class Kanban_Post_Types
 	static function init()
 	{
 		self::$post_types = apply_filters(
-			sprintf('%s_Post_Types_init', Kanban::$instance->settings->basename),
+			sprintf('%s_Post_Types_init', Kanban::get_instance()->settings->basename),
 			self::$post_types
 		);
 
@@ -92,12 +92,12 @@ class Kanban_Post_Types
 		{
 			$post_type_key = Kanban_Post_Types::format_post_type($post_type_slug);
 
-			if ( !isset(Kanban::$instance->post_type_keys) )
+			if ( !isset(Kanban::get_instance()->post_type_keys) )
 			{
-				Kanban::$instance->post_type_keys = array();
+				Kanban::get_instance()->post_type_keys = array();
 			}
 
-			Kanban::$instance->post_type_keys[$post_type_slug] = $post_type_key;
+			Kanban::get_instance()->post_type_keys[$post_type_slug] = $post_type_key;
 
 			foreach ($post_type_data as $key_type => $key_type_data )
 			{
@@ -105,18 +105,18 @@ class Kanban_Post_Types
 				{
 					$variable = sprintf('%s_list', $key_type);
 
-					if ( !isset(Kanban::$instance->$variable) )
+					if ( !isset(Kanban::get_instance()->$variable) )
 					{
-						Kanban::$instance->$variable = array();
+						Kanban::get_instance()->$variable = array();
 					}
 
 					// get variable by reference
-					$array = &Kanban::$instance->$variable;
+					$array = &Kanban::get_instance()->$variable;
 					$array[] = Kanban_Utils::format_key ($post_type_slug, $key_slug);
 
 					if ( !is_array($values) )
 					{
-						Kanban::$instance->field_defaults[Kanban_Utils::format_key ($post_type_slug, $key_slug)] = $values;
+						Kanban::get_instance()->field_defaults[Kanban_Utils::format_key ($post_type_slug, $key_slug)] = $values;
 					}
 				}
 			}
@@ -277,7 +277,7 @@ class Kanban_Post_Types
 	// utility function to build post type name
 	static function format_post_type ($post_type)
 	{
-		return sprintf('%s_%s', Kanban::$instance->settings->basename, $post_type);
+		return sprintf('%s_%s', Kanban::get_instance()->settings->basename, $post_type);
 	}
 
 

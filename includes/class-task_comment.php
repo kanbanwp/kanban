@@ -13,14 +13,14 @@ Kanban_Task_Comment::init();
 
 class Kanban_Task_Comment
 {
-	static $instance = false;
+	private static $instance;
 	static $slug = 'task_comment';
 
 
 
 	static function init()
 	{
-		// self::$instance = self::get_instance();
+		// self::get_instance() = self::get_instance();
 
 		add_action( sprintf('wp_ajax_save_%s', self::$slug), array(__CLASS__, 'ajax_save') );
 	}
@@ -29,11 +29,11 @@ class Kanban_Task_Comment
 
 	static function ajax_save ()
 	{
-		if (  !isset( $_POST[Kanban_Utils::get_nonce()] ) || ! wp_verify_nonce( $_POST[Kanban_Utils::get_nonce()], sprintf('%s-save', Kanban::$instance->settings->basename)) || !is_user_logged_in() ) wp_send_json_error();
+		if (  !isset( $_POST[Kanban_Utils::get_nonce()] ) || ! wp_verify_nonce( $_POST[Kanban_Utils::get_nonce()], sprintf('%s-save', Kanban::get_instance()->settings->basename)) || !is_user_logged_in() ) wp_send_json_error();
 
 
 
-		do_action( sprintf('%s_before_%s_ajax_save', Kanban::$instance->settings->basename, self::$slug) );
+		do_action( sprintf('%s_before_%s_ajax_save', Kanban::get_instance()->settings->basename, self::$slug) );
 
 
 
@@ -66,7 +66,7 @@ class Kanban_Task_Comment
 
 
 
-		do_action( sprintf('%s_after_%s_ajax_save', Kanban::$instance->settings->basename, self::$slug) );
+		do_action( sprintf('%s_after_%s_ajax_save', Kanban::get_instance()->settings->basename, self::$slug) );
 
 
 
@@ -98,7 +98,7 @@ class Kanban_Task_Comment
 
 
 
-	static function get_instance()
+	public static function get_instance()
 	{
 		if ( ! self::$instance )
 		{

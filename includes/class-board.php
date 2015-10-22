@@ -32,7 +32,7 @@ class Kanban_Board
 	static function send_page_data_to_template ($template)
 	{
 
-		if ( !isset(Kanban_Template::$instance->slug) || Kanban_Template::$instance->slug != self::$slug ) return $template;
+		if ( !isset(Kanban_Template::get_instance()->slug) || Kanban_Template::get_instance()->slug != self::$slug ) return $template;
 
 		global $wp_query;
 

@@ -7,18 +7,17 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 
 
 
-Kanban_Terms::init();
+// Kanban_Terms::init();
 
 
 
 class Kanban_Terms
 {
-	static $instance = false;
+	private static $instance;
 
-	static function init()
-	{
-		self::$instance = self::get_instance();
-	}
+	// static function init()
+	// {
+	// }
 
 
 
@@ -39,7 +38,7 @@ class Kanban_Terms
 		";
 
 		$sql = apply_filters(
-			sprintf('%s_sql_get_terms_for_posts', Kanban::$instance->settings->basename),
+			sprintf('%s_sql_get_terms_for_posts', Kanban::get_instance()->settings->basename),
 			$sql
 		);
 
@@ -66,7 +65,7 @@ class Kanban_Terms
 
 
 		// add additional blank fields
-		foreach (Kanban::$instance->taxonomies_list as $taxonomy_name)
+		foreach (Kanban::get_instance()->taxonomies_list as $taxonomy_name)
 		{
 			if ( strpos($taxonomy_name, $post_type) === FALSE ) continue;
 
@@ -93,19 +92,19 @@ class Kanban_Terms
 
 	static function get_all_terms ()
 	{
-		if ( !isset(Kanban_Terms::$instance->all_terms) )
+		if ( !isset(Kanban_Terms::get_instance()->all_terms) )
 		{
 			// get all terms for displaying
 			$args = array(
 				'hide_empty' => 0,
 				'orderby' => 'term_order'
 			);
-			$all_terms = get_terms(Kanban::$instance->taxonomies_list, $args);
+			$all_terms = get_terms(Kanban::get_instance()->taxonomies_list, $args);
 
-			Kanban_Terms::$instance->all_terms = Kanban_Utils::build_array_with_id_keys($all_terms, 'term_id');
+			Kanban_Terms::get_instance()->all_terms = Kanban_Utils::build_array_with_id_keys($all_terms, 'term_id');
 		}
 
-		return Kanban_Terms::$instance->all_terms;
+		return Kanban_Terms::get_instance()->all_terms;
 	}
 
 
@@ -137,8 +136,11 @@ class Kanban_Terms
 		{
 			foreach ($order as $status_id => $order)
 			{
-				$terms_in_order[] = $terms[$status_id];
-				unset($terms[$status_id]);
+				if ( isset($terms[$status_id]) )
+				{
+					$terms_in_order[] = $terms[$status_id];
+					unset($terms[$status_id]);
+				}
 			}
 		}
 
@@ -147,7 +149,7 @@ class Kanban_Terms
 
 
 
-	static function get_instance()
+	public static function get_instance()
 	{
 		if ( ! self::$instance )
 		{

@@ -38,14 +38,14 @@ class Kanban_Flash
 			}
 		}
 
-		Kanban::$instance->flash = new Kanban_Messages();
+		Kanban::get_instance()->flash = new Kanban_Messages();
 
 
 
-		Kanban::$instance->flash->msgTypes = array( 'default', 'info', 'warning', 'success', 'danger' );
-		Kanban::$instance->flash->msgClass = 'alert alert-';
-		Kanban::$instance->flash->msgWrapper = '<div class="%s%s alert-dismissible">
-								<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+		Kanban::get_instance()->flash->msgTypes = array( 'default', 'info', 'warning', 'success', 'danger' );
+		Kanban::get_instance()->flash->msgClass = 'alert alert-';
+		Kanban::get_instance()->flash->msgWrapper = '<div class="%s%s alert-dismissible">
+								<button type="button" class="close" data-dismiss="alert">
 								<span aria-hidden="true">&times;</span>
 								</button>
 								%s
@@ -53,9 +53,9 @@ class Kanban_Flash
 								. "\n";
 
 
-		Kanban::$instance->flash = apply_filters(
-			sprintf('%s_after_setup_flash_messages', Kanban::$instance->settings->basename),
-			Kanban::$instance->flash
+		Kanban::get_instance()->flash = apply_filters(
+			sprintf('%s_after_setup_flash_messages', Kanban::get_instance()->settings->basename),
+			Kanban::get_instance()->flash
 		);
 
 	}

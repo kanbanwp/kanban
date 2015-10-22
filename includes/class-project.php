@@ -13,15 +13,13 @@ Kanban_Project::init();
 
 class Kanban_Project
 {
-	static $instance = false;
+	private static $instance;
 	static $slug = 'project';
 
 
 
 	static function init()
 	{
-		self::$instance = self::get_instance();
-
 		add_action( sprintf('wp_ajax_save_%s', self::$slug), array(__CLASS__, 'ajax_save') );
 		add_action( sprintf('wp_ajax_delete_%s', self::$slug), array(__CLASS__, 'ajax_delete') );
 	}
@@ -30,11 +28,11 @@ class Kanban_Project
 
 	static function ajax_save ()
 	{
-		if (  !isset( $_POST[Kanban_Utils::get_nonce()] ) || ! wp_verify_nonce( $_POST[Kanban_Utils::get_nonce()], sprintf('%s-save', Kanban::$instance->settings->basename)) || $_POST['post_type'] !== Kanban_Post_Types::format_post_type(self::$slug) || !is_user_logged_in() ) wp_send_json_error();
+		if (  !isset( $_POST[Kanban_Utils::get_nonce()] ) || ! wp_verify_nonce( $_POST[Kanban_Utils::get_nonce()], sprintf('%s-save', Kanban::get_instance()->settings->basename)) || $_POST['post_type'] !== Kanban_Post_Types::format_post_type(self::$slug) || !is_user_logged_in() ) wp_send_json_error();
 
 
 
-		do_action( sprintf('%s_before_%s_ajax_save', Kanban::$instance->settings->basename, self::$slug) );
+		do_action( sprintf('%s_before_%s_ajax_save', Kanban::get_instance()->settings->basename, self::$slug) );
 
 
 
@@ -52,7 +50,7 @@ class Kanban_Project
 
 
 
-		do_action( sprintf('%s_after_%s_ajax_save', Kanban::$instance->settings->basename, self::$slug) );
+		do_action( sprintf('%s_after_%s_ajax_save', Kanban::get_instance()->settings->basename, self::$slug) );
 
 
 
@@ -66,11 +64,11 @@ class Kanban_Project
 
 	static function ajax_delete ()
 	{
-		if (  !isset( $_POST[Kanban_Utils::get_nonce()] ) || ! wp_verify_nonce( $_POST[Kanban_Utils::get_nonce()], sprintf('%s-save', Kanban::$instance->settings->basename)) || $_POST['post_type'] !== Kanban_Post_Types::format_post_type(self::$slug) || !is_user_logged_in() ) wp_send_json_error();
+		if (  !isset( $_POST[Kanban_Utils::get_nonce()] ) || ! wp_verify_nonce( $_POST[Kanban_Utils::get_nonce()], sprintf('%s-save', Kanban::get_instance()->settings->basename)) || $_POST['post_type'] !== Kanban_Post_Types::format_post_type(self::$slug) || !is_user_logged_in() ) wp_send_json_error();
 
 
 
-		do_action( sprintf('%s_before_%s_ajax_delete', Kanban::$instance->settings->basename, self::$slug) );
+		do_action( sprintf('%s_before_%s_ajax_delete', Kanban::get_instance()->settings->basename, self::$slug) );
 
 
 
@@ -78,7 +76,7 @@ class Kanban_Project
 
 
 
-		do_action( sprintf('%s_after_%s_ajax_delete', Kanban::$instance->settings->basename, self::$slug) );
+		do_action( sprintf('%s_after_%s_ajax_delete', Kanban::get_instance()->settings->basename, self::$slug) );
 
 
 
@@ -100,7 +98,7 @@ class Kanban_Project
 
 	static function get_all()
 	{
-		if ( !isset(self::$instance->all_projects) )
+		if ( !isset(self::get_instance()->all_projects) )
 		{
 			$post_type_key = Kanban_Post_Types::format_post_type(self::$slug);
 
@@ -112,15 +110,15 @@ class Kanban_Project
 
 			$posts = get_posts( $args );
 
-			self::$instance->all_projects = Kanban_Post::apply_postmeta_and_terms_to_posts($posts);
+			self::get_instance()->all_projects = Kanban_Post::apply_postmeta_and_terms_to_posts($posts);
 		}
 
-		return self::$instance->all_projects;
+		return self::get_instance()->all_projects;
 	}
 
 
 
-	static function get_instance()
+	public static function get_instance()
 	{
 		if ( ! self::$instance )
 		{

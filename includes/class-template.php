@@ -13,7 +13,7 @@ Kanban_Template::init();
 
 class Kanban_Template
 {
-	static $instance = false;
+	private static $instance;
 
 	static $page_slugs = array(
 		'board' => array(
@@ -24,17 +24,17 @@ class Kanban_Template
 				'jquery-ui' => "//code.jquery.com/ui/1.11.4/jquery-ui.js",
 				'bootstrap' => "//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js",
 				'bootstrap-growl' => "//cdnjs.cloudflare.com/ajax/libs/bootstrap-growl/1.0.0/jquery.bootstrap-growl.min.js",
-				'autoresize' => "%s/js/jquery.textarea.autoresize.js",
-				'same-height' => "%s/js/jquery.same-height.js",
+				'autoresize' => "%s/js/jquery.textarea.autoresize.min.js",
+				'same-height' => "%s/js/jquery.same-height.min.js",
 				't' => "%s/js/t.min.js",
-				// 'bind' => "%s/js/bind.min.js",
-				'board-modal-projects' => "%s/js/board-modal-projects.js",
-				'board-sidebar-header' => "%s/js/board-sidebar-header.js",
-				'board-search' => "%s/js/board-search.js",
-				'board-filter' => "%s/js/board-filter.js",
-				'board-view' => "%s/js/board-view.js",
-				'board-task' => "%s/js/board-task.js",
-				'board' => "%s/js/board.js"
+				'board-modal-projects' => "%s/js/board-modal-projects.min.js",
+				'board-sidebar-header' => "%s/js/board-sidebar-header.min.js",
+				// 'board-tour' => "%s/js/board-tour.min.js",
+				'board-search' => "%s/js/board-search.min.js",
+				'board-filter' => "%s/js/board-filter.min.js",
+				'board-view' => "%s/js/board-view.min.js",
+				'board-task' => "%s/js/board-task.min.js",
+				'board' => "%s/js/board.min.js"
 			)
 		),
 		'login' => array()
@@ -45,11 +45,9 @@ class Kanban_Template
 	static function init()
 	{
 		self::$page_slugs = apply_filters(
-			sprintf('%s_Template_init', Kanban::$instance->settings->basename),
+			sprintf('%s_Template_init', Kanban::get_instance()->settings->basename),
 			self::$page_slugs
 		);
-
-		self::$instance = self::get_instance();
 
 		add_action( 'init', array(__CLASS__, 'protect_slug') );
 
@@ -72,7 +70,7 @@ class Kanban_Template
 		// get my id, and allowed id's
 		$current_user_id = get_current_user_id();
 
-		$users_field_name = sprintf('%s_user', Kanban::$instance->settings->basename);
+		$users_field_name = sprintf('%s_user', Kanban::get_instance()->settings->basename);
 		$allowed_user_ids = Kanban_Settings::get_option($users_field_name, 'allowed_users', array());
 
 		// return if I'm allowed
@@ -92,7 +90,7 @@ class Kanban_Template
 		}
 
 		// allow for addition checks
-		do_action( sprintf('%s_protect_slug', Kanban::$instance->settings->basename) );
+		do_action( sprintf('%s_protect_slug', Kanban::get_instance()->settings->basename) );
 
 		// anyone can see login screen
 	    if ( strpos($_SERVER['REQUEST_URI'], sprintf('/%s/login', Kanban::$slug)) !== FALSE ) return;
@@ -116,7 +114,7 @@ class Kanban_Template
 
 
 		// allow for additional pages
-		self::$page_slugs = apply_filters( sprintf('%s_template_pages', Kanban::$instance->settings->basename), self::$page_slugs );
+		self::$page_slugs = apply_filters( sprintf('%s_template_pages', Kanban::get_instance()->settings->basename), self::$page_slugs );
 
 		foreach (self::$page_slugs as $slug => $data)
 		{
@@ -126,23 +124,23 @@ class Kanban_Template
 
 				if ( !empty($template) )
 				{
-					self::$instance->slug = $slug;
+					self::get_instance()->slug = $slug;
 
 					if ( isset($data['style']) )
 					{
 						foreach ($data['style'] as $handle => $path)
 						{
-							if ( !isset(self::$instance->style) || !is_array(self::$instance->style) )
+							if ( !isset(self::get_instance()->style) || !is_array(self::get_instance()->style) )
 							{
-								self::$instance->style = array();
+								self::get_instance()->style = array();
 							}
 
 							if ( strpos($path, '%s') !== FALSE )
 							{
-								$path = sprintf($path, Kanban::$instance->settings->uri);
+								$path = sprintf($path, Kanban::get_instance()->settings->uri);
 							}
 
-							self::$instance->style[$handle] = $path;
+							self::get_instance()->style[$handle] = $path;
 						}
 					}
 
@@ -150,27 +148,27 @@ class Kanban_Template
 					{
 						foreach ($data['script'] as $handle => $path)
 						{
-							if ( !isset(self::$instance->script) || !is_array(self::$instance->script) )
+							if ( !isset(self::get_instance()->script) || !is_array(self::get_instance()->script) )
 							{
-								self::$instance->script = array();
+								self::get_instance()->script = array();
 							}
 
 							if ( strpos($path, '%s') !== FALSE )
 							{
-								$path = sprintf($path, Kanban::$instance->settings->uri);
+								$path = sprintf($path, Kanban::get_instance()->settings->uri);
 							}
 
-							self::$instance->script[$handle] = $path;
+							self::get_instance()->script[$handle] = $path;
 						}
 					}
 				}
 			}
 		}
 
-		self::$instance->template = $template;
+		self::get_instance()->template = $template;
 
 		// allow additional templates
-		return apply_filters( sprintf('%s_after_template_chooser', Kanban::$instance->settings->basename), $template );
+		return apply_filters( sprintf('%s_after_template_chooser', Kanban::get_instance()->settings->basename), $template );
 	}
 
 
@@ -178,12 +176,12 @@ class Kanban_Template
 	static function find_template($basename)
 	{
 		// look for template in theme/name_of_class
-		$template = sprintf('%s/%s/%s', get_stylesheet_directory(), Kanban::$instance->settings->basename, sprintf('%s.php', $basename));
+		$template = sprintf('%s/%s/%s', get_stylesheet_directory(), Kanban::get_instance()->settings->basename, sprintf('%s.php', $basename));
 
 		// if not found, look for it in the plugin
 		if ( !is_file($template) )
 		{
-			$template = sprintf('%s/templates/%s', Kanban::$instance->settings->path, sprintf('%s.php', $basename));
+			$template = sprintf('%s/templates/%s', Kanban::get_instance()->settings->path, sprintf('%s.php', $basename));
 		}
 
 		// if not found, use the theme default
@@ -198,7 +196,7 @@ class Kanban_Template
 			$template = false;
 		}
 
-		return apply_filters( sprintf('%s_find_template', Kanban::$instance->settings->basename), $template );
+		return apply_filters( sprintf('%s_find_template', Kanban::get_instance()->settings->basename), $template );
 	}
 
 
@@ -222,9 +220,9 @@ class Kanban_Template
 
 	static function add_style()
 	{
-		if ( !isset(self::$instance->style) || !is_array(self::$instance->style) ) return;
+		if ( !isset(self::get_instance()->style) || !is_array(self::get_instance()->style) ) return;
 
-		foreach (self::$instance->style as $handle => $path)
+		foreach (self::get_instance()->style as $handle => $path)
 		{
 			echo sprintf(
 				'<link rel="stylesheet" id="%s-css" href="%s">' . "\n",
@@ -238,9 +236,9 @@ class Kanban_Template
 
 	static function add_script()
 	{
-		if ( !isset(self::$instance->script) || !is_array(self::$instance->script) ) return;
+		if ( !isset(self::get_instance()->script) || !is_array(self::get_instance()->script) ) return;
 
-		foreach (self::$instance->script as $handle => $path)
+		foreach (self::get_instance()->script as $handle => $path)
 		{
 			echo sprintf(
 				'<script id="%s-js" src="%s"></script>' . "\n",
@@ -252,7 +250,7 @@ class Kanban_Template
 
 
 
-	static function get_instance()
+	public static function get_instance()
 	{
 		if ( ! self::$instance )
 		{

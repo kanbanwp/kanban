@@ -19,7 +19,7 @@ class Kanban_Admin
 
 		// // add settings link
 		add_filter(
-			'plugin_action_links_' . Kanban::$instance->settings->file,
+			'plugin_action_links_' . Kanban::get_instance()->settings->file,
 			array(__CLASS__, 'add_plugin_settings_link')
 		);
 
@@ -34,13 +34,13 @@ class Kanban_Admin
 	static function welcome_screen_do_activation_redirect()
 	{
 		// Bail if no activation redirect
-		if ( ! get_transient( sprintf('_%s_welcome_screen_activation_redirect', Kanban::$instance->settings->basename) ) )
+		if ( ! get_transient( sprintf('_%s_welcome_screen_activation_redirect', Kanban::get_instance()->settings->basename) ) )
 		{
 			return;
 		}
 
 		// Delete the redirect transient
-		delete_transient( sprintf('_%s_welcome_screen_activation_redirect', Kanban::$instance->settings->basename) );
+		delete_transient( sprintf('_%s_welcome_screen_activation_redirect', Kanban::get_instance()->settings->basename) );
 
 		// Bail if activating from network, or bulk
 		if ( is_network_admin() || isset( $_GET['activate-multi'] ) )
@@ -52,7 +52,7 @@ class Kanban_Admin
 		wp_safe_redirect(
 			add_query_arg(
 				array(
-					'page' => Kanban::$instance->settings->basename,
+					'page' => Kanban::get_instance()->settings->basename,
 					'activation' => '1'
 				),
 				admin_url( 'admin.php' )

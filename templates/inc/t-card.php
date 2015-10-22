@@ -8,25 +8,25 @@
 				<li>
 					<a href="#" class="delete-task text-danger">
 						<span class="glyphicon glyphicon-remove text-danger"></span>
-						Delete this task
+						<?php _e( 'Delete this task', Kanban::get_text_domain() ); ?>
 					</a>
 				</li>
 			</ul>
 		</div>
 
 		<div class="project">
-			<input type="text" class="editable-input project_title" data-id="" value="" placeholder="Task project" readonly>
+			<input type="text" class="editable-input project_title" data-id="" value="" placeholder="<?php _e( 'Task project', Kanban::get_text_domain() ); ?>" readonly>
 			<ul class="list-group" style="display: none;">
 				<li class="list-group-edit">
 					<a href="#" class="btn btn-xs btn-edit-projects" data-toggle="modal" data-target="#modal-projects">
-						Edit
+						<?php _e( 'Edit', Kanban::get_text_domain() ); ?>
 					</a>
 				</li>
 			</ul>
 		</div>
 
 		<h3 class="h4 wrapper-task-title">
-			<textarea class="editable-input task_title resize" rows="1" placeholder="Task name" readonly>{{=post_title}}</textarea>
+			<textarea class="editable-input task_title resize" rows="1" placeholder="<?php _e( 'Task name', Kanban::get_text_domain() ); ?>" readonly>{{=post_title}}</textarea>
 		</h3>
 
 		<div class="row row-worked">

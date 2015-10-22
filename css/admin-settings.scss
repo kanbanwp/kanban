@@ -1,0 +1,21 @@
+.group-order {
+	th {
+		background: #F4F4F4;
+		border: 1px solid #CCC;
+		width: 100%;
+	}
+	.count {
+		background: #848484;
+		border-radius: 50%;
+		color: white;
+		display: block;
+		height: 2em;
+		float: right;
+		line-height: 2em;
+		text-align: center;
+		width: 2em;
+	}
+	tr td {
+		display: none;
+	}
+}

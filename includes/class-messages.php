@@ -92,7 +92,7 @@ class Kanban_Messages {
 		}
 		
 		// Make sure it's a valid message type
-		if( !in_array($type, $this->msgTypes) ) die('"' . strip_tags($type) . '" is not a valid message type!' );
+		if( !in_array($type, $this->msgTypes) ) die( __( '"' . strip_tags($type) . '" is not a valid message type!', Kanban::get_text_domain() ) );
 		
 		// If the session array doesn't exist, create it
 		if( !array_key_exists( $type, $_SESSION['flash_messages'] ) ) $_SESSION['flash_messages'][$type] = array();

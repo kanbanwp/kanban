@@ -16,7 +16,7 @@
 		<span class="dropup" id="filter-projects">
 			<button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">
 				<span class="btn-label" data-id="">
-					-- <?php echo __('Project', Kanban::$instance->settings->file) ?> --
+					-- <?php echo __('Project', Kanban::get_text_domain()) ?> --
 				</span>
 			</button>
 			<ul class="dropdown-menu" id="filter-projects-dropdown">
@@ -32,7 +32,7 @@
 		<span class="dropup" id="filter-users">
 			<button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">
 				<span class="btn-label" data-id="">
-					-- <?php echo __('User', Kanban::$instance->settings->file) ?> --
+					-- <?php echo __('User', Kanban::get_text_domain()) ?> --
 				</span>
 			</button>
 			<ul class="dropdown-menu" id="filter-users-dropdown">
@@ -46,10 +46,10 @@
 		</span>
 
 		<button type="button" class="btn btn-primary" id="btn-filter-apply">
-			<?php echo __('Filter', Kanban::$instance->settings->file) ?>
+			<?php echo __('Filter', Kanban::get_text_domain()) ?>
 		</button>
 		<button type="button" class="btn btn-warning" id="btn-filter-reset" style="display: none;">
-			<?php echo __('Show All', Kanban::$instance->settings->file) ?>
+			<?php echo __('Show All', Kanban::get_text_domain()) ?>
 		</button>
 
 	</div><!-- filter-wrapper -->
@@ -57,9 +57,9 @@
 
 
 	<div class="form-inline" id="search-wrapper">
-		<input type="search" id="board-search" class="form-control" placeholder="<?php echo __('Search', Kanban::$instance->settings->file) ?>">
+		<input type="search" id="board-search" class="form-control" placeholder="<?php echo __('Search', Kanban::get_text_domain()) ?>">
 		<button type="button" class="btn btn-default" id="board-search-reset" style="display: none;">
-			<?php echo __('Show All', Kanban::$instance->settings->file) ?>
+			<?php echo __('Show All', Kanban::get_text_domain()) ?>
 		</button>
 	</div><!-- search-wrapper -->
 
@@ -79,7 +79,7 @@
 
 
 	<a href="<?php echo admin_url( 'admin.php?page=' . Kanban::$instance->settings->basename ) ?>" class="btn btn-default" target="_blank">
-		<?php echo __('Admin', Kanban::$instance->settings->file) ?>
+		<?php echo __('Admin', Kanban::get_text_domain()) ?>
 	</a>
 </div>
 

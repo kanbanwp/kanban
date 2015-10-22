@@ -14,7 +14,7 @@ class Kanban_Post
 	// save a post
 	static function save ($post_data)
 	{
-		do_action( sprintf('%s_before_post_save', Kanban::$instance->settings->basename) );
+		do_action( sprintf('%s_before_post_save', Kanban::get_instance()->settings->basename) );
 
 
 
@@ -114,7 +114,7 @@ class Kanban_Post
 
 
 		// save fields
-		foreach (Kanban::$instance->postmeta_fields_list as $field_name)
+		foreach (Kanban::get_instance()->postmeta_fields_list as $field_name)
 		{
 			if ( isset($post_data->postmeta[$field_name]) && strpos($field_name, $post_type) !== FALSE )
 			{
@@ -128,7 +128,7 @@ class Kanban_Post
 
 
 		// save taxonomies
-		foreach (Kanban::$instance->taxonomies_list as $taxonomy_name)
+		foreach (Kanban::get_instance()->taxonomies_list as $taxonomy_name)
 		{
 			if ( isset($post_data->terms[$taxonomy_name]) && strpos($taxonomy_name, $post_type) !== FALSE )
 			{
@@ -167,12 +167,12 @@ class Kanban_Post
 
 
 
-		do_action( sprintf('%s_after_post_save', Kanban::$instance->settings->basename) );
+		do_action( sprintf('%s_after_post_save', Kanban::get_instance()->settings->basename) );
 
 
 
 		return apply_filters(
-			sprintf('%s_after_post_save', Kanban::$instance->settings->basename),
+			sprintf('%s_after_post_save', Kanban::get_instance()->settings->basename),
 			$post
 		);
 
@@ -187,13 +187,13 @@ class Kanban_Post
 	 */
 	static function delete ($post_data)
 	{
-		do_action( sprintf('%s_before_post_delete', Kanban::$instance->settings->basename) );
+		do_action( sprintf('%s_before_post_delete', Kanban::get_instance()->settings->basename) );
 
 		$post_data = (object) $post_data;
 
 		$is_success = wp_trash_post($post_data->ID);
 
-		do_action( sprintf('%s_after_post_delete', Kanban::$instance->settings->basename) );
+		do_action( sprintf('%s_after_post_delete', Kanban::get_instance()->settings->basename) );
 
 		return $is_success;
 	}
@@ -214,7 +214,7 @@ class Kanban_Post
 		$post_ids_str = implode (',', $post_ids_arr);
 
 		// build look up of post meta data by post id
-		$postmeta_fields_str = sprintf('"%s"', implode('","', Kanban::$instance->postmeta_fields_list));
+		$postmeta_fields_str = sprintf('"%s"', implode('","', Kanban::get_instance()->postmeta_fields_list));
 
 
 
@@ -229,7 +229,7 @@ class Kanban_Post
 		";
 
 		$sql = apply_filters(
-			sprintf('%s_sql_get_postmeta_for_posts', Kanban::$instance->settings->basename),
+			sprintf('%s_sql_get_postmeta_for_posts', Kanban::get_instance()->settings->basename),
 			$sql
 		);
 
@@ -252,7 +252,7 @@ class Kanban_Post
 
 
 		// add additional blank fields
-		foreach (Kanban::$instance->postmeta_fields_list as $field_name)
+		foreach (Kanban::get_instance()->postmeta_fields_list as $field_name)
 		{
 			if ( strpos($field_name, $post_type) === FALSE ) continue;
 
@@ -265,7 +265,7 @@ class Kanban_Post
 
 				if ( !isset($postmeta[$post_id]->$field_name) )
 				{
-					$postmeta[$post_id]->$field_name = Kanban::$instance->field_defaults[$field_name];
+					$postmeta[$post_id]->$field_name = Kanban::get_instance()->field_defaults[$field_name];
 				}
 			}
 		}
@@ -273,7 +273,7 @@ class Kanban_Post
 
 
 		$postmeta = apply_filters(
-			sprintf('%s_postmeta_for_posts', Kanban::$instance->settings->basename),
+			sprintf('%s_postmeta_for_posts', Kanban::get_instance()->settings->basename),
 			$postmeta
 		);
 

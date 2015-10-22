@@ -13,15 +13,13 @@ Kanban_Status_Change::init();
 
 class Kanban_Status_Change
 {
-	static $instance = false;
+	private static $instance;
 	static $slug = 'status_change';
 
 
 
 	static function init()
 	{
-		self::$instance = self::get_instance();
-
 		add_action( sprintf('wp_ajax_add_%s', self::$slug), array(__CLASS__, 'ajax_save') );
 	}
 
@@ -29,11 +27,11 @@ class Kanban_Status_Change
 
 	static function ajax_save ()
 	{
-		if (  !isset( $_POST[Kanban_Utils::get_nonce()] ) || ! wp_verify_nonce( $_POST[Kanban_Utils::get_nonce()], sprintf('%s-save', Kanban::$instance->settings->basename)) || !is_user_logged_in() ) wp_send_json_error();
+		if (  !isset( $_POST[Kanban_Utils::get_nonce()] ) || ! wp_verify_nonce( $_POST[Kanban_Utils::get_nonce()], sprintf('%s-save', Kanban::get_instance()->settings->basename)) || !is_user_logged_in() ) wp_send_json_error();
 
 
 
-		do_action( sprintf('%s_before_%s_ajax_save', Kanban::$instance->settings->basename, self::$slug) );
+		do_action( sprintf('%s_before_%s_ajax_save', Kanban::get_instance()->settings->basename, self::$slug) );
 
 
 
@@ -63,7 +61,7 @@ class Kanban_Status_Change
 
 
 
-		do_action( sprintf('%s_after_%s_ajax_save', Kanban::$instance->settings->basename, self::$slug) );
+		do_action( sprintf('%s_after_%s_ajax_save', Kanban::get_instance()->settings->basename, self::$slug) );
 
 
 
@@ -75,7 +73,7 @@ class Kanban_Status_Change
 
 
 
-	static function get_instance()
+	public static function get_instance()
 	{
 		if ( ! self::$instance )
 		{

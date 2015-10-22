@@ -16,14 +16,13 @@ Kanban_Settings::init();
 
 class Kanban_Settings
 {
-	static $instance;
+	private static $instance;
 
 
 
 	static function init()
 	{
-		self::$instance = self::get_instance();
-		self::$instance->options_key = sprintf('%s_options', Kanban::$instance->settings->basename);
+		self::get_instance()->options_key = sprintf('%s_options', Kanban::get_instance()->settings->basename);
 
 		add_action( 'admin_init', array(__CLASS__, 'admin_init') );
 		add_action( 'admin_menu', array(__CLASS__, 'admin_menu') );
@@ -35,10 +34,10 @@ class Kanban_Settings
 	static function plugin_page()
 	{
 		?>
-		<link rel="stylesheet" href="<?php echo Kanban::$instance->settings->uri ?>/css/admin-settings.css">
+		<link rel="stylesheet" href="<?php echo Kanban::get_instance()->settings->uri ?>/css/admin-settings.css">
 		<div class="wrap">
 			<h1>
-				<?php echo sprintf('%s Settings', Kanban::$instance->settings->pretty_name) ?>
+				<?php echo sprintf('%s Settings', Kanban::get_instance()->settings->pretty_name) ?>
 			</h1>
 
 			<?php /*
@@ -55,12 +54,12 @@ class Kanban_Settings
 		<?php
 		settings_errors();
 
-	    self::$instance->settings_api->show_navigation();
-	    self::$instance->settings_api->show_forms();
+	    self::get_instance()->settings_api->show_navigation();
+	    self::get_instance()->settings_api->show_forms();
 ?>
 	    </div>
 			<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
-			<script src="<?php echo Kanban::$instance->settings->uri ?>/js/admin-settings.js"></script>
+			<script src="<?php echo Kanban::get_instance()->settings->uri ?>/js/admin-settings.js"></script>
 		<?php
 	}
 
@@ -72,27 +71,27 @@ class Kanban_Settings
 		?>
 		<div class="wrap">
 			<h1>
-				<?php echo __('About', Kanban::$instance->settings->file) ?> <?php echo Kanban::$instance->settings->pretty_name ?>
+				<?php echo __('About', Kanban::get_text_domain()) ?> <?php echo Kanban::get_instance()->settings->pretty_name ?>
 			</h1>
 
 			<?php if ( isset($_GET['activation']) ) : ?>
 				<div class="updated notice is-dismissible below-h2">
-					<p><?php echo __('Thanks for using Kanban for WordPress!', Kanban::$instance->settings->file) ?></p>
+					<p><?php echo __('Thanks for using Kanban for WordPress!', Kanban::get_text_domain()) ?></p>
 					<button type="button" class="notice-dismiss">
-						<span class="screen-reader-text"><?php echo __('Dismiss this notice.', Kanban::$instance->settings->file) ?></span>
+						<span class="screen-reader-text"><?php echo __('Dismiss this notice.', Kanban::get_text_domain()) ?></span>
 					</button>
 				</div>
 			<?php endif ?>
 
 			<p>
 				<a href="<?php echo sprintf( '%s/%s/board', home_url(), Kanban::$slug ) ?>" class="button" target="_blank">
-					<?php echo __('Go to your board', Kanban::$instance->settings->file) ?>
+					<?php echo __('Go to your board', Kanban::get_text_domain()) ?>
 				</a>
 			</p>
 
 			<p>
 				<a href="http://kanbanwp.com/documentation" target="_blank">
-					<?php echo __('Documentation', Kanban::$instance->settings->file) ?>
+					<?php echo __('Documentation', Kanban::get_text_domain()) ?>
 				</a>
 			</p>
 		</div>
@@ -107,10 +106,10 @@ class Kanban_Settings
 		$icon_svg = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAAPCAYAAAAGRPQsAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNSBNYWNpbnRvc2giIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6QkRFMDQwQTg1NUFFMTFFNUJBRDdBMjA0MjA4NTJFNzEiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6QkRFMDQwQTk1NUFFMTFFNUJBRDdBMjA0MjA4NTJFNzEiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDpCREUwNDBBNjU1QUUxMUU1QkFEN0EyMDQyMDg1MkU3MSIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDpCREUwNDBBNzU1QUUxMUU1QkFEN0EyMDQyMDg1MkU3MSIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PokTEeYAAABuSURBVHjaYvz//z8DCMw8fBXCwAHSbbUZgRReNUwMVASD1zAWGGPLuTvWDIwMf2GBwsiACKJ//xn/AcOMYfq+C5r/GRj//QPJM8JU/AfTf/4x/GccjYBBEpudm48zEogABqWyOXjVjMYm6QAgwADj+y/EHS5dLQAAAABJRU5ErkJggg==';
 
 		add_menu_page(
-			Kanban::$instance->settings->pretty_name,
-			Kanban::$instance->settings->pretty_name,
+			Kanban::get_instance()->settings->pretty_name,
+			Kanban::get_instance()->settings->pretty_name,
 			'manage_options',
-			Kanban::$instance->settings->basename,
+			Kanban::get_instance()->settings->basename,
 			null,
 			$icon_svg
 		);
@@ -120,11 +119,11 @@ class Kanban_Settings
 		// redeclare same page to change name to settings
 		// @link https://codex.wordpress.org/Function_Reference/add_submenu_page#Inside_menu_created_with_add_menu_page.28.29
 		add_submenu_page(
-			Kanban::$instance->settings->basename,
+			Kanban::get_instance()->settings->basename,
 			'Welcome',
 			'Welcome',
 			'manage_options',
-			Kanban::$instance->settings->basename,
+			Kanban::get_instance()->settings->basename,
 			array(__CLASS__, 'welcome_page')
 		);
 
@@ -141,7 +140,7 @@ class Kanban_Settings
 				if ( defined('KANBAN_DEBUG') && KANBAN_DEBUG === TRUE )
 				{
 					add_submenu_page(
-						Kanban::$instance->settings->basename,
+						Kanban::get_instance()->settings->basename,
 						sprintf('All %s', str_replace('_', ' ', Kanban_Utils::make_word_plural($post_type_label))),
 						sprintf('All %s', str_replace('_', ' ', Kanban_Utils::make_word_plural($post_type_label))),
 						'manage_options',
@@ -158,7 +157,7 @@ class Kanban_Settings
 					$taxonomy_label = ucwords(sprintf('%s %s', $post_type_slug, Kanban_Utils::make_word_plural($taxonomy_slug)));
 
 					add_submenu_page(
-						Kanban::$instance->settings->basename,
+						Kanban::get_instance()->settings->basename,
 						$taxonomy_label,
 						$taxonomy_label,
 						'manage_options',
@@ -179,13 +178,13 @@ class Kanban_Settings
 		{
 			// @link https://codex.wordpress.org/Function_Reference/add_submenu_page#Inside_menu_created_with_add_menu_page.28.29
 			add_submenu_page(
-				Kanban::$instance->settings->basename,
+				Kanban::get_instance()->settings->basename,
 				'Settings',
 				'Settings',
 				'manage_options',
 				sprintf(
 					'admin.php?page=%s',
-					Kanban::$instance->settings->basename
+					Kanban::get_instance()->settings->basename
 				),
 				array(__CLASS__, 'plugin_page')
 			);
@@ -218,7 +217,7 @@ class Kanban_Settings
 				$submenu_file = self::get_submenu_file( 'task', 'estimate' );
             }
 
-            $parent_file = Kanban::$instance->settings->basename;
+            $parent_file = Kanban::get_instance()->settings->basename;
 
         }
 
@@ -229,7 +228,7 @@ class Kanban_Settings
 
 	static function admin_init ()
 	{
-		$users_field_name = sprintf('%s_user', Kanban::$instance->settings->basename);
+		$users_field_name = sprintf('%s_user', Kanban::get_instance()->settings->basename);
 
 		$status_tax_key = Kanban_Utils::format_key ('task', 'status');
 		$status_color_field_name = sprintf('%s_colors', $status_tax_key);
@@ -334,14 +333,14 @@ class Kanban_Settings
 
 
 
-	    self::$instance->settings_api = new WeDevs_Settings_API();
+	    self::get_instance()->settings_api = new WeDevs_Settings_API();
 
 	    //set sections and fields
-	    self::$instance->settings_api->set_sections( $sections );
-	    self::$instance->settings_api->set_fields( $fields );
+	    self::get_instance()->settings_api->set_sections( $sections );
+	    self::get_instance()->settings_api->set_fields( $fields );
 
 	    //initialize them
-	    self::$instance->settings_api->admin_init();
+	    self::get_instance()->settings_api->admin_init();
 	}
 
 
@@ -368,9 +367,9 @@ class Kanban_Settings
 
 	// static function get_option($option)
 	// {
-	// 	self::$instance->options = !self::$instance->options ? get_option(Kanban_Settings::$instance->options_key) : self::$instance->options;
+	// 	self::get_instance()->options = !self::get_instance()->options ? get_option(Kanban_Settings::get_instance()->options_key) : self::get_instance()->options;
 
-	// 	return self::$instance->options[$option];
+	// 	return self::get_instance()->options[$option];
 	// }
 
 
@@ -378,7 +377,7 @@ class Kanban_Settings
 
 	// static function update_option($option_name, $new_value)
 	// {
-	// 	$options = get_option(Kanban_Settings::$instance->options_key);
+	// 	$options = get_option(Kanban_Settings::get_instance()->options_key);
 
 	// 	if( !is_array($options) )
 	// 	{
@@ -387,7 +386,7 @@ class Kanban_Settings
 
 	// 	$options[$option_name] = $new_value;
 
-	// 	update_option(Kanban_Settings::$instance->options_key, $options);
+	// 	update_option(Kanban_Settings::get_instance()->options_key, $options);
 	// }
 
 
@@ -398,7 +397,7 @@ class Kanban_Settings
 
 	// 	self::update_option('allowed_users', $_POST['allowed_users']);
 
-	// 	Kanban::$instance->flash->add('success', 'The users have been updated');
+	// 	Kanban::get_instance()->flash->add('success', 'The users have been updated');
 
 	// 	wp_redirect($_POST['_wp_http_referer']);
 	// 	exit;
@@ -435,7 +434,7 @@ class Kanban_Settings
 	// 	$color_name = sprintf('%s_colors', $tax_key);
 	// 	self::update_option($color_name, $_POST[$color_name]);
 
-	// 	Kanban::$instance->flash->add('success', 'Status order has been saved');
+	// 	Kanban::get_instance()->flash->add('success', 'Status order has been saved');
 
 	// 	wp_redirect($_POST['_wp_http_referer']);
 	// 	exit;
@@ -453,7 +452,7 @@ class Kanban_Settings
 	// 	self::update_option($field_name, $_POST[$field_name]);
 
 
-	// 	Kanban::$instance->flash->add('success', 'Estimates order has been saved');
+	// 	Kanban::get_instance()->flash->add('success', 'Estimates order has been saved');
 
 	// 	wp_redirect($_POST['_wp_http_referer']);
 	// 	exit;
@@ -461,7 +460,7 @@ class Kanban_Settings
 
 
 
-	static function get_instance()
+	public static function get_instance()
 	{
 		if ( ! self::$instance )
 		{

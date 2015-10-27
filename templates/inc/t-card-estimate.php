@@ -1,6 +1,6 @@
 <div class="btn btn-default btn-estimate" data-toggle="dropdown">
-	<small><?php _e( 'Estimate:', Kanban::get_text_domain() ); ?></small>
+	<span class="btn-title"><?php _e( 'Estimate:', Kanban::get_text_domain() ); ?></span>
 	<b class="task-estimate">
-		{{=kanban_task_estimate}}
+		{{=estimate}}
 	</b>
 </div>

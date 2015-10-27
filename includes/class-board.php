@@ -40,25 +40,16 @@ class Kanban_Board
 		$wp_query->query_vars['kanban']->board = (object) array();
 
 
-		// // get all data for the javascript
+		// get all data for the javascript
+		$wp_query->query_vars['kanban']->board->settings = Kanban_Settings::get_all();
+
 		$wp_query->query_vars['kanban']->board->allowed_users = Kanban_User::get_allowed_users();
 
-		$wp_query->query_vars['kanban']->board->estimates = Kanban_Terms::terms_in_order ('task', 'estimate');
-
-		$wp_query->query_vars['kanban']->board->status_tax_key = Kanban_Utils::format_key ('task', 'status');
-		$wp_query->query_vars['kanban']->board->status_color_field_name = sprintf('%s_colors', $wp_query->query_vars['kanban']->board->status_tax_key);
-		$wp_query->query_vars['kanban']->board->status_colors = Kanban_Settings::get_option($wp_query->query_vars['kanban']->board->status_color_field_name, null, array());
-		$wp_query->query_vars['kanban']->board->statuses = Kanban_Terms::terms_in_order ('task', 'status');
-
-		foreach ( $wp_query->query_vars['kanban']->board->statuses as $status)
-		{
-			if ( !isset($wp_query->query_vars['kanban']->board->status_colors[$status->term_id]) ) continue;
-			$status->color = $wp_query->query_vars['kanban']->board->status_colors[$status->term_id];
-		}
+		$wp_query->query_vars['kanban']->board->estimates = Kanban_Estimate::get_all();
+		$wp_query->query_vars['kanban']->board->statuses = Kanban_Status::get_all();
 
 		$wp_query->query_vars['kanban']->board->projects = Kanban_Project::get_all();
 		$wp_query->query_vars['kanban']->board->tasks = Kanban_Task::get_all();
-
 
 		$current_user_id = get_current_user_id();
 
@@ -75,6 +66,20 @@ class Kanban_Board
 		return $template;
 	}
 
+
+
+	// static function get_settings ()
+	// {
+	// 	$to_return = array();
+
+	// 	$settings_section_name = sprintf('%s_settings', Kanban::get_instance()->settings->basename);
+	// 	$work_hour_interval_key = Kanban_Utils::format_key ('work_hour', 'interval');
+	// 	$work_hour_interval = (float) Kanban_Settings::get_option($settings_section_name, $work_hour_interval_key);
+
+	// 	$to_return[$work_hour_interval_key] = $work_hour_interval ? $work_hour_interval : 1;
+
+	// 	return $to_return;
+	// }
 
 
 } // Kanban_Board

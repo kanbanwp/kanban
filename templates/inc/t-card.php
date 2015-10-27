@@ -1,8 +1,8 @@
-<div class="panel panel-default card task" id="task-{{=ID}}" data-id="{{=ID}}">
+<div class="panel panel-default card task" id="task-{{=task.id}}" data-id="{{=task.id}}">
 	<div class="panel-body">
 		<div class="pull-right text-muted task-id">
 			<div class="badge" data-toggle="dropdown">
-				{{=ID}}
+				{{=task.id}}
 			</div>
 			<ul class="dropdown-menu">
 				<li>
@@ -26,18 +26,18 @@
 		</div>
 
 		<h3 class="h4 wrapper-task-title">
-			<textarea class="editable-input task_title resize" rows="1" placeholder="<?php _e( 'Task name', Kanban::get_text_domain() ); ?>" readonly>{{=post_title}}</textarea>
+			<textarea class="editable-input task_title resize" rows="1" placeholder="<?php _e( 'Task name', Kanban::get_text_domain() ); ?>" readonly>{{=task.title}}</textarea>
 		</h3>
 
 		<div class="row row-worked">
-			<div class="col col-xs-4 col-work-hours">
-				<div class="btn btn-default btn-work-hours">
+			<div class="col col-xs-4 col-task-hours">
+				<div class="btn btn-default btn-task-hours">
 				</div><!-- btn -->
-				<div class="btn-group work-hours-operators">
-					<button type="button" class="btn btn-default btn-sm" value="+1">
+				<div class="btn-group task-hours-operators">
+					<button type="button" class="btn btn-default btn-sm" value="+{{=settings.hour_interval}}">
 						<span class="glyphicon glyphicon-plus"></span>
 					</button>
-					<button type="button" class="btn btn-default btn-sm" value="-1">
+					<button type="button" class="btn btn-default btn-sm" value="-{{=settings.hour_interval}}">
 						<span class="glyphicon glyphicon-minus"></span>
 					</button>
 				</div>
@@ -62,6 +62,6 @@
 			</div><!-- progress bar -->
 		</div><!-- progress -->
 	</div><!-- panel body -->
-	<div class="task-handle" style="background: {{=status_color}};">
+	<div class="task-handle" style="background: {{=task.status_color}};">
 	</div>
 </div>

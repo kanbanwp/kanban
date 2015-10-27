@@ -21,7 +21,7 @@ class Kanban_Template
 				'board' => '%s/css/board.css'
 			),
 			'script' => array(
-				'jquery-ui' => "//code.jquery.com/ui/1.11.4/jquery-ui.js",
+				'jquery-ui' => "//code.jquery.com/ui/1.11.3/jquery-ui.min.js",
 				'bootstrap' => "//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js",
 				'bootstrap-growl' => "//cdnjs.cloudflare.com/ajax/libs/bootstrap-growl/1.0.0/jquery.bootstrap-growl.min.js",
 				'autoresize' => "%s/js/jquery.textarea.autoresize.min.js",
@@ -157,6 +157,12 @@ class Kanban_Template
 							{
 								$path = sprintf($path, Kanban::get_instance()->settings->uri);
 							}
+
+							if ( defined('KANBAN_DEBUG') && KANBAN_DEBUG === TRUE )
+							{
+								$path = str_replace('.min', '', $path);
+							}
+
 
 							self::get_instance()->script[$handle] = $path;
 						}

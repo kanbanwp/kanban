@@ -17,11 +17,11 @@ class Kanban_Utils
 
 
 
-	static function format_key ($post_type, $key)
-	{
-		$post_type = Kanban_Post_Types::format_post_type ($post_type);
-		return sprintf('%s_%s', $post_type, $key);
-	}
+	// static function format_key ($post_type, $key)
+	// {
+	// 	$post_type = Kanban_Post_Types::format_post_type ($post_type);
+	// 	return sprintf('%s_%s', $post_type, $key);
+	// }
 
 
 

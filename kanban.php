@@ -77,20 +77,22 @@ class Kanban
 	{
 		self::$instance = self::get_instance();
 
-		Kanban::$instance->settings = (object) array();
-		Kanban::$instance->settings->path = dirname(__FILE__);
-		Kanban::$instance->settings->file = basename(__FILE__, '.php');
-		Kanban::$instance->settings->basename = strtolower(__CLASS__);
-		Kanban::$instance->settings->uri = plugin_dir_url(__FILE__);
-		Kanban::$instance->settings->pretty_name = __('Kanban', Kanban::$instance->settings->file);
+		Kanban::get_instance()->settings = (object) array();
+		Kanban::get_instance()->settings->path = dirname(__FILE__);
+		Kanban::get_instance()->settings->file = basename(__FILE__, '.php');
+		Kanban::get_instance()->settings->basename = strtolower(__CLASS__);
+		Kanban::get_instance()->settings->uri = plugin_dir_url(__FILE__);
+		Kanban::get_instance()->settings->pretty_name = __('Kanban', Kanban::get_instance()->settings->file);
+		Kanban::get_instance()->settings->db_version = '1.0';
 
 
 
 		// needs to come first
-		include_once Kanban::$instance->settings->path . '/includes/class-utils.php';
+		include_once Kanban::get_instance()->settings->path . '/includes/class-utils.php';
+		include_once Kanban::get_instance()->settings->path . '/includes/class-db.php';
 
 		// Automatically load classes
-		$files = glob(Kanban::$instance->settings->path . '/includes/class-*.php');
+		$files = glob(Kanban::get_instance()->settings->path . '/includes/class-*.php');
 		foreach ($files as $file)
 		{
 		    include_once $file;
@@ -103,12 +105,16 @@ class Kanban
 
 	static function on_activation()
 	{
+		Kanban_Db::check_for_updates();
+
+
+
 		// http://wordpress.stackexchange.com/questions/20043/inserting-taxonomy-terms-during-a-plugin-activation
 		Kanban_Post_Types::custom_post_types();
 
 
 
-		$is_installed_before = get_option( sprintf('_%s_is_installed_before', Kanban::$instance->settings->basename) );
+		$is_installed_before = get_option( sprintf('_%s_is_installed_before', Kanban::get_instance()->settings->basename) );
 
 
 		if ( !$is_installed_before )
@@ -269,7 +275,7 @@ class Kanban
 
 
 			// save that the plugin has been installed
-			update_option( sprintf('_%s_is_installed_before', Kanban::$instance->settings->basename), TRUE );
+			update_option( sprintf('_%s_is_installed_before', Kanban::get_instance()->settings->basename), TRUE );
 
 		} // $is_installed_before
 
@@ -282,7 +288,7 @@ class Kanban
 		// redirect to welcome page
 		// @link http://premium.wpmudev.org/blog/tabbed-interface/
 		set_transient(
-			sprintf('_%s_welcome_screen_activation_redirect', Kanban::$instance->settings->basename),
+			sprintf('_%s_welcome_screen_activation_redirect', Kanban::get_instance()->settings->basename),
 			true,
 			30
 		);
@@ -299,11 +305,11 @@ class Kanban
 
 	public static function get_instance()
 	{
-		if ( ! Kanban::$instance )
+		if ( ! self::$instance )
 		{
-			Kanban::$instance = new self();
+			self::$instance = new self();
 		}
-		return Kanban::$instance;
+		return self::$instance;
 	}
 
 

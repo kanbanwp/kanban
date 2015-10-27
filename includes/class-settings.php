@@ -14,9 +14,14 @@ Kanban_Settings::init();
 
 
 
-class Kanban_Settings
+class Kanban_Settings extends Kanban_Db
 {
 	private static $instance;
+	protected static $table_name = 'options';
+	protected static $table_columns = array(
+		'name' => 'text',
+		'value' => 'text'
+	);
 
 
 
@@ -54,15 +59,44 @@ class Kanban_Settings
 		<?php
 		settings_errors();
 
-	    self::get_instance()->settings_api->show_navigation();
-	    self::get_instance()->settings_api->show_forms();
+		self::get_instance()->settings_api->show_navigation();
+		self::get_instance()->settings_api->show_forms();
 ?>
-	    </div>
+		</div>
 			<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
 			<script src="<?php echo Kanban::get_instance()->settings->uri ?>/js/admin-settings.js"></script>
 		<?php
 	}
 
+
+
+	static function get_all ($sql = NULL)
+	{
+		$table_name = self::table_name();
+
+		$sql = "SELECT *
+				FROM `{$table_name}`
+		;";
+
+		$sql = apply_filters(
+			sprintf(
+				'%s_sql_%s_get_all',
+				Kanban::get_instance()->settings->basename,
+				self::$table_name
+			),
+			$sql
+		);
+
+		$records = parent::get_all($sql);
+
+		$output = array();
+		foreach ($records as $record)
+		{
+			$output[$record->name] = $record->value;
+		}
+
+		return $output;
+	}
 
 
 
@@ -207,140 +241,157 @@ class Kanban_Settings
 
 		$current_screen = get_current_screen();
 
-        // Set the submenu as active/current while anywhere in your Custom Post Type (nwcm_news)
-        if ( Kanban_Post_Types::format_post_type ('task') === $current_screen->post_type ) {
+		// Set the submenu as active/current while anywhere in your Custom Post Type (nwcm_news)
+		if ( Kanban_Post_Types::format_post_type ('task') === $current_screen->post_type ) {
 
-            if ( Kanban_Utils::format_key('task', 'status') === $current_screen->taxonomy ) {
-                $submenu_file = self::get_submenu_file( 'task', 'status' );
-            }
-            if ( Kanban_Utils::format_key('task', 'estimate') === $current_screen->taxonomy ) {
+			if ( Kanban_Utils::format_key('task', 'status') === $current_screen->taxonomy ) {
+				$submenu_file = self::get_submenu_file( 'task', 'status' );
+			}
+			if ( Kanban_Utils::format_key('task', 'estimate') === $current_screen->taxonomy ) {
 				$submenu_file = self::get_submenu_file( 'task', 'estimate' );
-            }
+			}
 
-            $parent_file = Kanban::get_instance()->settings->basename;
+			$parent_file = Kanban::get_instance()->settings->basename;
 
-        }
+		}
 
-        return $parent_file;
+		return $parent_file;
 	}
 
 
 
 	static function admin_init ()
 	{
-		$users_field_name = sprintf('%s_user', Kanban::get_instance()->settings->basename);
+		// $settings_section_name = sprintf('%s_settings', Kanban::get_instance()->settings->basename);
+		// $work_hour_interval_key = Kanban_Utils::format_key ('work_hour', 'interval');
 
-		$status_tax_key = Kanban_Utils::format_key ('task', 'status');
-		$status_color_field_name = sprintf('%s_colors', $status_tax_key);
-		$status_order_field_name = sprintf('%s_order', $status_tax_key);
+		// $users_field_name = sprintf('%s_user', Kanban::get_instance()->settings->basename);
 
-
-		$estimate_tax_key = Kanban_Utils::format_key ('task', 'estimate');
-		$estimate_order_field_name = sprintf('%s_order', $estimate_tax_key);
-
+		// $status_tax_key = Kanban_Utils::format_key ('task', 'status');
+		// $status_color_field_name = sprintf('%s_colors', $status_tax_key);
+		// $status_order_field_name = sprintf('%s_order', $status_tax_key);
 
 
-		$sections = array(
-	        array(
-	            'id' => $users_field_name,
-	            'title' => 'Users'
-	        ),
-	        array(
-	            'id' => $status_order_field_name,
-	            'title' => 'Status Order'
-	        ),
-	        array(
-	            'id' => $status_color_field_name,
-	            'title' => 'Status Colors'
-	        ),
-	        array(
-	            'id' => $estimate_order_field_name,
-	            'title' => 'Estimate Order'
-	        ),
-	    );
+		// $estimate_tax_key = Kanban_Utils::format_key ('task', 'estimate');
+		// $estimate_order_field_name = sprintf('%s_order', $estimate_tax_key);
 
 
 
-	    $fields = array();
+		// $sections = array(
+		// 	array(
+		// 		'id' => $settings_section_name,
+		// 		'title' => __('Settings', Kanban::get_text_domain())
+		// 	),
+		// 	array(
+		// 		'id' => $users_field_name,
+		// 		'title' => __('Users', Kanban::get_text_domain())
+		// 	),
+		// 	array(
+		// 		'id' => $status_order_field_name,
+		// 		'title' => __('Status Order', Kanban::get_text_domain())
+		// 	),
+		// 	array(
+		// 		'id' => $status_color_field_name,
+		// 		'title' => __('Status Colors', Kanban::get_text_domain())
+		// 	),
+		// 	array(
+		// 		'id' => $estimate_order_field_name,
+		// 		'title' => __('Estimate Order', Kanban::get_text_domain())
+		// 	),
+		// );
 
 
 
-		$fields[$users_field_name] = array();
-
-		$all_users = get_users();
-		$all_users_arr = array();
-		foreach ($all_users as $user)
-		{
-			$all_users_arr[$user->ID] = Kanban_User::format_user_name($user);
-		}
-
-	    $fields[$users_field_name][] = array(
-            'name' => 'allowed_users',
-            'label' => 'Allowed Users',
-            'desc' => 'Users who have access to the board',
-            'type' => 'multicheck',
-            'options' => $all_users_arr
-	    );
+		// $fields = array();
 
 
 
-		$statuses_in_order = Kanban_Terms::terms_in_order ('task', 'status');
+		// $fields[$settings_section_name] = array();
+		// $fields[$settings_section_name][] = array(
+		// 	'name' => $work_hour_interval_key,
+		// 	'label' => 'Work time interval',
+		// 	'desc' => 'The interval to use to track your time, based on 1 hour ( .166 = 10 minutes, for example)',
+		// 	'type' => 'text'
+		// );
 
 
 
-		$fields[$status_color_field_name] = array();
+		// $fields[$users_field_name] = array();
 
-		foreach ($statuses_in_order as $status)
-		{
-			$fields[$status_color_field_name][] = array(
-                'name' => $status->term_id,
-                'label' => $status->name,
-                'type' => 'color'
-            );
-	    }
+		// $all_users = get_users();
+		// $all_users_arr = array();
+		// foreach ($all_users as $user)
+		// {
+		// 	$all_users_arr[$user->ID] = Kanban_User::format_user_name($user);
+		// }
 
-
-
-		$fields[$status_order_field_name] = array();
-
-		foreach ($statuses_in_order as $status)
-		{
-			$fields[$status_order_field_name][$status->term_id] = array(
-                'name' => $status->term_id,
-                'label' => $status->name,
-                'type' => 'number'
-            );
-	    }
+		// $fields[$users_field_name][] = array(
+		// 	'name' => 'allowed_users',
+		// 	'label' => 'Allowed Users',
+		// 	'desc' => 'Users who have access to the board',
+		// 	'type' => 'multicheck',
+		// 	'options' => $all_users_arr
+		// );
 
 
 
-
-		$estimates_in_order = Kanban_Terms::terms_in_order ('task', 'estimate');
-
+		// $statuses_in_order = Kanban_Terms::terms_in_order ('task', 'status');
 
 
 
-		$fields[$estimate_order_field_name] = array();
+		// $fields[$status_color_field_name] = array();
 
-		foreach ($estimates_in_order as $status)
-		{
-			$fields[$estimate_order_field_name][$status->term_id] = array(
-                'name' => $status->term_id,
-                'label' => $status->name,
-                'type' => 'number'
-            );
-	    }
+		// foreach ($statuses_in_order as $status)
+		// {
+		// 	$fields[$status_color_field_name][] = array(
+		// 		'name' => $status->term_id,
+		// 		'label' => $status->name,
+		// 		'type' => 'color'
+		// 	);
+		// }
 
 
 
-	    self::get_instance()->settings_api = new WeDevs_Settings_API();
+		// $fields[$status_order_field_name] = array();
 
-	    //set sections and fields
-	    self::get_instance()->settings_api->set_sections( $sections );
-	    self::get_instance()->settings_api->set_fields( $fields );
+		// foreach ($statuses_in_order as $status)
+		// {
+		// 	$fields[$status_order_field_name][$status->term_id] = array(
+		// 		'name' => $status->term_id,
+		// 		'label' => $status->name,
+		// 		'type' => 'number'
+		// 	);
+		// }
 
-	    //initialize them
-	    self::get_instance()->settings_api->admin_init();
+
+
+
+		// $estimates_in_order = Kanban_Terms::terms_in_order ('task', 'estimate');
+
+
+
+
+		// $fields[$estimate_order_field_name] = array();
+
+		// foreach ($estimates_in_order as $status)
+		// {
+		// 	$fields[$estimate_order_field_name][$status->term_id] = array(
+		// 		'name' => $status->term_id,
+		// 		'label' => $status->name,
+		// 		'type' => 'number'
+		// 	);
+		// }
+
+
+
+		// self::get_instance()->settings_api = new WeDevs_Settings_API();
+
+		// //set sections and fields
+		// self::get_instance()->settings_api->set_sections( $sections );
+		// self::get_instance()->settings_api->set_fields( $fields );
+
+		// //initialize them
+		// self::get_instance()->settings_api->admin_init();
 	}
 
 
@@ -348,19 +399,19 @@ class Kanban_Settings
 
 	static function get_option ( $section, $option = null, $default = '' )
 	{
-	    $options = get_option( $section );
+		$options = get_option( $section );
 
-	    if ( empty($options) )
-	    {
-	    	return $default;
-	    }
+		if ( empty($options) )
+		{
+			return $default;
+		}
 
-	    if ( isset( $options[$option] ) )
-	    {
-	        return $options[$option];
-	    }
+		if ( isset( $options[$option] ) )
+		{
+			return $options[$option];
+		}
 
-	    return $options;
+		return $options;
 	}
 
 
@@ -457,6 +508,25 @@ class Kanban_Settings
 	// 	wp_redirect($_POST['_wp_http_referer']);
 	// 	exit;
 	// }
+
+
+
+	static function db_table ()
+	{
+		return "CREATE TABLE " . self::table_name() . " (
+					id bigint(20) NOT NULL AUTO_INCREMENT,
+					name varchar(64) NOT NULL,
+					value longtext NOT NULL,
+					PRIMARY KEY  (id)
+				)";
+	} // db_table
+
+
+
+	static function table_name()
+	{
+		return Kanban_Db::format_table_name(self::$table_name);
+	}
 
 
 

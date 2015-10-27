@@ -122,15 +122,13 @@
 <script type="text/javascript">
 var ajaxurl = '<?php echo admin_url('admin-ajax.php'); ?>';
 
+var settings = <?php echo json_encode($wp_query->query_vars['kanban']->board->settings) ?>;
 var status_records = <?php echo json_encode($wp_query->query_vars['kanban']->board->statuses) ?>;
-var status_colors = <?php echo json_encode($wp_query->query_vars['kanban']->board->status_colors) ?>;
 var task_records = <?php echo json_encode($wp_query->query_vars['kanban']->board->tasks) ?>;
 var project_records = <?php echo json_encode($wp_query->query_vars['kanban']->board->projects) ?>;
 var allowed_users = <?php echo json_encode($wp_query->query_vars['kanban']->board->allowed_users) ?>;
-var estimates = <?php echo json_encode($wp_query->query_vars['kanban']->board->estimates) ?>;
+var estimate_records = <?php echo json_encode($wp_query->query_vars['kanban']->board->estimates) ?>;
 var current_user = <?php echo json_encode($wp_query->query_vars['kanban']->board->current_user->data) ?>;
-
-var statuses = [];
 
 var col_percent_w = <?php echo $wp_query->query_vars['kanban']->board->col_percent_w ?>;
 var sidebar_w = <?php echo $wp_query->query_vars['kanban']->board->sidebar_w ?>;

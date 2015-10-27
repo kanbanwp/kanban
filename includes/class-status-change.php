@@ -11,10 +11,18 @@ Kanban_Status_Change::init();
 
 
 
-class Kanban_Status_Change
+class Kanban_Status_Change extends Kanban_Db
 {
 	private static $instance;
 	static $slug = 'status_change';
+	protected static $table_name = 'log_status_changes';
+	protected static $table_columns = array(
+		'task_id' => 'int',
+		'created_dt_gmt' => 'datetime',
+		'status_id_old' => 'int',
+		'status_id_new' => 'int',
+		'user_id_author' => 'int',
+	);
 
 
 
@@ -69,6 +77,50 @@ class Kanban_Status_Change
 			'message' => sprintf('%s saved', self::$slug),
 			self::$slug => $post_data
 		));
+	}
+
+
+
+	static function add ($task_id, $status_id_new, $status_id_old = 0, $user_id_author = NULL)
+	{
+		if ( !$user_id_author )
+		{
+			$user_id_author = get_current_user_id();
+		}
+
+
+
+		$data = array(
+			'task_id' => $task_id,
+			'created_dt_gmt' => gmdate('Y-m-d H:i:s'),
+			'status_id_old' => $status_id_old,
+			'status_id_new' => $status_id_new,
+			'user_id_author' => $user_id_author
+		);
+
+		$id = self::insert($data);
+	}
+
+
+
+	static function db_table ()
+	{
+		return "CREATE TABLE " . self::table_name() . " (
+					id bigint(20) NOT NULL AUTO_INCREMENT,
+					task_id bigint(20) NOT NULL,
+					created_dt_gmt datetime NOT NULL,
+					status_id_old bigint(20) NOT NULL,
+					status_id_new bigint(20) NOT NULL,
+					user_id_author bigint(20) NOT NULL,
+					PRIMARY KEY  (id)
+				)";
+	} // db_table
+
+
+
+	static function table_name()
+	{
+		return Kanban_Db::format_table_name(self::$table_name);
 	}
 
 

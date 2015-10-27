@@ -431,7 +431,9 @@ body.view-compact {
 			.row-worked {
 				margin: 0 0 $margin/3;
 
-				small {
+				.btn-title {
+					color: #999;
+					font-size: .82em;
 					display: block;
 				}
 
@@ -475,8 +477,9 @@ body.view-compact {
 				width: 2em;
 
 				img {
+					border-radius: 50%;
 					height: 2em;
-				width: 2em;
+					width: 2em;
 				}
 
 				&.empty {
@@ -485,10 +488,10 @@ body.view-compact {
 				}
 			}
 
-			.col-work-hours {
+			.col-task-hours {
 				position: relative;
 
-				.work-hours-operators {
+				.task-hours-operators {
 					display: none;
 					left: 0;
 					position: absolute;
@@ -505,14 +508,14 @@ body.view-compact {
 				}
 
 				&:hover {
-					.work-hours-operators {
+					.task-hours-operators {
 						display: block;
 					}
 				}
 			}
 
 			.task-estimate,
-			.task-work-hours {
+			.task-hour-count {
 				font-size: 1.618em;
 				line-height: 1;
 			}

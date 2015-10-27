@@ -10,10 +10,22 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 Kanban_Task::init();
 
 
-class Kanban_Task
+class Kanban_Task extends Kanban_Db
 {
 	private static $instance;
 	static $slug = 'task';
+	protected static $table_name = 'tasks';
+	protected static $table_columns = array(
+		'title' => 'text',
+		'description' => 'text',
+		'created_dt_gmt' => 'datetime',
+		'modified_dt_gmt' => 'datetime',
+		'user_id_author' => 'int',
+		'user_id_assigned' => 'int',
+		'status_id' => 'int',
+		'project_id' => 'int',
+		'estimate_id' => 'int'
+	);
 
 
 
@@ -29,7 +41,6 @@ class Kanban_Task
 
 
 
-
 	static function format_hours($hours)
 	{
 		if ( $hours < 0 )
@@ -37,7 +48,11 @@ class Kanban_Task
 			$hours = 0;
 		}
 
-		if ( $hours < 8 )
+		if ( $hours < 1 )
+		{
+			$label = sprintf('%sm', ceil($hours*60/100));
+		}
+		elseif ( $hours < 8 )
 		{
 			$label = sprintf('%sh', $hours);
 		}
@@ -53,7 +68,7 @@ class Kanban_Task
 
 	static function ajax_save ()
 	{
-		if (  !isset( $_POST[Kanban_Utils::get_nonce()] ) || ! wp_verify_nonce( $_POST[Kanban_Utils::get_nonce()], sprintf('%s-save', Kanban::get_instance()->settings->basename)) || $_POST['post_type'] !== Kanban_Post_Types::format_post_type(self::$slug) || !is_user_logged_in() ) wp_send_json_error();
+		if (  !isset( $_POST[Kanban_Utils::get_nonce()] ) || ! wp_verify_nonce( $_POST[Kanban_Utils::get_nonce()], sprintf('%s-save', Kanban::get_instance()->settings->basename)) || !is_user_logged_in() ) wp_send_json_error();
 
 
 
@@ -61,15 +76,53 @@ class Kanban_Task
 
 
 
-		if ( !isset($_POST[self::$slug]['post_type']) )
+		$_POST['task']['modified_dt_gmt'] = gmdate('Y-m-d H:i:s');
+		$_POST['task']['user_id_author'] = get_current_user_id();
+
+
+
+		if ( isset($_POST['task']['id']) )
 		{
-			$post_type = Kanban_Post_Types::format_post_type (self::$slug);
-			$_POST['post_type'] = $post_type;
+			self::update($_POST['task'], array('id' => $_POST['task']['id']));
+			$task_id = $_POST['task']['id'];
+		}
+		else
+		{
+			$_POST['task']['created_dt_gmt'] = gmdate('Y-m-d H:i:s');
+			$task_id = self::insert($_POST['task']);
 		}
 
-		$post_data = Kanban_Post::save($_POST);
+
+
+		$post_data = self::get_row('id', $task_id);
 
 		if ( !$post_data ) wp_send_json_error();
+
+
+
+		Kanban_Status_Change::add($task_id, $post_data->status_id);
+
+
+
+		if ( !empty($_POST['comment']) )
+		{
+			Kanban_Comment::add(
+				$_POST['comment'],
+				'system',
+				$task_id
+			);
+		}
+
+
+
+		if ( isset($_POST['status_id_old']) )
+		{
+			Kanban_Status_Change::add(
+				$task_id,
+				$_POST['status_id'],
+				$_POST['status_id_old']
+			);
+		}
 
 
 
@@ -119,95 +172,55 @@ class Kanban_Task
 
 
 
-	static function get_all()
+	static function get_all ($sql = NULL)
 	{
-		if ( !isset(self::get_instance()->all_tasks) )
-		{
-			global $wpdb;
+		$table_name = self::table_name();
 
-			$post_type_key = Kanban_Post_Types::format_post_type(self::$slug);
-
-			$sql = "SELECT *
-					FROM `{$wpdb->prefix}posts`
-					WHERE `{$wpdb->prefix}posts`.`post_type` = '$post_type_key'
-					AND `{$wpdb->prefix}posts`.`post_status` IN ('publish')
-			;";
-
-			$sql = apply_filters(
-				sprintf('%s_sql_%s_get_all', Kanban::get_instance()->settings->basename, self::$slug),
-				$sql
-			);
-
-			$posts = $wpdb->get_results($sql);
-
-			self::get_instance()->all_tasks = Kanban_Post::apply_postmeta_and_terms_to_posts($posts);
-		}
-
-		return self::get_instance()->all_tasks;
-	}
+		$worked_table_name = Kanban_Task_Hour::table_name();
 
 
 
-	static function add_comments_meta_box()
-	{
-		add_meta_box
-		(
-			sprintf('%s_comments', Kanban_Post_Types::format_post_type(self::$slug)),
-			'Task action log',
-			array(__CLASS__, 'render_comments_meta_box'),
-			Kanban_Post_Types::format_post_type(self::$slug),
-			'side'
-		);
-	}
 
-
-	static function render_comments_meta_box ($post)
-	{
-		global $wpdb;
-
-		$comment_type = Kanban_Utils::format_key (self::$slug, 'comment');
-
-		$sql = "SELECT `{$wpdb->prefix}comments`.*
-				FROM `{$wpdb->prefix}comments`
-				WHERE `comment_post_ID` = '{$post->ID}'
-				AND `comment_type` = '{$comment_type}'
-				ORDER BY `{$wpdb->prefix}comments`.`comment_date` DESC
-			;";
+		$sql = "SELECT tasks.*,
+				COALESCE(SUM(worked.hours), 0) 'hour_count'
+				FROM {$table_name} tasks
+				LEFT JOIN {$worked_table_name} worked
+				ON tasks.id = worked.task_id
+				WHERE tasks.is_active = 1
+				GROUP BY tasks.id
+		;";
 
 		$sql = apply_filters(
-			sprintf('%s_sql_%s_comments_meta_box', Kanban::get_instance()->settings->basename, self::$slug),
+			sprintf('%s_sql_%s_get_all', Kanban::get_instance()->settings->basename, self::$slug),
 			$sql
 		);
 
-		$comments = $wpdb->get_results($sql);
-		?>
-		<style>
-		#kanban_task_comments .inside {
-			margin: 0;
-			padding: 0;
-		}
-		#kanban_task_comments li {
-			padding: 10px;
-		}
-		#kanban_task_comments small {
-			color: #CCC;
-			display: block;
-		}
-		</style>
-		<ul class="striped">
-		<?php foreach ($comments as $comment) : $comment_date_dt = new DateTime($comment->comment_date); ?>
-			<li>
-			<small>
-			<?php echo $comment_date_dt->format('D, j M, Y') ?>
-			at
-			<?php echo $comment_date_dt->format('g:ia') ?>
-			</small>
-			<?php echo $comment->comment_content ?>
-			</li>
-		<?php endforeach; ?>
-		</ul>
-		<?php
+		$records = parent::get_all($sql);
+
+		return Kanban_Utils::build_array_with_id_keys ($records, 'id');;
 	}
+
+
+
+	static function db_table ()
+	{
+		return "CREATE TABLE " . self::table_name() . " (
+					id bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+					title text NOT NULL,
+					description text NOT NULL,
+					created_dt_gmt datetime NOT NULL,
+					modified_dt_gmt datetime NOT NULL,
+					user_id_author bigint(20) NOT NULL,
+					user_id_assigned bigint(20) NOT NULL,
+					status_id bigint(20) NOT NULL,
+					project_id bigint(20) NOT NULL,
+					estimate_id bigint(20) NOT NULL,
+					is_active BOOLEAN NOT NULL DEFAULT TRUE,
+					PRIMARY KEY  (id),
+					KEY is_active (is_active)
+				)";
+	} // db_table
+
 
 
 	public static function get_instance()

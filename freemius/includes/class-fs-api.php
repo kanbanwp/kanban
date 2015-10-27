@@ -108,17 +108,23 @@
 		/**
 		 * Find clock diff between server and API server, and store the diff locally.
 		 *
+		 * @param bool|int $diff
+		 *
 		 * @return bool|int False if clock diff didn't change, otherwise returns the clock diff in seconds.
 		 */
-		private function _sync_clock_diff() {
+		private function _sync_clock_diff( $diff = false ) {
 			$this->_logger->entrance();
 
 			// Sync clock and store.
-			$new_clock_diff = $this->_api->FindClockDiff();
+			$new_clock_diff = ( false === $diff ) ?
+				$this->_api->FindClockDiff() :
+				$diff;
 
 			if ( $new_clock_diff === self::$_clock_diff ) {
 				return false;
 			}
+
+			self::$_clock_diff = $new_clock_diff;
 
 			// Update API clock's diff.
 			$this->_api->SetClockDiff( self::$_clock_diff );
@@ -148,11 +154,14 @@
 			     isset( $result->error ) &&
 			     'request_expired' === $result->error->code
 			) {
-
 				if ( ! $retry ) {
+					$diff = isset( $result->error->timestamp ) ?
+						( time() - strtotime( $result->error->timestamp ) ) :
+						false;
+
 					// Try to sync clock diff.
-					if ( false !== $this->_sync_clock_diff() ) // Retry call with new synced clock.
-					{
+					if ( false !== $this->_sync_clock_diff( $diff ) ) {
+						// Retry call with new synced clock.
 						return $this->_call( $path, $method, $params, true );
 					}
 				}
@@ -230,9 +239,7 @@
 						// If there was an error during a newer data fetch,
 						// fallback to older data version.
 						$result = $cache_entry->result;
-					}
-					else
-					{
+					} else {
 						// If no older data version, return result without
 						// caching the error.
 						return $result;
@@ -267,6 +274,11 @@
 		function test( $unique_anonymous_id = null ) {
 			$this->_logger->entrance();
 
+			if ( ! function_exists( 'curl_version' ) ) {
+				// cUrl extension is not active.
+				return false;
+			}
+
 			$test = is_null( $unique_anonymous_id ) ?
 				$this->_api->Test() :
 				$this->_api->Test( $this->_call( 'ping.json?uid=' . $unique_anonymous_id ) );
@@ -277,7 +289,9 @@
 
 				self::$_options->set_option( 'api_force_http', true, true );
 
-				$test = $this->_api->Test();
+				$test = is_null( $unique_anonymous_id ) ?
+					$this->_api->Test() :
+					$this->_api->Test( $this->_call( 'ping.json?uid=' . $unique_anonymous_id ) );
 			}
 
 			return $test;
@@ -289,11 +303,28 @@
 		 * @author Vova Feldman (@svovaf)
 		 * @since  1.0.9
 		 *
+		 * @param null|string $unique_anonymous_id
 		 *
 		 * @return object
 		 */
-		function ping() {
-			return $this->_api->Ping();
+		function ping( $unique_anonymous_id = null ) {
+			return is_null( $unique_anonymous_id ) ?
+				$this->_api->Ping() :
+				$this->_call( 'ping.json?uid=' . $unique_anonymous_id );
+		}
+
+		/**
+		 * Check if valid ping request result.
+		 *
+		 * @author Vova Feldman (@svovaf)
+		 * @since  1.1.1
+		 *
+		 * @param mixed $pong
+		 *
+		 * @return bool
+		 */
+		function is_valid_ping( $pong ) {
+			return $this->_api->Test( $pong );
 		}
 
 		function get_url( $path = '' ) {
@@ -306,9 +337,8 @@
 		 * @author Vova Feldman (@svovaf)
 		 * @since  1.0.9
 		 */
-		static function clear_cache()
-		{
-			self::$_cache   = FS_Option_Manager::get_manager( WP_FS__API_CACHE_OPTION_NAME, true );
+		static function clear_cache() {
+			self::$_cache = FS_Option_Manager::get_manager( WP_FS__API_CACHE_OPTION_NAME, true );
 			self::$_cache->clear( true );
 		}
 	}

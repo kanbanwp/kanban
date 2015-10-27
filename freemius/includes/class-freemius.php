@@ -14,7 +14,7 @@
 		/**
 		 * @var string
 		 */
-		public $version = '1.1.0';
+		public $version = '1.1.1';
 
 		/**
 		 * @since 1.0.1
@@ -101,6 +101,11 @@
 		/**
 		 * @var FS_Plugin
 		 * @since 1.0.4
+		 */
+		private $_parent_plugin = false;
+		/**
+		 * @var Freemius
+		 * @since 1.1.1
 		 */
 		private $_parent = false;
 		/**
@@ -291,7 +296,7 @@
 							$this->add_action( 'after_init_plugin_registered', array( &$this, '_add_trial_notice' ) );
 						}
 					}
-				}
+		}
 
 //				$this->add_action( 'plugin_version_update', array( &$this, 'update_plugin_version_event' ));
 			}
@@ -476,7 +481,9 @@
 		 * @return bool
 		 */
 		function is_activation_page() {
-			return isset( $_GET['page'] ) && ( strtolower( $this->_menu_slug ) === strtolower( $_GET['page'] ) );
+			return isset( $_GET['page'] ) &&
+			       ( ( strtolower( $this->_menu_slug ) === strtolower( $_GET['page'] ) ) ||
+			         ( strtolower( $this->_slug ) === strtolower( $_GET['page'] ) ) );
 		}
 
 		private static $_statics_loaded = false;
@@ -676,7 +683,15 @@
 				$this->get_api_plugin_scope()->test( $this->get_anonymous_id() );
 
 			if ( ! $is_connected ) {
-				$this->_add_connectivity_issue_message();
+				// 2nd try of connectivity.
+				$pong = $this->get_api_plugin_scope()->ping( $this->get_anonymous_id() );
+
+				if ( $this->get_api_plugin_scope()->is_valid_ping( $pong ) ) {
+					$is_connected = true;
+				} else {
+					// Another API failure.
+					$this->_add_connectivity_issue_message( $pong );
+				}
 			}
 
 			$this->_storage->connectivity_test = array(
@@ -701,7 +716,14 @@
 		 */
 		function get_anonymous_id() {
 			if ( ! self::$_accounts->has_option( 'unique_id' ) ) {
-				self::$_accounts->set_option( 'unique_id', md5( get_site_url() ), true );
+				$key = get_site_url();
+
+				// If localhost, assign microtime instead of domain.
+				if ( WP_FS__IS_LOCALHOST || false !== strpos( $key, 'localhost' ) ) {
+					$key = microtime();
+				}
+
+				self::$_accounts->set_option( 'unique_id', md5( $key ), true );
 			}
 
 			return self::$_accounts->get_option( 'unique_id' );
@@ -712,8 +734,10 @@
 		 *
 		 * @author Vova Feldman (@svovaf)
 		 * @since  1.0.9
+		 *
+		 * @param mixed $api_result
 		 */
-		function _add_connectivity_issue_message() {
+		function _add_connectivity_issue_message( $api_result ) {
 			if ( ! function_exists( 'wp_nonce_url' ) ) {
 				require_once( ABSPATH . 'wp-includes/functions.php' );
 			}
@@ -725,28 +749,93 @@
 //			$admin_email = get_option( 'admin_email' );
 			$admin_email = $current_user->user_email;
 
-			$ping = $this->get_api_plugin_scope()->ping();
-
-			if ( is_object( $ping ) &&
-			     isset( $ping->error ) &&
-			     'cloudflare_ddos_protection' === $ping->error->code
+			$message = false;
+			if ( is_object( $api_result ) &&
+			     isset( $api_result->error )
 			) {
-				$message = __fs( 'cloudflare-blocks-connection-message' );
-			} else {
-				$message = __fs( 'connectivity-test-fails-message' );
+				switch ( $api_result->error->code ) {
+					case 'cloudflare_ddos_protection':
+						$message = sprintf(
+							__fs( 'x-requires-access-to-api', 'freemius' ) . ' ' .
+							__fs( 'cloudflare-blocks-connection-message' ) . ' ' .
+							__fs( 'happy-to-resolve-issue-asap' ) .
+							' %s',
+							'<b>' . $this->get_plugin_name() . '</b>',
+							sprintf(
+								'<ol id="fs_firewall_issue_options"><li>%s</li><li>%s</li><li>%s</li></ol>',
+								sprintf(
+									'<a class="fs-resolve" data-type="cloudflare" href="#"><b>%s</b></a>%s',
+									__fs( 'fix-issue-title' ),
+									' - ' . sprintf(
+										__fs( 'fix-issue-desc' ),
+										'<a href="mailto:' . $admin_email . '">' . $admin_email . '</a>'
+									)
+								),
+								sprintf(
+									'<a href="%s" target="_blank"><b>%s</b></a>%s',
+									sprintf( 'https://wordpress.org/plugins/%s/download/', $this->_slug ),
+									__fs( 'install-previous-title' ),
+									' - ' . __fs( 'install-previous-desc' )
+								),
+								sprintf(
+									'<a href="%s"><b>%s</b></a>%s',
+									wp_nonce_url( 'plugins.php?action=deactivate&amp;plugin=' . $this->_plugin_basename . '&amp;plugin_status=' . 'all' . '&amp;paged=' . '1' . '&amp;s=' . '', 'deactivate-plugin_' . $this->_plugin_basename ),
+									__fs( 'deactivate-plugin-title' ),
+									' - ' . __fs( 'deactivate-plugin-desc', 'freemius' )
+								)
+							)
+						);
+						break;
+					case 'squid_cache_block':
+						$message = sprintf(
+							__fs( 'x-requires-access-to-api', 'freemius' ) . ' ' .
+							__fs( 'squid-blocks-connection-message' ) .
+							' %s',
+							'<b>' . $this->get_plugin_name() . '</b>',
+							sprintf(
+								'<ol id="fs_firewall_issue_options"><li>%s</li><li>%s</li><li>%s</li></ol>',
+								sprintf(
+									'<a class="fs-resolve" data-type="squid" href="#"><b>%s</b></a>%s',
+									__fs( 'squid-no-clue-title' ),
+									' - ' . sprintf(
+										__fs( 'squid-no-clue-desc' ),
+										'<a href="mailto:' . $admin_email . '">' . $admin_email . '</a>'
+									)
+								),
+								sprintf(
+									'<b>%s</b> - %s',
+									__fs( 'squid-sysadmin-title' ),
+									sprintf(
+										__fs( 'squid-sysadmin-desc' ),
+										// We use a filter since the plugin might require additional API connectivity.
+										'<b>' . implode( ', ', $this->apply_filters( 'api_domains', array( 'api.freemius.com' ) ) ) . '</b>' )
+								),
+								sprintf(
+									'<a href="%s"><b>%s</b></a>%s',
+									wp_nonce_url( 'plugins.php?action=deactivate&amp;plugin=' . $this->_plugin_basename . '&amp;plugin_status=' . 'all' . '&amp;paged=' . '1' . '&amp;s=' . '', 'deactivate-plugin_' . $this->_plugin_basename ),
+									__fs( 'deactivate-plugin-title' ),
+									' - ' . __fs( 'deactivate-plugin-desc', 'freemius' )
+								)
+							)
+						);
+						break;
+					default:
+						$message = __fs( 'connectivity-test-fails-message' );
+						break;
+				}
 			}
 
-			$this->_admin_notices->add_sticky(
-				sprintf(
+			if ( false === $message ) {
+				$message = sprintf(
 					__fs( 'x-requires-access-to-api', 'freemius' ) . ' ' .
-					$message . ' ' .
+					__fs( 'connectivity-test-fails-message' ) . ' ' .
 					__fs( 'happy-to-resolve-issue-asap' ) .
 					' %s',
 					'<b>' . $this->get_plugin_name() . '</b>',
 					sprintf(
 						'<ol id="fs_firewall_issue_options"><li>%s</li><li>%s</li><li>%s</li></ol>',
 						sprintf(
-							'<a class="fs-resolve" href="#"><b>%s</b></a>%s',
+							'<a class="fs-resolve" data-type="general" href="#"><b>%s</b></a>%s',
 							__fs( 'fix-issue-title' ),
 							' - ' . sprintf(
 								__fs( 'fix-issue-desc' ),
@@ -766,13 +855,15 @@
 							' - ' . __fs( 'deactivate-plugin-desc', 'freemius' )
 						)
 					)
-				),
+				);
+			}
+
+			$this->_admin_notices->add_sticky(
+				$message,
 				'failed_connect_api',
 				__fs( 'oops' ) . '...',
 				'error'
 			);
-
-//				add_action( "wp_ajax_{$this->_slug}_deactivate_plugin", array( &$this, 'send_affiliate_application' ) );
 		}
 
 		/**
@@ -830,10 +921,24 @@
 
 			$ping = $this->get_api_plugin_scope()->ping();
 
+			$error_type = fs_request_get( 'error_type', 'general' );
+
+			switch ( $error_type ) {
+				case 'squid':
+					$title = 'Squid ACL Blocking Issue';
+					break;
+				case 'cloudflare':
+					$title = 'CloudFlare Blocking Issue';
+					break;
+				default:
+					$title = 'API Connectivity Issue';
+					break;
+			}
+
 			// Send email with technical details to resolve CloudFlare's firewall unnecessary protection.
 			wp_mail(
 				'api@freemius.com',
-				'API Connectivity Issue [' . $this->get_plugin_name() . ']',
+				$title . ' [' . $this->get_plugin_name() . ']',
 				sprintf( '<table>
 	<thead>
 		<tr><th colspan="2" style="text-align: left; background: #333; color: #fff; padding: 5px;">SDK</th></tr>
@@ -855,7 +960,8 @@
 	<tbody>
 		<tr><td><b>Address:</b></td><td>%s</td></tr>
 		<tr><td><b>HTTP_HOST:</b></td><td>%s</td></tr>
-		<tr><td><b>SERVER_ADDR:</b></td><td>%s</td></tr>
+		<tr><td><b>SERVER_ADDR:</b></td><td>%s</td></tr>' . ( ( 'squid' !== $error_type ) ? '' : '
+		<tr><td><b>Hosting Company:</b></td><td>' . fs_request_get( 'hosting_company' ) . '</td></tr>' ) . '
 	</tbody>
 	<thead>
 		<tr><th colspan="2" style="text-align: left; background: #333; color: #fff; padding: 5px;">User</th></tr>
@@ -890,7 +996,7 @@
 					$current_user->user_firstname,
 					$current_user->user_lastname,
 					$active_plugin_string,
-					( is_string( $ping ) ? $ping : json_encode( $ping ) )
+					( is_string( $ping ) ? htmlentities( $ping ) : json_encode( $ping ) )
 				),
 				"Content-type: text/html\r\n" .
 				"Reply-To: $admin_email <$admin_email>"
@@ -1021,13 +1127,13 @@
 					if ( is_admin() && $this->_admin_notices->has_sticky( 'failed_connect_api' ) ) {
 						if ( ! $this->_enable_anonymous ) {
 							// If anonymous mode is disabled, add firewall admin-notice message.
-						add_action( 'admin_footer', array( 'Freemius', '_add_firewall_issues_javascript' ) );
+							add_action( 'admin_footer', array( 'Freemius', '_add_firewall_issues_javascript' ) );
 
-						add_action( "wp_ajax_{$this->_slug}_resolve_firewall_issues", array(
-							&$this,
-							'_email_about_firewall_issue'
-						) );
-					}
+							add_action( "wp_ajax_{$this->_slug}_resolve_firewall_issues", array(
+								&$this,
+								'_email_about_firewall_issue'
+							) );
+						}
 					}
 
 					// Turn Freemius off.
@@ -1055,6 +1161,15 @@
 				}
 			}
 
+			if ( $this->is_addon() ) {
+				if ( $this->is_parent_plugin_installed() ) {
+					// Link to parent FS.
+					$this->_parent = self::get_instance_by_id( $parent_id );
+
+					// Get parent plugin reference.
+					$this->_parent_plugin = $this->_parent->get_plugin();
+				}
+			}
 
 			if ( is_admin() ) {
 				if ( $this->is_addon() ) {
@@ -1070,20 +1185,15 @@
 
 						return;
 					} else {
-						$parent_fs = self::get_instance_by_id( $parent_id );
-
-						// Get parent plugin reference.
-						$this->_parent = $parent_fs->get_plugin();
-
-						if ( $parent_fs->is_registered() && ! $this->is_registered() ) {
+						if ( $this->_parent->is_registered() && ! $this->is_registered() ) {
 							// If parent plugin activated, automatically install add-on for the user.
-							$this->_activate_addon_account( $parent_fs );
+							$this->_activate_addon_account( $this->_parent );
 						}
 
 						// @todo This should be only executed on activation. It should be migrated to register_activation_hook() together with other activation related logic.
 						if ( $this->is_premium() ) {
 							// Remove add-on download admin-notice.
-							$parent_fs->_admin_notices->remove_sticky( 'addon_plan_upgraded_' . $this->_slug );
+							$this->_parent->_admin_notices->remove_sticky( 'addon_plan_upgraded_' . $this->_slug );
 						}
 					}
 				} else {
@@ -1102,7 +1212,7 @@
 						add_action( 'install_plugins_pre_plugin-information', 'fs_install_plugin_information' );
 
 						// Override request for plugin information for Add-ons.
-						add_filter( 'plugins_api', array( &$this, '_get_addon_info_filter' ), 10, 3 );
+						add_filter( 'fs_plugins_api', array( &$this, '_get_addon_info_filter' ), 10, 3 );
 					} else {
 						if ( $this->is_paying() || $this->_has_addons() ) {
 							new FS_Plugin_Updater( $this );
@@ -1164,9 +1274,9 @@
 		function _plugin_code_type_changed() {
 			// Send code type changes event.
 			$this->get_api_site_scope()->call( '/', 'put', array(
-					'is_active'  => true,
-					'is_premium' => $this->is_premium(),
-					'version'    => $this->get_plugin_version(),
+				'is_active'  => true,
+				'is_premium' => $this->is_premium(),
+				'version'    => $this->get_plugin_version(),
 			) );
 
 			if ( $this->is_premium() ) {
@@ -1404,14 +1514,38 @@
 		function get_installed_addons() {
 			$installed_addons = array();
 			foreach ( self::$_instances as $slug => $instance ) {
-				if ( $instance->is_addon() && is_object( $instance->_parent ) ) {
-					if ( $this->_plugin->id == $instance->_parent->id ) {
+				if ( $instance->is_addon() && is_object( $instance->_parent_plugin ) ) {
+					if ( $this->_plugin->id == $instance->_parent_plugin->id ) {
 						$installed_addons[] = $instance;
 					}
 				}
 			}
 
 			return $installed_addons;
+		}
+
+		/**
+		 * Check if any add-ons of the plugin are installed.
+		 *
+		 * @author Leo Fajardo (@leorw)
+		 * @since  1.1.1
+		 *
+		 * @return bool
+		 */
+		function has_installed_addons() {
+			if ( ! $this->_has_addons() ) {
+				return false;
+			}
+
+			foreach ( self::$_instances as $slug => $instance ) {
+				if ( $instance->is_addon() && is_object( $instance->_parent_plugin ) ) {
+					if ( $this->_plugin->id == $instance->_parent_plugin->id ) {
+						return true;
+					}
+				}
+			}
+
+			return false;
 		}
 
 		/**
@@ -1613,7 +1747,9 @@
 
 			if ( fs_request_is_action( $this->_slug . '_skip_activation' ) ) {
 				check_admin_referer( $this->_slug . '_skip_activation' );
-				$this->_storage->is_anonymous = true;
+
+				$this->skip_connection();
+
 				if ( fs_redirect( $this->apply_filters( 'after_skip_url', $this->_get_admin_page_url() ) ) ) {
 					exit();
 				}
@@ -1677,7 +1813,8 @@
 		 * @return bool
 		 */
 		function _is_plugin_page() {
-			return fs_is_plugin_page( $this->_menu_slug );
+			return fs_is_plugin_page( $this->_menu_slug ) ||
+			       fs_is_plugin_page( $this->_slug );
 		}
 
 		/* Events
@@ -1869,6 +2006,24 @@
 		}
 
 		/**
+		 * Skip account connect, and set anonymous mode.
+		 *
+		 * @author Vova Feldman (@svovaf)
+		 * @since  1.1.1
+		 */
+		private function skip_connection() {
+			$this->_logger->entrance();
+
+			$this->_storage->is_anonymous = true;
+
+			// Send anonymous skip event.
+			// No user identified info nor any tracking will be sent after the user skips the opt-in.
+			$this->get_api_plugin_scope()->call( 'skip.json', 'put', array(
+				'uid' => $this->get_anonymous_id(),
+			) );
+		}
+
+		/**
 		 * Plugin version update hook.
 		 *
 		 * @author Vova Feldman (@svovaf)
@@ -1920,12 +2075,12 @@
 
 			// Send uninstall event.
 			$this->get_api_site_scope()->call( '/', 'put', array(
-				'is_active'      => false,
-				'is_premium'     => $this->is_premium(),
-				'is_uninstalled' => true,
-				// Send version on uninstall.
-				'version'        => $this->get_plugin_version(),
-			) );
+					'is_active'      => false,
+					'is_premium'     => $this->is_premium(),
+					'is_uninstalled' => true,
+					// Send version on uninstall.
+					'version'        => $this->get_plugin_version(),
+				) );
 
 			// @todo Decide if we want to delete plugin information from db.
 		}
@@ -1936,8 +2091,8 @@
 		 *
 		 * @return string
 		 */
-		private function premium_plugin_basename(){
-			return preg_replace('/\//', '-premium/', $this->_free_plugin_basename, 1 );
+		private function premium_plugin_basename() {
+			return preg_replace( '/\//', '-premium/', $this->_free_plugin_basename, 1 );
 		}
 
 		/**
@@ -1966,9 +2121,9 @@
 			if ( is_object( $fs ) ) {
 				self::require_plugin_essentials();
 
-				if (is_plugin_active( $fs->_free_plugin_basename ) ||
-				    is_plugin_active( $fs->premium_plugin_basename() )
-				){
+				if ( is_plugin_active( $fs->_free_plugin_basename ) ||
+				     is_plugin_active( $fs->premium_plugin_basename() )
+				) {
 					// Deleting Free or Premium plugin version while the other version still installed.
 					return;
 				}
@@ -1987,8 +2142,7 @@
 		 * @author Vova Feldman (@svovaf)
 		 * @since  1.1.1
 		 */
-		private static function require_plugin_essentials()
-		{
+		private static function require_plugin_essentials() {
 			if ( ! function_exists( 'get_plugins' ) ) {
 				require_once( ABSPATH . 'wp-admin/includes/plugin.php' );
 			}
@@ -2052,6 +2206,16 @@
 		 */
 		function get_secret_key() {
 			return $this->_plugin->secret_key;
+		}
+
+		/**
+		 * @author Vova Feldman (@svovaf)
+		 * @since  1.1.1
+		 *
+		 * @return bool
+		 */
+		function has_secret_key() {
+			return ! empty( $this->_plugin->secret_key );
 		}
 
 		/**
@@ -2593,7 +2757,7 @@
 		 */
 		function _sync_plans() {
 			$plans = $this->_fetch_plugin_plans();
-			if ( ! isset( $plans->error ) ) {
+			if ( ! $this->is_api_error( $plans ) ) {
 				$this->_plans = $plans;
 				$this->_store_plans();
 			}
@@ -3077,9 +3241,15 @@
 		 * @return string
 		 */
 		function _get_admin_page_url( $page = '', $params = array() ) {
-			return add_query_arg( array_merge( $params, array(
-				'page' => trim( "{$this->_menu_slug}-{$page}", '-' )
-			) ), admin_url( 'admin.php', 'admin' ) );
+			if ( false === strpos( $this->_menu_slug, '.php' ) ) {
+				return add_query_arg( array_merge( $params, array(
+					'page' => trim( "{$this->_menu_slug}-{$page}", '-' )
+				) ), admin_url( 'admin.php', 'admin' ) );
+			} else {
+				return add_query_arg( array_merge( $params, array(
+					'page' => trim( "{$this->_slug}-{$page}", '-' )
+				) ), admin_url( 'admin.php', 'admin' ) );
+			}
 		}
 
 		/**
@@ -3148,8 +3318,7 @@
 		 *
 		 * @return string
 		 */
-		function addon_url($slug)
-		{
+		function addon_url( $slug ) {
 			return $this->_get_admin_page_url( 'addons', array(
 				'slug' => $slug
 			) );
@@ -3507,8 +3676,7 @@
 					}
 
 				}
-			}
-			else {
+			} else {
 				// Reload the page with the keys.
 				if ( fs_redirect( $this->apply_filters( 'after_connect_url', $this->_get_admin_page_url() ) ) ) {
 					exit();
@@ -3559,7 +3727,7 @@
 					$this->_add_pending_activation_notice( fs_request_get( 'user_email' ) );
 
 					// Reload the page with with pending activation message.
-					if ( fs_redirect( $this->apply_filters( 'connect_url', $this->_get_admin_page_url() ) ) ) {
+					if ( fs_redirect( $this->apply_filters( 'after_pending_connect_url', $this->apply_filters( 'connect_url', $this->_get_admin_page_url() ) ) ) ) {
 						exit();
 					}
 				}
@@ -3766,39 +3934,36 @@
 		 *
 		 * @return false|string If submenu exist, will return the hook name.
 		 */
-		private function override_plugin_submenu_action($parent_slug, $menu_slug, $function)
-		{
+		private function override_plugin_submenu_action( $parent_slug, $menu_slug, $function ) {
 			global $submenu;
 
-			$menu_slug = plugin_basename( $menu_slug );
-			$parent_slug = plugin_basename( $parent_slug);
+			$menu_slug   = plugin_basename( $menu_slug );
+			$parent_slug = plugin_basename( $parent_slug );
 
-			if (!isset($submenu[$parent_slug])) {
+			if ( ! isset( $submenu[ $parent_slug ] ) ) {
 				// Parent menu not exist.
 				return false;
 			}
 
 			$found_submenu_item = false;
-			foreach ($submenu[$parent_slug] as $submenu_item)
-			{
-				if ($menu_slug === $submenu_item[2]){
+			foreach ( $submenu[ $parent_slug ] as $submenu_item ) {
+				if ( $menu_slug === $submenu_item[2] ) {
 					$found_submenu_item = $submenu_item;
 					break;
 				}
 			}
 
-			if (false === $found_submenu_item)
-			{
+			if ( false === $found_submenu_item ) {
 				// Submenu item not found.
 				return false;
 			}
 
 			// Remove current function.
-			$hookname = get_plugin_page_hookname( $menu_slug, $parent_slug);
-			remove_all_actions($hookname);
+			$hookname = get_plugin_page_hookname( $menu_slug, $parent_slug );
+			remove_all_actions( $hookname );
 
 			// Attach new action.
-			add_action($hookname, $function);
+			add_action( $hookname, $function );
 
 			return $hookname;
 		}
@@ -3827,8 +3992,9 @@
 				}
 			}
 
-			if (false === $found_menu)
+			if ( false === $found_menu ) {
 				return false;
+			}
 
 			return array(
 				'menu'      => $found_menu,
@@ -3870,8 +4036,9 @@
 			// Find main menu item.
 			$menu = $this->find_plugin_main_menu();
 
-			if (false === $menu)
+			if ( false === $menu ) {
 				return $menu;
+			}
 
 			// Remove it with its actions.
 			remove_all_actions( $menu['hook_name'] );
@@ -3893,19 +4060,18 @@
 
 			$menu = $this->remove_menu_item();
 
-			if (false !== $menu) {
-			// Override menu action.
-			$hook = add_menu_page(
-				$menu['menu'][3],
-				$menu['menu'][0],
-				'manage_options',
-				$this->_menu_slug,
-				array( &$this, '_connect_page_render' ),
-				$menu['menu'][6],
-				$menu['position']
-			);
-			}
-			else {
+			if ( false !== $menu ) {
+				// Override menu action.
+				$hook = add_menu_page(
+					$menu['menu'][3],
+					$menu['menu'][0],
+					'manage_options',
+					$this->_get_menu_slug(),
+					array( &$this, '_connect_page_render' ),
+					$menu['menu'][6],
+					$menu['position']
+				);
+			} else {
 				// Try to override tools submenu item if exist.
 				$hook = $this->override_plugin_submenu_action(
 					'tools.php',
@@ -4033,7 +4199,11 @@
 		}
 
 		private function _get_menu_slug( $slug = '' ) {
-			return $this->_menu_slug . ( empty( $slug ) ? '' : ( '-' . $slug ) );
+			if ( false === strpos( $this->_menu_slug, '.php' ) ) {
+				return $this->_menu_slug . ( empty( $slug ) ? '' : ( '-' . $slug ) );
+			} else {
+				return $this->_slug . ( empty( $slug ) ? '' : ( '-' . $slug ) );
+			}
 		}
 
 		/**
@@ -4611,7 +4781,7 @@
 
 			$result = $api->get( '/plans.json', true );
 
-			if ( ! isset( $result->error ) ) {
+			if ( ! $this->is_api_error( $result ) ) {
 				for ( $i = 0, $len = count( $result->plans ); $i < $len; $i ++ ) {
 					$result->plans[ $i ] = new FS_Plugin_Plan( $result->plans[ $i ] );
 				}
@@ -4886,12 +5056,21 @@
 		private function _sync_plugin_license( $background = false ) {
 			$this->_logger->entrance();
 
-			// Load site details.
-			$site = $this->_fetch_site( true );
+			// Sync site info.
+			$site = $this->get_api_site_scope()->call( '/', 'put', array(
+				'is_active'        => true,
+				'is_premium'       => $this->is_premium(),
+				'version'          => $this->get_plugin_version(),
+				'url'              => get_site_url(),
+				'title'            => get_bloginfo( 'name' ),
+				'platform_version' => get_bloginfo( 'version' ),
+				'language'         => get_bloginfo( 'language' ),
+				'charset'          => get_bloginfo( 'charset' ),
+			) );
 
 			$plan_change = 'none';
 
-			if ( isset( $site->error ) ) {
+			if ( $this->is_api_error( $site ) ) {
 				$api = $this->get_api_site_scope();
 
 				// Try to ping API to see if not blocked.
@@ -4915,12 +5094,14 @@
 						'error'
 					);
 				}
-
-				// Plan update failure, set update time to 24hours + 10min so it won't annoy the admin too much.
-				$this->_site->updated = time() - WP_FS__TIME_24_HOURS_IN_SEC + WP_FS__TIME_10_MIN_IN_SEC;
 			} else {
+				$site = new FS_Site( $site );
+
 				// Sync licenses.
 				$this->_sync_licenses();
+
+				// Sync plans.
+				$this->_sync_plans();
 
 				// Check if plan / license changed.
 				if ( ! FS_Entity::equals( $site->plan, $this->_site->plan ) ||
@@ -4998,7 +5179,7 @@
 									'<a href="%s">%s</a>',
 									$this->contact_url(
 										'bug',
-										sprintf( __( 'plan-did-not-change-email-message', 'freemius' ),
+										sprintf( __fs( 'plan-did-not-change-email-message', 'freemius' ),
 											strtoupper( $this->_site->plan->name )
 										)
 									),
@@ -5609,11 +5790,13 @@
 		 * @since  1.0.3
 		 * @uses   FS_Api
 		 *
+		 * @param string $new_email
+		 *
 		 * @return object
 		 */
-		private function _update_email() {
+		private function _update_email( $new_email ) {
 			$this->_logger->entrance();
-			$new_email = fs_request_get( 'fs_email_' . $this->_slug, '' );
+
 
 			$api  = $this->get_api_user_scope();
 			$user = $api->call( "?plugin_id={$this->_plugin->id}&fields=id,email,is_verified", 'put', array(
@@ -5637,6 +5820,83 @@
 		}
 
 		/**
+		 * @author Vova Feldman (@svovaf)
+		 * @since  1.1.1
+		 *
+		 * @param mixed $result
+		 *
+		 * @return bool Is API result contains an error.
+		 */
+		private function is_api_error( $result ) {
+			return ( is_object( $result ) && isset( $result->error ) ) ||
+			       is_string( $result );
+		}
+
+		/**
+		 * Start install ownership change.
+		 *
+		 * @author Vova Feldman (@svovaf)
+		 * @since  1.1.1
+		 * @uses   FS_Api
+		 *
+		 * @param string $candidate_email
+		 *
+		 * @return bool Is ownership change successfully initiated.
+		 */
+		private function init_change_owner( $candidate_email ) {
+			$this->_logger->entrance();
+
+			$api    = $this->get_api_site_scope();
+			$result = $api->call( "/users/{$this->_user->id}.json", 'put', array(
+				'email'             => $candidate_email,
+				'after_confirm_url' => $this->_get_admin_page_url(
+					'account',
+					array( 'fs_action' => 'change_owner' )
+				),
+			) );
+
+			return ! $this->is_api_error( $result );
+		}
+
+		/**
+		 * Handle install ownership change.
+		 *
+		 * @author Vova Feldman (@svovaf)
+		 * @since  1.1.1
+		 * @uses   FS_Api
+		 *
+		 * @return bool Was ownership change successfully complete.
+		 */
+		private function complete_change_owner() {
+			$this->_logger->entrance();
+
+			$site_result = $this->get_api_site_scope( true )->get();
+			$site        = new FS_Site( $site_result );
+			$this->_site = $site;
+
+			$user     = new FS_User();
+			$user->id = fs_request_get( 'user_id' );
+
+			// Validate install's user and given user.
+			if ( $user->id != $this->_site->user_id ) {
+				return false;
+			}
+
+			$user->public_key = fs_request_get( 'user_public_key' );
+			$user->secret_key = fs_request_get( 'user_secret_key' );
+
+			// Fetch new user information.
+			$this->_user = $user;
+			$user_result = $this->get_api_user_scope( true )->get();
+			$user        = new FS_User( $user_result );
+			$this->_user = $user;
+
+			$this->_set_account( $user, $site );
+
+			return true;
+		}
+
+		/**
 		 * Handle user name update.
 		 *
 		 * @author Vova Feldman (@svovaf)
@@ -5645,7 +5905,7 @@
 		 *
 		 * @return object
 		 */
-		private function _update_user_name() {
+		private function update_user_name() {
 			$this->_logger->entrance();
 			$name = fs_request_get( 'fs_user_name_' . $this->_slug, '' );
 
@@ -5673,7 +5933,7 @@
 		 * @since  1.0.3
 		 * @uses   FS_Api
 		 */
-		private function _verify_email() {
+		private function verify_email() {
 			$this->_handle_account_user_sync();
 
 			if ( $this->_user->is_verified() ) {
@@ -5777,16 +6037,56 @@
 
 					return;
 
+				case 'change_owner':
+					$state = fs_request_get( 'state', 'init' );
+					switch ( $state ) {
+						case 'init':
+							$candidate_email = fs_request_get( 'candidate_email', '' );
+
+							if ( $this->init_change_owner( $candidate_email ) ) {
+								$this->_admin_notices->add( sprintf( __fs( 'change-owner-request-sent-x' ), '<b>' . $this->_user->email . '</b>' ) );
+							}
+							break;
+						case 'owner_confirmed':
+							$candidate_email = fs_request_get( 'candidate_email', '' );
+
+							$this->_admin_notices->add( sprintf( __fs( 'change-owner-request_owner-confirmed' ), '<b>' . $candidate_email . '</b>' ) );
+							break;
+						case 'candidate_confirmed':
+							if ( $this->complete_change_owner() ) {
+								$this->_admin_notices->add_sticky(
+									sprintf( __fs( 'change-owner-request_candidate-confirmed' ), '<b>' . $this->_user->email . '</b>' ),
+									'ownership_changed',
+									__fs( 'congrats' ) . '!'
+								);
+							} else {
+								// @todo Handle failed ownership change message.
+							}
+							break;
+					}
+
+					return;
+
 				case 'update_email':
 					check_admin_referer( 'update_email' );
 
-					$result = $this->_update_email();
+					$new_email = fs_request_get( 'fs_email_' . $this->_slug, '' );
+					$result    = $this->_update_email( $new_email );
 
 					if ( isset( $result->error ) ) {
 						switch ( $result->error->code ) {
 							case 'user_exist':
 								$this->_admin_notices->add(
-									__fs( 'user-exist-message' ),
+									__fs( 'user-exist-message' ) . ' ' .
+									sprintf( __fs( 'user-exist-message_ownership' ), '<b>' . $new_email . '</b>' ) .
+									sprintf(
+										'<a style="margin-left: 10px;" href="%s"><button class="button button-primary">%s &nbsp;&#10140;</button></a>',
+										$this->get_account_url( 'change_owner', array(
+											'state'           => 'init',
+											'candidate_email' => $new_email
+										) ),
+										__fs( 'change-ownership' )
+									),
 									__fs( 'oops' ) . '...',
 									'error'
 								);
@@ -5801,7 +6101,7 @@
 				case 'update_user_name':
 					check_admin_referer( 'update_user_name' );
 
-					$result = $this->_update_user_name();
+					$result = $this->update_user_name();
 
 					if ( isset( $result->error ) ) {
 						$this->_admin_notices->add(
@@ -5823,7 +6123,7 @@
 					return;
 
 				case 'verify_email':
-					$this->_verify_email();
+					$this->verify_email();
 
 					return;
 
@@ -6066,10 +6366,12 @@
 		 * @author Vova Feldman (@svovaf)
 		 * @since  1.0.2
 		 *
+		 * @param bool $flush
+		 *
 		 * @return FS_Api
 		 */
-		function get_api_user_scope() {
-			if ( ! isset( $this->_user_api ) ) {
+		function get_api_user_scope( $flush = false ) {
+			if ( ! isset( $this->_user_api ) || $flush ) {
 				$this->_user_api = FS_Api::instance(
 					$this->_slug,
 					'user',
@@ -6090,10 +6392,12 @@
 		 * @author Vova Feldman (@svovaf)
 		 * @since  1.0.2
 		 *
+		 * @param bool $flush
+		 *
 		 * @return FS_Api
 		 */
-		function get_api_site_scope() {
-			if ( ! isset( $this->_site_api ) ) {
+		function get_api_site_scope( $flush = false ) {
+			if ( ! isset( $this->_site_api ) || $flush ) {
 				$this->_site_api = FS_Api::instance(
 					$this->_slug,
 					'install',

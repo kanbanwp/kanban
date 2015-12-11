@@ -1021,30 +1021,32 @@ abstract class Kanban_Db
 
 		$options_table = Kanban_Option::table_name();
 
-		$sql = "SELECT count(`id`)
+		$sql = "SELECT *
 				FROM `{$options_table}`
 		;";
 
-		$options_count = $wpdb->get_var($sql);
+		$options = $wpdb->get_results($sql);
 
-
-
-		if ( $options_count == 0 )
+		$options_arr = array();
+		foreach ( $options as $option )
 		{
-			$options = array(
-				'hour_interval' => '1',
-				'allowed_users' => serialize(array(get_current_user_id()))
+			$options_arr[$option->name] = $option->value;
+		}
+
+
+
+		$defaults = Kanban_Option::get_defaults();
+
+		foreach ( $defaults as $name => $value )
+		{
+			if ( isset($options_arr[$name]) ) continue;
+
+			$data = array(
+				'name' => $name,
+				'value' => $value
 			);
 
-			foreach ( $options as $name => $value )
-			{
-				$data = array(
-					'name' => $name,
-					'value' => $value
-				);
-
-				Kanban_Option::replace($data);
-			}
+			Kanban_Option::replace($data);
 		}
 	}
 

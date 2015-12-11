@@ -20,6 +20,11 @@ class Kanban_Option extends Kanban_Db
 		'value' => 'text'
 	);
 
+	protected static $defaults = array (
+		'hour_interval' => '1',
+		'allowed_users' => ''
+	);
+
 
 
 	static function init()
@@ -46,7 +51,12 @@ class Kanban_Option extends Kanban_Db
 	} // db_table
 
 
+	static function get_defaults ()
+	{
+		self::$defaults['allowed_users'] = serialize(array(get_current_user_id()));
 
+		return self::$defaults;
+	}
 
 
 	static function get_all_raw ()
@@ -90,6 +100,8 @@ class Kanban_Option extends Kanban_Db
 		{
 			$output[$record->name] = $record->value;
 		}
+
+		$output = array_merge(self::get_defaults(), $output);
 
 		return $output;
 	}

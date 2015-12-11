@@ -79,7 +79,7 @@ class Kanban_Template
 			// redirect away from login
 		    if ( strpos($_SERVER['REQUEST_URI'], sprintf('/%s/login', Kanban::$slug)) !== FALSE )
 		    {
-		    	wp_redirect(sprintf('/%s/board', Kanban::$slug));
+		    	wp_redirect(sprintf('%s/%s/board', site_url(), Kanban::$slug));
 				exit;
 		    }
 		    else
@@ -96,7 +96,7 @@ class Kanban_Template
 	    if ( strpos($_SERVER['REQUEST_URI'], sprintf('/%s/login', Kanban::$slug)) !== FALSE ) return;
 
 	    // otherwise redirect to login
-		wp_redirect(sprintf('/%s/login', Kanban::$slug));
+		wp_redirect(sprintf('%s/%s/login', site_url(), Kanban::$slug));
 		exit;
 	}
 

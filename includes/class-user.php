@@ -115,7 +115,7 @@ class Kanban_User
 
 
 
-		wp_redirect(sprintf('/%s/board', Kanban::$slug));
+		wp_redirect(sprintf('%s/%s/board', site_url(), Kanban::$slug));
 		exit;
 
 

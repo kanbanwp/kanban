@@ -192,7 +192,7 @@ class Kanban_Admin extends Kanban_Db
 						{
 							if ( data.data.done )
 							{
-								$('#kanban-migrate-progress').html('<b style="font-size: 1.618em;">Migration has completed! <a href="/kanban/board" class="button button-primary" target="_blank">Go to your board</a>.</b>');
+								$('#kanban-migrate-progress').html('<b style="font-size: 1.618em;">Migration has completed! <a href="<?php echo site_url() ?>/kanban/board" class="button button-primary" target="_blank">Go to your board</a>.</b>');
 							}
 							else
 							{

@@ -84,6 +84,7 @@ class Kanban
 		Kanban::get_instance()->settings = (object) array();
 		Kanban::get_instance()->settings->path = dirname(__FILE__);
 		Kanban::get_instance()->settings->file = basename(__FILE__, '.php');
+		Kanban::get_instance()->settings->plugin_data = get_plugin_data(__FILE__);
 		Kanban::get_instance()->settings->basename = strtolower(__CLASS__);
 		Kanban::get_instance()->settings->plugin_basename = plugin_basename(__FILE__);
 		Kanban::get_instance()->settings->uri = plugin_dir_url(__FILE__);

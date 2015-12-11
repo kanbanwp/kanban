@@ -234,9 +234,10 @@ class Kanban_Template
 		foreach (self::get_instance()->style as $handle => $path)
 		{
 			echo sprintf(
-				'<link rel="stylesheet" id="%s-css" href="%s">' . "\n",
+				'<link rel="stylesheet" id="%s-css" href="%s?ver=%s">' . "\n",
 				$handle,
-				$path
+				$path,
+				Kanban::get_instance()->settings->plugin_data['Version']
 			);
 		}
 	}
@@ -250,9 +251,10 @@ class Kanban_Template
 		foreach (self::get_instance()->script as $handle => $path)
 		{
 			echo sprintf(
-				'<script id="%s-js" src="%s"></script>' . "\n",
+				'<script id="%s-js" src="%s?ver=%s"></script>' . "\n",
 				$handle,
-				$path
+				$path,
+				Kanban::get_instance()->settings->plugin_data['Version']
 			);
 		}
 	}

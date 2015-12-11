@@ -12,7 +12,7 @@
 
 <div id="wrapper-footer">
 	<div id="filter-wrapper">
-		Filter by: 
+		<?php echo __('Filter by', Kanban::get_text_domain()) ?>: 
 		<span class="dropup" id="filter-projects">
 			<button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">
 				<span class="btn-label" data-id="">
@@ -78,7 +78,7 @@
 
 
 
-	<a href="<?php echo admin_url( 'admin.php?page=' . Kanban::$instance->settings->basename ) ?>" class="btn btn-default" target="_blank">
+	<a href="<?php echo admin_url( sprintf('admin.php?page=%s_welcome', Kanban::$instance->settings->basename) ) ?>" class="btn btn-default" target="_blank">
 		<?php echo __('Admin', Kanban::get_text_domain()) ?>
 	</a>
 </div>
@@ -91,7 +91,7 @@
 		<div class="modal-content">
 			<div class="modal-body">
 				<button type="button" class=" btn btn-default btn-close" data-dismiss="modal">
-					Close
+					<?php echo __('Close', Kanban::get_text_domain()) ?>
 				</button>
 
 				<div class="panel-group" id="accordion-projects">

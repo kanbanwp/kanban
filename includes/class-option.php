@@ -15,11 +15,22 @@ class Kanban_Option extends Kanban_Db
 {
 	private static $instance;
 	protected static $table_name = 'options';
+	protected static $table_columns = array(
+		'name' => 'text',
+		'value' => 'text'
+	);
 
 
 
 	static function init()
 	{
+
+	}
+
+
+	static function replace ($data)
+	{
+		return self::_replace($data);
 	}
 
 
@@ -36,10 +47,78 @@ class Kanban_Option extends Kanban_Db
 
 
 
-	static function table_name()
+
+
+	static function get_all_raw ()
 	{
-		return Kanban_Db::format_table_name(self::$table_name);
+		$table_name = self::table_name();
+
+		$sql = "SELECT *
+				FROM `{$table_name}`
+		;";
+
+		$sql = apply_filters(
+			sprintf(
+				'%s_sql_%s_get_all',
+				Kanban::get_instance()->settings->basename,
+				self::$table_name
+			),
+			$sql
+		);
+
+		$records = parent::get_all($sql);
+
+		// unserialize arrays
+		foreach ($records as $key => $record)
+		{
+			if ( !is_serialized($record->value) ) continue;
+
+			$records[$key]->value = unserialize($record->value);
+		}
+
+		return $records;
 	}
+
+
+
+	static function get_all ($sql = NULL)
+	{
+		$records = self::get_all_raw();
+
+		$output = array();
+		foreach ($records as $record)
+		{
+			$output[$record->name] = $record->value;
+		}
+
+		return $output;
+	}
+
+
+
+	static function get_option($name)
+	{
+		global $wpdb;
+
+		$table_name = self::table_name();
+
+		$sql = "SELECT `value`
+				FROM `{$table_name}`
+				WHERE `name` = %s
+		;";
+
+		$value = $wpdb->get_var(
+			$wpdb->prepare( $sql, $name )
+		);
+		if ( is_serialized($value) )
+		{
+			$value = unserialize($value);
+		}
+
+		return $value;
+	}
+
+
 
 
 

@@ -127,27 +127,43 @@ class Kanban_User
 	{
 		if ( !isset(Kanban_User::get_instance()->allowed_users) )
 		{
-			$users_field_name = sprintf('%s_user', Kanban::get_instance()->settings->basename);
-			$allowed_user_ids = Kanban_Settings::get_option($users_field_name, 'allowed_users', array());
+			// get all settings
+			$settings = Kanban_Option::get_all();
+
+			// pull out allowed user id's
+			$allowed_user_ids = array();
+
+			if ( isset($settings['allowed_users']) )
+			{
+				$allowed_user_ids = $settings['allowed_users'];
+			}
 
 			if ( empty($allowed_user_ids) )
 			{
 				$allowed_user_ids = array(0);
 			}
 
+			// load actual users
 			$pm_users = get_users(array(
 				'include' => $allowed_user_ids
 			));
 
-			Kanban_User::get_instance()->allowed_users = Kanban_Utils::build_array_with_id_keys($pm_users);
+			// add users to object
+			Kanban_User::get_instance()->allowed_users = Kanban_Utils::build_array_with_id_keys($pm_users, 'ID');
 
+			// load extra data
 			foreach (Kanban_User::get_instance()->allowed_users as $user_id => $user)
 			{
+				// get gravatar
 				if(self::validate_gravatar($user->data->user_email))
 				{
 					Kanban_User::get_instance()->allowed_users[$user_id]->data->avatar = get_avatar($user->data->user_email);
 				}
 
+				// remove passwords!
+				unset(Kanban_User::get_instance()->allowed_users[$user_id]->data->user_pass);
+
+				// fancy name formating
 				Kanban_User::get_instance()->allowed_users[$user_id]->data->long_name_email = Kanban_User::format_user_name ($user);
 				Kanban_User::get_instance()->allowed_users[$user_id]->data->short_name = Kanban_User::format_user_name ($user, TRUE);
 				Kanban_User::get_instance()->allowed_users[$user_id]->data->initials = Kanban_User::get_initials ($user);

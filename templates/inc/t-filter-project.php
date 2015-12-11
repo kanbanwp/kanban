@@ -1,3 +1,3 @@
 <li class="project">
-	<a href="#" data-id="{{=ID}}">{{=post_title}}</a>
+	<a href="#" data-id="{{=id}}">{{=title}}</a>
 </li>

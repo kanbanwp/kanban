@@ -12,6 +12,7 @@ $.fn.board_filter = function(task)
     	var $users_dropdown = $('#filter-users-dropdown', $wrapper);
 
 
+
     	$('#filter-projects', $wrapper).on(
     		'show.bs.dropdown',
     		function()
@@ -43,7 +44,7 @@ $.fn.board_filter = function(task)
 				if ( typeof project === 'undefined' )
 				{
 					project = {
-						post_title: $a.text()
+						title: $a.text()
 					};
 				}
 
@@ -56,7 +57,7 @@ $.fn.board_filter = function(task)
 				}
 
 				$label
-				.text(project.post_title)
+				.text(project.title)
 				.attr('data-id', project_id);
 
 				$('#btn-filter-apply', $wrapper).trigger('click');

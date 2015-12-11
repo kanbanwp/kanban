@@ -53,6 +53,26 @@ class Kanban_Estimate extends Kanban_Db
 
 
 
+	static function replace ($data)
+	{
+		return self::_replace($data);
+	}
+
+
+
+	static function delete ($where)
+	{
+		return self::_delete($where);
+	}
+
+
+
+	static function insert_id ()
+	{
+		return self::_insert_id();
+	}
+
+
 	static function db_table ()
 	{
 		return "CREATE TABLE " . self::table_name() . " (
@@ -63,13 +83,6 @@ class Kanban_Estimate extends Kanban_Db
 					PRIMARY KEY  (id)
 				)";
 	} // db_table
-
-
-
-	static function table_name()
-	{
-		return Kanban_Db::format_table_name(self::$table_name);
-	}
 
 
 

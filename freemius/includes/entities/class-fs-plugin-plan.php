@@ -11,30 +11,40 @@
 	}
 
 	class FS_Plugin_Plan extends FS_Entity {
-		public $title;
-		public $name;
-		public $trial_period;
-		public $is_require_subscription;
+
+		#region Properties
 
 		/**
-		 * @param stdClass|bool $plan
+		 * @var string
 		 */
-		function __construct( $plan = false )
-		{
-			if ( ! ( $plan instanceof stdClass ) ) {
-				return;
-			}
+		public $title;
+		/**
+		 * @var string
+		 */
+		public $name;
+		/**
+		 * @var int Trial days.
+		 */
+		public $trial_period;
+		/**
+		 * @var string If true, require payment for trial.
+		 */
+		public $is_require_subscription;
 
+		#endregion Properties
+
+		/**
+		 * @param object|bool $plan
+		 */
+		function __construct( $plan = false ) {
 			parent::__construct( $plan );
 
-			$this->title                   = $plan->title;
-			$this->name                    = strtolower( $plan->name );
-			$this->trial_period            = $plan->trial_period;
-			$this->is_require_subscription = $plan->is_require_subscription;
+			if ( is_object( $plan ) ) {
+				$this->name = strtolower( $plan->name );
+			}
 		}
 
-		static function get_type()
-		{
+		static function get_type() {
 			return 'plan';
 		}
 
@@ -44,9 +54,8 @@
 		 *
 		 * @return bool
 		 */
-		function is_free()
-		{
-			return ('free' === $this->name);
+		function is_free() {
+			return ( 'free' === $this->name );
 		}
 
 		/**
@@ -55,8 +64,7 @@
 		 *
 		 * @return bool
 		 */
-		function has_trial()
-		{
+		function has_trial() {
 			return ! $this->is_free() &&
 			       is_numeric( $this->trial_period ) && ( $this->trial_period > 0 );
 		}

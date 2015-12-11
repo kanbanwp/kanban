@@ -24,7 +24,8 @@ class Kanban_Task extends Kanban_Db
 		'user_id_assigned' => 'int',
 		'status_id' => 'int',
 		'project_id' => 'int',
-		'estimate_id' => 'int'
+		'estimate_id' => 'int',
+		'is_active' => 'bool'
 	);
 
 
@@ -34,9 +35,6 @@ class Kanban_Task extends Kanban_Db
 		// add_action( 'wp', array(__CLASS__, 'post_save') );
 		add_action( sprintf('wp_ajax_save_%s', self::$slug), array(__CLASS__, 'ajax_save') );
 		add_action( sprintf('wp_ajax_delete_%s', self::$slug), array(__CLASS__, 'ajax_delete') );
-
-		add_action( 'add_meta_boxes', array(__CLASS__, 'add_comments_meta_box') );
-
 	}
 
 
@@ -77,20 +75,21 @@ class Kanban_Task extends Kanban_Db
 
 
 		$_POST['task']['modified_dt_gmt'] = gmdate('Y-m-d H:i:s');
-		$_POST['task']['user_id_author'] = get_current_user_id();
 
 
 
-		if ( isset($_POST['task']['id']) )
+		if ( !isset($_POST['task']['user_id_author']) )
 		{
-			self::update($_POST['task'], array('id' => $_POST['task']['id']));
-			$task_id = $_POST['task']['id'];
+			$_POST['task']['user_id_author'] = get_current_user_id();
 		}
-		else
-		{
-			$_POST['task']['created_dt_gmt'] = gmdate('Y-m-d H:i:s');
-			$task_id = self::insert($_POST['task']);
-		}
+
+
+
+		$is_successful = self::_replace($_POST['task']);
+
+
+
+		$task_id = isset($_POST['task']['id']) ? $_POST['task']['id'] : self::_insert_id();
 
 
 
@@ -100,47 +99,60 @@ class Kanban_Task extends Kanban_Db
 
 
 
-		Kanban_Status_Change::add($task_id, $post_data->status_id);
+		do_action( sprintf('%s_after_%s_ajax_save', Kanban::get_instance()->settings->basename, self::$slug) );
 
 
 
 		if ( !empty($_POST['comment']) )
 		{
+			do_action( sprintf('%s_before_%s_ajax_comment_save', Kanban::get_instance()->settings->basename, self::$slug) );
+
 			Kanban_Comment::add(
 				$_POST['comment'],
 				'system',
 				$task_id
 			);
+
+			do_action( sprintf('%s_after_%s_ajax_comment_save', Kanban::get_instance()->settings->basename, self::$slug) );
 		}
 
 
 
 		if ( isset($_POST['status_id_old']) )
 		{
+			do_action( sprintf('%s_before_%s_ajax_status_change_save', Kanban::get_instance()->settings->basename, self::$slug) );
+
 			Kanban_Status_Change::add(
 				$task_id,
-				$_POST['status_id'],
+				$post_data->status_id,
 				$_POST['status_id_old']
 			);
+
+			do_action( sprintf('%s_after_%s_ajax_status_change_save', Kanban::get_instance()->settings->basename, self::$slug) );
 		}
 
 
 
-		do_action( sprintf('%s_after_%s_ajax_save', Kanban::get_instance()->settings->basename, self::$slug) );
-
-
-
-		wp_send_json_success(array(
-			'message' => sprintf('%s saved', self::$slug),
-			self::$slug => $post_data
-		));
+		if ( $is_successful )
+		{
+			wp_send_json_success(array(
+				'message' => sprintf('%s saved', self::$slug),
+				self::$slug => $post_data
+			));
+		}
+		else
+		{
+			wp_send_json_error(array(
+				'message' => sprintf('Error saving %s', self::$slug)
+			));
+		}
 	}
 
 
 
 	static function ajax_delete ()
 	{
-		if (  !isset( $_POST[Kanban_Utils::get_nonce()] ) || ! wp_verify_nonce( $_POST[Kanban_Utils::get_nonce()], sprintf('%s-save', Kanban::get_instance()->settings->basename)) || $_POST['post_type'] !== Kanban_Post_Types::format_post_type(self::$slug) || !is_user_logged_in() ) wp_send_json_error();
+		if (  !isset( $_POST[Kanban_Utils::get_nonce()] ) || ! wp_verify_nonce( $_POST[Kanban_Utils::get_nonce()], sprintf('%s-save', Kanban::get_instance()->settings->basename)) || !is_user_logged_in() ) wp_send_json_error();
 
 
 
@@ -148,7 +160,8 @@ class Kanban_Task extends Kanban_Db
 
 
 
-		$is_successful = Kanban_Post::delete($_POST);
+		// $is_successful = Kanban_Post::delete($_POST);
+		$is_successful = self::delete($_POST['task']['id']);
 
 
 
@@ -168,6 +181,23 @@ class Kanban_Task extends Kanban_Db
 				'message' => sprintf('Error deleting %s', self::$slug)
 			));
 		}
+	}
+
+
+
+	static function replace ($data)
+	{
+		return self::_replace($data);
+	}
+
+
+
+	protected static function delete ($id)
+	{
+		return self::_update(
+			array('is_active' => 0),
+			array('id' => $id)
+		);
 	}
 
 
@@ -223,6 +253,8 @@ class Kanban_Task extends Kanban_Db
 
 
 
+
+
 	public static function get_instance()
 	{
 		if ( ! self::$instance )
@@ -231,6 +263,10 @@ class Kanban_Task extends Kanban_Db
 		}
 		return self::$instance;
 	}
+
+
+
+	private function __construct() { }
 
 } // Kanban_Task
 

@@ -152,7 +152,7 @@ $.fn.board_task = function(task)
 
 								var comment = '{0} added the task to the project "{1}"'.sprintf (
 									current_user.short_name,
-									response.data.project.post_title
+									response.data.project.title
 								);
 
 								// save task
@@ -406,6 +406,7 @@ $.fn.board_task = function(task)
 				if ( current < 0 )
 				{
 					current = 0;
+					return;
 				}
 
 				// update the total count
@@ -572,7 +573,6 @@ $.fn.board_task = function(task)
 					return false;
 				}
 
-				// $('.project_title', $task).val(project.post_title);
 
 
 				// add comment for log
@@ -611,7 +611,7 @@ $.fn.board_task = function(task)
 
 				if ( typeof estimate !== 'undefined' )
 				{
-					progress_percent = (parseFloat(task.hour_count)*100)/parseFloat(estimate.slug);
+					progress_percent = (parseFloat(task.hour_count)*100)/parseFloat(estimate.hours);
 				}
 			}
 
@@ -695,7 +695,7 @@ $.fn.board_task = function(task)
 				}
 				else
 				{
-					var label = estimate.name;
+					var label = estimate.title;
 				}
 
 				var data = {

@@ -71,7 +71,7 @@ class Kanban_Template
 		$current_user_id = get_current_user_id();
 
 		$users_field_name = sprintf('%s_user', Kanban::get_instance()->settings->basename);
-		$allowed_user_ids = Kanban_Settings::get_option($users_field_name, 'allowed_users', array());
+		$allowed_user_ids = Kanban_User::get_allowed_users();
 
 		// return if I'm allowed
 		if ( in_array($current_user_id, array_keys($allowed_user_ids)) )
@@ -173,6 +173,9 @@ class Kanban_Template
 
 		self::get_instance()->template = $template;
 
+		// page found. set the header
+		status_header(200);
+
 		// allow additional templates
 		return apply_filters( sprintf('%s_after_template_chooser', Kanban::get_instance()->settings->basename), $template );
 	}
@@ -264,6 +267,10 @@ class Kanban_Template
 		}
 		return self::$instance;
 	}
+
+
+
+	private function __construct() { }
 
 } // Kanban_Template
 

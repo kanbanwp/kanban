@@ -14,7 +14,7 @@
 	fs_enqueue_local_style( 'fs_connect', '/admin/connect.css' );
 
 	$slug         = $VARS['slug'];
-	$fs           = fs( $slug );
+	$fs           = freemius( $slug );
 	$current_user = wp_get_current_user();
 
 	$first_name = $current_user->user_firstname;
@@ -34,20 +34,10 @@
 	<div class="fs-visual">
 		<b class="fs-site-icon"><i class="dashicons dashicons-wordpress"></i></b>
 		<i class="dashicons dashicons-plus fs-first"></i>
-
-		<div class="fs-plugin-icon">
-			<object data="//plugins.svn.wordpress.org/<?php echo $slug ?>/assets/icon-128x128.png" type="image/png">
-				<object data="//plugins.svn.wordpress.org/<?php echo $slug ?>/assets/icon-128x128.jpg" type="image/png">
-					<object data="//plugins.svn.wordpress.org/<?php echo $slug ?>/assets/icon-256x256.png"
-					        type="image/png">
-						<object data="//plugins.svn.wordpress.org/<?php echo $slug ?>/assets/icon-256x256.jpg"
-						        type="image/png">
-							<img src="//wimg.freemius.com/plugin-icon.png"/>
-						</object>
-					</object>
-				</object>
-			</object>
-		</div>
+		<?php
+			$vars = array( 'slug' => $slug );
+			fs_require_once_template( 'plugin-icon.php', $vars );
+		?>
 		<i class="dashicons dashicons-plus fs-second"></i>
 		<img class="fs-connect-logo" width="80" height="80" src="//img.freemius.com/connect-logo.png"/>
 	</div>
@@ -86,6 +76,7 @@
 						'user_lastname'     => $current_user->user_lastname,
 						'user_nickname'     => $current_user->user_nicename,
 						'user_email'        => $current_user->user_email,
+						'user_ip'           => fs_get_ip(),
 						'plugin_slug'       => $slug,
 						'plugin_id'         => $fs->get_id(),
 						'plugin_public_key' => $fs->get_public_key(),
@@ -102,9 +93,25 @@
 						'site_url'          => get_site_url(),
 						'site_name'         => get_bloginfo( 'name' ),
 						'platform_version'  => get_bloginfo( 'version' ),
+						'php_version'       => phpversion(),
 						'language'          => get_bloginfo( 'language' ),
 						'charset'           => get_bloginfo( 'charset' ),
 					);
+
+					if ( WP_FS__SKIP_EMAIL_ACTIVATION && $fs->has_secret_key() ) {
+						// Even though rand() is known for its security issues,
+						// the timestamp adds another layer of protection.
+						// It would be very hard for an attacker to get the secret key form here.
+						// Plus, this should never run in production since the secret should never
+						// be included in the production version.
+						$params['ts']     = WP_FS__SCRIPT_START_TIME;
+						$params['salt']   = md5( uniqid( rand() ) );
+						$params['secure'] = md5(
+							$params['ts'] .
+							$params['salt'] .
+							$fs->get_secret_key()
+						);
+					}
 				?>
 				<?php foreach ( $params as $name => $value ) : ?>
 					<input type="hidden" name="<?php echo $name ?>" value="<?php echo esc_attr( $value ) ?>">
@@ -155,8 +162,11 @@
 </div>
 <script type="text/javascript">
 	(function ($) {
-		$('.button.button-primary').on('click', function () {
+		$('.button').on('click', function () {
+			// Set loading mode.
 			$(document.body).css({'cursor': 'wait'});
+		});
+		$('.button.button-primary').on('click', function () {
 			$(this).html('<?php _efs( 'activating' ) ?>...').css({'cursor': 'wait'});
 		});
 		$('.fs-permissions .fs-trigger').on('click', function () {

@@ -21,7 +21,8 @@ class Kanban_Project extends Kanban_Db
 		'description' => 'text',
 		'user_id_author' => 'int',
 		'created_dt_gmt' => 'datetime',
-		'modified_dt_gmt' => 'datetime'
+		'modified_dt_gmt' => 'datetime',
+		'is_active' => 'bool'
 	);
 
 
@@ -49,22 +50,15 @@ class Kanban_Project extends Kanban_Db
 
 
 
-		if ( isset($_POST['project']['id']) )
-		{
-			self::update($_POST['project'], array('id' => $_POST['project']['id']));
-			$project_id = $_POST['project']['id'];
-		}
-		else
-		{
-			$_POST['project']['created_dt_gmt'] = gmdate('Y-m-d H:i:s');
-			$project_id = self::insert($_POST['project']);
-		}
+		$is_successful = self::_replace($_POST['project']);
+
+
+
+		$project_id = isset($_POST['task']['id']) ? $_POST['task']['id'] : self::_insert_id();
 
 
 
 		$post_data = self::get_row('id', $project_id);
-
-
 
 		if ( !$post_data ) wp_send_json_error();
 
@@ -74,17 +68,26 @@ class Kanban_Project extends Kanban_Db
 
 
 
-		wp_send_json_success(array(
-			'message' => sprintf('%s saved', self::$slug),
-			self::$slug => $post_data
-		));
+		if ( $is_successful )
+		{
+			wp_send_json_success(array(
+				'message' => sprintf('%s saved', self::$slug),
+				self::$slug => $post_data
+			));
+		}
+		else
+		{
+			wp_send_json_error(array(
+				'message' => sprintf('Error saving %s', self::$slug)
+			));
+		}
 	}
 
 
 
 	static function ajax_delete ()
 	{
-		if (  !isset( $_POST[Kanban_Utils::get_nonce()] ) || ! wp_verify_nonce( $_POST[Kanban_Utils::get_nonce()], sprintf('%s-save', Kanban::get_instance()->settings->basename)) || $_POST['post_type'] !== Kanban_Post_Types::format_post_type(self::$slug) || !is_user_logged_in() ) wp_send_json_error();
+		if (  !isset( $_POST[Kanban_Utils::get_nonce()] ) || ! wp_verify_nonce( $_POST[Kanban_Utils::get_nonce()], sprintf('%s-save', Kanban::get_instance()->settings->basename)) || !is_user_logged_in() ) wp_send_json_error();
 
 
 
@@ -92,7 +95,7 @@ class Kanban_Project extends Kanban_Db
 
 
 
-		$is_successful = Kanban_Post::delete($_POST);
+		$is_successful = self::delete($_POST['id']);
 
 
 
@@ -116,13 +119,38 @@ class Kanban_Project extends Kanban_Db
 
 
 
+	static function replace ($data)
+	{
+		return self::_replace($data);
+	}
+
+
+
+	protected static function delete ($id)
+	{
+		return self::_update(
+			array('is_active' => 0),
+			array('id' => $id)
+		);
+	}
+
+
+
 	static function get_all ($sql = NULL)
 	{
 		$table_name = self::table_name();
+		$tasks_table_name = Kanban_Task::table_name();
 
-		$sql = "SELECT *
-				FROM `{$table_name}`
-				WHERE `{$table_name}`.`is_active` = 1
+		$sql = "SELECT `projects`.*,
+				(
+					SELECT COUNT(`id`)
+					FROM `{$tasks_table_name}` tasks
+					WHERE `tasks`.`project_id` = `projects`.`id`
+					AND `tasks`.`is_active` = 1
+				)
+				AS 'task_count'
+				FROM `{$table_name}` projects
+				WHERE `projects`.`is_active` = 1
 		;";
 
 		$sql = apply_filters(
@@ -154,12 +182,6 @@ class Kanban_Project extends Kanban_Db
 
 
 
-	static function table_name()
-	{
-		return Kanban_Db::format_table_name(self::$table_name);
-	}
-
-
 
 	public static function get_instance()
 	{
@@ -169,6 +191,10 @@ class Kanban_Project extends Kanban_Db
 		}
 		return self::$instance;
 	}
+
+
+
+	private function __construct() { }
 
 }
 

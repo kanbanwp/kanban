@@ -22,7 +22,31 @@
 		/**
 		 * @var string
 		 */
+		public $title;
+		/**
+		 * @var string
+		 */
+		public $url;
+		/**
+		 * @var string
+		 */
 		public $version;
+		/**
+		 * @var string E.g. en-GB
+		 */
+		public $language;
+		/**
+		 * @var string E.g. UTF-8
+		 */
+		public $charset;
+		/**
+		 * @var string Platform version (e.g WordPress version).
+		 */
+		public $platform_version;
+		/**
+		 * @var string Programming language version (e.g PHP version).
+		 */
+		public $programming_language_version;
 		/**
 		 * @var FS_Plugin_Plan $plan
 		 */
@@ -52,26 +76,11 @@
 		function __construct( $site = false ) {
 			$this->plan = new FS_Plugin_Plan();
 
-			if ( ! ( $site instanceof stdClass ) ) {
-				return;
-			}
-
 			parent::__construct( $site );
 
-			$this->user_id    = $site->user_id;
-			$this->plan->id   = $site->plan_id;
-			$this->license_id = $site->license_id;
-			$this->version    = $site->version;
-			$this->is_premium = $site->is_premium;
-
-			/**
-			 * Added trial properties.
-			 *
-			 * @author Vova Feldman (@svovaf)
-			 * @since  1.0.9
-			 */
-			$this->trial_plan_id = $site->trial_plan_id;
-			$this->trial_ends    = $site->trial_ends;
+			if ( is_object( $site ) ) {
+				$this->plan->id = $site->plan_id;
+			}
 		}
 
 		static function get_type() {

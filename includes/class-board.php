@@ -31,8 +31,35 @@ class Kanban_Board
 	 */
 	static function send_page_data_to_template ($template)
 	{
-
 		if ( !isset(Kanban_Template::get_instance()->slug) || Kanban_Template::get_instance()->slug != self::$slug ) return $template;
+
+
+
+		// make sure they don't need to upgrade
+		if ( Kanban::get_instance()->settings->records_to_move > 0 )
+		{
+			?>
+			<p>
+			<?php echo sprintf(__('We\'ve found %s kanban records that need to be migrated for the latest version of Kanban for WordPress!', Kanban::get_text_domain()), Kanban::get_instance()->settings->records_to_move); ?>
+			</p>
+			<p>
+			<?php echo sprintf(
+					__(
+						'Please visit the <a href="%s">Kanban welcome page</a> to migrate your data.',
+						Kanban::get_text_domain()
+					),
+					add_query_arg(
+						'page',
+						'kanban_welcome',
+						admin_url('admin.php')
+					)
+				);
+			?>
+			<?php
+			exit;
+		}
+
+
 
 		global $wp_query;
 
@@ -41,7 +68,7 @@ class Kanban_Board
 
 
 		// get all data for the javascript
-		$wp_query->query_vars['kanban']->board->settings = Kanban_Settings::get_all();
+		$wp_query->query_vars['kanban']->board->settings = Kanban_Option::get_all();
 
 		$wp_query->query_vars['kanban']->board->allowed_users = Kanban_User::get_allowed_users();
 
@@ -66,20 +93,6 @@ class Kanban_Board
 		return $template;
 	}
 
-
-
-	// static function get_settings ()
-	// {
-	// 	$to_return = array();
-
-	// 	$settings_section_name = sprintf('%s_settings', Kanban::get_instance()->settings->basename);
-	// 	$work_hour_interval_key = Kanban_Utils::format_key ('work_hour', 'interval');
-	// 	$work_hour_interval = (float) Kanban_Settings::get_option($settings_section_name, $work_hour_interval_key);
-
-	// 	$to_return[$work_hour_interval_key] = $work_hour_interval ? $work_hour_interval : 1;
-
-	// 	return $to_return;
-	// }
 
 
 } // Kanban_Board

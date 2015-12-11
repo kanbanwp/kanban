@@ -14,19 +14,11 @@
 		public $version;
 		public $url;
 
-		function __construct( $tag = false )
-		{
-			if (!($tag instanceof stdClass))
-				return;
-
-			parent::__construct($tag);
-
-			$this->version = $tag->version;
-			$this->url = $tag->url;
+		function __construct( $tag = false ) {
+			parent::__construct( $tag );
 		}
 
-		static function get_type()
-		{
+		static function get_type() {
 			return 'tag';
 		}
 	}

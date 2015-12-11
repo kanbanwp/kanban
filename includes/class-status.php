@@ -17,7 +17,7 @@ class Kanban_Status extends Kanban_Db
 	protected static $table_name = 'statuses';
 	protected static $table_columns = array(
 		'title' => 'text',
-		'color' => 'float',
+		'color_hex' => 'text',
 		'position' => 'int'
 	);
 
@@ -58,7 +58,7 @@ class Kanban_Status extends Kanban_Db
 		return "CREATE TABLE " . self::table_name() . " (
 					id bigint(20) NOT NULL AUTO_INCREMENT,
 					title varchar(64) NOT NULL,
-					color_hex varchar(6) NOT NULL,
+					color_hex varchar(7) NOT NULL,
 					position bigint(20) NOT NULL,
 					PRIMARY KEY  (id)
 				)";
@@ -66,9 +66,23 @@ class Kanban_Status extends Kanban_Db
 
 
 
-	static function table_name()
+	static function replace ($data)
 	{
-		return Kanban_Db::format_table_name(self::$table_name);
+		return self::_replace($data);
+	}
+
+
+
+	static function delete ($where)
+	{
+		return self::_delete($where);
+	}
+
+
+
+	static function insert_id ()
+	{
+		return self::_insert_id();
 	}
 
 

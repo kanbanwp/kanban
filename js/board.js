@@ -65,7 +65,7 @@ var format_hours = function (h)
 {
 	if ( h == 0 )
 	{
-		return '0h';
+		return '0<small>h</small>';
 	}
 
     var min = Math.round(h*60);
@@ -97,6 +97,11 @@ var format_hours = function (h)
 		to_return += '{0}<small>m</small>'.sprintf(minutes);
 	}
 
+	if ( to_return == '' )
+	{
+		to_return = format_hours(0);
+	}
+
 	return to_return;
 };
 
@@ -110,7 +115,8 @@ var show_growl_msg = function(response)
 		$.bootstrapGrowl(
 			response.data.message,
 			{
-				type: 'info'
+				type: 'info',
+  				allow_dismiss: true
 			}
 		);
 	}
@@ -129,6 +135,16 @@ var add_task_to_status_col = function(task)
 	if ( typeof task.user_id_assigned === 'undefined' )
 	{
 		task.user_id_assigned = '';
+	}
+
+	if ( typeof status_records[task.status_id] != 'undefined' )
+	{
+		task.status_color = status_records[task.status_id].color_hex;
+	}
+
+	if ( typeof task.hour_count === 'undefined' )
+	{
+		task.hour_count = 0;
 	}
 
 	var $task = $(t_card.render({task: task, settings: settings}));

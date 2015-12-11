@@ -9,7 +9,6 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 
 class Kanban_Utils
 {
-
 	static function get_nonce()
 	{
 		return sprintf('%s_nonce', Kanban::get_instance()->settings->basename);
@@ -17,15 +16,7 @@ class Kanban_Utils
 
 
 
-	// static function format_key ($post_type, $key)
-	// {
-	// 	$post_type = Kanban_Post_Types::format_post_type ($post_type);
-	// 	return sprintf('%s_%s', $post_type, $key);
-	// }
-
-
-
-	static function build_array_with_id_keys ($arr, $id_key = 'ID')
+	static function build_array_with_id_keys ($arr, $id_key = 'id')
 	{
 		$return = array();
 
@@ -60,4 +51,21 @@ class Kanban_Utils
 
 		return FALSE;
 	}
+
+
+
+	static function order_array_of_objects_by_property ($arr, $property)
+	{
+		usort(
+			$arr,
+			function($a, $b) use ($property)
+			{
+				return strcmp($a->$property, $b->$property);
+			}
+		);
+
+		return $arr;
+	}
 }
+
+

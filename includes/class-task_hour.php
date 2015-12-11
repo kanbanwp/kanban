@@ -20,6 +20,7 @@ class Kanban_Task_Hour extends Kanban_Db
 		'task_id' => 'int',
 		'created_dt_gmt' => 'datetime',
 		'hours' => 'float',
+		'status_id' => 'int',
 		'user_id_author' => 'int',
 		'user_id_worked' => 'int'
 	);
@@ -54,19 +55,18 @@ class Kanban_Task_Hour extends Kanban_Db
 
 		eval(sprintf('$hours = 0%s;', $_POST['operator']));
 
+
+
 		$data = array(
 			'task_id' => $_POST['task']['id'],
 			'worked_dt_gmt' => gmdate('Y-m-d H:i:s'),
 			'hours' => $hours,
+			'status_is' => $_POST['task']['status_id'],
 			'user_id_author' => $user_id_author,
 			'user_id_worked' => $_POST['user_id_worked']
 		);
 
-		$id = self::insert($data);
-
-
-
-		if ( !$id ) wp_send_json_error();
+		$is_successful = self::_insert($data);
 
 
 
@@ -74,11 +74,26 @@ class Kanban_Task_Hour extends Kanban_Db
 
 
 
-		wp_send_json_success(array(
-			'message' => sprintf('%s saved', self::$slug)
-		));
+		if ( $is_successful )
+		{
+			wp_send_json_success(array(
+				'message' => sprintf('%s saved', str_replace('_', ' ', self::$slug))
+			));
+		}
+		else
+		{
+			wp_send_json_error(array(
+				'message' => sprintf('Error saving %s', str_replace('_', ' ', self::$slug))
+			));
+		}
 	}
 
+
+
+	static function insert ($data)
+	{
+		return self::_insert($data);
+	}
 
 
 
@@ -89,6 +104,7 @@ class Kanban_Task_Hour extends Kanban_Db
 					task_id bigint(20) NOT NULL,
 					created_dt_gmt datetime NOT NULL,
 					hours decimal(6, 4) NOT NULL,
+					status_id bigint(20) NOT NULL,
 					user_id_author bigint(20) NOT NULL,
 					user_id_worked bigint(20) NOT NULL,
 					PRIMARY KEY  (id)
@@ -96,11 +112,6 @@ class Kanban_Task_Hour extends Kanban_Db
 	} // db_table
 
 
-
-	static function table_name()
-	{
-		return Kanban_Db::format_table_name(self::$table_name);
-	}
 
 
 
@@ -112,6 +123,10 @@ class Kanban_Task_Hour extends Kanban_Db
 		}
 		return self::$instance;
 	}
+
+
+
+	private function __construct() { }
 
 }
 

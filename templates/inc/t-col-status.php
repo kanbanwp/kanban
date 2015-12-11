@@ -1,4 +1,4 @@
-<div class="col col-xs-12 col-status col_percent_w" id="status-{{=id}}" data-id="{{=id}}" data-color="#{{=color_hex}}" data-close="{{=left_close}}%" data-open="{{=left_open}}%">
+<div class="col col-xs-12 col-status col_percent_w" id="status-{{=id}}" data-id="{{=id}}" data-color="{{=color_hex}}" data-close="{{=left_close}}%" data-open="{{=left_open}}%">
 
 {{left_close}}
 	<button type="button" class="btn btn-primary toggle-sidebar toggle-sidebar-close">
@@ -12,7 +12,7 @@
 	</button>
 {{/left_close}}
 
-	<h2 class="h3" style="border-color: #{{=color_hex}};">
+	<h2 class="h3" style="border-color: {{=color_hex}};">
 		{{=title}}
 	</h2>
 

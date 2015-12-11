@@ -1,7 +1,7 @@
 === Kanban for WordPress ===
 
 Contributors: gelform, mkrdip, freemius
-Tags: kanban board, agile, scrum, project management, productivity, Trello
+Tags: kanban board, agile, scrum, project management, team management, productivity, Trello
 Requires at least: 4.0
 Tested up to: 4.3.1
 Stable Tag: 1.0
@@ -11,9 +11,17 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
 A complete kanban board for agile project management inside your WordPress site. 
 
 
+
 == Description ==
 
 Kanban for WordPress lets you run a complete kanban board on your WordPress site. If you want to get more done, if you want to see or show progress on your projects, if you want to use agile project management methods, try Kanban for WordPress.
+
+For more information, please visit [KanbanWP.com](http://kanbanwp.com?utm_medium=documentation&utm_source=wordpress.org&utc_campaign=documentation)
+
+Here's a 60-second intro to how to use the board, once you have it installed:
+[vimeo https://vimeo.com/145274368]
+
+
 
 = Features =
 
@@ -26,8 +34,9 @@ Kanban for WordPress lets you run a complete kanban board on your WordPress site
 * Manage the users who have access to the board, in case some team members don't need to see it
 * Works on mobile!
 
-While using this plugin if you find any bug or any conflict, please submit an issue at 
-[Github](https://github.com/gelform/kanban/) (If possible with a pull request). 
+While using this plugin if you find any bug or any conflict, please submit an issue at [Github](https://github.com/gelform/kanban/) (If possible with a pull request).
+
+
 
 == Installation ==
 
@@ -38,12 +47,21 @@ While using this plugin if you find any bug or any conflict, please submit an is
 5. Visit the "Kanban" menu item that appears in the WordPress Admin menu. You can manage settings for your kanban board here.
 6. Click "Go to the board" to visit your kanban board and start adding tasks!
 
+
+
 == Screenshots ==
 
 1. An example of the kanban board
 2. The kanban board on a mobile tablet
 3. The projects edit screen on the kanban board
 4. The settings page, where you set the color of each status column (or swimlane)
+
+
+
+== DISCLAIMER ==
+For optimized user experience, upon activation, the plugin will make an API connectivity test. This API call is *anonymous* and will *NOT* share any identifiable information about your site or user.
+
+
 
 == Changelog ==
 

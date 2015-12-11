@@ -21,14 +21,10 @@ $.fn.modal_projects = function()
 
 					for ( var j in task_records )
 					{
-						try
+						if ( task_records[j].project_id == project.id )
 						{
-							if ( task_records[j].postmeta.kanban_task_project_id == project.ID )
-							{
-								project['task_count']++;
-							}
+							project['task_count']++;
 						}
-						catch (err) {}
 					}
 
 					var $project = $(t_modal_projects_panel.render(project));
@@ -66,9 +62,9 @@ $.fn.modal_projects = function()
 					// remove project from tasks
 					for ( var i in task_records )
 					{
-						if ( task_records[i].postmeta.kanban_task_project_id == project_id )
+						if ( task_records[i].project_id == project_id )
 						{
-							task_records[i].postmeta.kanban_task_project_id = 0;
+							task_records[i].project_id = 0;
 							$('#task-' + task_records[i].ID)
 							.trigger('save')
 							.trigger('populate_project');
@@ -139,7 +135,7 @@ $.fn.modal_projects = function()
 				var $panel = $input.closest('.panel');
 				var project_id = $panel.attr('data-id');
 
-				project_records[project_id].post_title = post_title;
+				project_records[project_id].title = post_title;
 
 				var data = JSON.parse(JSON.stringify(project_records[project_id]));
 				data.action = 'save_project';

@@ -1,5 +1,7 @@
 # [Kanban for WordPress](http://kanbanwp.com/)
 
+[![A quick intrduction to the Kanban for WordPress](https://i.vimeocdn.com/video/543343707_640.jpg)](https://vimeo.com/145274368)
+
 Welcome to the Kanban for WordPress repository on GitHub. Here you can browse the source, look at open issues and keep track of development. We recommend all developers to follow the [Kanban for WordPress development blog](http://kanbanwp.com/blog?utm_medium=documentation&utm_source=github.com&utc_campaign=documentation) to stay up to date about everything happening in the project. You can also [follow @KanbanWP](https://twitter.com/kanbanwp) on Twitter for the latest development updates.
 
 If you are not a developer, please use the [Kanban plugin page](https://wordpress.org/plugins/kanban/) on WordPress.org.

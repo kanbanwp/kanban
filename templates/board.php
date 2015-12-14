@@ -58,7 +58,7 @@
 
 	<div class="form-inline" id="search-wrapper">
 		<input type="search" id="board-search" class="form-control" placeholder="<?php echo __('Search', Kanban::get_text_domain()) ?>">
-		<button type="button" class="btn btn-default" id="board-search-reset" style="display: none;">
+		<button type="button" class="btn btn-warning" id="board-search-reset" style="display: none;">
 			<?php echo __('Show All', Kanban::get_text_domain()) ?>
 		</button>
 	</div><!-- search-wrapper -->

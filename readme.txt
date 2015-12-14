@@ -11,7 +11,6 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
 A complete kanban board for agile project management inside your WordPress site. 
 
 
-
 == Description ==
 
 Kanban for WordPress lets you run a complete kanban board on your WordPress site. If you want to get more done, if you want to see or show progress on your projects, if you want to use agile project management methods, try Kanban for WordPress.

@@ -22,6 +22,9 @@ Support requests in issues on this repository will be closed on sight.
 ## Contributing to Kanban for WordPress
 If you have a patch, or stumbled upon an issue with Kanban core, you can contribute this back to the code. Please read our [contributor guidelines](https://github.com/gelform/kanban/blob/master/CONTRIBUTING.md) for more information how you can do this.
 
+## Usage in production
+
+The `master` branch of this repository is a development branch and should not be used in production. Instead, please check out the latest tag release or [WordPress.org](https://wordpress.org/plugins/kanban/) plugin page.
 
 
 #### DISCLAIMER:

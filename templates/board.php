@@ -78,8 +78,8 @@
 
 
 
-	<a href="<?php echo admin_url( sprintf('admin.php?page=%s_welcome', Kanban::$instance->settings->basename) ) ?>" class="btn btn-default" target="_blank">
-		<?php echo __('Admin', Kanban::get_text_domain()) ?>
+	<a href="<?php echo admin_url( sprintf('admin.php?page=%s_settings', Kanban::$instance->settings->basename) ) ?>" class="btn btn-default" target="_blank">
+		<?php echo __('Settings', Kanban::get_text_domain()) ?>
 	</a>
 </div>
 

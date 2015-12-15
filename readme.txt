@@ -3,7 +3,7 @@
 Contributors: gelform, mkrdip, freemius
 Tags: kanban board, agile, scrum, project management, team management, productivity, Trello
 Requires at least: 4.0
-Tested up to: 4.4.1
+Tested up to: 4.4
 Stable Tag: 1.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -68,16 +68,16 @@ For optimized user experience, upon activation, the plugin will make an API conn
 
 Release Date: December 15, 2015
 
-Moving to custom tables
-Data migration UI to upgrade to custom tables
-User can track work in intervals small than 1 hour (user setting)
-Improved Settings UI
+* Moving to custom tables
+* Data migration UI to upgrade to custom tables
+* User can track work in intervals small than 1 hour (user setting)
+* Improved Settings UI
 
 = 1.0.1 =
 
-CSS and JS minification
-Code cleanup
-More translation support
+* CSS and JS minification
+* Code cleanup
+* More translation support
 
 = 1.0.0 =
 

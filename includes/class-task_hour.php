@@ -53,7 +53,23 @@ class Kanban_Task_Hour extends Kanban_Db
 			$_POST['user_id_worked'] = $user_id_author;
 		}
 
-		eval(sprintf('$hours = 0%s;', $_POST['operator']));
+
+
+		try
+		{
+			$operator = substr($_POST['operator'], 0, 1) == '-' ? '-' : '+';
+			$val = sprintf('%s%s', $operator, floatval($_POST['operator']));
+		}
+		catch (Exception $e)
+		{
+			wp_send_json_error(array(
+				'message' => sprintf('Error saving %s', str_replace('_', ' ', self::$slug))
+			));
+		}
+
+
+
+		eval(sprintf('$hours = 0%s;', $val));
 
 
 

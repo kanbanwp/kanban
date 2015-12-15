@@ -54,7 +54,7 @@ class Kanban_Project extends Kanban_Db
 
 
 
-		$project_id = isset($_POST['task']['id']) ? $_POST['task']['id'] : self::_insert_id();
+		$project_id = isset($_POST['project']['id']) ? $_POST['project']['id'] : self::_insert_id();
 
 
 

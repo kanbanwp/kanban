@@ -132,26 +132,27 @@ $.fn.modal_projects = function()
 				var $input = $(this);
 
 				var post_title = $input.val();
+
 				var $panel = $input.closest('.panel');
 				var project_id = $panel.attr('data-id');
 
 				project_records[project_id].title = post_title;
 
-				var data = JSON.parse(JSON.stringify(project_records[project_id]));
-				data.action = 'save_project';
-				data.kanban_nonce = $('#kanban_nonce').val();
+				var project_data = {project: project_records[project_id]};
+				project_data.action = 'save_project';
+				project_data.kanban_nonce = $('#kanban_nonce').val();
 
 				$.ajax({
 					method: "POST",
 					url: ajaxurl,
-					data: data
+					data: project_data
 				})
 				.done(function(response )
 				{
 					// update task projects
 					for ( var i in task_records )
 					{
-						$('#task-' + task_records[i].ID).trigger('populate_project');
+						$('#task-' + task_records[i].id).trigger('populate_project');
 					}
 
 					var project = project_records[project_id];

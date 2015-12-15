@@ -29,7 +29,7 @@ abstract class Kanban_Db
 
 
 
-	function custom_freemius_optin_message ( $html_msg )
+	static function custom_freemius_optin_message ( $html_msg )
 	{
 		global $kan_fs;
 

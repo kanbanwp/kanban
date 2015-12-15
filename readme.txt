@@ -57,13 +57,36 @@ While using this plugin if you find any bug or any conflict, please submit an is
 
 
 
-== DISCLAIMER ==
+== Privacy Policy ==
 For optimized user experience, upon activation, the plugin will make an API connectivity test. This API call is *anonymous* and will *NOT* share any identifiable information about your site or user.
 
 
 
 == Changelog ==
 
+= 1.1.0 =
+
+Release Date: December 15, 2015
+
+Moving to custom tables
+Data migration UI to upgrade to custom tables
+User can track work in intervals small than 1 hour (user setting)
+Improved Settings UI
+
+= 1.0.1 =
+
+CSS and JS minification
+Code cleanup
+More translation support
+
 = 1.0.0 =
 
 * Initial release
+
+
+
+== Upgrade Notice ==
+
+
+= 1.1 =
+This version requires a data migration. Please follow the instructions in the admin notice.

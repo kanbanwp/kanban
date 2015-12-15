@@ -64,6 +64,20 @@ For optimized user experience, upon activation, the plugin will make an API conn
 
 == Changelog ==
 
+= 1.1.0 =
+
+* Moving to custom tables
+* Data migration UI to upgrade to custom tables
+* User can track work in intervals small than 1 hour (user setting)
+* Improved Settings UI
+
+= 1.0.1 =
+
+* CSS and JS minification
+* Code cleanup
+* More translation support
+
+
 = 1.0.0 =
 
 * Initial release

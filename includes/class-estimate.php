@@ -35,6 +35,7 @@ class Kanban_Estimate extends Kanban_Db
 
 		$sql = "SELECT *
 				FROM `{$table_name}`
+				ORDER BY `position` ASC
 		;";
 
 		$sql = apply_filters(

@@ -157,6 +157,22 @@ var add_task_to_status_col = function(task)
 
 
 
+var records_by_position = function (obj)
+{
+	var obj_arr = $.map(obj, function(value, index) {
+	    return [value];
+	});
+
+	obj_arr.sort(function(a, b)
+	{
+		return a.position - b.position;
+	});
+
+	return obj_arr;
+};
+
+
+
 jQuery(function($)
 {
 	$('#filter-wrapper').board_filter();
@@ -174,10 +190,14 @@ jQuery(function($)
 
 
 
+	var status_records_arr = records_by_position(status_records);
+
+
+
 	var i = 0;
-	for ( var id in status_records )
+	for ( var id in status_records_arr )
 	{
-		var status = status_records[id];
+		var status = status_records_arr[id];
 
 		if ( i == 0 )
 		{
@@ -185,7 +205,7 @@ jQuery(function($)
 			status.left_close = '-{0}'.sprintf(sidebar_w);
 		}
 
-		if ( i == Object.size(status_records)-1 )
+		if ( i == Object.size(status_records_arr)-1 )
 		{
 			status.left_open = '-{0}'.sprintf(sidebar_w*2);
 			status.left_close = '-{0}'.sprintf(sidebar_w);

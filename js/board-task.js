@@ -9,6 +9,9 @@ $.fn.board_task = function(task)
 		var $projects_dropdown = $('.project .list-group', $task);
 
 
+		var estimate_records_arr = records_by_position(estimate_records);
+
+
 
 		// save the task
 		$task.on(
@@ -673,9 +676,10 @@ $.fn.board_task = function(task)
 
 
 		// populate estimate dropdowns
-		for ( var id in estimate_records )
+		for ( var i in estimate_records_arr )
 		{
-			var estimate = estimate_records[id];
+			var estimate = estimate_records_arr[i];
+
 			var $estimate = $(t_card_estimates_dropdown.render(estimate));
 			$('.dropdown-menu-estimates', $task).append($estimate);
 		}

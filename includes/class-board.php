@@ -11,8 +11,19 @@ Kanban_Board::init();
 
 
 
-class Kanban_Board
+class Kanban_Board extends Kanban_Db
 {
+	private static $instance;
+	protected static $table_name = 'boards';
+	protected static $table_columns = array(
+		'title' => 'text',
+		'description' => 'text',
+		'created_dt_gmt' => 'datetime',
+		'modified_dt_gmt' => 'datetime',
+		'user_id_author' => 'int',
+		'is_active' => 'bool'
+	);
+
 	static $slug = 'board';
 
 
@@ -79,12 +90,7 @@ class Kanban_Board
 		$wp_query->query_vars['kanban']->board->tasks = Kanban_Task::get_all();
 
 		$current_user_id = get_current_user_id();
-
-		$wp_query->query_vars['kanban']->board->current_user = get_user_by('id', $current_user_id);
-		unset($wp_query->query_vars['kanban']->board->current_user->data->user_pass);
-		$wp_query->query_vars['kanban']->board->current_user->data->long_name_email = Kanban_User::format_user_name ($wp_query->query_vars['kanban']->board->current_user);
-		$wp_query->query_vars['kanban']->board->current_user->data->short_name = Kanban_User::format_user_name ($wp_query->query_vars['kanban']->board->current_user, TRUE);
-		$wp_query->query_vars['kanban']->board->current_user->data->initials = Kanban_User::get_initials ($wp_query->query_vars['kanban']->board->current_user);
+		$wp_query->query_vars['kanban']->board->current_user = $wp_query->query_vars['kanban']->board->allowed_users[$current_user_id];
 
 		$wp_query->query_vars['kanban']->board->col_percent_w = count($wp_query->query_vars['kanban']->board->statuses) > 0 ? 100/(count($wp_query->query_vars['kanban']->board->statuses)) : 100;
 		$wp_query->query_vars['kanban']->board->sidebar_w = count($wp_query->query_vars['kanban']->board->statuses) > 0 ? 100/(count($wp_query->query_vars['kanban']->board->statuses)-2) : 0;
@@ -92,6 +98,45 @@ class Kanban_Board
 
 		return $template;
 	}
+
+
+
+	static function replace ($data)
+	{
+		return self::_replace($data);
+	}
+
+
+
+	static function db_table ()
+	{
+		return "CREATE TABLE " . self::table_name() . " (
+					id bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+					title text NOT NULL,
+					description text NOT NULL,
+					created_dt_gmt datetime NOT NULL,
+					modified_dt_gmt datetime NOT NULL,
+					user_id_author bigint(20) NOT NULL,
+					is_active BOOLEAN NOT NULL DEFAULT TRUE,
+					UNIQUE KEY id (id),
+					KEY is_active (is_active)
+				)";
+	} // db_table
+
+
+
+	public static function get_instance()
+	{
+		if ( ! self::$instance )
+		{
+			self::$instance = new self();
+		}
+		return self::$instance;
+	}
+
+
+
+	private function __construct() {}
 
 
 

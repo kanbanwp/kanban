@@ -66,6 +66,13 @@ class Kanban_Utils
 
 		return $arr;
 	}
+
+
+
+	static function mysql_now_gmt ()
+	{
+		return gmdate('Y-m-d H:i:s');
+	}
 }
 
 

@@ -275,13 +275,14 @@ abstract class Kanban_Db
 	 */
 	static function check_for_updates ()
 	{
-		if ( self::installed_ver() == Kanban::get_instance()->settings->db_version ) return FALSE;
+		if ( self::installed_ver() == Kanban::get_instance()->settings->plugin_data['Version'] ) return FALSE;
 
-		global $charset_collate;
+		global $charset_collate, $wpdb;
 
 		require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
 
 		$classes_with_tables = array(
+			'Kanban_Board',
 			'Kanban_Comment',
 			'Kanban_Estimate',
 			'Kanban_Option',
@@ -304,13 +305,51 @@ abstract class Kanban_Db
 
 
 
+		Kanban_Db::add_defaults();
+
+
+
+		// make sure every task has a board
+		$boards_table = Kanban_Board::table_name();
+
+		$sql = "SELECT `id`
+				FROM `{$boards_table}`
+				LIMIT 1
+		;";
+
+		$board_id = $wpdb->get_var($sql);
+
+
+
+		$classes_with_board_id = array(
+			'Kanban_Estimate',
+			'Kanban_Status',
+			'Kanban_Task',
+		);
+
+		foreach ($classes_with_board_id as $class)
+		{
+			$table = $class::table_name();
+
+			$sql = "UPDATE $table
+				SET `board_id` = $board_id
+				WHERE `board_id` IS NULL
+				OR `board_id` = 0
+			;";
+
+			$wpdb->query($sql);
+		}
+
+
+
+
 		// save db version to avoid updates
 		update_option(
 			sprintf(
 				'%s_db_version',
 				Kanban::get_instance()->settings->basename
 			),
-			Kanban::get_instance()->settings->db_version
+			Kanban::get_instance()->settings->plugin_data['Version']
 		);
 	}
 
@@ -1015,6 +1054,64 @@ abstract class Kanban_Db
 
 				$i++;
 			}
+		}
+
+
+
+		$boards_table = Kanban_Board::table_name();
+
+		$sql = "SELECT count(`id`)
+				FROM `{$boards_table}`
+		;";
+
+		$boards_count = $wpdb->get_var($sql);
+
+
+
+		if ( $boards_count == 0 )
+		{
+			$data = array(
+				'title' => 'Your first kanban board',
+				'created_dt_gmt' => Kanban_Utils::mysql_now_gmt(),
+				'modified_dt_gmt' => Kanban_Utils::mysql_now_gmt(),
+				'user_id_author' => get_current_user_id(),
+				'is_active' => 1
+			);
+
+			Kanban_Board::replace($data);
+		}
+
+
+
+		$tasks_table = Kanban_Board::table_name();
+
+		$sql = "SELECT count(`id`)
+				FROM `{$tasks_table}`
+		;";
+
+		$tasks_count = $wpdb->get_var($sql);
+
+
+
+		if ( $tasks_count == 0 )
+		{
+			$sql = "SELECT `id`
+					FROM `{$boards_table}`
+					LIMIT 1
+			;";
+
+			$board_id = $wpdb->get_var($sql);
+
+			$data = array(
+				'title' => 'Your first task',
+				'board_id' => $board_id,
+				'created_dt_gmt' => Kanban_Utils::mysql_now_gmt(),
+				'modified_dt_gmt' => Kanban_Utils::mysql_now_gmt(),
+				'user_id_author' => get_current_user_id(),
+				'is_active' => 1
+			);
+
+			Kanban_Board::replace($data);
 		}
 
 

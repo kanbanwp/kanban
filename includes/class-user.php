@@ -128,14 +128,14 @@ class Kanban_User
 		if ( !isset(Kanban_User::get_instance()->allowed_users) )
 		{
 			// get all settings
-			$settings = Kanban_Option::get_all();
+			$allowed_users = Kanban_Option::get_option('allowed_users');
 
 			// pull out allowed user id's
 			$allowed_user_ids = array();
 
-			if ( isset($settings['allowed_users']) )
+			if ( is_array($allowed_users) )
 			{
-				$allowed_user_ids = $settings['allowed_users'];
+				$allowed_user_ids = $allowed_users;
 			}
 
 			if ( empty($allowed_user_ids) )
@@ -144,29 +144,33 @@ class Kanban_User
 			}
 
 			// load actual users
-			$pm_users = get_users(array(
-				'include' => $allowed_user_ids
+			$users = get_users(array(
+				'include' => $allowed_user_ids,
+				'fields' => array(
+					'ID',
+					'user_email',
+
+				)
 			));
 
 			// add users to object
-			Kanban_User::get_instance()->allowed_users = Kanban_Utils::build_array_with_id_keys($pm_users, 'ID');
+			Kanban_User::get_instance()->allowed_users = Kanban_Utils::build_array_with_id_keys($users, 'ID');
 
 			// load extra data
 			foreach (Kanban_User::get_instance()->allowed_users as $user_id => $user)
 			{
+				Kanban_User::get_instance()->allowed_users[$user_id]->caps = array('write');
+
 				// get gravatar
-				if(self::validate_gravatar($user->data->user_email))
+				if(self::validate_gravatar($user->user_email))
 				{
-					Kanban_User::get_instance()->allowed_users[$user_id]->data->avatar = get_avatar($user->data->user_email);
+					Kanban_User::get_instance()->allowed_users[$user_id]->avatar = get_avatar($user->user_email);
 				}
 
-				// remove passwords!
-				unset(Kanban_User::get_instance()->allowed_users[$user_id]->data->user_pass);
-
 				// fancy name formating
-				Kanban_User::get_instance()->allowed_users[$user_id]->data->long_name_email = Kanban_User::format_user_name ($user);
-				Kanban_User::get_instance()->allowed_users[$user_id]->data->short_name = Kanban_User::format_user_name ($user, TRUE);
-				Kanban_User::get_instance()->allowed_users[$user_id]->data->initials = Kanban_User::get_initials ($user);
+				Kanban_User::get_instance()->allowed_users[$user_id]->long_name_email = Kanban_User::format_user_name ($user);
+				Kanban_User::get_instance()->allowed_users[$user_id]->short_name = Kanban_User::format_user_name ($user, TRUE);
+				Kanban_User::get_instance()->allowed_users[$user_id]->initials = Kanban_User::get_initials ($user);
 			}
 		}
 

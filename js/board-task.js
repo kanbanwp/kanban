@@ -9,7 +9,7 @@ $.fn.board_task = function(task)
 		var $projects_dropdown = $('.project .list-group', $task);
 
 
-		var estimate_records_arr = records_by_position(estimate_records);
+		var estimate_records_arr = records_by_position(board.estimate_records());
 
 
 
@@ -18,6 +18,11 @@ $.fn.board_task = function(task)
 			'save',
 			function (e, options)
 			{
+				if ( !current_user_has_cap('write') )
+				{
+					return false;
+				}
+
 				if ( typeof options === 'undefined' )
 				{
 					options = [];
@@ -62,11 +67,16 @@ $.fn.board_task = function(task)
 			'delete',
 			function (e)
 			{
+				if ( !current_user_has_cap('write') )
+				{
+					return false;
+				}
+
 				var task_data = {task: task};
 				task_data.action = 'delete_task';
 				task_data.kanban_nonce = $('#kanban_nonce').val();
 				task_data.comment = 'task deleted by {0}'.sprintf(
-					current_user.short_name
+					board.current_user().short_name
 				);
 
 				$.ajax({
@@ -99,6 +109,11 @@ $.fn.board_task = function(task)
 			'add_project',
 			function ()
 			{
+				if ( !current_user_has_cap('write') )
+				{
+					return false;
+				}
+
 				// delay, in case a project is selected
 				setTimeout(function()
 				{
@@ -113,9 +128,9 @@ $.fn.board_task = function(task)
 
 					// see if typed value matches existing project
 					var is_new_project = true;
-					for ( var i in project_records )
+					for ( var i in board.project_records )
 					{
-						var project = project_records[i];
+						var project = board.project_records[i];
 
 						// it is NOT a new project
 						if ( project_title == project.title )
@@ -148,13 +163,13 @@ $.fn.board_task = function(task)
 							try
 							{
 								// add project to available projects
-								project_records[response.data.project.id] = response.data.project;
+								board.project_records[response.data.project.id] = response.data.project;
 
 								// assign new project id to task
 								task.project_id = response.data.project.id;
 
 								var comment = '{0} added the task to the project "{1}"'.sprintf (
-									current_user.short_name,
+									board.current_user().short_name,
 									response.data.project.title
 								);
 
@@ -182,11 +197,16 @@ $.fn.board_task = function(task)
 			'status_change',
 			function(e, status_id_new)
 			{
+				if ( !current_user_has_cap('write') )
+				{
+					return false;
+				}
+
 				var status_id_old = task.status_id + '';
 
 				var comment = '{0} moved the task to "{1}"'.sprintf(
-									current_user.short_name,
-									status_records[status_id_new].title
+									board.current_user().short_name,
+									board.status_records()[status_id_new].title
 								);
 
 				// update status and save
@@ -197,7 +217,7 @@ $.fn.board_task = function(task)
 
 				// update color
 				$('.task-handle', $task).css({
-					background: status_records[status_id_new].color_hex
+					background: board.status_records()[status_id_new].color_hex
 				});
 			} // function
 		);
@@ -206,6 +226,11 @@ $.fn.board_task = function(task)
 
 		var log_work_hour = function(operator)
 		{
+			if ( !current_user_has_cap('write') )
+			{
+				return false;
+			}
+
 			var task_data = {task: task};
 
 			task_data.action = 'add_task_hour';
@@ -234,6 +259,11 @@ $.fn.board_task = function(task)
 			'.editable-input',
 			function ()
 			{
+				if ( !current_user_has_cap('write') )
+				{
+					return false;
+				}
+
 				var $input = $(this);
 
 				// if already editing, ignore
@@ -339,7 +369,7 @@ $.fn.board_task = function(task)
 				var user_id = $btn.val();
 
 				var comment = '{0} assigned the task to {1}'.sprintf (
-					current_user.short_name,
+					board.current_user().short_name,
 					$('.task-assigned-to-short_name', $task).text()
 				);
 
@@ -364,8 +394,8 @@ $.fn.board_task = function(task)
 				task.estimate_id = estimate_id;
 
 				var comment = '{0} set the task estimate to {1}'.sprintf (
-					current_user.short_name,
-					estimate_records[estimate_id].title
+					board.current_user().short_name,
+					board.estimate_records()[estimate_id].title
 				);
 
 				$task.trigger('save');
@@ -394,6 +424,11 @@ $.fn.board_task = function(task)
 			'.task-hours-operators .btn',
 			function()
 			{
+				if ( !current_user_has_cap('write') )
+				{
+					return false;
+				}
+
 				var $btn = $(this);
 				var operator = $btn.val();
 
@@ -430,7 +465,7 @@ $.fn.board_task = function(task)
 			'populate_project',
 			function ()
 			{
-				var project = project_records[task.project_id];
+				var project = board.project_records[task.project_id];
 
 				if ( typeof project === 'undefined' )
 				{
@@ -447,8 +482,7 @@ $.fn.board_task = function(task)
 				.attr('data-id', project.id);
 			}
 		)
-
-		$task.trigger('populate_project');
+		.trigger('populate_project');
 
 
 
@@ -487,9 +521,9 @@ $.fn.board_task = function(task)
 				var value = $input.val();
 				var valueLower = $.trim( value.toLowerCase() );
 
-				for ( var id in project_records )
+				for ( var id in board.project_records )
 				{
-					var project = project_records[id];
+					var project = board.project_records[id];
 
 					var text = project.title;
 					var textLower = $.trim(text.toLowerCase() );
@@ -543,6 +577,11 @@ $.fn.board_task = function(task)
 			'.project_title',
 			function(e)
 			{
+				if ( !current_user_has_cap('write') )
+				{
+					return false;
+				}
+
 				var $input = $(this);
 				$input.trigger('keyup');
 			}
@@ -569,7 +608,7 @@ $.fn.board_task = function(task)
 
 
 
-				var project = project_records[project_id];
+				var project = board.project_records[project_id];
 
 				if ( typeof project === 'undefined' )
 				{
@@ -583,7 +622,7 @@ $.fn.board_task = function(task)
 					'add_comment',
 					[
 						'{0} added the task to the project "{1}"'.sprintf (
-							current_user.short_name,
+							board.current_user().short_name,
 							project.post_title
 						)
 					]
@@ -610,7 +649,7 @@ $.fn.board_task = function(task)
 			var progress_percent = 0;
 			if ( typeof task.estimate_id !== 'undefined' && typeof task.hour_count !== 'undefined' )
 			{
-				var estimate = estimate_records[task.estimate_id];
+				var estimate = board.estimate_records()[task.estimate_id];
 
 				if ( typeof estimate !== 'undefined' )
 				{
@@ -666,7 +705,7 @@ $.fn.board_task = function(task)
 				task.title = $input.val();
 
 				var comment = '{0} updated the task title'.sprintf (
-							current_user.short_name
+							board.current_user().short_name
 						);
 
 				$task.trigger('save', {comment: comment});
@@ -676,12 +715,15 @@ $.fn.board_task = function(task)
 
 
 		// populate estimate dropdowns
-		for ( var i in estimate_records_arr )
+		if ( current_user_has_cap('write') )
 		{
-			var estimate = estimate_records_arr[i];
+			for ( var i in estimate_records_arr )
+			{
+				var estimate = estimate_records_arr[i];
 
-			var $estimate = $(t_card_estimates_dropdown.render(estimate));
-			$('.dropdown-menu-estimates', $task).append($estimate);
+				var $estimate = $(t_card_estimates_dropdown.render(estimate));
+				$('.dropdown-menu-estimates', $task).append($estimate);
+			}
 		}
 
 
@@ -691,7 +733,7 @@ $.fn.board_task = function(task)
 			function ()
 			{
 				// populate estimate
-				var estimate = estimate_records[task.estimate_id];
+				var estimate = board.estimate_records()[task.estimate_id];
 
 				if ( typeof estimate === 'undefined' )
 				{
@@ -716,13 +758,20 @@ $.fn.board_task = function(task)
 
 
 
-
-		// populate user dropdowns
-		for ( var i in allowed_users )
+		if ( current_user_has_cap('write') )
 		{
-			var user = allowed_users[i];
-			var $user = $(t_card_users_dropdown.render(user));
-			$('.dropdown-menu-allowed-users', $task).append($user);
+			// populate user dropdowns
+			for ( var i in board.allowed_users() )
+			{
+				var user = board.allowed_users()[i];
+				if ( !current_user_has_cap('write') )
+				{
+					continue;
+				}
+
+				var $user = $(t_card_users_dropdown.render(user));
+				$('.dropdown-menu-allowed-users', $task).append($user);
+			}
 		}
 
 
@@ -734,7 +783,7 @@ $.fn.board_task = function(task)
 				var user;
 				try
 				{
-					var user = allowed_users[task.user_id_assigned];
+					var user = board.allowed_users()[task.user_id_assigned];
 					$task.attr('data-assigned-to', task.user_id_assigned);
 				}
 				catch (err) {}
@@ -742,10 +791,8 @@ $.fn.board_task = function(task)
 				if ( typeof user === 'undefined' )
 				{
 					user = {
-						data: {
-							short_name: '-- Assign --',
-							initials: '--'
-						}
+						short_name: '-- Assign --',
+						initials: '--'
 					};
 				}
 

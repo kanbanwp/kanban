@@ -109,7 +109,7 @@ $.fn.board_sidebar_header = function()
 
 				var task_data = {
 					task: {'status_id': status_id},
-					comment: 'Task added by {0}'.sprintf(current_user.short_name)
+					comment: 'Task added by {0}'.sprintf(board.current_user().short_name)
 				};
 				task_data.action = 'save_task';
 				task_data.kanban_nonce = $('#kanban_nonce').val();

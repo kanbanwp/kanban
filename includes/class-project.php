@@ -45,7 +45,7 @@ class Kanban_Project extends Kanban_Db
 
 
 
-		$_POST['project']['modified_dt_gmt'] = gmdate('Y-m-d H:i:s');
+		$_POST['project']['modified_dt_gmt'] = Kanban_Utils::mysql_now_gmt();
 		$_POST['project']['user_id_author'] = get_current_user_id();
 
 
@@ -175,7 +175,7 @@ class Kanban_Project extends Kanban_Db
 					created_dt_gmt datetime NOT NULL,
 					modified_dt_gmt datetime NOT NULL,
 					is_active BOOLEAN NOT NULL DEFAULT TRUE,
-					PRIMARY KEY  (id),
+					UNIQUE KEY  (id),
 					KEY is_active (is_active)
 				)";
 	} // db_table

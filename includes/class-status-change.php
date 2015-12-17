@@ -92,7 +92,7 @@ class Kanban_Status_Change extends Kanban_Db
 
 		$data = array(
 			'task_id' => $task_id,
-			'created_dt_gmt' => gmdate('Y-m-d H:i:s'),
+			'created_dt_gmt' => Kanban_Utils::mysql_now_gmt(),
 			'status_id_old' => $status_id_old,
 			'status_id_new' => $status_id_new,
 			'user_id_author' => $user_id_author
@@ -112,7 +112,7 @@ class Kanban_Status_Change extends Kanban_Db
 					status_id_old bigint(20) NOT NULL,
 					status_id_new bigint(20) NOT NULL,
 					user_id_author bigint(20) NOT NULL,
-					PRIMARY KEY  (id)
+					UNIQUE KEY  (id)
 				)";
 	} // db_table
 

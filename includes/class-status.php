@@ -18,6 +18,7 @@ class Kanban_Status extends Kanban_Db
 	protected static $table_columns = array(
 		'title' => 'text',
 		'color_hex' => 'text',
+		'board_id' => 'int',
 		'position' => 'int'
 	);
 
@@ -61,7 +62,9 @@ class Kanban_Status extends Kanban_Db
 					title varchar(64) NOT NULL,
 					color_hex varchar(7) NOT NULL,
 					position bigint(20) NOT NULL,
-					PRIMARY KEY  (id)
+					board_id bigint(20) NOT NULL,
+					UNIQUE KEY  (id),
+					KEY board_id (board_id)
 				)";
 	} // db_table
 

@@ -137,9 +137,9 @@ var add_task_to_status_col = function(task)
 		task.user_id_assigned = '';
 	}
 
-	if ( typeof status_records[task.status_id] != 'undefined' )
+	if ( typeof board.status_records()[task.status_id] != 'undefined' )
 	{
-		task.status_color = status_records[task.status_id].color_hex;
+		task.status_color = board.status_records()[task.status_id].color_hex;
 	}
 
 	if ( typeof task.hour_count === 'undefined' )
@@ -147,13 +147,31 @@ var add_task_to_status_col = function(task)
 		task.hour_count = 0;
 	}
 
-	var $task = $(t_card.render({task: task, settings: settings}));
+	var $task = $(t_card.render({
+		task: task,
+		settings: board.settings(),
+		current_user_can_write: current_user_has_cap('write')
+	}));
 	$task.prependTo('#status-{0}-tasks'.sprintf(task.status_id)).board_task(task);
 
 	$('.col-tasks').same_height();
 
 	return $task;
 };
+
+
+
+var current_user_has_cap = function (cap)
+{
+	try
+	{
+		return board.current_user().caps.indexOf(cap) < 0 ? false : true;
+	}
+	catch (err)
+	{
+		return false;
+	}
+}
 
 
 
@@ -190,7 +208,7 @@ jQuery(function($)
 
 
 
-	var status_records_arr = records_by_position(status_records);
+	var status_records_arr = records_by_position(board.status_records());
 
 
 
@@ -211,10 +229,16 @@ jQuery(function($)
 			status.left_close = '-{0}'.sprintf(sidebar_w);
 		}
 
-		var $status = $(t_col_status.render(status));
+		var $status = $(t_col_status.render({
+			status: status,
+			current_user_can_write: current_user_has_cap('write')
+		}));
 		$status.appendTo('#row-statuses').board_sidebar_header();
 
-		var $status = $(t_col_tasks.render(status));
+		var $status = $(t_col_tasks.render({
+			status: status,
+			current_user_can_write: current_user_has_cap('write')
+		}));
 		$status.appendTo('#row-tasks');
 
 		i++;
@@ -222,44 +246,49 @@ jQuery(function($)
 
 
 
-	for ( var id in task_records )
+	for ( var id in board.task_records )
 	{
-		var task = task_records[id];
+		var task = board.task_records[id];
 		add_task_to_status_col(task);
 	}
 
 
 
-	$('.col-tasks').sortable({
-		connectWith: '.col-tasks',
-		handle: ".task-handle",
-		forcePlaceholderSize: true,
-		forceHelperSize: true,
-		// tolerance: "pointer",
-		placeholder: "task-placeholder",
-		over: function (e, ui)
-		{
-			ui.placeholder.closest('.col-tasks').addClass('hover');
-		},
-		out: function (e, ui)
-		{
-			ui.placeholder.closest('.col-tasks').removeClass('hover');
-		},
-		stop: function (e, ui)
-		{
-			$('.col-tasks.hover').removeClass('hover');
-		},
-		receive: function(e, ui)
-		{
-			var task_id = ui.item.attr('data-id');
-			var $col = ui.item.closest('.col-tasks');
-			var status_id_new = $col.attr('data-status-id');
+	if ( current_user_has_cap('write') )
+	{
 
-			ui.item.trigger('status_change', [status_id_new]);
+		$('.col-tasks').sortable({
+			connectWith: '.col-tasks',
+			handle: ".task-handle",
+			forcePlaceholderSize: true,
+			forceHelperSize: true,
+			// tolerance: "pointer",
+			placeholder: "task-placeholder",
+			over: function (e, ui)
+			{
+				ui.placeholder.closest('.col-tasks').addClass('hover');
+			},
+			out: function (e, ui)
+			{
+				ui.placeholder.closest('.col-tasks').removeClass('hover');
+			},
+			stop: function (e, ui)
+			{
+				$('.col-tasks.hover').removeClass('hover');
+			},
+			receive: function(e, ui)
+			{
+				var task_id = ui.item.attr('data-id');
+				var $col = ui.item.closest('.col-tasks');
+				var status_id_new = $col.attr('data-status-id');
 
-			$('.col-tasks').same_height();
-		} // receive
-	}).disableSelection();
+				ui.item.trigger('status_change', [status_id_new]);
+
+				$('.col-tasks').same_height();
+			} // receive
+		}).disableSelection();
+	}
+
 
 
 
@@ -373,23 +402,27 @@ jQuery(function($)
 
 
 
-	$('.col-tasks')
-	.on(
-		'mouseenter',
-		function()
-		{
-			var status_id = $(this).attr('data-status-id');
-			$('#status-{0}'.sprintf(status_id)).addClass('hover');
-		}
-	)
-	.on(
-		'mouseleave',
-		function()
-		{
-			var status_id = $(this).attr('data-status-id');
-			$('#status-{0}'.sprintf(status_id)).removeClass('hover');
-		}
-	);
+	if ( current_user_has_cap('write') )
+	{
+
+		$('.col-tasks')
+		.on(
+			'mouseenter',
+			function()
+			{
+				var status_id = $(this).attr('data-status-id');
+				$('#status-{0}'.sprintf(status_id)).addClass('hover');
+			}
+		)
+		.on(
+			'mouseleave',
+			function()
+			{
+				var status_id = $(this).attr('data-status-id');
+				$('#status-{0}'.sprintf(status_id)).removeClass('hover');
+			}
+		);
+	}
 
 
 

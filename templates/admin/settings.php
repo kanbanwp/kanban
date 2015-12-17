@@ -22,6 +22,15 @@
 		<a href="#tab-users" class="nav-tab"><?php echo __('Users', Kanban::get_text_domain() ) ?></a>
 		<a href="#tab-statuses" class="nav-tab"><?php echo __('Statuses', Kanban::get_text_domain() ) ?></a>
 		<a href="#tab-estimates" class="nav-tab"><?php echo __('Estimates', Kanban::get_text_domain() ) ?></a>
+		<?php
+		echo apply_filters(
+			sprintf(
+				'%s_settings_tabs',
+				Kanban::get_instance()->settings->basename
+			),
+			''
+		);
+		?>
 	</h2>
 
 
@@ -79,6 +88,17 @@
 							</fieldset>
 						</td>
 					</tr>
+
+					<?php
+					echo apply_filters(
+						sprintf(
+							'%s_settings_tab_users_content',
+							Kanban::get_instance()->settings->basename
+						),
+						''
+					);
+					?>
+
 				</tbody>
 			</table>
 
@@ -132,6 +152,18 @@
 					'submit'
 			) ?>
 		</div><!-- tab-estimates -->
+
+
+
+		<?php
+		echo apply_filters(
+			sprintf(
+				'%s_settings_tabs_content',
+				Kanban::get_instance()->settings->basename
+			),
+			''
+		);
+		?>
 
 
 

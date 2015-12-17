@@ -27,17 +27,8 @@ class Kanban_Admin extends Kanban_Db
 			add_filter('show_admin_bar', '__return_false');
 		}
 
-		add_filter(
-			sprintf('plugin_action_links_%s', Kanban::get_instance()->settings->plugin_basename),
-			array(__CLASS__, 'add_plugin_settings_link')
-		);
-
 		// add_action( 'admin_init', array(__CLASS__, 'admin_init') );
 		add_action( 'admin_menu', array(__CLASS__, 'admin_menu') );
-
-		add_action('init', array(__CLASS__, 'save_settings'));
-
-		add_action( 'admin_enqueue_scripts', array(__CLASS__, 'enqueue_js') );
 
 		add_action( 'admin_notices', array(__CLASS__, 'render_upgrade_notice') );
 	}
@@ -229,223 +220,11 @@ class Kanban_Admin extends Kanban_Db
 
 
 
-	static function save_settings ()
-	{
-		if (  !isset( $_POST[Kanban_Utils::get_nonce()] ) || ! wp_verify_nonce( $_POST[Kanban_Utils::get_nonce()], sprintf('%s-%s', Kanban::get_instance()->settings->basename, Kanban_Option::table_name())) || !is_user_logged_in() ) return;
-
-
-		$statuses = Kanban_Status::get_all();
-		$status_ids = array_keys($statuses);
-
-
-
-		// any statuses to delete?
-		if ( isset($_POST['statuses']['saved']) )
-		{
-			$deleted_statuses = array_diff_key($status_ids, array_keys($_POST['statuses']['saved']));
-
-			if ( !empty($deleted_statuses) )
-			{
-				foreach ($deleted_statuses as $key => $id)
-				{
-					Kanban_Status::delete(array('id' => $id));
-				}
-			}
-		}
-
-
-
-		// add new statuses first
-		if ( isset($_POST['statuses']['new']) )
-		{
-			foreach ($_POST['statuses']['new'] as $status)
-			{
-				// save it
-				$success = Kanban_Status::replace($status);
-
-				if ( $success )
-				{
-					Kanban_Status::insert_id();
-
-					// add it to all the statuses to save
-					$_POST['statuses']['saved'][$status_id] = $status;
-				}
-			}
-		}
-
-
-
-		// now save all statuses with positions
-		if ( isset($_POST['statuses']['saved']) )
-		{
-			foreach ($_POST['statuses']['saved'] as $status_id => $status)
-			{
-				$status['id'] = $status_id;
-
-				Kanban_Status::replace($status);
-			}
-		}
-
-
-
-		$estimates = Kanban_Estimate::get_all();
-		$estimate_ids = array_keys($estimates);
-
-
-
-		// any estimates to delete?
-		if ( isset($_POST['estimates']['saved']) )
-		{
-			$deleted_estimates = array_diff($estimate_ids, array_keys($_POST['estimates']['saved']));
-
-			if ( !empty($deleted_estimates) )
-			{
-				foreach ($deleted_estimates as $key => $id)
-				{
-					Kanban_Estimate::delete(array('id' => $id));
-				}
-			}
-		}
-
-
-
-		// add new estimates first
-		if ( isset($_POST['estimates']['new']) )
-		{
-			foreach ($_POST['estimates']['new'] as $estimate)
-			{
-				// save it
-				$success = Kanban_Estimate::replace($estimate);
-
-				if ( $success )
-				{
-					$estimate_id = Kanban_Estimate::insert_id();
-
-					// add it to all the estimates to save
-					$_POST['estimates']['saved'][$estimate_id] = $estimate;
-				}
-			}
-		}
-
-
-
-		// now save all estimates with positions
-		if ( isset($_POST['estimates']['saved']) )
-		{
-			foreach ($_POST['estimates']['saved'] as $estimate_id => $estimate)
-			{
-				$estimate['id'] = $estimate_id;
-
-				Kanban_Estimate::replace($estimate);
-			}
-		}
-
-
-
-		// get current settings
-		$settings = Kanban_Option::get_all_raw();
-		$settings = Kanban_Utils::build_array_with_id_keys($settings);
-
-
-
-		// save all single settings
-		foreach ($_POST['settings'] as $key => $value)
-		{
-			if ( is_array($value) )
-			{
-				$value = serialize($value);
-			}
-
-			$data = array(
-				'name' => $key,
-				'value' => $value
-			);
-
-			// see if it's already set
-			$id = Kanban_Utils::find_key_of_object_by_property ('name', $key, $settings);
-
-			if ( $id )
-			{
-				$data['id'] = $id;
-			}
-
-			Kanban_Option::_replace($data);
-		}
-
-
-
-		$url = add_query_arg(
-			array(
-				'message' => urlencode(__('Settings saved', Kanban::get_text_domain() ))
-			),
-			$_POST['_wp_http_referer']
-		);
-
-		wp_redirect($url);
-		exit;
-	}
-
-
-
 	static function welcome_page()
 	{
 		$template = Kanban_Template::find_template('admin/welcome');
 
 		include_once $template;
-	}
-
-
-
-	static function settings_page()
-	{
-		$settings = Kanban_Option::get_all();
-
-		$all_users = get_users();
-		$all_users_arr = array();
-		foreach ($all_users as $user)
-		{
-			$all_users_arr[$user->ID] = Kanban_User::format_user_name($user);
-		}
-
-		$statuses = Kanban_Status::get_all();
-		$statuses = Kanban_Utils::order_array_of_objects_by_property ($statuses, 'position');
-
-		$estimates = Kanban_Estimate::get_all();
-		$estimates = Kanban_Utils::order_array_of_objects_by_property ($estimates, 'position');
-
-		$template = Kanban_Template::find_template('admin/settings');
-
-		include_once $template;
-	}
-
-
-
-	static function enqueue_js($hook)
-	{
-		if ( !is_admin() || (isset($_GET['page']) && $_GET['page'] != sprintf('%s_settings', Kanban::get_instance()->settings->basename)) ) return;
-
-	    wp_enqueue_style( 'wp-color-picker' );
-
-		wp_enqueue_script(
-	    	'jquery-ui',
-	    	'//code.jquery.com/ui/1.11.4/jquery-ui.js',
-	    	array()
-	    );
-
-		wp_enqueue_script(
-	    	't',
-	    	sprintf('%s/js/t.min.js', Kanban::get_instance()->settings->uri),
-	    	array()
-	    );
-
-
-	    wp_enqueue_script(
-	    	sprintf('%s_settings', Kanban::get_instance()->settings->basename),
-	    	sprintf('%s/js/admin-settings.js', Kanban::get_instance()->settings->uri),
-	    	array( 'wp-color-picker' ),
-	    	false,
-	    	true
-	    );
 	}
 
 
@@ -483,49 +262,31 @@ class Kanban_Admin extends Kanban_Db
 			'Settings',
 			'manage_options',
 			sprintf('%s_settings', Kanban::get_instance()->settings->basename),
-			array(__CLASS__, 'settings_page')
+			array('Kanban_Option', 'settings_page')
 		);
 
 	} // admin_menu
 
 
 
-
-	// public static function parent_file( $parent_file )
-	// {
-	// 	// global $submenu_file;
-
-	// 	// $current_screen = get_current_screen();
-
-	// 	// // Set the submenu as active/current while anywhere in your Custom Post Type (nwcm_news)
-	// 	// if ( Kanban_Post_Types::format_post_type ('task') === $current_screen->post_type ) {
-
-	// 	// 	if ( Kanban_Utils::format_key('task', 'status') === $current_screen->taxonomy ) {
-	// 	// 		$submenu_file = self::get_submenu_file( 'task', 'status' );
-	// 	// 	}
-	// 	// 	if ( Kanban_Utils::format_key('task', 'estimate') === $current_screen->taxonomy ) {
-	// 	// 		$submenu_file = self::get_submenu_file( 'task', 'estimate' );
-	// 	// 	}
-
-	// 	// 	$parent_file = Kanban::get_instance()->settings->basename;
-
-	// 	// }
-
-	// 	return $parent_file;
-	// }
-
-
-
-
-	static function db_table ()
+	static function add_plugin_settings_link( $links )
 	{
-		return "CREATE TABLE " . self::table_name() . " (
-					id bigint(20) NOT NULL AUTO_INCREMENT,
-					name varchar(64) NOT NULL,
-					value longtext NOT NULL,
-					PRIMARY KEY  (id)
-				)";
-	} // db_table
+		$url = admin_url(
+			sprintf(
+				'admin.php?page=%s',
+				sprintf(
+					'%s_settings',
+					Kanban::get_instance()->settings->basename
+				)
+			)
+		);
+
+		$mylinks = array(
+			sprintf('<a href="%s">Settings</a>', $url)
+		);
+
+		return array_merge( $links, $mylinks );
+	}
 
 
 
@@ -576,25 +337,6 @@ class Kanban_Admin extends Kanban_Db
 	}
 
 
-
-	static function add_plugin_settings_link( $links )
-	{
-		$url = admin_url(
-			sprintf(
-				'admin.php?page=%s',
-				sprintf(
-					'%s_settings',
-					Kanban::get_instance()->settings->basename
-				)
-			)
-		);
-
-		$mylinks = array(
-			sprintf('<a href="%s">Settings</a>', $url)
-		);
-
-		return array_merge( $links, $mylinks );
-	}
 }
 
 

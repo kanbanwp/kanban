@@ -10,6 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 Kanban_Task::init();
 
 
+
 class Kanban_Task extends Kanban_Db
 {
 	private static $instance;
@@ -25,6 +26,7 @@ class Kanban_Task extends Kanban_Db
 		'status_id' => 'int',
 		'project_id' => 'int',
 		'estimate_id' => 'int',
+		'board_id' => 'int',
 		'is_active' => 'bool'
 	);
 
@@ -32,7 +34,6 @@ class Kanban_Task extends Kanban_Db
 
 	static function init()
 	{
-		// add_action( 'wp', array(__CLASS__, 'post_save') );
 		add_action( sprintf('wp_ajax_save_%s', self::$slug), array(__CLASS__, 'ajax_save') );
 		add_action( sprintf('wp_ajax_delete_%s', self::$slug), array(__CLASS__, 'ajax_delete') );
 	}
@@ -74,7 +75,7 @@ class Kanban_Task extends Kanban_Db
 
 
 
-		$_POST['task']['modified_dt_gmt'] = gmdate('Y-m-d H:i:s');
+		$_POST['task']['modified_dt_gmt'] = Kanban_Utils::mysql_now_gmt();
 
 
 
@@ -245,13 +246,13 @@ class Kanban_Task extends Kanban_Db
 					status_id bigint(20) NOT NULL,
 					project_id bigint(20) NOT NULL,
 					estimate_id bigint(20) NOT NULL,
+					board_id bigint(20) NOT NULL,
 					is_active BOOLEAN NOT NULL DEFAULT TRUE,
-					PRIMARY KEY  (id),
-					KEY is_active (is_active)
+					UNIQUE KEY  (id),
+					KEY is_active (is_active),
+					KEY board_id (board_id)
 				)";
 	} // db_table
-
-
 
 
 

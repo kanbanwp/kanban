@@ -58,7 +58,7 @@ class Kanban_Task_Hour extends Kanban_Db
 		try
 		{
 			$operator = substr($_POST['operator'], 0, 1) == '-' ? '-' : '+';
-			$val = sprintf('%s%s', $operator, floatval($_POST['operator']));
+			$val = sprintf('%s%s', $operator, abs(floatval($_POST['operator'])));
 		}
 		catch (Exception $e)
 		{
@@ -75,7 +75,7 @@ class Kanban_Task_Hour extends Kanban_Db
 
 		$data = array(
 			'task_id' => $_POST['task']['id'],
-			'worked_dt_gmt' => gmdate('Y-m-d H:i:s'),
+			'worked_dt_gmt' => Kanban_Utils::mysql_now_gmt(),
 			'hours' => $hours,
 			'status_is' => $_POST['task']['status_id'],
 			'user_id_author' => $user_id_author,
@@ -123,7 +123,7 @@ class Kanban_Task_Hour extends Kanban_Db
 					status_id bigint(20) NOT NULL,
 					user_id_author bigint(20) NOT NULL,
 					user_id_worked bigint(20) NOT NULL,
-					PRIMARY KEY  (id)
+					UNIQUE KEY  (id)
 				)";
 	} // db_table
 

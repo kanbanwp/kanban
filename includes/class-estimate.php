@@ -18,6 +18,7 @@ class Kanban_Estimate extends Kanban_Db
 	protected static $table_columns = array(
 		'title' => 'text',
 		'hours' => 'float',
+		'board_id' => 'int',
 		'position' => 'int'
 	);
 
@@ -81,7 +82,9 @@ class Kanban_Estimate extends Kanban_Db
 					title varchar(64) NOT NULL,
 					hours decimal(6,4) NOT NULL,
 					position bigint(20) NOT NULL,
-					PRIMARY KEY  (id)
+					board_id bigint(20) NOT NULL,
+					UNIQUE KEY  (id),
+					KEY board_id (board_id)
 				)";
 	} // db_table
 

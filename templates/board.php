@@ -122,13 +122,30 @@
 <script type="text/javascript">
 var ajaxurl = '<?php echo admin_url('admin-ajax.php'); ?>';
 
-var settings = <?php echo json_encode($wp_query->query_vars['kanban']->board->settings) ?>;
-var status_records = <?php echo json_encode($wp_query->query_vars['kanban']->board->statuses) ?>;
-var task_records = <?php echo json_encode($wp_query->query_vars['kanban']->board->tasks) ?>;
-var project_records = <?php echo json_encode($wp_query->query_vars['kanban']->board->projects) ?>;
-var allowed_users = <?php echo json_encode($wp_query->query_vars['kanban']->board->allowed_users) ?>;
-var estimate_records = <?php echo json_encode($wp_query->query_vars['kanban']->board->estimates) ?>;
-var current_user = <?php echo json_encode($wp_query->query_vars['kanban']->board->current_user->data) ?>;
+var board = {
+	settings: function ()
+	{
+		return <?php echo json_encode($wp_query->query_vars['kanban']->board->settings) ?>;
+	},
+	status_records: function ()
+	{
+		return <?php echo json_encode($wp_query->query_vars['kanban']->board->statuses) ?>;
+	},
+	task_records: <?php echo json_encode($wp_query->query_vars['kanban']->board->tasks) ?>,
+	project_records: <?php echo json_encode($wp_query->query_vars['kanban']->board->projects) ?>,
+	allowed_users: function ()
+	{
+		return <?php echo json_encode($wp_query->query_vars['kanban']->board->allowed_users) ?>;
+	},
+	estimate_records: function ()
+	{
+		return <?php echo json_encode($wp_query->query_vars['kanban']->board->estimates) ?>;
+	},
+	current_user: function ()
+	{
+		return <?php echo json_encode($wp_query->query_vars['kanban']->board->current_user) ?>;
+	}
+};
 
 var col_percent_w = <?php echo $wp_query->query_vars['kanban']->board->col_percent_w ?>;
 var sidebar_w = <?php echo $wp_query->query_vars['kanban']->board->sidebar_w ?>;

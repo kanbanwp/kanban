@@ -37,7 +37,11 @@ class Kanban_Template
 				'board' => "%s/js/board.min.js"
 			)
 		),
-		'login' => array()
+		'login' => array(
+			'style' => array(
+				'login' => "%s/css/login.css"
+			)		
+		)
 	);
 
 

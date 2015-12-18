@@ -45,9 +45,6 @@ class Kanban_Flash
 		Kanban::get_instance()->flash->msgTypes = array( 'default', 'info', 'warning', 'success', 'danger' );
 		Kanban::get_instance()->flash->msgClass = 'alert alert-';
 		Kanban::get_instance()->flash->msgWrapper = '<div class="%s%s alert-dismissible">
-								<button type="button" class="close" data-dismiss="alert">
-								<span aria-hidden="true">&times;</span>
-								</button>
 								%s
 								</div>'
 								. "\n";

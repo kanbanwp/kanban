@@ -11,35 +11,66 @@
 	}
 
 	class FS_Plugin_License extends FS_Entity {
+
+		#region Properties
+
+		/**
+		 * @var number
+		 */
+		public $plugin_id;
+		/**
+		 * @var number
+		 */
+		public $user_id;
+		/**
+		 * @var number
+		 */
 		public $plan_id;
-		public $activated;
-		public $activated_local;
+		/**
+		 * @var number
+		 */
+		public $pricing_id;
+		/**
+		 * @var int
+		 */
 		public $quota;
+		/**
+		 * @var int
+		 */
+		public $activated;
+		/**
+		 * @var int
+		 */
+		public $activated_local;
+		/**
+		 * @var string
+		 */
 		public $expiration;
+		/**
+		 * @var bool $is_free_localhost Defaults to true. If true, allow unlimited localhost installs with the same
+		 *      license.
+		 */
 		public $is_free_localhost;
+		/**
+		 * @var bool $is_block_features Defaults to true. If false, don't block features after license expiry - only
+		 *      block updates and support.
+		 */
 		public $is_block_features;
+		/**
+		 * @var bool
+		 */
+		public $is_cancelled;
+
+		#endregion Properties
 
 		/**
 		 * @param stdClass|bool $license
 		 */
 		function __construct( $license = false ) {
-			if ( ! ( $license instanceof stdClass ) ) {
-				return;
-			}
-
 			parent::__construct( $license );
-
-			$this->plan_id           = $license->plan_id;
-			$this->activated         = $license->activated;
-			$this->activated_local   = $license->activated_local;
-			$this->quota             = $license->quota;
-			$this->expiration        = $license->expiration;
-			$this->is_free_localhost = $license->is_free_localhost;
-			$this->is_block_features = $license->is_block_features;
 		}
 
-		static function get_type()
-		{
+		static function get_type() {
 			return 'license';
 		}
 
@@ -51,12 +82,12 @@
 		 *
 		 * @return int
 		 */
-		function left()
-		{
-			if ($this->is_expired())
+		function left() {
+			if ( $this->is_expired() ) {
 				return 0;
+			}
 
-			return ($this->quota - $this->activated - ($this->is_free_localhost ? 0 : $this->activated_local));
+			return ( $this->quota - $this->activated - ( $this->is_free_localhost ? 0 : $this->activated_local ) );
 		}
 
 		/**
@@ -65,9 +96,8 @@
 		 *
 		 * @return bool
 		 */
-		function is_expired()
-		{
-			return !$this->is_lifetime() && (strtotime($this->expiration) < WP_FS__SCRIPT_START_TIME);
+		function is_expired() {
+			return ! $this->is_lifetime() && ( strtotime( $this->expiration ) < WP_FS__SCRIPT_START_TIME );
 		}
 
 		/**
@@ -76,9 +106,8 @@
 		 *
 		 * @return bool
 		 */
-		function is_lifetime()
-		{
-			return is_null($this->expiration);
+		function is_lifetime() {
+			return is_null( $this->expiration );
 		}
 
 		/**
@@ -91,13 +120,13 @@
 		 *
 		 * @return bool
 		 */
-		function is_utilized($is_localhost = null)
-		{
-			if (is_null($is_localhost))
+		function is_utilized( $is_localhost = null ) {
+			if ( is_null( $is_localhost ) ) {
 				$is_localhost = WP_FS__IS_LOCALHOST_FOR_SERVER;
+			}
 
-			return !($this->is_free_localhost && $is_localhost) &&
-			       ($this->quota <= $this->activated + ($this->is_free_localhost ? 0 : $this->activated_local));
+			return ! ( $this->is_free_localhost && $is_localhost ) &&
+			       ( $this->quota <= $this->activated + ( $this->is_free_localhost ? 0 : $this->activated_local ) );
 		}
 
 		/**
@@ -111,9 +140,8 @@
 		 *
 		 * @return bool
 		 */
-		function is_features_enabled()
-		{
-			return (!$this->is_block_features || !$this->is_expired());
+		function is_features_enabled() {
+			return ( ! $this->is_block_features || ! $this->is_expired() );
 		}
 
 		/**
@@ -126,8 +154,7 @@
 		 *
 		 * @return bool
 		 */
-		function is_first_payment_pending()
-		{
-			return ( WP_FS__TIME_24_HOURS_IN_SEC >= strtotime($this->expiration) - strtotime($this->created));
+		function is_first_payment_pending() {
+			return ( WP_FS__TIME_24_HOURS_IN_SEC >= strtotime( $this->expiration ) - strtotime( $this->created ) );
 		}
 	}

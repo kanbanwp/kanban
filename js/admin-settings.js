@@ -1,52 +1,184 @@
 jQuery(function($)
 {
-	// @link http://www.foliotek.com/devblog/make-table-rows-sortable-using-jquery-ui-sortable/
-	var fixHelper = function(e, ui) {
-		ui.children().each(function() {
-			$(this).width($(this).width());
+	function toggle_tabs (tab_id)
+	{
+		$('.nav-tab[href=' + tab_id + ']').addClass('nav-tab-active');
+		$('.nav-tab').not('[href=' + tab_id + ']').removeClass('nav-tab-active');
+		$('.tab').not(tab_id).hide();
+		$(tab_id).show();
+	}
+
+	function set_positions ()
+	{
+		$('.sortable').each(function()
+		{
+			$('li', this).each(function(i)
+			{
+				$('.position', this).val(i);
+			});
 		});
-		return ui;
-	};
 
-	$('.group[id$="_order"]').addClass('group-order');
+	}
 
-	$('.group[id$="_order"] tbody').sortable({
+	$('.nav-tab-wrapper a').on(
+		'click',
+		function()
+		{
+			var $a = $(this);
+			var tab_id = $a.attr('href');
+
+			toggle_tabs(tab_id);
+
+			return false;
+		}
+	);
+
+	if ( typeof window.location.hash !== 'undefined' )
+	{
+		if ( window.location.hash != '' )
+		{
+			toggle_tabs(window.location.hash);
+		}
+	}
+
+
+
+	$('.color-picker').wpColorPicker();
+
+
+
+	var t_status = new t($('#t-status').html());
+
+	$('#add-status').on(
+		'click',
+		function()
+		{
+			// get count of new statuses
+			var new_count = $('#list-statuses li.new').length;
+
+			// render the new status
+			var html = t_status.render();
+
+			// add the status count
+			html = html.replace(/\[count\]/g, '[' + new_count + ']');
+
+			// append it
+			var $html = $(html).addClass('new').appendTo('#list-statuses');
+
+			// replace the names
+			$('[data-name]', $html).each(function()
+			{
+				$(this).attr('name', $(this).attr('data-name') );
+			});
+
+			// activate color pickers
+			$('.color-picker', $html).wpColorPicker();
+
+			set_positions();
+		}
+	);
+
+	$('#list-statuses').on(
+		'click',
+		'.delete',
+		function()
+		{
+			$(this)
+			.closest('li')
+			.slideUp(
+				'fast',
+				function()
+				{
+					$(this).remove();
+				}
+			);
+		}
+	);
+
+
+
+	var t_estimate = new t($('#t-estimate').html());
+
+	$('#add-estimate').on(
+		'click',
+		function()
+		{
+			// get count of new estimates
+			var new_count = $('#list-estimates li.new').length;
+
+			// render the new estimate
+			var html = t_estimate.render();
+
+			// add the estimate count
+			html = html.replace(/\[count\]/g, '[' + new_count + ']');
+
+			// append it
+			var $html = $(html).addClass('new').appendTo('#list-estimates');
+
+			// replace the names
+			$('[data-name]', $html).each(function()
+			{
+				$(this).attr('name', $(this).attr('data-name') );
+			});
+
+			// activate color pickers
+			$('.color-picker', $html).wpColorPicker();
+
+			set_positions();
+		}
+	);
+
+	$('#list-estimates').on(
+		'click',
+		'.delete',
+		function()
+		{
+			$(this)
+			.closest('li')
+			.slideUp(
+				'fast',
+				function()
+				{
+					$(this).remove();
+				}
+			);
+		}
+	);
+
+
+
+
+	$('.sortable').sortable({
 		// forceHelperSize: true,
-		helper: fixHelper,
+		helper: 'clone', // fixHelper,
+		items: 'li',
+		handle: '.handle',
 		stop: function( event, ui )
 		{
-			var $container = ui.item.closest('.group-order');
-			$('tr', $container).each(function(i)
-			{
-				var $tr = $(this);
-				var $count = $('.count', $tr);
-				$count.text(i+1);
-				var $input = $('input', $tr);
-				$input.val(i);
-			});
+			set_positions ();
 		}
 	}).disableSelection();
 
 
-	$('.group-order').each(function()
-	{
-		$('tr', this).each(function(i)
-		{
-			var $tr = $(this);
-			var $th = $('th', $tr);
-			var $input = $('input', $tr);
-			var val;
-			if ( $input.val() !== '' )
-			{
-				val = parseInt($('input', $tr).val());
-			}
-			else
-			{
-				val = i;
-				$input.val(i);
-			}
+	// $('.group-order').each(function()
+	// {
+	// 	$('tr', this).each(function(i)
+	// 	{
+	// 		var $tr = $(this);
+	// 		var $th = $('th', $tr);
+	// 		var $input = $('input', $tr);
+	// 		var val;
+	// 		if ( $input.val() !== '' )
+	// 		{
+	// 			val = parseInt($('input', $tr).val());
+	// 		}
+	// 		else
+	// 		{
+	// 			val = i;
+	// 			$input.val(i);
+	// 		}
 
-			$('<span class="count"/>').text(val+1).appendTo($th);
-		}); // tr
-	}); // group-order
+	// 		$('<span class="count"/>').text(val+1).appendTo($th);
+	// 	}); // tr
+	// }); // group-order
 });

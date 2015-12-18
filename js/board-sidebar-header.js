@@ -107,9 +107,11 @@ $.fn.board_sidebar_header = function()
 				var $btn = $(this);
 				$('.glyphicon', $btn).toggle();
 
-				var task_data = {task: ['']};
+				var task_data = {
+					task: {'status_id': status_id},
+					comment: 'Task added by {0}'.sprintf(board.current_user().short_name)
+				};
 				task_data.action = 'save_task';
-				task_data.post_type = 'kanban_task';
 				task_data.kanban_nonce = $('#kanban_nonce').val();
 
 				$.ajax({
@@ -124,21 +126,9 @@ $.fn.board_sidebar_header = function()
 					// just in case
 					try
 					{
-						response.data.task.terms.kanban_task_status[0] = status_id;
-						$task = add_task_to_status_col(response.data.task, status_id);
-
-						// send again, cos we skip the first save
-						$task.trigger('save', [response.data.task]);
+						$task = add_task_to_status_col(response.data.task);
 
 						$('.task_title', $task).trigger('click').focus();
-
-						$task.trigger(
-							'add_comment',
-							[
-								'{0} added the task'
-								.sprintf(current_user.short_name)
-							]
-						);
 					}
 					catch (err) {}
 
@@ -194,7 +184,13 @@ $.fn.board_sidebar_header = function()
 				var next_status_id = $sidebar_next.attr('data-id');
 				$sidebar_next.show();
 				$('#status-{0}-tasks'.sprintf(next_status_id)).show();
-
+				$('textarea.resize').autoresize({
+					onResize: function()
+					{
+						$(this).addClass('autoresize');
+					}
+				})
+				.trigger('keydown');
 			}
 		);
 

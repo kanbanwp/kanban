@@ -15,7 +15,7 @@
 	 *  fs_after_license_loaded
 	 */
 
-	if (!class_exists('Freemius')) {
+	if ( ! class_exists( 'Freemius' ) ) {
 
 		// Configuration should be loaded first.
 		require_once dirname( __FILE__ ) . '/config.php';
@@ -27,6 +27,7 @@
 //		require_once WP_FS__DIR_INCLUDES . '/managers/class-fs-abstract-manager.php';
 		require_once WP_FS__DIR_INCLUDES . '/managers/class-fs-option-manager.php';
 		require_once WP_FS__DIR_INCLUDES . '/managers/class-fs-admin-notice-manager.php';
+		require_once WP_FS__DIR_INCLUDES . '/managers/class-fs-admin-menu-manager.php';
 		require_once WP_FS__DIR_INCLUDES . '/managers/class-fs-key-value-storage.php';
 		require_once WP_FS__DIR_INCLUDES . '/managers/class-fs-license-manager.php';
 		require_once WP_FS__DIR_INCLUDES . '/managers/class-fs-plan-manager.php';
@@ -55,7 +56,7 @@
 		 *
 		 * @return Freemius
 		 */
-		function fs( $slug ) {
+		function freemius( $slug ) {
 			return Freemius::instance( $slug );
 		}
 

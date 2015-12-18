@@ -12,15 +12,16 @@ $.fn.board_filter = function(task)
     	var $users_dropdown = $('#filter-users-dropdown', $wrapper);
 
 
+
     	$('#filter-projects', $wrapper).on(
     		'show.bs.dropdown',
     		function()
     		{
     			$('.project', $projects_dropdown).remove();
 
-				for ( var i in project_records )
+				for ( var i in board.project_records )
 				{
-					var $project = $(t_filter_project.render(project_records[i]));
+					var $project = $(t_filter_project.render(board.project_records[i]));
 					$project.prependTo($projects_dropdown);
 				}
 
@@ -37,13 +38,13 @@ $.fn.board_filter = function(task)
 				var $a = $(this);
 				var project_id = $a.attr('data-id');
 
-				var project = project_records[project_id];
+				var project = board.project_records[project_id];
 
 				// if not found
 				if ( typeof project === 'undefined' )
 				{
 					project = {
-						post_title: $a.text()
+						title: $a.text()
 					};
 				}
 
@@ -56,7 +57,7 @@ $.fn.board_filter = function(task)
 				}
 
 				$label
-				.text(project.post_title)
+				.text(project.title)
 				.attr('data-id', project_id);
 
 				$('#btn-filter-apply', $wrapper).trigger('click');
@@ -73,9 +74,16 @@ $.fn.board_filter = function(task)
     		{
     			$('.user', $users_dropdown).remove();
 
-				for ( var i in allowed_users )
+				for ( var i in board.allowed_users() )
 				{
-					var $user = $(t_filter_user.render(allowed_users[i]));
+					var user = board.allowed_users()[i];
+
+					if ( !current_user_has_cap('write') )
+					{
+						continue;
+					}
+
+					var $user = $(t_filter_user.render(user));
 					$user.prependTo($users_dropdown);
 				}
     		}
@@ -90,15 +98,13 @@ $.fn.board_filter = function(task)
 			{
 				var $a = $(this);
 				var user_id = $a.attr('data-id');
-				var user = allowed_users[user_id];
+				var user = board.allowed_users()[user_id];
 
 				// if not found
 				if ( typeof user === 'undefined' )
 				{
 					user = {
-						data: {
-							long_name_email: $a.text()
-						}
+						long_name_email: $a.text()
 					};
 				}
 

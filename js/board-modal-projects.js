@@ -13,22 +13,18 @@ $.fn.modal_projects = function()
 			{
 				$('#accordion-projects').empty();
 
-				for ( var i in project_records )
+				for ( var i in board.project_records )
 				{
-					var project = project_records[i];
+					var project = board.project_records[i];
 
 					project['task_count'] = 0;
 
-					for ( var j in task_records )
+					for ( var j in board.task_records )
 					{
-						try
+						if ( board.task_records[j].project_id == project.id )
 						{
-							if ( task_records[j].postmeta.kanban_task_project_id == project.ID )
-							{
-								project['task_count']++;
-							}
+							project['task_count']++;
 						}
-						catch (err) {}
 					}
 
 					var $project = $(t_modal_projects_panel.render(project));
@@ -49,7 +45,7 @@ $.fn.modal_projects = function()
 				var $panel = $btn.closest('.panel');
 				var project_id = $panel.attr('data-id');
 
-				var data = JSON.parse(JSON.stringify(project_records[project_id]));
+				var data = JSON.parse(JSON.stringify(board.project_records[project_id]));
 				data.action = 'delete_project';
 				data.kanban_nonce = $('#kanban_nonce').val();
 
@@ -64,12 +60,12 @@ $.fn.modal_projects = function()
 					delete project_records[project_id];
 
 					// remove project from tasks
-					for ( var i in task_records )
+					for ( var i in board.task_records )
 					{
-						if ( task_records[i].postmeta.kanban_task_project_id == project_id )
+						if ( board.task_records[i].project_id == project_id )
 						{
-							task_records[i].postmeta.kanban_task_project_id = 0;
-							$('#task-' + task_records[i].ID)
+							task_records[i].project_id = 0;
+							$('#task-' + board.task_records[i].ID)
 							.trigger('save')
 							.trigger('populate_project');
 						}
@@ -136,33 +132,34 @@ $.fn.modal_projects = function()
 				var $input = $(this);
 
 				var post_title = $input.val();
+
 				var $panel = $input.closest('.panel');
 				var project_id = $panel.attr('data-id');
 
-				project_records[project_id].post_title = post_title;
+				board.project_records[project_id].title = post_title;
 
-				var data = JSON.parse(JSON.stringify(project_records[project_id]));
-				data.action = 'save_project';
-				data.kanban_nonce = $('#kanban_nonce').val();
+				var project_data = {project: board.project_records[project_id]};
+				project_data.action = 'save_project';
+				project_data.kanban_nonce = $('#kanban_nonce').val();
 
 				$.ajax({
 					method: "POST",
 					url: ajaxurl,
-					data: data
+					data: project_data
 				})
 				.done(function(response )
 				{
 					// update task projects
-					for ( var i in task_records )
+					for ( var i in board.task_records )
 					{
-						$('#task-' + task_records[i].ID).trigger('populate_project');
+						$('#task-' + board.task_records[i].id).trigger('populate_project');
 					}
 
-					var project = project_records[project_id];
+					var project = board.project_records[project_id];
 					var $project = $(t_modal_projects_panel.render(project));
 					$panel.replaceWith($project);
 					$('.collapse', $project).addClass('in');
-					$('.project_title', $project).focus();
+					// $('.project_title', $project).focus();
 
 				})
 				// .fail(function() {

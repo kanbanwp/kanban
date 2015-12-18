@@ -15,12 +15,13 @@
 	 * under the License.
 	 */
 
-	define('FS_API__VERSION', '1');
-	define('FS_SDK__PATH', dirname(__FILE__));
-	define('FS_SDK__EXCEPTIONS_PATH', FS_SDK__PATH . '/Exceptions/');
+	define( 'FS_API__VERSION', '1' );
+	define( 'FS_SDK__PATH', dirname( __FILE__ ) );
+	define( 'FS_SDK__EXCEPTIONS_PATH', FS_SDK__PATH . '/Exceptions/' );
 
-	if (!function_exists('json_decode'))
-		throw new Exception('Freemius needs the JSON PHP extension.');
+	if ( ! function_exists( 'json_decode' ) ) {
+		throw new Exception( 'Freemius needs the JSON PHP extension.' );
+	}
 
 	// Include all exception files.
 	$exceptions = array(
@@ -31,11 +32,11 @@
 		'OAuthException'
 	);
 
-	foreach ($exceptions as $e)
+	foreach ( $exceptions as $e ) {
 		require FS_SDK__EXCEPTIONS_PATH . $e . '.php';
+	}
 
-	abstract class Freemius_Api_Base
-	{
+	abstract class Freemius_Api_Base {
 		const VERSION = '1.0.4';
 		const FORMAT = 'json';
 
@@ -46,44 +47,42 @@
 		protected $_sandbox;
 
 		/**
-		 * @param string $pScope 'app', 'developer', 'user' or 'install'.
-		 * @param number $pID Element's id.
-		 * @param string $pPublic Public key.
-		 * @param string $pSecret Element's secret key.
-		 * @param bool $pSandbox Whether or not to run API in sandbox mode.
+		 * @param string $pScope   'app', 'developer', 'user' or 'install'.
+		 * @param number $pID      Element's id.
+		 * @param string $pPublic  Public key.
+		 * @param string $pSecret  Element's secret key.
+		 * @param bool   $pSandbox Whether or not to run API in sandbox mode.
 		 */
-		public function Init($pScope, $pID, $pPublic, $pSecret, $pSandbox = false)
-		{
-			$this->_id = $pID;
-			$this->_public = $pPublic;
-			$this->_secret = $pSecret;
-			$this->_scope = $pScope;
+		public function Init( $pScope, $pID, $pPublic, $pSecret, $pSandbox = false ) {
+			$this->_id      = $pID;
+			$this->_public  = $pPublic;
+			$this->_secret  = $pSecret;
+			$this->_scope   = $pScope;
 			$this->_sandbox = $pSandbox;
 		}
 
-		public function IsSandbox()
-		{
+		public function IsSandbox() {
 			return $this->_sandbox;
 		}
 
-		function CanonizePath($pPath)
-		{
-			$pPath = trim($pPath, '/');
-			$query_pos = strpos($pPath, '?');
-			$query = '';
+		function CanonizePath( $pPath ) {
+			$pPath     = trim( $pPath, '/' );
+			$query_pos = strpos( $pPath, '?' );
+			$query     = '';
 
-			if (false !== $query_pos) {
-				$query = substr($pPath, $query_pos);
-				$pPath = substr($pPath, 0, $query_pos);
+			if ( false !== $query_pos ) {
+				$query = substr( $pPath, $query_pos );
+				$pPath = substr( $pPath, 0, $query_pos );
 			}
 
 			// Trim '.json' suffix.
-			$format_length = strlen('.' . self::FORMAT);
-			$start = $format_length * (-1); //negative
-			if (substr(strtolower($pPath), $start) === ('.' . self::FORMAT))
-				$pPath = substr($pPath, 0, strlen($pPath) - $format_length);
+			$format_length = strlen( '.' . self::FORMAT );
+			$start         = $format_length * ( - 1 ); //negative
+			if ( substr( strtolower( $pPath ), $start ) === ( '.' . self::FORMAT ) ) {
+				$pPath = substr( $pPath, 0, strlen( $pPath ) - $format_length );
+			}
 
-			switch ($this->_scope) {
+			switch ( $this->_scope ) {
 				case 'app':
 					$base = '/apps/' . $this->_id;
 					break;
@@ -100,87 +99,61 @@
 					$base = '/installs/' . $this->_id;
 					break;
 				default:
-					throw new Freemius_Exception('Scope not implemented.');
+					throw new Freemius_Exception( 'Scope not implemented.' );
 			}
 
 			return '/v' . FS_API__VERSION . $base .
-			       (!empty($pPath) ? '/' : '') . $pPath .
-			       ((false === strpos($pPath, '.')) ? '.' . self::FORMAT : '') . $query;
+			       ( ! empty( $pPath ) ? '/' : '' ) . $pPath .
+			       ( ( false === strpos( $pPath, '.' ) ) ? '.' . self::FORMAT : '' ) . $query;
 		}
 
-		abstract function MakeRequest($pCanonizedPath, $pMethod = 'GET', $pParams = array());
+		abstract function MakeRequest( $pCanonizedPath, $pMethod = 'GET', $pParams = array() );
 
 		/**
 		 * @param string $pPath
 		 * @param string $pMethod
 		 * @param array  $pParams
 		 *
-		 * @return array|object|null
+		 * @return object[]|object|null
 		 */
-		private function _Api($pPath, $pMethod = 'GET', $pParams = array())
-		{
-			$pMethod = strtoupper($pMethod);
+		private function _Api( $pPath, $pMethod = 'GET', $pParams = array() ) {
+			$pMethod = strtoupper( $pMethod );
 
 			try {
-				$result = $this->MakeRequest($pPath, $pMethod, $pParams);
-			}
-			catch (Freemius_Exception $e)
-			{
+				$result = $this->MakeRequest( $pPath, $pMethod, $pParams );
+			} catch ( Freemius_Exception $e ) {
 				// Map to error object.
-				$result = json_encode($e->getResult());
-			} catch (Exception $e) {
+				$result = (object) $e->getResult();
+			} catch ( Exception $e ) {
 				// Map to error object.
-				$result = json_encode(array(
+				$result = (object) array(
 					'error' => array(
 						'type'    => 'Unknown',
 						'message' => $e->getMessage() . ' (' . $e->getFile() . ': ' . $e->getLine() . ')',
 						'code'    => 'unknown',
 						'http'    => 402
 					)
-				));
+				);
 			}
 
-			if (empty($result))
-				return null;
-
-			$decoded = json_decode($result);
-
-			if (is_null($decoded)) {
-				if (preg_match('/Please turn JavaScript on/i', $result) &&
-				    preg_match('/text\/javascript/', $result)
-				) {
-					$decoded = (object) array(
-						'error' => (object) array(
-							'type'    => 'CloudFlareDDoSProtection',
-							'message' => $result,
-							'code'    => 'cloudflare_ddos_protection',
-							'http'    => 402
-						)
-					);
-				}
-				else {
-					$decoded = (object) array(
-						'error' => (object) array(
-							'type'    => 'Unknown',
-							'message' => $result,
-							'code'    => 'unknown',
-							'http'    => 402
-						)
-					);
-				}
-			}
-
-			return $decoded;
+			return $result;
 		}
 
 		/**
-		 * @return bool True if successful connectivity to the API endpoint using ping.json endpoint.
+		 * If successful connectivity to the API endpoint using ping.json endpoint.
+		 *
+		 *      - OR -
+		 *
+		 * Validate if ping result object is valid.
+		 *
+		 * @param mixed $pPong
+		 *
+		 * @return bool
 		 */
-		public function Test()
-		{
-			$pong = $this->Ping();
+		public function Test( $pPong = null ) {
+			$pong = is_null( $pPong ) ? $this->Ping() : $pPong;
 
-			return (is_object($pong) && isset($pong->api) && 'pong' === $pong->api);
+			return ( is_object( $pong ) && isset( $pong->api ) && 'pong' === $pong->api );
 		}
 
 		/**
@@ -188,9 +161,8 @@
 		 *
 		 * @return object
 		 */
-		public function Ping()
-		{
-			return $this->_Api('/v' . FS_API__VERSION . '/ping.json');
+		public function Ping() {
+			return $this->_Api( '/v' . FS_API__VERSION . '/ping.json' );
 		}
 
 		/**
@@ -199,16 +171,15 @@
 		 * @since 1.0.2
 		 * @return int Clock diff in seconds.
 		 */
-		public function FindClockDiff()
-		{
+		public function FindClockDiff() {
 			$time = time();
-			$pong = $this->_Api('/v' . FS_API__VERSION . '/ping.json');
-			return ($time - strtotime($pong->timestamp));
+			$pong = $this->_Api( '/v' . FS_API__VERSION . '/ping.json' );
+
+			return ( $time - strtotime( $pong->timestamp ) );
 		}
 
-		public function Api($pPath, $pMethod = 'GET', $pParams = array())
-		{
-			return $this->_Api($this->CanonizePath($pPath), $pMethod, $pParams);
+		public function Api( $pPath, $pMethod = 'GET', $pParams = array() ) {
+			return $this->_Api( $this->CanonizePath( $pPath ), $pMethod, $pParams );
 		}
 
 		/**
@@ -219,11 +190,11 @@
 		 *   No padded =
 		 *
 		 * @param string $input base64UrlEncoded string
+		 *
 		 * @return string
 		 */
-		protected static function Base64UrlDecode($input)
-		{
-			return base64_decode(strtr($input, '-_', '+/'));
+		protected static function Base64UrlDecode( $input ) {
+			return base64_decode( strtr( $input, '-_', '+/' ) );
 		}
 
 		/**
@@ -233,12 +204,12 @@
 		 *   _ instead of /
 		 *
 		 * @param string $input string
+		 *
 		 * @return string base64Url encoded string
 		 */
-		protected static function Base64UrlEncode($input)
-		{
-			$str = strtr(base64_encode($input), '+/', '-_');
-			$str = str_replace('=', '', $str);
+		protected static function Base64UrlEncode( $input ) {
+			$str = strtr( base64_encode( $input ), '+/', '-_' );
+			$str = str_replace( '=', '', $str );
 
 			return $str;
 		}

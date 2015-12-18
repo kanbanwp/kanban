@@ -10,15 +10,16 @@ var t_col_tasks = new t($('#t-col-tasks').html());
 var t_card = new t($('#t-card').html());
 var t_card_project = new t($('#t-card-project').html());
 var t_card_user_assigned_to = new t($('#t-card-user-assigned-to').html());
-var t_card_work_hours = new t($('#t-card-work-hours').html());
+var t_card_task_hours = new t($('#t-card-task-hours').html());
 var t_card_estimate = new t($('#t-card-estimate').html());
 var t_card_users_dropdown = new t($('#t-card-users-dropdown').html());
 var t_card_estimates_dropdown = new t($('#t-card-estimates-dropdown').html());
 var t_card_projects_dropdown = new t($('#t-card-projects-dropdown').html());
 var t_modal_projects_panel = new t($('#t-modal-projects-panel').html());
 
-var sidebar_w;
+var sidebar_w, $last_clicked;
 var timers = [];
+
 
 
 // @link http://stackoverflow.com/a/3492815/38241
@@ -32,10 +33,22 @@ String.prototype.sprintf = function() {
 
 
 
+// @link http://stackoverflow.com/a/6700/38241
+Object.size = function(obj) {
+    var size = 0, key;
+    for (key in obj) {
+        if (obj.hasOwnProperty(key)) size++;
+    }
+    return size;
+};
+
+
+
 var get_screen_size = function ()
 {
 	return $('#screen-size :visible').attr('data-size');
 };
+
 
 
 var obj_to_arr = function (obj)
@@ -46,24 +59,47 @@ var obj_to_arr = function (obj)
 };
 
 
+
 // friendly format hours
 var format_hours = function (h)
 {
-	var to_return;
-	if ( h < 8 )
+	if ( h == 0 )
 	{
-		to_return = h + 'h';
+		return '0<small>h</small>';
 	}
-	else
+
+    var min = Math.round(h*60);
+
+    var days = Math.floor(min / (60  * 8));
+
+    var divisor_for_hours = min % (60  * 8);
+    var hours = Math.floor(divisor_for_hours / 60);
+
+    var divisor_for_minutes = divisor_for_hours % (60 );
+    var minutes = Math.floor(divisor_for_minutes );
+
+
+
+	var to_return = '';
+
+	if ( days > 0 )
 	{
-		to_return = Math.floor(h/8) + 'd';
+		to_return += '{0}<small>d</small>'.sprintf(days);
+	}
 
-		var remainder = Math.floor(h % 8);
+	if ( hours > 0 )
+	{
+		to_return += '{0}<small>h</small>'.sprintf(hours);
+	}
 
-		if ( remainder > 0 )
-		{
-			to_return += ' ' + remainder + 'h';
-		}
+	if ( minutes > 0 )
+	{
+		to_return += '{0}<small>m</small>'.sprintf(minutes);
+	}
+
+	if ( to_return == '' )
+	{
+		to_return = format_hours(0);
 	}
 
 	return to_return;
@@ -79,7 +115,8 @@ var show_growl_msg = function(response)
 		$.bootstrapGrowl(
 			response.data.message,
 			{
-				type: 'info'
+				type: 'info',
+  				allow_dismiss: true
 			}
 		);
 	}
@@ -88,26 +125,34 @@ var show_growl_msg = function(response)
 
 
 
-var add_task_to_status_col = function(task, status_id)
+var add_task_to_status_col = function(task)
 {
-	try
+	if ( typeof task.estimate_id === 'undefined' )
 	{
-		task.status_color = status_colors[task.terms.kanban_task_status[0]];
-	}
-	catch (err) {}
-
-	if ( typeof task.terms.kanban_task_estimate === 'undefined' )
-	{
-		task.terms.kanban_task_estimate = 0;
+		task.estimate_id = 0;
 	}
 
-	if ( typeof task.postmeta.kanban_task_user_id_assigned === 'undefined' )
+	if ( typeof task.user_id_assigned === 'undefined' )
 	{
-		task.postmeta.kanban_task_user_id_assigned = '';
+		task.user_id_assigned = '';
 	}
 
-	var $task = $(t_card.render(task));
-	$task.prependTo('#status-{0}-tasks'.sprintf(status_id)).board_task(task);
+	if ( typeof board.status_records()[task.status_id] != 'undefined' )
+	{
+		task.status_color = board.status_records()[task.status_id].color_hex;
+	}
+
+	if ( typeof task.hour_count === 'undefined' )
+	{
+		task.hour_count = 0;
+	}
+
+	var $task = $(t_card.render({
+		task: task,
+		settings: board.settings(),
+		current_user_can_write: current_user_has_cap('write')
+	}));
+	$task.prependTo('#status-{0}-tasks'.sprintf(task.status_id)).board_task(task);
 
 	$('.col-tasks').same_height();
 
@@ -116,27 +161,33 @@ var add_task_to_status_col = function(task, status_id)
 
 
 
-var project_save = function (project_id)
+var current_user_has_cap = function (cap)
 {
-	var data = JSON.parse(JSON.stringify(project_records[project_id]));
-	data.action = 'save_project';
-	data.kanban_nonce = $('#kanban_nonce').val();
-
-	$.ajax({
-		method: "POST",
-		url: ajaxurl,
-		data: data
-	})
-	// .done(function(response )
-	// {
-	// })
-	// .fail(function() {
-	// })
-	.always(function(response)
+	try
 	{
-		show_growl_msg(response);
-	});
+		return board.current_user().caps.indexOf(cap) < 0 ? false : true;
+	}
+	catch (err)
+	{
+		return false;
+	}
 }
+
+
+
+var records_by_position = function (obj)
+{
+	var obj_arr = $.map(obj, function(value, index) {
+	    return [value];
+	});
+
+	obj_arr.sort(function(a, b)
+	{
+		return a.position - b.position;
+	});
+
+	return obj_arr;
+};
 
 
 
@@ -148,55 +199,23 @@ jQuery(function($)
 	$('#modal-projects').modal_projects();
 
 
-	// var project_records_array = obj_to_arr(project_records);
 
-	// projects = new Bind(
-	// 	{
-	// 		projects: project_records_array
-	// 	},
-	// 	{
-	// 		'projects': {
-	// 			dom: '#filter-projects-dropdown',
-	// 			transform: function (project)
-	// 			{
-	// 				return '<li><a href="#" data-id="' + project.ID + '">' + this.safe(project.post_title) + '</a></li>';
-	// 			}
-	// 		},
-	// 	}
-	// ); // bind
-
-
-
-	// var allowed_users_array = obj_to_arr(allowed_users);
-
-	// users = new Bind(
-	// 	{
-	// 		users: allowed_users_array
-	// 	},
-	// 	{
-	// 		'users': {
-	// 			dom: '#filter-users-dropdown',
-	// 			transform: function (user) {
-	// 				return '<li><a href="#" data-id="' + user.data.ID + '">' + this.safe(user.data.long_name_email) + '</a></li>';
-	// 			}
-	// 		},
-	// 	}
-	// ); // bind
-
-
-
-	// var col_percent_w = 100/(status_records.length);
-	// var sidebar_w = 100/(status_records.length-2);
-
-	for ( var i in status_records )
+	$(document).mousedown(function(e)
 	{
-		var status = status_records[i];
+		// The latest element clicked
+		$last_clicked = $(e.target);
+	});
 
-		try
-		{
-			status.color = status_colors[status.term_id];
-		}
-		catch (err) {}
+
+
+	var status_records_arr = records_by_position(board.status_records());
+
+
+
+	var i = 0;
+	for ( var id in status_records_arr )
+	{
+		var status = status_records_arr[id];
 
 		if ( i == 0 )
 		{
@@ -204,68 +223,72 @@ jQuery(function($)
 			status.left_close = '-{0}'.sprintf(sidebar_w);
 		}
 
-		if ( i == status_records.length-1 )
+		if ( i == Object.size(status_records_arr)-1 )
 		{
 			status.left_open = '-{0}'.sprintf(sidebar_w*2);
 			status.left_close = '-{0}'.sprintf(sidebar_w);
 		}
 
-		var $status = $(t_col_status.render(status));
+		var $status = $(t_col_status.render({
+			status: status,
+			current_user_can_write: current_user_has_cap('write')
+		}));
 		$status.appendTo('#row-statuses').board_sidebar_header();
 
-		var $status = $(t_col_tasks.render(status));
+		var $status = $(t_col_tasks.render({
+			status: status,
+			current_user_can_write: current_user_has_cap('write')
+		}));
 		$status.appendTo('#row-tasks');
 
-		statuses[status.term_id] = status;
+		i++;
 	}
 
 
 
-	for ( var i in task_records )
+	for ( var id in board.task_records )
 	{
-		var task = task_records[i];
-
-		if ( typeof task.terms.kanban_task_status[0] === 'undefined' || task.terms.kanban_task_status[0] == 0 || typeof statuses[task.terms.kanban_task_status[0]] === 'undefined' )
-		{
-			var status_id = $('#row-statuses .col').eq(1).attr('data-id');
-			task.terms.kanban_task_status[0] = status_id;
-		}
-
-		add_task_to_status_col(task, task.terms.kanban_task_status[0]);
+		var task = board.task_records[id];
+		add_task_to_status_col(task);
 	}
 
 
 
-	$('.col-tasks').sortable({
-		connectWith: '.col-tasks',
-		handle: ".task-handle",
-		forcePlaceholderSize: true,
-		forceHelperSize: true,
-		// tolerance: "pointer",
-		placeholder: "task-placeholder",
-		over: function (e, ui)
-		{
-			ui.placeholder.closest('.col-tasks').addClass('hover');
-		},
-		out: function (e, ui)
-		{
-			ui.placeholder.closest('.col-tasks').removeClass('hover');
-		},
-		stop: function (e, ui)
-		{
-			$('.col-tasks.hover').removeClass('hover');
-		},
-		receive: function(e, ui)
-		{
-			var task_id = ui.item.attr('data-id');
-			var $col = ui.item.closest('.col-tasks');
-			var status_id_new = $col.attr('data-status-id');
+	if ( current_user_has_cap('write') )
+	{
 
-			ui.item.trigger('status_change', [status_id_new]);
+		$('.col-tasks').sortable({
+			connectWith: '.col-tasks',
+			handle: ".task-handle",
+			forcePlaceholderSize: true,
+			forceHelperSize: true,
+			// tolerance: "pointer",
+			placeholder: "task-placeholder",
+			over: function (e, ui)
+			{
+				ui.placeholder.closest('.col-tasks').addClass('hover');
+			},
+			out: function (e, ui)
+			{
+				ui.placeholder.closest('.col-tasks').removeClass('hover');
+			},
+			stop: function (e, ui)
+			{
+				$('.col-tasks.hover').removeClass('hover');
+			},
+			receive: function(e, ui)
+			{
+				var task_id = ui.item.attr('data-id');
+				var $col = ui.item.closest('.col-tasks');
+				var status_id_new = $col.attr('data-status-id');
 
-			$('.col-tasks').same_height();
-		} // receive
-	}).disableSelection();
+				ui.item.trigger('status_change', [status_id_new]);
+
+				$('.col-tasks').same_height();
+			} // receive
+		}).disableSelection();
+	}
+
 
 
 
@@ -326,6 +349,17 @@ jQuery(function($)
 				$('#board-search').focus();
 				return false;
 			}
+
+
+
+			// launch tour
+			// if( e.keyCode === 84 && $any_input.length === 0 )
+			// {
+			// 	if ( e.shiftKey )
+			// 	{
+			// 		board_tour.show();
+			// 	}
+			// }
 		}
 	);
 
@@ -368,23 +402,27 @@ jQuery(function($)
 
 
 
-	$('.col-tasks')
-	.on(
-		'mouseenter',
-		function()
-		{
-			var status_id = $(this).attr('data-status-id');
-			$('#status-{0}'.sprintf(status_id)).addClass('hover');
-		}
-	)
-	.on(
-		'mouseleave',
-		function()
-		{
-			var status_id = $(this).attr('data-status-id');
-			$('#status-{0}'.sprintf(status_id)).removeClass('hover');
-		}
-	);
+	if ( current_user_has_cap('write') )
+	{
+
+		$('.col-tasks')
+		.on(
+			'mouseenter',
+			function()
+			{
+				var status_id = $(this).attr('data-status-id');
+				$('#status-{0}'.sprintf(status_id)).addClass('hover');
+			}
+		)
+		.on(
+			'mouseleave',
+			function()
+			{
+				var status_id = $(this).attr('data-status-id');
+				$('#status-{0}'.sprintf(status_id)).removeClass('hover');
+			}
+		);
+	}
 
 
 

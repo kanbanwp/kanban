@@ -1,0 +1,65 @@
+.video-wrapper {
+	position: relative;
+	padding-bottom: 56.25%;
+	padding-top: 30px;
+	height: 0;
+	overflow: hidden;
+
+	iframe,
+	object,
+	embed {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+	}
+
+}
+
+
+
+.sortable {
+	li {
+		background: white;
+		margin-bottom: .382em;
+		padding: .236em 1em;
+
+		.handle {
+			background: #CCC;
+			border-radius: .5em;
+			cursor: move;
+			display: inline-block;
+			padding: .236em .618em;
+		}
+		.wp-picker-container {
+			line-height: 2.618em;
+			position: relative;
+			.wp-picker-holder {
+				position: absolute;
+				z-index: 1;
+			}
+		}
+
+		.delete {
+			background: red;
+			border-radius: .5em;
+			border-width: 0;
+			color: white;
+			cursor: pointer;
+			display: inline-block;
+			float: right;
+			opacity: .5;
+			padding: .236em .618em;
+
+			&:hover {
+				opacity: 1;
+			}
+		}
+
+		label {
+			margin: 0 3em;
+			white-space: nowrap;
+		}
+	}
+}

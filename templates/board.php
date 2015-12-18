@@ -12,11 +12,11 @@
 
 <div id="wrapper-footer">
 	<div id="filter-wrapper">
-		Filter by: 
+		<?php echo __('Filter by', Kanban::get_text_domain()) ?>: 
 		<span class="dropup" id="filter-projects">
 			<button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">
 				<span class="btn-label" data-id="">
-					-- <?php echo __('Project', Kanban::$instance->settings->file) ?> --
+					-- <?php echo __('Project', Kanban::get_text_domain()) ?> --
 				</span>
 			</button>
 			<ul class="dropdown-menu" id="filter-projects-dropdown">
@@ -32,7 +32,7 @@
 		<span class="dropup" id="filter-users">
 			<button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">
 				<span class="btn-label" data-id="">
-					-- <?php echo __('User', Kanban::$instance->settings->file) ?> --
+					-- <?php echo __('User', Kanban::get_text_domain()) ?> --
 				</span>
 			</button>
 			<ul class="dropdown-menu" id="filter-users-dropdown">
@@ -46,10 +46,10 @@
 		</span>
 
 		<button type="button" class="btn btn-primary" id="btn-filter-apply">
-			<?php echo __('Filter', Kanban::$instance->settings->file) ?>
+			<?php echo __('Filter', Kanban::get_text_domain()) ?>
 		</button>
 		<button type="button" class="btn btn-warning" id="btn-filter-reset" style="display: none;">
-			<?php echo __('Show All', Kanban::$instance->settings->file) ?>
+			<?php echo __('Show All', Kanban::get_text_domain()) ?>
 		</button>
 
 	</div><!-- filter-wrapper -->
@@ -57,9 +57,9 @@
 
 
 	<div class="form-inline" id="search-wrapper">
-		<input type="search" id="board-search" class="form-control" placeholder="<?php echo __('Search', Kanban::$instance->settings->file) ?>">
-		<button type="button" class="btn btn-default" id="board-search-reset" style="display: none;">
-			<?php echo __('Show All', Kanban::$instance->settings->file) ?>
+		<input type="search" id="board-search" class="form-control" placeholder="<?php echo __('Search', Kanban::get_text_domain()) ?>">
+		<button type="button" class="btn btn-warning" id="board-search-reset" style="display: none;">
+			<?php echo __('Show All', Kanban::get_text_domain()) ?>
 		</button>
 	</div><!-- search-wrapper -->
 
@@ -78,8 +78,8 @@
 
 
 
-	<a href="<?php echo admin_url( 'admin.php?page=' . Kanban::$instance->settings->basename ) ?>" class="btn btn-default" target="_blank">
-		<?php echo __('Admin', Kanban::$instance->settings->file) ?>
+	<a href="<?php echo admin_url( sprintf('admin.php?page=%s_settings', Kanban::$instance->settings->basename) ) ?>" class="btn btn-default" target="_blank">
+		<?php echo __('Settings', Kanban::get_text_domain()) ?>
 	</a>
 </div>
 
@@ -91,7 +91,7 @@
 		<div class="modal-content">
 			<div class="modal-body">
 				<button type="button" class=" btn btn-default btn-close" data-dismiss="modal">
-					Close
+					<?php echo __('Close', Kanban::get_text_domain()) ?>
 				</button>
 
 				<div class="panel-group" id="accordion-projects">
@@ -122,15 +122,30 @@
 <script type="text/javascript">
 var ajaxurl = '<?php echo admin_url('admin-ajax.php'); ?>';
 
-var status_records = <?php echo json_encode($wp_query->query_vars['kanban']->board->statuses) ?>;
-var status_colors = <?php echo json_encode($wp_query->query_vars['kanban']->board->status_colors) ?>;
-var task_records = <?php echo json_encode($wp_query->query_vars['kanban']->board->tasks) ?>;
-var project_records = <?php echo json_encode($wp_query->query_vars['kanban']->board->projects) ?>;
-var allowed_users = <?php echo json_encode($wp_query->query_vars['kanban']->board->allowed_users) ?>;
-var estimates = <?php echo json_encode($wp_query->query_vars['kanban']->board->estimates) ?>;
-var current_user = <?php echo json_encode($wp_query->query_vars['kanban']->board->current_user->data) ?>;
-
-var statuses = [];
+var board = {
+	settings: function ()
+	{
+		return <?php echo json_encode($wp_query->query_vars['kanban']->board->settings) ?>;
+	},
+	status_records: function ()
+	{
+		return <?php echo json_encode($wp_query->query_vars['kanban']->board->statuses) ?>;
+	},
+	task_records: <?php echo json_encode($wp_query->query_vars['kanban']->board->tasks) ?>,
+	project_records: <?php echo json_encode($wp_query->query_vars['kanban']->board->projects) ?>,
+	allowed_users: function ()
+	{
+		return <?php echo json_encode($wp_query->query_vars['kanban']->board->allowed_users) ?>;
+	},
+	estimate_records: function ()
+	{
+		return <?php echo json_encode($wp_query->query_vars['kanban']->board->estimates) ?>;
+	},
+	current_user: function ()
+	{
+		return <?php echo json_encode($wp_query->query_vars['kanban']->board->current_user) ?>;
+	}
+};
 
 var col_percent_w = <?php echo $wp_query->query_vars['kanban']->board->col_percent_w ?>;
 var sidebar_w = <?php echo $wp_query->query_vars['kanban']->board->sidebar_w ?>;

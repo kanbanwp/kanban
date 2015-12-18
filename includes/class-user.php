@@ -13,12 +13,10 @@ Kanban_User::init();
 
 class Kanban_User
 {
-	static $instance = false;
+	private static $instance;
 
 	static function init()
 	{
-		self::$instance = self::get_instance();
-
 		add_action( 'wp', array(__CLASS__, 'login') );
 		add_action( 'wp', array(__CLASS__, 'request_access') );
 	}
@@ -39,26 +37,29 @@ class Kanban_User
 
 		wp_mail(
 			$admin_email,
-			sprintf(
+			__( sprintf(
 				'%s: %s has requested access',
-				Kanban::$instance->settings->pretty_name,
+				Kanban::get_instance()->settings->pretty_name,
 				Kanban_User::format_user_name ($current_user)
-			),
-			sprintf(
+			), Kanban::get_text_domain() ),
+			__( sprintf(
 				'The following user has requested access. ' . "\n"
 				. '%s' . "\n\n"
 				. 'To grant them access, please visit this link:' . "\n"
 				. '%s' . "\n"
 				. 'And select them as an allowed user.',
 				Kanban_User::format_user_name ($current_user),
-				admin_url('admin.php?page=' . Kanban::$instance->settings->basename)
-			),
+				admin_url('admin.php?page=' . Kanban::get_instance()->settings->basename)
+			), Kanban::get_text_domain() ),
 			$headers
 		);
 
 
 
-		Kanban::$instance->flash->add('success', 'Your request has been sent.');
+		Kanban::get_instance()->flash->add(
+			'success',
+			__( 'Your request has been sent.', Kanban::get_text_domain() )
+		);
 
 
 
@@ -74,11 +75,14 @@ class Kanban_User
 
 
 
-		$user_by_email = get_user_by_email( $_POST['email'] );
+		$user_by_email = get_user_by('email', $_POST['email'] );
 
 		if ( empty($user_by_email) )
 		{
-			Kanban::$instance->flash->add('danger', 'Whoops! We can\'t find an account for that email address.');
+			Kanban::get_instance()->flash->add(
+				'danger',
+				__( 'Whoops! We can\'t find an account for that email address.', Kanban::get_text_domain() )
+			);
 			wp_redirect($_POST['_wp_http_referer']);
 			exit;
 		}
@@ -96,7 +100,10 @@ class Kanban_User
 
 		if ( is_wp_error($user) )
 		{
-			Kanban::$instance->flash->add('danger', 'Whoops! That password is incorrect for this email address.');
+			Kanban::get_instance()->flash->add(
+				'danger',
+				__( 'Whoops! That password is incorrect for this email address.', Kanban::get_text_domain() )
+			);
 			wp_redirect($_POST['_wp_http_referer']);
 			exit;
 		}
@@ -108,7 +115,7 @@ class Kanban_User
 
 
 
-		wp_redirect(sprintf('/%s/board', Kanban::$slug));
+		wp_redirect(sprintf('%s/%s/board', site_url(), Kanban::$slug));
 		exit;
 
 
@@ -118,38 +125,58 @@ class Kanban_User
 
 	static function get_allowed_users ()
 	{
-		if ( !isset(Kanban_User::$instance->allowed_users) )
+		if ( !isset(Kanban_User::get_instance()->allowed_users) )
 		{
-			$users_field_name = sprintf('%s_user', Kanban::$instance->settings->basename);
-			$allowed_user_ids = Kanban_Settings::get_option($users_field_name, 'allowed_users', array());
+			// get all settings
+			$allowed_users = Kanban_Option::get_option('allowed_users');
+
+			// pull out allowed user id's
+			$allowed_user_ids = array();
+
+			if ( is_array($allowed_users) )
+			{
+				$allowed_user_ids = $allowed_users;
+			}
 
 			if ( empty($allowed_user_ids) )
 			{
 				$allowed_user_ids = array(0);
 			}
 
-			$pm_users = get_users(array(
-				'include' => $allowed_user_ids
+			// load actual users
+			$users = get_users(array(
+				'include' => $allowed_user_ids,
+				'fields' => array(
+					'ID',
+					'user_email',
+
+				)
 			));
 
-			Kanban_User::$instance->allowed_users = Kanban_Utils::build_array_with_id_keys($pm_users);
+			// add users to object
+			Kanban_User::get_instance()->allowed_users = Kanban_Utils::build_array_with_id_keys($users, 'ID');
 
-			foreach (Kanban_User::$instance->allowed_users as $user_id => $user)
+			// load extra data
+			foreach (Kanban_User::get_instance()->allowed_users as $user_id => $user)
 			{
-				if(self::validate_gravatar($user->data->user_email))
+				Kanban_User::get_instance()->allowed_users[$user_id]->caps = array('write');
+
+				// get gravatar
+				if(self::validate_gravatar($user->user_email))
 				{
-					Kanban_User::$instance->allowed_users[$user_id]->data->avatar = get_avatar($user->data->user_email);
+					Kanban_User::get_instance()->allowed_users[$user_id]->avatar = get_avatar($user->user_email);
 				}
 
-				Kanban_User::$instance->allowed_users[$user_id]->data->long_name_email = Kanban_User::format_user_name ($user);
-				Kanban_User::$instance->allowed_users[$user_id]->data->short_name = Kanban_User::format_user_name ($user, TRUE);
-				Kanban_User::$instance->allowed_users[$user_id]->data->initials = Kanban_User::get_initials ($user);
+				// fancy name formating
+				Kanban_User::get_instance()->allowed_users[$user_id]->long_name_email = Kanban_User::format_user_name ($user);
+				Kanban_User::get_instance()->allowed_users[$user_id]->short_name = Kanban_User::format_user_name ($user, TRUE);
+				Kanban_User::get_instance()->allowed_users[$user_id]->initials = Kanban_User::get_initials ($user);
 			}
 		}
 
 		return apply_filters(
-			sprintf('%s_after_get_allowed_users', Kanban::$instance->settings->basename),
-			Kanban_User::$instance->allowed_users
+			sprintf('%s_after_get_allowed_users', Kanban::get_instance()->settings->basename),
+			Kanban_User::get_instance()->allowed_users
 		);
 	}
 
@@ -252,7 +279,7 @@ class Kanban_User
 			}
 		    wp_cache_set($hashkey, $data, $group = '', $expire = 60*5);
 
-		}		
+		}
 		if ($data == '200'){
 			return true;
 		} else {
@@ -261,7 +288,8 @@ class Kanban_User
 	}
 
 
-	static function get_instance()
+
+	public static function get_instance()
 	{
 		if ( ! self::$instance )
 		{

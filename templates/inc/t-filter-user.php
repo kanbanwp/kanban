@@ -1,3 +1,3 @@
 <li class="user">
-	<a href="#" data-id="{{=data.ID}}">{{=data.long_name_email}}</a>
+	<a href="#" data-id="{{=ID}}">{{=long_name_email}}</a>
 </li>

@@ -9,23 +9,14 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 
 class Kanban_Utils
 {
-
 	static function get_nonce()
 	{
-		return sprintf('%s_nonce', Kanban::$instance->settings->basename);
+		return sprintf('%s_nonce', Kanban::get_instance()->settings->basename);
 	}
 
 
 
-	static function format_key ($post_type, $key)
-	{
-		$post_type = Kanban_Post_Types::format_post_type ($post_type);
-		return sprintf('%s_%s', $post_type, $key);
-	}
-
-
-
-	static function build_array_with_id_keys ($arr, $id_key = 'ID')
+	static function build_array_with_id_keys ($arr, $id_key = 'id')
 	{
 		$return = array();
 
@@ -41,7 +32,7 @@ class Kanban_Utils
 
 	static function make_word_plural ($word)
 	{
-		return substr($word, -1) == 's' ? sprintf('%ses', $word) : sprintf('%ss', $word);
+		return substr($word, -1) == 's' ? __( sprintf('%ses', $word), Kanban::get_text_domain() ) : __( sprintf('%ss', $word), Kanban::get_text_domain() );
 	}
 
 
@@ -60,4 +51,28 @@ class Kanban_Utils
 
 		return FALSE;
 	}
+
+
+
+	static function order_array_of_objects_by_property ($arr, $property)
+	{
+		usort(
+			$arr,
+			function($a, $b) use ($property)
+			{
+				return strcmp($a->$property, $b->$property);
+			}
+		);
+
+		return $arr;
+	}
+
+
+
+	static function mysql_now_gmt ()
+	{
+		return gmdate('Y-m-d H:i:s');
+	}
 }
+
+

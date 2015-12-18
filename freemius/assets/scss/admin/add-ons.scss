@@ -65,6 +65,7 @@
                     display: block;
                     height: 100px;
                     background-repeat: repeat-x;
+                    background-size: 100% 100%;
                     @include transition(all, 0.15s);
                 }
 
@@ -140,6 +141,11 @@
 {
     #section-description
     {
+        h2, h3, p, b, i, blockquote, li, ul, ol
+        {
+            clear: none;
+        }
+
         .fs-selling-points
         {
             padding-bottom: 10px;
@@ -166,7 +172,6 @@
 
                     h3
                     {
-                        clear: none;
                         margin-left: 30px;
                     }
                 }

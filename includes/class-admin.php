@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * for all interactions w the WordPress admin
+ */
+
 
 
 // Exit if accessed directly
@@ -7,6 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 
 
 
+// instantiate the class
 Kanban_Admin::init();
 
 
@@ -19,6 +24,7 @@ class Kanban_Admin extends Kanban_Db
 
 	static function init ()
 	{
+		// redirect to welcome screen on activation
 		add_action( 'admin_init',array(__CLASS__, 'welcome_screen_do_activation_redirect') );
 
 		// Remove Admin bar
@@ -27,17 +33,21 @@ class Kanban_Admin extends Kanban_Db
 			add_filter('show_admin_bar', '__return_false');
 		}
 
-		// add_action( 'admin_init', array(__CLASS__, 'admin_init') );
+		// add custom pages to admin
 		add_action( 'admin_menu', array(__CLASS__, 'admin_menu') );
 
+		// if migrating from older version, show upgrade notice with progress bar
 		add_action( 'admin_notices', array(__CLASS__, 'render_upgrade_notice') );
 	}
 
 
 
+	/**
+	 * show upgrade notice with progress bar
+	 */
 	static function render_upgrade_notice ()
 	{
-
+		// make sure something needs to be upgraded
 		if ( Kanban::get_instance()->settings->records_to_move <= 0 ) return;
 
 
@@ -95,13 +105,13 @@ class Kanban_Admin extends Kanban_Db
 		  position: absolute;
 		  top: 0; left: 0; bottom: 0; right: 0;
 		  background-image: linear-gradient(
-		    -45deg, 
-		    rgba(255, 255, 255, .2) 25%, 
-		    transparent 25%, 
-		    transparent 50%, 
-		    rgba(255, 255, 255, .2) 50%, 
-		    rgba(255, 255, 255, .2) 75%, 
-		    transparent 75%, 
+		    -45deg,
+		    rgba(255, 255, 255, .2) 25%,
+		    transparent 25%,
+		    transparent 50%,
+		    rgba(255, 255, 255, .2) 50%,
+		    rgba(255, 255, 255, .2) 75%,
+		    transparent 75%,
 		    transparent
 		  );
 		  z-index: 1;
@@ -126,13 +136,16 @@ class Kanban_Admin extends Kanban_Db
 		<script>
 		jQuery(function($)
 		{
+			// start with how many records need to be migrated
 			var records_to_move = <?php echo Kanban::get_instance()->settings->records_to_move ?>;
 
+			// if migration fails, show alert
 			function migration_failed ()
 			{
 				alert('Migration failed. Please refresh the page and try again.');
 			}
 
+			// the loop to continually do migration, and update progress bar
 			function do_migrate ()
 			{
 				$.post(
@@ -164,12 +177,14 @@ class Kanban_Admin extends Kanban_Db
 						migration_failed();
 					}
 
+					// update the returned message
 					try
 					{
 						$('#kanban-migrate-message').text(data.data.message);
 					}
 					catch (err) {}
 
+					// wait 2 seconds and do it again
 					try
 					{
 						if ( data.data.continue )
@@ -216,10 +231,13 @@ class Kanban_Admin extends Kanban_Db
 		});
 		</script>
 		<?php
-	}
+	} // render_upgrade_notice
 
 
 
+	/**
+	 * render the welcome page
+	 */
 	static function welcome_page()
 	{
 		$template = Kanban_Template::find_template('admin/welcome');
@@ -229,11 +247,16 @@ class Kanban_Admin extends Kanban_Db
 
 
 
+	/**
+	 * add pages to admin menu, including custom icon
+	 * @return [type] [description]
+	 */
 	static function admin_menu()
 	{
 		// Base 64 encoded SVG image.
 		$icon_svg = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAAPCAYAAAAGRPQsAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNSBNYWNpbnRvc2giIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6QkRFMDQwQTg1NUFFMTFFNUJBRDdBMjA0MjA4NTJFNzEiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6QkRFMDQwQTk1NUFFMTFFNUJBRDdBMjA0MjA4NTJFNzEiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDpCREUwNDBBNjU1QUUxMUU1QkFEN0EyMDQyMDg1MkU3MSIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDpCREUwNDBBNzU1QUUxMUU1QkFEN0EyMDQyMDg1MkU3MSIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PokTEeYAAABuSURBVHjaYvz//z8DCMw8fBXCwAHSbbUZgRReNUwMVASD1zAWGGPLuTvWDIwMf2GBwsiACKJ//xn/AcOMYfq+C5r/GRj//QPJM8JU/AfTf/4x/GccjYBBEpudm48zEogABqWyOXjVjMYm6QAgwADj+y/EHS5dLQAAAABJRU5ErkJggg==';
 
+		// add the base slug and page
 		add_menu_page(
 			Kanban::get_instance()->settings->pretty_name,
 			Kanban::get_instance()->settings->pretty_name,
@@ -256,6 +279,7 @@ class Kanban_Admin extends Kanban_Db
 			array(__CLASS__, 'welcome_page')
 		);
 
+		// add the settings admin page
 		add_submenu_page(
 			sprintf('%s_welcome', Kanban::get_instance()->settings->basename),
 			'Settings',
@@ -269,6 +293,7 @@ class Kanban_Admin extends Kanban_Db
 
 
 
+	// add the settings page link on the plugins page
 	static function add_plugin_settings_link( $links )
 	{
 		$url = admin_url(
@@ -287,21 +312,6 @@ class Kanban_Admin extends Kanban_Db
 
 		return array_merge( $links, $mylinks );
 	}
-
-
-
-	public static function get_instance()
-	{
-		if ( ! self::$instance )
-		{
-			self::$instance = new self();
-		}
-		return self::$instance;
-	}
-
-
-
-	private function __construct() { }
 
 
 
@@ -337,7 +347,31 @@ class Kanban_Admin extends Kanban_Db
 	}
 
 
-}
+
+	/**
+	 * get the instance of this class
+	 * @return	object	the instance
+	 */
+	public static function get_instance()
+	{
+		if ( ! self::$instance )
+		{
+			self::$instance = new self();
+		}
+		return self::$instance;
+	}
+
+
+
+	/**
+	 * construct that can't be overwritten
+	 */
+	private function __construct() { }
+
+
+
+
+} // Kanban_Admin
 
 
 

@@ -128,6 +128,11 @@ class Kanban_Option extends Kanban_Db
 	{
 		$options = self::get_all();
 
+		if ( !isset($options[$name]) )
+		{
+			return null;
+		}
+
 		return $options[$name];
 	}
 

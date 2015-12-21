@@ -90,6 +90,21 @@ class Kanban_Task_Hour extends Kanban_Db
 
 
 
+		if ( !empty($_POST['comment']) )
+		{
+			do_action( sprintf('%s_before_%s_ajax_comment_save', Kanban::get_instance()->settings->basename, self::$slug) );
+
+			Kanban_Comment::add(
+				$_POST['comment'],
+				'system',
+				$_POST['task']['id']
+			);
+
+			do_action( sprintf('%s_after_%s_ajax_comment_save', Kanban::get_instance()->settings->basename, self::$slug) );
+		}
+
+
+
 		if ( $is_successful )
 		{
 			wp_send_json_success(array(

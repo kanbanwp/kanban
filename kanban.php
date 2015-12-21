@@ -70,6 +70,7 @@ kan_fs();
 
 
 
+// instantiate the plugin
 Kanban::init();
 
 
@@ -84,8 +85,10 @@ class Kanban
 
 	static function init ()
 	{
+		// get instance
 		self::$instance = self::get_instance();
 
+		// build settings
 		Kanban::get_instance()->settings = (object) array();
 		Kanban::get_instance()->settings->path = dirname(__FILE__);
 		Kanban::get_instance()->settings->file = basename(__FILE__, '.php');
@@ -97,6 +100,7 @@ class Kanban
 
 
 
+		// require at least PHP 5.3
 		if (version_compare(PHP_VERSION, '5.3', '<'))
 		{
 			add_action('admin_notices', array(__CLASS__, 'notify_php_version') );
@@ -131,11 +135,8 @@ class Kanban
 
 	static function on_activation()
 	{
+		// check for db updates and migration
 		Kanban_Db::check_for_updates();
-
-
-
-		// flush_rewrite_rules();
 
 
 
@@ -157,20 +158,18 @@ class Kanban
 	}
 
 
-
+	/**
+	 * placeholder
+	 */
 	static function on_deactivation()
 	{
-		// delete db version, in case of reinstallation
-		delete_option(
-			sprintf(
-				'%s_db_version',
-				Kanban::get_instance()->settings->basename
-			)
-		);
 	}
 
 
 
+	/**
+	 * friendly notice about php version requirement
+	 */
 	static function notify_php_version()
 	{
 		if( !is_admin() ) return;
@@ -198,6 +197,10 @@ class Kanban
 
 
 
+	/**
+	 * get the instance of this class
+	 * @return	object	the instance
+	 */
 	public static function get_instance()
 	{
 		if ( ! self::$instance )
@@ -209,8 +212,15 @@ class Kanban
 
 
 
+	/**
+	 * construct that can't be overwritten
+	 */
 	private function __construct() { }
+
+
+
 } // Kanban
+
 
 
 

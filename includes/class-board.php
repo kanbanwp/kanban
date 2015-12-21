@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * the class for rendering our kanban board
+ */
+
 
 
 // Exit if accessed directly
@@ -7,6 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 
 
 
+// instantiate the plugin
 Kanban_Board::init();
 
 

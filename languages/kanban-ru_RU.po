@@ -1,0 +1,126 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Канбан для WordPress\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: Wed Oct 14 2015 01:42:14 GMT+0600 (Azores Standard Time)\n"
+"PO-Revision-Date: Wed Oct 14 2015 01:42:21 GMT+0600 (Azores Standard Time)\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: Russian\n"
+"Plural-Forms: nplurals=2; plural=n != 1\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-Basepath: .\n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Poedit-KeywordsList: _:1;gettext:1;dgettext:2;ngettext:1,2;dngettext:2,3;"
+"__:1;_e:1;_c:1;_n:1,2;_n_noop:1,2;_nc:1,2;__ngettext:1,2;__ngettext_noop:1,2;"
+"_x:1,2c;_ex:1,2c;_nx:1,2,4c;_nx_noop:1,2,3c;_n_js:1,2;_nx_js:1,2,3c;"
+"esc_attr__:1;esc_html__:1;esc_attr_e:1;esc_html_e:1;esc_attr_x:1,2c;"
+"esc_html_x:1,2c;comments_number_link:2,3;t:1;st:1;trans:1;transChoice:1,2\n"
+
+
+#: /kanban.php:55
+msgid "Канбан"
+msgstr ""
+
+#: /includes/class-post-types.php:148
+msgid ""
+"The &#8220;slug&#8221; is the URL-friendly version of the name. For "
+"estimates, it should be the number of working hours."
+msgstr ""
+
+#: /includes/class-post-types.php:155
+msgid "Slug"
+msgstr ""
+
+#: /includes/class-settings-api.php:352
+msgid "Выберите файл"
+msgstr ""
+
+#: /includes/class-settings.php:75
+msgid "О проекте"
+msgstr ""
+
+#: /includes/class-settings.php:80
+msgid "Спасибо, что используете Канбан для WordPress!"
+msgstr ""
+
+#: /includes/class-settings.php:82
+msgid "Закрыть уведомление."
+msgstr ""
+
+#: /includes/class-settings.php:89
+msgid "Перейти к доске"
+msgstr ""
+
+#: /includes/class-settings.php:95
+msgid "Документация"
+msgstr ""
+
+#: /templates/board.php:19
+msgid "Проект"
+msgstr ""
+
+#: /templates/board.php:26
+msgid "Назначенные проекты отсутствуют"
+msgstr ""
+
+#: /templates/board.php:35
+msgid "Пользователь"
+msgstr ""
+
+#: /templates/board.php:42
+msgid "Назначенные пользователи отсутствуют"
+msgstr ""
+
+#: /templates/board.php:49
+msgid "Фильтр"
+msgstr ""
+
+#: /templates/board.php:52 /templates/board.php:62
+msgid "Показать все"
+msgstr ""
+
+#: /templates/board.php:60
+msgid "Поиск"
+msgstr ""
+
+#: /templates/board.php:82
+msgid "Администратор"
+msgstr ""
+
+#: /templates/login.php:6
+msgid "Логин"
+msgstr ""
+
+#: /templates/login.php:24
+msgid "Email"
+msgstr ""
+
+#: /templates/login.php:26
+msgid "email"
+msgstr ""
+
+#: /templates/login.php:30
+msgid "Пароль"
+msgstr ""
+
+#: /templates/login.php:32
+msgid "пароль"
+msgstr ""
+
+#: /templates/login.php:36
+msgid "Войти"
+msgstr ""
+
+#: /templates/login.php:42
+msgid ""
+"Ой, похоже, вам не был предоставлен доступ. Нажмите на ссылку, чтобы"
+"Запросить доступ."
+msgstr ""
+
+#: /templates/login.php:46
+msgid "Запрос доступа"
+msgstr ""

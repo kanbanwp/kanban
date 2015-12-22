@@ -40,7 +40,7 @@ msgid "Выберите файл"
 msgstr ""
 
 #: /includes/class-settings.php:75
-msgid "About"
+msgid "О проекте"
 msgstr ""
 
 #: /includes/class-settings.php:80
@@ -92,7 +92,7 @@ msgid "Администратор"
 msgstr ""
 
 #: /templates/login.php:6
-msgid "Login"
+msgid "Логин"
 msgstr ""
 
 #: /templates/login.php:24
@@ -104,21 +104,21 @@ msgid "email"
 msgstr ""
 
 #: /templates/login.php:30
-msgid "Password"
+msgid "Пароль"
 msgstr ""
 
 #: /templates/login.php:32
-msgid "password"
+msgid "пароль"
 msgstr ""
 
 #: /templates/login.php:36
-msgid "Log in"
+msgid "Войти"
 msgstr ""
 
 #: /templates/login.php:42
 msgid ""
-"Whoops, looks like you haven't been granted access yet. Click below to "
-"request access."
+"Ой, похоже, вам не был предоставлен доступ. Нажмите на ссылку, чтобы"
+"Запросить доступ."
 msgstr ""
 
 #: /templates/login.php:46

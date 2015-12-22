@@ -764,7 +764,8 @@ $.fn.board_task = function(task)
 			for ( var i in board.allowed_users() )
 			{
 				var user = board.allowed_users()[i];
-				if ( !current_user_has_cap('write') )
+
+				if ( !user_has_cap('write', user) )
 				{
 					continue;
 				}

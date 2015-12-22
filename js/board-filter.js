@@ -78,7 +78,7 @@ $.fn.board_filter = function(task)
 				{
 					var user = board.allowed_users()[i];
 
-					if ( !current_user_has_cap('write') )
+					if ( !user_has_cap('write', user) )
 					{
 						continue;
 					}

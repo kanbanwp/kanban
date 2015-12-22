@@ -13,9 +13,16 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 
 class Kanban_Status_Change extends Kanban_Db
 {
+	// the instance of this object
 	private static $instance;
+
+	// the common name for this class
 	static $slug = 'status_change';
+
+	// the table name of this class
 	protected static $table_name = 'log_status_changes';
+
+	// define db table columns and their validation type
 	protected static $table_columns = array(
 		'task_id' => 'int',
 		'created_dt_gmt' => 'datetime',
@@ -103,6 +110,7 @@ class Kanban_Status_Change extends Kanban_Db
 
 
 
+	// define the db schema
 	static function db_table ()
 	{
 		return "CREATE TABLE " . self::table_name() . " (
@@ -118,6 +126,10 @@ class Kanban_Status_Change extends Kanban_Db
 
 
 
+	/**
+	 * get the instance of this class
+	 * @return	object	the instance
+	 */
 	public static function get_instance()
 	{
 		if ( ! self::$instance )
@@ -126,6 +138,13 @@ class Kanban_Status_Change extends Kanban_Db
 		}
 		return self::$instance;
 	}
+
+
+
+	/**
+	 * construct that can't be overwritten
+	 */
+	private function __construct() { }
 
 }
 

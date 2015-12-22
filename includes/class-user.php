@@ -13,7 +13,10 @@ Kanban_User::init();
 
 class Kanban_User
 {
+	// the instance of this object
 	private static $instance;
+
+
 
 	static function init()
 	{
@@ -23,6 +26,10 @@ class Kanban_User
 
 
 
+	/**
+	 * if a logged in user sees the log in page, and requets access to the kanban board
+	 * sends an email to the site admin
+	 */
 	static function request_access()
 	{
 		if (  !isset( $_POST[Kanban_Utils::get_nonce()] ) || ! wp_verify_nonce( $_POST[Kanban_Utils::get_nonce()], 'request_access') ) return;
@@ -40,7 +47,7 @@ class Kanban_User
 			__( sprintf(
 				'%s: %s has requested access',
 				Kanban::get_instance()->settings->pretty_name,
-				Kanban_User::format_user_name ($current_user)
+				Kanban_User::get_username_long ($current_user)
 			), Kanban::get_text_domain() ),
 			__( sprintf(
 				'The following user has requested access. ' . "\n"
@@ -48,7 +55,7 @@ class Kanban_User
 				. 'To grant them access, please visit this link:' . "\n"
 				. '%s' . "\n"
 				. 'And select them as an allowed user.',
-				Kanban_User::format_user_name ($current_user),
+				Kanban_User::get_username_long ($current_user),
 				admin_url('admin.php?page=' . Kanban::get_instance()->settings->basename)
 			), Kanban::get_text_domain() ),
 			$headers
@@ -69,6 +76,9 @@ class Kanban_User
 
 
 
+	/**
+	 * custom log in functionality, from custom log in page
+	 */
 	static function login()
 	{
 		if (  !isset( $_POST[Kanban_Utils::get_nonce()] ) || ! wp_verify_nonce( $_POST[Kanban_Utils::get_nonce()], 'login') ) return;
@@ -123,6 +133,10 @@ class Kanban_User
 
 
 
+	/**
+	 * get the users that are allowed to access the board
+	 * @return array allowed user objects
+	 */
 	static function get_allowed_users ()
 	{
 		if ( !isset(Kanban_User::get_instance()->allowed_users) )
@@ -168,8 +182,8 @@ class Kanban_User
 				}
 
 				// fancy name formating
-				Kanban_User::get_instance()->allowed_users[$user_id]->long_name_email = Kanban_User::format_user_name ($user);
-				Kanban_User::get_instance()->allowed_users[$user_id]->short_name = Kanban_User::format_user_name ($user, TRUE);
+				Kanban_User::get_instance()->allowed_users[$user_id]->long_name_email = Kanban_User::get_username_long ($user);
+				Kanban_User::get_instance()->allowed_users[$user_id]->short_name = Kanban_User::get_username_short ($user, TRUE);
 				Kanban_User::get_instance()->allowed_users[$user_id]->initials = Kanban_User::get_initials ($user);
 			}
 		}
@@ -182,37 +196,51 @@ class Kanban_User
 
 
 
-
-	static function format_user_name ($user, $short = FALSE)
+	/**
+	 * build a formatted name for a WordPress user
+	 * @param  object  $user  a WordPress user object
+	 * @return string         the formated user name
+	 */
+	static function get_username_long ($user)
 	{
-		if ( $short )
+		if ( !empty($user->first_name) )
 		{
-			if ( !empty($user->first_name) )
-			{
-				return sprintf('%s %s', $user->first_name, substr($user->last_name, 0, 1));
-			}
-			else
-			{
-				$parts = explode("@", $user->user_email);
-				$username = $parts[0];
-				return $username;
-			}
+			return sprintf('%s %s (%s)', $user->first_name, $user->last_name, $user->user_email );
 		}
 		else
 		{
-			if ( !empty($user->first_name) )
-			{
-				return sprintf('%s %s (%s)', $user->first_name, $user->last_name, $user->user_email );
-			}
-			else
-			{
-				return $user->user_email;
-			}
+			return $user->user_email;
 		}
 	}
 
 
 
+	/**
+	 * build a formatted name for a WordPress user
+	 * @param  object  $user  a WordPress user object
+	 * @return string         the formated user name
+	 */
+	static function get_username_short ($user)
+	{
+		if ( !empty($user->first_name) )
+		{
+			return sprintf('%s %s', $user->first_name, substr($user->last_name, 0, 1));
+		}
+		else
+		{
+			$parts = explode("@", $user->user_email);
+			$username = $parts[0];
+			return $username;
+		}
+	}
+
+
+
+	/**
+	 * get the initials of the first and last name for a user, if avaiable
+	 * @param  object $user a WordPress user object
+	 * @return string       the initials
+	 */
 	static function get_initials ($user)
 	{
 		if ( !empty($user->first_name) )
@@ -239,7 +267,6 @@ class Kanban_User
 	 * @param int|string|object $id_or_email A user ID,  email address, or comment object
 	 * @return bool if the gravatar exists or not
 	 */
-
 	static function validate_gravatar($id_or_email) {
 	  //id or email code borrowed from wp-includes/pluggable.php
 		$email = '';
@@ -289,6 +316,10 @@ class Kanban_User
 
 
 
+	/**
+	 * get the instance of this class
+	 * @return	object	the instance
+	 */
 	public static function get_instance()
 	{
 		if ( ! self::$instance )
@@ -300,7 +331,11 @@ class Kanban_User
 
 
 
+	/**
+	 * construct that can't be overwritten
+	 */
 	private function __construct() { }
+
 }
 
 

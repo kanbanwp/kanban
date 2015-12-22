@@ -161,11 +161,29 @@ var add_task_to_status_col = function(task)
 
 
 
+/**
+ * test if current user has capability
+ * @param  {string} cap the cap we're looking for
+ * @return {bool}     if current user has cap or not
+ */
 var current_user_has_cap = function (cap)
+{
+	return user_has_cap(cap, board.current_user());
+}
+
+
+
+/**
+ * test if a user has a capability
+ * @param  {string} cap the cap we're looking for
+ * @param  {object} user the user to test against
+ * @return {bool}     if user has cap or not
+ */
+var user_has_cap = function (cap, user)
 {
 	try
 	{
-		return board.current_user().caps.indexOf(cap) < 0 ? false : true;
+		return user.caps.indexOf(cap) < 0 ? false : true;
 	}
 	catch (err)
 	{
@@ -175,6 +193,11 @@ var current_user_has_cap = function (cap)
 
 
 
+/**
+ * sort objects that have a position property by their position
+ * @param  {object} obj the objects we want to sort
+ * @return {array}     an array of the objects, sorted by position
+ */
 var records_by_position = function (obj)
 {
 	var obj_arr = $.map(obj, function(value, index) {

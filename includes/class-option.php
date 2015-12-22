@@ -13,18 +13,25 @@ Kanban_Option::init();
 
 class Kanban_Option extends Kanban_Db
 {
+	// the instance of this object
 	private static $instance;
+
+	// the table name of this class
 	protected static $table_name = 'options';
+
+	// define db table columns and their validation type
 	protected static $table_columns = array(
 		'name' => 'text',
 		'value' => 'text'
 	);
 
+	// defaults for all options, so at least something is returned
 	protected static $defaults = array (
 		'hour_interval' => '1',
 		'allowed_users' => ''
 	);
 
+	// store the options on first load, to prevent mulitple db calls
 	protected static $options = array();
 
 
@@ -38,6 +45,8 @@ class Kanban_Option extends Kanban_Db
 	}
 
 
+
+	// extend parent, so it's accessible from other classes
 	static function replace ($data)
 	{
 		return self::_replace($data);
@@ -45,6 +54,7 @@ class Kanban_Option extends Kanban_Db
 
 
 
+	// define the db schema
 	static function db_table ()
 	{
 		return "CREATE TABLE " . self::table_name() . " (
@@ -176,7 +186,7 @@ class Kanban_Option extends Kanban_Db
 		$all_users_arr = array();
 		foreach ($all_users as $user)
 		{
-			$all_users_arr[$user->ID] = Kanban_User::format_user_name($user);
+			$all_users_arr[$user->ID] = Kanban_User::get_username_long($user);
 		}
 
 		$statuses = Kanban_Status::get_all();
@@ -350,6 +360,10 @@ class Kanban_Option extends Kanban_Db
 
 
 
+	/**
+	 * get the instance of this class
+	 * @return	object	the instance
+	 */
 	public static function get_instance()
 	{
 		if ( ! self::$instance )
@@ -358,6 +372,13 @@ class Kanban_Option extends Kanban_Db
 		}
 		return self::$instance;
 	}
+
+
+
+	/**
+	 * construct that can't be overwritten
+	 */
+	private function __construct() { }
 
 }
 

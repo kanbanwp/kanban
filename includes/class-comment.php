@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * class for handling stored comments, both system and user
+ */
 
 
 // Exit if accessed directly
@@ -13,8 +16,16 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 
 class Kanban_Comment extends Kanban_Db
 {
+	// the instance of this object
 	private static $instance;
+
+	// the common name for this class
+	static $slug = 'comment';
+
+	// the table name of this class
 	protected static $table_name = 'log_comments';
+
+	// define db table columns and their validation type
 	protected static $table_columns = array(
 		'task_id' => 'int',
 		'created_dt_gmt' => 'datetime',
@@ -25,6 +36,7 @@ class Kanban_Comment extends Kanban_Db
 	);
 
 
+
 	static function init()
 	{
 	}
@@ -33,6 +45,13 @@ class Kanban_Comment extends Kanban_Db
 
 	static function add ($comment, $type = 'system', $task_id = 0, $user_id_author = NULL)
 	{
+
+
+		do_action( sprintf('%s_before_%s_add', Kanban::get_instance()->settings->basename, self::$slug) );
+
+
+
+
 		if ( !$user_id_author )
 		{
 			$user_id_author = get_current_user_id();
@@ -49,11 +68,23 @@ class Kanban_Comment extends Kanban_Db
 
 		$success = self::_insert($data);
 
+
+
+		do_action(
+			sprintf('%s_after_%s_add', Kanban::get_instance()->settings->basename, self::$slug),
+			$success,
+			$data
+		);
+
+
+
+
 		return $success;
 	}
 
 
 
+	// extend parent, so it's accessible from other classes
 	static function insert ($data)
 	{
 		return self::_insert($data);
@@ -61,6 +92,7 @@ class Kanban_Comment extends Kanban_Db
 
 
 
+	// define the db schema
 	static function db_table ()
 	{
 		return "CREATE TABLE " . self::table_name() . " (
@@ -77,6 +109,10 @@ class Kanban_Comment extends Kanban_Db
 
 
 
+	/**
+	 * get the instance of this class
+	 * @return	object	the instance
+	 */
 	public static function get_instance()
 	{
 		if ( ! self::$instance )
@@ -85,6 +121,13 @@ class Kanban_Comment extends Kanban_Db
 		}
 		return self::$instance;
 	}
+
+
+
+	/**
+	 * construct that can't be overwritten
+	 */
+	private function __construct() { }
 
 }
 

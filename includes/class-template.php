@@ -13,17 +13,23 @@ Kanban_Template::init();
 
 class Kanban_Template
 {
+	// the instance of this object
 	private static $instance;
 
+
+
+	// the list of kanban-related URL's
 	static $page_slugs = array(
 		'board' => array(
 			'style' => array(
+				'bootstrap' => "%s/bootstrap/css/bootstrap.min.css", // "//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js",
 				'board' => '%s/css/board.css'
 			),
 			'script' => array(
-				'jquery-ui' => "//code.jquery.com/ui/1.11.3/jquery-ui.min.js",
-				'bootstrap' => "//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js",
-				'bootstrap-growl' => "//cdnjs.cloudflare.com/ajax/libs/bootstrap-growl/1.0.0/jquery.bootstrap-growl.min.js",
+				'jquery' => "%s/js/jquery-1.11.3.min.js", // "https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js",
+				'jquery-ui' => "%s/js/jquery-ui.min.js", // "//code.jquery.com/ui/1.11.3/jquery-ui.min.js",
+				'bootstrap' => "%s/bootstrap/js/bootstrap.min.js", // "//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js,
+				'bootstrap-growl' => "%s/js/jquery.bootstrap-growl.min.js", // "//cdnjs.cloudflare.com/ajax/libs/bootstrap-growl/1.0.0/jquery.bootstrap-growl.min.js",
 				'autoresize' => "%s/js/jquery.textarea.autoresize.min.js",
 				'same-height' => "%s/js/jquery.same-height.min.js",
 				't' => "%s/js/t.min.js",
@@ -37,11 +43,7 @@ class Kanban_Template
 				'board' => "%s/js/board.min.js"
 			)
 		),
-		'login' => array(
-			'style' => array(
-				'login' => "%s/css/login.css"
-			)		
-		)
+		'login' => array()
 	);
 
 
@@ -61,6 +63,9 @@ class Kanban_Template
 
 
 
+	/**
+	 * make sure only authenticated users can see our pages
+	 */
 	static function protect_slug ()
 	{
 		// only protect pages with our slug
@@ -106,7 +111,12 @@ class Kanban_Template
 
 
 
-	static function template_chooser($template)
+	/**
+	 * routing to interpret our custom URLs
+	 * @param  string $template the template being passed
+	 * @return string           the template found (or not found)
+	 */
+	static function template_chooser ($template)
 	{
 		if ( is_admin() ) return $template;
 
@@ -162,12 +172,6 @@ class Kanban_Template
 								$path = sprintf($path, Kanban::get_instance()->settings->uri);
 							}
 
-							if ( defined('KANBAN_DEBUG') && KANBAN_DEBUG === TRUE )
-							{
-								$path = str_replace('.min', '', $path);
-							}
-
-
 							self::get_instance()->script[$handle] = $path;
 						}
 					}
@@ -186,6 +190,11 @@ class Kanban_Template
 
 
 
+	/**
+	 * higherarchy of template locations, to allow for customization
+	 * @param  string $basename filename of the template we're looking for
+	 * @return string           fill template path
+	 */
 	static function find_template($basename)
 	{
 		// look for template in theme/name_of_class
@@ -214,6 +223,12 @@ class Kanban_Template
 
 
 
+	/**
+	 * render an html template, and populate variables
+	 * @param  string $basename the filename of the template we're looking for
+	 * @param  array  $data     the variables to populate
+	 * @return string           the html output
+	 */
 	static function render_template ($basename, $data = array())
 	{
 		$template_path = Kanban_Template::find_template($basename);
@@ -231,6 +246,9 @@ class Kanban_Template
 
 
 
+	/**
+	 * add a css sheet to a kanban template, without using the WordPress queue
+	 */
 	static function add_style()
 	{
 		if ( !isset(self::get_instance()->style) || !is_array(self::get_instance()->style) ) return;
@@ -248,6 +266,9 @@ class Kanban_Template
 
 
 
+	/**
+	 * add a js script to a kanban template, without using the WordPress queue
+	 */
 	static function add_script()
 	{
 		if ( !isset(self::get_instance()->script) || !is_array(self::get_instance()->script) ) return;
@@ -265,6 +286,10 @@ class Kanban_Template
 
 
 
+	/**
+	 * get the instance of this class
+	 * @return	object	the instance
+	 */
 	public static function get_instance()
 	{
 		if ( ! self::$instance )
@@ -276,6 +301,9 @@ class Kanban_Template
 
 
 
+	/**
+	 * construct that can't be overwritten
+	 */
 	private function __construct() { }
 
 } // Kanban_Template

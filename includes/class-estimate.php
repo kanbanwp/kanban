@@ -13,8 +13,13 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 
 class Kanban_Estimate extends Kanban_Db
 {
+	// the instance of this object
 	private static $instance;
+
+	// the table name of this class
 	protected static $table_name = 'estimates';
+
+	// define db table columns and their validation type
 	protected static $table_columns = array(
 		'title' => 'text',
 		'hours' => 'float',
@@ -55,6 +60,7 @@ class Kanban_Estimate extends Kanban_Db
 
 
 
+	// extend parent, so it's accessible from other classes
 	static function replace ($data)
 	{
 		return self::_replace($data);
@@ -62,6 +68,7 @@ class Kanban_Estimate extends Kanban_Db
 
 
 
+	// extend parent, so it's accessible from other classes
 	static function delete ($where)
 	{
 		return self::_delete($where);
@@ -69,12 +76,15 @@ class Kanban_Estimate extends Kanban_Db
 
 
 
+	// extend parent, so it's accessible from other classes
 	static function insert_id ()
 	{
 		return self::_insert_id();
 	}
 
 
+
+	// define the db schema
 	static function db_table ()
 	{
 		return "CREATE TABLE " . self::table_name() . " (
@@ -90,6 +100,10 @@ class Kanban_Estimate extends Kanban_Db
 
 
 
+	/**
+	 * get the instance of this class
+	 * @return	object	the instance
+	 */
 	public static function get_instance()
 	{
 		if ( ! self::$instance )
@@ -98,6 +112,13 @@ class Kanban_Estimate extends Kanban_Db
 		}
 		return self::$instance;
 	}
+
+
+
+	/**
+	 * construct that can't be overwritten
+	 */
+	private function __construct() { }
 
 }
 

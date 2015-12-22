@@ -13,9 +13,16 @@ Kanban_Project::init();
 
 class Kanban_Project extends Kanban_Db
 {
+	// the instance of this object
 	private static $instance;
+
+	// the common name for this class
 	static $slug = 'project';
+
+	// the table name of this class
 	protected static $table_name = 'projects';
+
+	// define db table columns and their validation type
 	protected static $table_columns = array(
 		'title' => 'text',
 		'description' => 'text',
@@ -119,6 +126,7 @@ class Kanban_Project extends Kanban_Db
 
 
 
+	// extend parent, so it's accessible from other classes
 	static function replace ($data)
 	{
 		return self::_replace($data);
@@ -165,6 +173,7 @@ class Kanban_Project extends Kanban_Db
 
 
 
+	// define the db schema
 	static function db_table ()
 	{
 		return "CREATE TABLE " . self::table_name() . " (
@@ -183,6 +192,10 @@ class Kanban_Project extends Kanban_Db
 
 
 
+	/**
+	 * get the instance of this class
+	 * @return	object	the instance
+	 */
 	public static function get_instance()
 	{
 		if ( ! self::$instance )
@@ -194,6 +207,9 @@ class Kanban_Project extends Kanban_Db
 
 
 
+	/**
+	 * construct that can't be overwritten
+	 */
 	private function __construct() { }
 
 }

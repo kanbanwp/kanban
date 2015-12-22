@@ -1148,11 +1148,16 @@ abstract class Kanban_Db
 	}
 
 
-
+	/**
+	 * get the stored db version
+	 * @return float the current stored version
+	 */
 	static function installed_ver ()
 	{
+		// if it hasn't been loaded yet
 		if ( !isset(self::$installed_ver) )
 		{
+			// get it from the db, and store it
 			self::$installed_ver = get_option(
 				sprintf(
 					'%s_db_version',
@@ -1161,11 +1166,17 @@ abstract class Kanban_Db
 			);
 		}
 
+		// return the stored db version
 		return self::$installed_ver;
 	}
 
 
 
+	/**
+	 * build the table name with "namespacing"
+	 * @param  string $table the classname for the table
+	 * @return string        the complete table name
+	 */
 	static function format_table_name ($table)
 	{
 		global $wpdb;
@@ -1180,14 +1191,26 @@ abstract class Kanban_Db
 
 
 
-	// public static function get_instance()
-	// {
-	// 	if ( ! self::$instance )
-	// 	{
-	// 		self::$instance = new self();
-	// 	}
-	// 	return self::$instance;
-	// }
+	/**
+	 * get the instance of this class
+	 * @return	object	the instance
+	 */
+	public static function get_instance()
+	{
+		if ( ! self::$instance )
+		{
+			self::$instance = new self();
+		}
+		return self::$instance;
+	}
+
+
+
+	/**
+	 * construct that can't be overwritten
+	 */
+	private function __construct() { }
+
 }
 
 

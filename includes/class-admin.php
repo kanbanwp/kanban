@@ -16,8 +16,9 @@ Kanban_Admin::init();
 
 
 
-class Kanban_Admin extends Kanban_Db
+class Kanban_Admin
 {
+	// the instance of this object
 	private static $instance;
 
 
@@ -367,7 +368,6 @@ class Kanban_Admin extends Kanban_Db
 	 * construct that can't be overwritten
 	 */
 	private function __construct() { }
-
 
 
 

@@ -22,28 +22,32 @@ class Kanban_Template
 	static $page_slugs = array(
 		'board' => array(
 			'style' => array(
-				'bootstrap' => "%s/bootstrap/css/bootstrap.min.css", // "//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js",
-				'board' => '%s/css/board.css'
+				'bootstrap' => "%sbootstrap/css/bootstrap.min.css", // "//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js",
+				'board' => '%scss/board.css'
 			),
 			'script' => array(
-				'jquery' => "%s/js/jquery-1.11.3.min.js", // "https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js",
-				'jquery-ui' => "%s/js/jquery-ui.min.js", // "//code.jquery.com/ui/1.11.3/jquery-ui.min.js",
-				'bootstrap' => "%s/bootstrap/js/bootstrap.min.js", // "//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js,
-				'bootstrap-growl' => "%s/js/jquery.bootstrap-growl.min.js", // "//cdnjs.cloudflare.com/ajax/libs/bootstrap-growl/1.0.0/jquery.bootstrap-growl.min.js",
-				'autoresize' => "%s/js/jquery.textarea.autoresize.min.js",
-				'same-height' => "%s/js/jquery.same-height.min.js",
-				't' => "%s/js/t.min.js",
-				'board-modal-projects' => "%s/js/board-modal-projects.min.js",
-				'board-sidebar-header' => "%s/js/board-sidebar-header.min.js",
-				// 'board-tour' => "%s/js/board-tour.min.js",
-				'board-search' => "%s/js/board-search.min.js",
-				'board-filter' => "%s/js/board-filter.min.js",
-				'board-view' => "%s/js/board-view.min.js",
-				'board-task' => "%s/js/board-task.min.js",
-				'board' => "%s/js/board.min.js"
+				'jquery' => "%sjs/jquery-1.11.3.min.js", // "https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js",
+				'jquery-ui' => "%sjs/jquery-ui.min.js", // "//code.jquery.com/ui/1.11.3/jquery-ui.min.js",
+				'bootstrap' => "%sbootstrap/js/bootstrap.min.js", // "//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js,
+				'bootstrap-growl' => "%sjs/jquery.bootstrap-growl.min.js", // "//cdnjs.cloudflare.com/ajax/libs/bootstrap-growl/1.0.0/jquery.bootstrap-growl.min.js",
+				'autoresize' => "%sjs/jquery.textarea.autoresize.min.js",
+				'same-height' => "%sjs/jquery.same-height.min.js",
+				't' => "%sjs/t.min.js",
+				'board-modal-projects' => "%sjs/board-modal-projects.min.js",
+				'board-sidebar-header' => "%sjs/board-sidebar-header.min.js",
+				// 'board-tour' => "%sjs/board-tour.min.js",
+				'board-search' => "%sjs/board-search.min.js",
+				'board-filter' => "%sjs/board-filter.min.js",
+				'board-view' => "%sjs/board-view.min.js",
+				'board-task' => "%sjs/board-task.min.js",
+				'board' => "%sjs/board.min.js"
 			)
 		),
-		'login' => array()
+		'login' => array(
+			'style' => array(
+				'bootstrap' => "%sbootstrap/css/bootstrap.min.css", // "//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js",
+			)
+		)
 	);
 
 
@@ -72,8 +76,10 @@ class Kanban_Template
 	    if ( strpos($_SERVER['REQUEST_URI'], sprintf('/%s/', Kanban::$slug)) === FALSE ) return;
 
 
+
 		// admins can see anything
 		// if ( current_user_can('manage_options') ) return;
+
 
 
 		// get my id, and allowed id's

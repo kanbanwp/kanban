@@ -22,9 +22,9 @@
 				<h2><?php echo __('Please Login', Kanban::$instance->settings->file) ?></h2>
 				<div class="form-group">
 					<label for="email" class="sr-only">
-						<?php echo __('Email', Kanban::get_text_domain()) ?>
+						<?php echo __('Email or username', Kanban::get_text_domain()) ?>
 					</label>
-					<input type="email" name="email" id="email" class="form-control input-lg" placeholder="<?php echo __('Email', Kanban::get_text_domain()) ?>" required autofocus>
+					<input type="text" name="email" id="email" class="form-control input-lg" placeholder="<?php echo __('Email or username', Kanban::get_text_domain()) ?>" required autofocus>
 				</div><!-- form group -->
 				<div class="form-group">
 					<label for="password" class="sr-only">

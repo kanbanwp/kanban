@@ -85,22 +85,39 @@ class Kanban_User
 
 
 
-		$user_by_email = get_user_by('email', $_POST['email'] );
-
-		if ( empty($user_by_email) )
+		if ( is_email( $_POST['email'] ) )
 		{
-			Kanban::get_instance()->flash->add(
-				'danger',
-				__( 'Whoops! We can\'t find an account for that email address.', Kanban::get_text_domain() )
-			);
-			wp_redirect($_POST['_wp_http_referer']);
-			exit;
+			$user = get_user_by('email', $_POST['email'] );
+
+			if ( empty($user) )
+			{
+				Kanban::get_instance()->flash->add(
+					'danger',
+					__( 'Whoops! We can\'t find an account for that email address.', Kanban::get_text_domain() )
+				);
+				wp_redirect($_POST['_wp_http_referer']);
+				exit;
+			}
+		}
+		else
+		{
+			$user = get_user_by('login', $_POST['email'] );
+
+			if ( empty($user) )
+			{
+				Kanban::get_instance()->flash->add(
+					'danger',
+					__( 'Whoops! We can\'t find an account for that username.', Kanban::get_text_domain() )
+				);
+				wp_redirect($_POST['_wp_http_referer']);
+				exit;
+			}
 		}
 
 
 
 		$creds = array();
-		$creds['user_login'] = $user_by_email->user_login;
+		$creds['user_login'] = $user->user_login;
 		$creds['user_password'] = $_POST['password'];
 		$creds['remember'] = true;
 

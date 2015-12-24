@@ -73,7 +73,7 @@ kan_fs();
 // instantiate the plugin
 Kanban::init();
 
-
+do_action( 'kanban_loaded' );
 
 class Kanban
 {

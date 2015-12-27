@@ -129,6 +129,10 @@ class Kanban
 
 		register_activation_hook( __FILE__, array( __CLASS__, 'on_activation' ) );
 		register_deactivation_hook( __FILE__, array( __CLASS__, 'on_deactivation' ) );
+
+
+
+		do_action( 'kanban_loaded' );
 	}
 
 

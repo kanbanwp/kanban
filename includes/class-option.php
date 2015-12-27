@@ -215,7 +215,7 @@ class Kanban_Option extends Kanban_Db
 		// any statuses to delete?
 		if ( isset($_POST['statuses']['saved']) )
 		{
-			$deleted_statuses = array_diff_key($status_ids, array_keys($_POST['statuses']['saved']));
+			$deleted_statuses = array_diff($status_ids, array_keys($_POST['statuses']['saved']));
 
 			if ( !empty($deleted_statuses) )
 			{
@@ -238,7 +238,7 @@ class Kanban_Option extends Kanban_Db
 
 				if ( $success )
 				{
-					Kanban_Status::insert_id();
+					$status_id = Kanban_Status::insert_id();
 
 					// add it to all the statuses to save
 					$_POST['statuses']['saved'][$status_id] = $status;

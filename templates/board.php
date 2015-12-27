@@ -117,10 +117,10 @@
 				<p class="lead text-center" id="empty-archive-confirmation-label" data-label="<?php echo __('Delete all tasks in &quot;{0}&quot;?', Kanban::get_text_domain()) ?>">
 				</p>
 				<p class="text-center">
-					<button type="button" class="btn btn-default" data-dismiss="modal">
+					<button type="button" class="btn btn-default" id="btn-empty-status-tasks-cancel" data-dismiss="modal">
 						<?php echo __('Cancel', Kanban::get_text_domain()) ?>
 					</button>
-					<button type="button" class="btn btn-primary" id="btn-empty-status-tasks" data-dismiss="modal" data-status-col-id="">
+					<button type="button" class="btn btn-primary" id="btn-empty-status-tasks" data-status-col-id="">
 						<?php echo __('Archive', Kanban::get_text_domain()) ?>
 					</button>
 				</p>

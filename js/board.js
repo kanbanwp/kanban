@@ -227,13 +227,16 @@ jQuery(function($)
 		'click',
 		function ()
 		{
-			var $btn = $(this);
+			// set text
+			$('#empty-archive-confirmation-label').text('Deleting...');
+
+			var $btn = $(this).prop('disabled', true);
 
 			// get passed status col id
 			var status_id = $btn.attr('data-status-col-id');
 
 			// start an interval
-			var delete_task_interval = setInterval(function()
+			timers.delete_task_interval = setInterval(function()
 			{
 				// see if there's a task to delete
 				var $first_task = $('#{0} .task:first .delete-task'.sprintf(status_id));
@@ -242,17 +245,31 @@ jQuery(function($)
 				if ( $first_task.length == 0 )
 				{
 					// stop the interval
-					clearInterval(delete_task_interval);
+					clearInterval(timers.delete_task_interval);
+
+					// reset, hide modal
+					$('#btn-empty-status-tasks').prop('disabled', false);
+					$('#modal-empty-archive').modal('hide');
 				}
 				else
 				{
 					// otherwise trigger the delete
 					$first_task.click();
 				}
-			}, 2000);
+			}, 3000);
 			// click()
 		}
-	)
+	);
+
+
+
+	$('#btn-empty-status-tasks-cancel').on(
+		'click',
+		function()
+		{
+			clearInterval(timers.delete_task_interval);
+		}
+	);
 
 
 	$(document).mousedown(function(e)

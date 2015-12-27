@@ -28,6 +28,12 @@ class Kanban_Admin
 		// redirect to welcome screen on activation
 		add_action( 'admin_init',array(__CLASS__, 'welcome_screen_do_activation_redirect') );
 
+		// add settings link
+  		add_filter(
+  			'plugin_action_links_' . Kanban::get_instance()->settings->plugin_basename,
+  			array(__CLASS__, 'add_plugin_settings_link')
+  		);
+
 		// Remove Admin bar
 		if ( strpos($_SERVER['REQUEST_URI'], sprintf('/%s/', Kanban::$slug)) !== FALSE )
 		{

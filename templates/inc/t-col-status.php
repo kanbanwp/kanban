@@ -15,8 +15,16 @@
 	<h2 class="h3" style="border-color: {{=status.color_hex}};">
 		{{=status.title}}
 	</h2>
+
 {{current_user_can_write}}
+
 	<div class="btn-group btn-group-status-actions pull-right">
+{{status.left_close}}
+		<button type="button" class="btn btn-primary btn-empty-status-tasks-modal" data-status-title="{{=status.title}}" data-status-col-id="status-{{=status.id}}-tasks">
+			<span class="glyphicon glyphicon glyphicon-trash"></span>
+			<span class="glyphicon glyphicon-refresh glyphicon-refresh-animate" style="display: none;"></span>
+		</button>
+{{/status.left_close}}
 		<button type="button" class="btn btn-primary btn-new-task">
 			<span class="glyphicon glyphicon-plus"></span>
 			<span class="glyphicon glyphicon-refresh glyphicon-refresh-animate" style="display: none;"></span>

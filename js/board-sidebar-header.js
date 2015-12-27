@@ -142,6 +142,29 @@ $.fn.board_sidebar_header = function()
 
 		$sidebar.on(
 			'click',
+			'.btn-empty-status-tasks-modal',
+			function()
+			{
+				var $btn = $(this);
+
+				// build and set text
+				var status_title = $btn.attr('data-status-title');
+				var status_title = $('#empty-archive-confirmation-label').attr('data-label').sprintf(status_title);
+				$('#empty-archive-confirmation-label').text(status_title);
+
+				// get and set status col id
+				var status_id = $btn.attr('data-status-col-id');
+				$('#btn-empty-status-tasks').attr('data-status-col-id', status_id);
+
+				$('#modal-empty-archive').modal('show');
+			}
+		);
+
+
+
+
+		$sidebar.on(
+			'click',
 			'h2',
 			function(e)
 			{

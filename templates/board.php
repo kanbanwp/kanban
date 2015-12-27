@@ -110,6 +110,27 @@
 
 
 
+<div class="modal fade" id="modal-empty-archive" data-keyboard="false">
+	<div class="modal-dialog modal-lg" role="document">
+		<div class="modal-content">
+			<div class="modal-body">
+				<p class="lead text-center" id="empty-archive-confirmation-label" data-label="<?php echo __('Delete all tasks in &quot;{0}&quot;?', Kanban::get_text_domain()) ?>">
+				</p>
+				<p class="text-center">
+					<button type="button" class="btn btn-default" data-dismiss="modal">
+						<?php echo __('Cancel', Kanban::get_text_domain()) ?>
+					</button>
+					<button type="button" class="btn btn-primary" id="btn-empty-status-tasks" data-dismiss="modal" data-status-col-id="">
+						<?php echo __('Archive', Kanban::get_text_domain()) ?>
+					</button>
+				</p>
+			</div>
+		</div><!-- content -->
+	</div><!-- dialog -->
+</div><!-- modal -->
+
+
+
 
 <div id="screen-size">
 	<div class="visible-xs" data-size="xs"></div>

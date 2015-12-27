@@ -223,6 +223,38 @@ jQuery(function($)
 
 
 
+	$('#btn-empty-status-tasks').on(
+		'click',
+		function ()
+		{
+			var $btn = $(this);
+
+			// get passed status col id
+			var status_id = $btn.attr('data-status-col-id');
+
+			// start an interval
+			var delete_task_interval = setInterval(function()
+			{
+				// see if there's a task to delete
+				var $first_task = $('#{0} .task:first .delete-task'.sprintf(status_id));
+
+				// if no first task
+				if ( $first_task.length == 0 )
+				{
+					// stop the interval
+					clearInterval(delete_task_interval);
+				}
+				else
+				{
+					// otherwise trigger the delete
+					$first_task.click();
+				}
+			}, 2000);
+			// click()
+		}
+	)
+
+
 	$(document).mousedown(function(e)
 	{
 		// The latest element clicked

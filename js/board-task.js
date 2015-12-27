@@ -86,7 +86,7 @@ $.fn.board_task = function(task)
 				})
 				.done(function(response )
 				{
-					delete task_records[task.ID];
+					delete board.task_records[task.ID];
 
 					$task.slideUp('fast', function()
 					{

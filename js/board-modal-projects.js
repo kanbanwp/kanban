@@ -57,7 +57,7 @@ $.fn.modal_projects = function()
 				.done(function(response )
 				{
 					// remove project from projects
-					delete project_records[project_id];
+					delete board.project_records[project_id];
 
 					// remove project from tasks
 					for ( var i in board.task_records )

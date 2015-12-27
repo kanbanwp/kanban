@@ -8,17 +8,30 @@ jQuery(function($)
 		$(tab_id).show();
 	}
 
+
+
+	// (re)set positions with padding
 	function set_positions ()
 	{
 		$('.sortable').each(function()
 		{
 			$('li', this).each(function(i)
 			{
-				$('.position', this).val(i);
+				// add zeros
+				// @link http://stackoverflow.com/a/1699980
+				var s = i+"";
+				while ( s.length < 3 )
+				{
+					s = "0" + s;
+				}
+
+				// set position
+				$('.position', this).val(s);
 			});
 		});
-
 	}
+
+
 
 	$('.nav-tab-wrapper a').on(
 		'click',
@@ -32,6 +45,8 @@ jQuery(function($)
 			return false;
 		}
 	);
+
+
 
 	if ( typeof window.location.hash !== 'undefined' )
 	{

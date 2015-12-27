@@ -499,7 +499,7 @@ $.fn.board_task = function(task)
 				// enter
 				if(e.keyCode==13)
 				{
-					$projects_dropdown.hide();
+					$task.trigger('projects_dropdown_hide');
 					return;
 				}
 
@@ -508,13 +508,13 @@ $.fn.board_task = function(task)
 				// escape
 				if(e.keyCode==27)
 				{
-					$projects_dropdown.hide();
+					$task.trigger('projects_dropdown_hide');
 					return;
 				}
 
 
 
-				$projects_dropdown.show();
+				$task.trigger('projects_dropdown_show');
 
 				$('.list-group-item', $task).remove();
 
@@ -536,7 +536,7 @@ $.fn.board_task = function(task)
 
 				if ( $('.list-group-item', $task).length == 0 )
 				{
-					$projects_dropdown.hide();
+					$task.trigger('projects_dropdown_hide');
 				}
 			} // function
 		);
@@ -594,7 +594,7 @@ $.fn.board_task = function(task)
 			'.project .list-group-item',
 			function()
 			{
-				$projects_dropdown.hide();
+				$task.trigger('projects_dropdown_hide');
 
 				var project_id = $(this).attr('data-id');
 
@@ -637,7 +637,7 @@ $.fn.board_task = function(task)
 			'.btn-edit-projects',
 			function()
 			{
-				$projects_dropdown.hide();
+				$task.trigger('projects_dropdown_hide');
 			}
 		);
 
@@ -831,6 +831,27 @@ $.fn.board_task = function(task)
 		)
 		.trigger('populate_task_hours');
 
+
+
+		$task.on(
+			'projects_dropdown_show',
+			function ()
+			{
+				$projects_dropdown.show();
+				$task.addClass('active');
+			}
+		);
+
+
+
+		$task.on(
+			'projects_dropdown_hide',
+			function ()
+			{
+				$projects_dropdown.hide();
+				$task.removeClass('active');
+			}
+		);
 
 
 	}); // each task

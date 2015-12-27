@@ -73,6 +73,13 @@ class Kanban_Utils
 	{
 		return gmdate('Y-m-d H:i:s');
 	}
+
+
+
+	static function str_for_frontend ($str)
+	{
+			return htmlspecialchars(stripcslashes(stripcslashes(stripcslashes($str))), ENT_QUOTES);
+	}
 }
 
 

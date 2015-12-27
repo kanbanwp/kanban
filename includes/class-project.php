@@ -168,6 +168,11 @@ class Kanban_Project extends Kanban_Db
 
 		$records = parent::get_all($sql);
 
+		foreach ($records as $key => $record)
+		{
+			$records[$key]->title = Kanban_Utils::str_for_frontend($records[$key]->title);
+		}
+
 		return Kanban_Utils::build_array_with_id_keys ($records, 'id');;
 	}
 

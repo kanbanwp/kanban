@@ -181,6 +181,10 @@ class Kanban_Option extends Kanban_Db
 	static function settings_page()
 	{
 		$settings = Kanban_Option::get_all();
+		if ( is_serialized($settings['allowed_users']) )
+		{
+			$settings['allowed_users'] = unserialize($settings['allowed_users']);
+		}
 
 		$all_users = get_users();
 		$all_users_arr = array();

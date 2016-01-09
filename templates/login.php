@@ -29,7 +29,7 @@
 					<label for="password" class="sr-only">
 						<?php echo __('Password', 'kanban') ?>
 					</label>
-					<input type="password" name="password" id="password" class="form-control input-lg" placeholder="<?php echo __('Password', 'kanban') ?>" required autofocus>
+					<input type="password" name="password" id="password" class="form-control input-lg" placeholder="<?php echo __('Password', 'kanban') ?>" required>
 				</div><!-- form group -->
 				<div>
 					<button type="submit" class="btn btn-lg btn-primary btn-block">

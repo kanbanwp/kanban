@@ -4,9 +4,9 @@
 
 <div class="wrap">
 	<h1>
-		<?php echo __(sprintf('%s Settings', Kanban::get_instance()->settings->pretty_name), Kanban::get_text_domain()) ?>
+		<?php echo __(sprintf('%s Settings', Kanban::get_instance()->settings->pretty_name), 'kanban') ?>
 		<a href="<?php echo sprintf( '%s/%s/board', home_url(), Kanban::$slug ) ?>" class="page-title-action" target="_blank">
-			<?php echo __('Go to your board', Kanban::get_text_domain()) ?>
+			<?php echo __('Go to your board', 'kanban') ?>
 		</a>
 
 	</h1>
@@ -18,10 +18,10 @@
 <?php endif // message ?>
 
 	<h2 class="nav-tab-wrapper">
-		<a href="#tab-settings" class="nav-tab nav-tab-active"><?php echo __('Settings', Kanban::get_text_domain() ) ?></a>
-		<a href="#tab-users" class="nav-tab"><?php echo __('Users', Kanban::get_text_domain() ) ?></a>
-		<a href="#tab-statuses" class="nav-tab"><?php echo __('Statuses', Kanban::get_text_domain() ) ?></a>
-		<a href="#tab-estimates" class="nav-tab"><?php echo __('Estimates', Kanban::get_text_domain() ) ?></a>
+		<a href="#tab-settings" class="nav-tab nav-tab-active"><?php echo __('Settings', 'kanban' ) ?></a>
+		<a href="#tab-users" class="nav-tab"><?php echo __('Users', 'kanban' ) ?></a>
+		<a href="#tab-statuses" class="nav-tab"><?php echo __('Statuses', 'kanban' ) ?></a>
+		<a href="#tab-estimates" class="nav-tab"><?php echo __('Estimates', 'kanban' ) ?></a>
 		<?php
 		echo apply_filters(
 			sprintf(
@@ -44,22 +44,54 @@
 					<tr>
 						<th width="33%" scope="row">
 							<label for="hour_interval">
-								<?php echo __('Work hour interval', Kanban::get_text_domain() ) ?><br>
-								<small><?php echo __('in hours', Kanban::get_text_domain() ) ?></small>
+								<?php echo __('Work hour interval', 'kanban' ) ?><br>
+								<small><?php echo __('in hours', 'kanban' ) ?></small>
 							</label>
 						</th>
 						<td>
 							<input name="settings[hour_interval]" type="text" id="hour_increment" value="<?php echo isset($settings['hour_interval']) ? $settings['hour_interval'] : 1 ?>" class="regular-text">
 							<p class="description">
-								<?php echo __('Example: If you want to track work in 10 minute increments, enter ".1667" here.', Kanban::get_text_domain() ) ?>
+								<?php echo __('Example: If you want to track work in 10 minute increments, enter ".1667" here.', 'kanban' ) ?>
 							</p>
+						</td>
+					</tr>
+					<tr>
+						<th width="33%" scope="row">
+							<?php echo __('Show all columns all the time', 'kanban' ) ?>
+						</th>
+						<td>
+
+
+							<div class="switch-field">
+								<input type="radio" id="show_all_cols_1" name="settings[show_all_cols]" value="1" <?php echo (bool) $settings['show_all_cols'] ? 'checked' : '' ?>>
+								<label for="show_all_cols_1">Yes</label>
+								<input type="radio" id="show_all_cols_0" name="settings[show_all_cols]" value="0" <?php echo !(bool) $settings['show_all_cols'] ? 'checked' : '' ?>>
+								<label for="show_all_cols_0">No</label>
+							</div>
+
+							<p class="clear description">
+								<?php echo __('This disables hiding the first and last status columns.', 'kanban' ) ?>
+							</p>
+						</td>
+					</tr>
+					<tr>
+						<th width="33%" scope="row">
+							<?php echo __('Default the view to "compact"', 'kanban' ) ?>
+						</th>
+						<td>
+							<div class="switch-field">
+								<input type="radio" id="default_to_compact_view_1" name="settings[default_to_compact_view]" value="1" <?php echo (bool) $settings['default_to_compact_view'] ? 'checked' : '' ?>>
+								<label for="default_to_compact_view_1">Yes</label>
+								<input type="radio" id="default_to_compact_view_0" name="settings[default_to_compact_view]" value="0" <?php echo !(bool) $settings['default_to_compact_view'] ? 'checked' : '' ?>>
+								<label for="default_to_compact_view_0">No</label>
+							</div>
 						</td>
 					</tr>
 				</tbody>
 			</table>
 
 			<?php submit_button(
-				__('Save your Settings', Kanban::get_text_domain()),
+				__('Save your Settings', 'kanban'),
 					'primary',
 					'submit'
 			) ?>
@@ -74,7 +106,10 @@
 					<tr>
 						<th width="33%" scope="row">
 							<label for="hour_interval">
-								<?php echo __('Allowed users', Kanban::get_text_domain() ) ?>
+								<?php echo __('Allowed users', 'kanban' ) ?><br>
+								<small>
+									<?php echo __('(Users who can make changes to the board)', 'kanban' ) ?>
+								</small>
 							</label>
 						</th>
 						<td>
@@ -103,7 +138,7 @@
 			</table>
 
 			<?php submit_button(
-				__('Save your Settings', Kanban::get_text_domain()),
+				__('Save your Settings', 'kanban'),
 					'primary',
 					'submit'
 			) ?>
@@ -120,12 +155,12 @@
 			</ol><!-- sortable -->
 			<p>
 				<button type="button" class="button" id="add-status">
-					<?php echo __('Add another status', Kanban::get_text_domain()) ?>
+					<?php echo __('Add another status', 'kanban') ?>
 				</button>
 			</p>
 
 			<?php submit_button(
-				__('Save your Settings', Kanban::get_text_domain()),
+				__('Save your Settings', 'kanban'),
 					'primary',
 					'submit'
 			) ?>
@@ -142,12 +177,12 @@
 			</ol><!-- sortable -->
 			<p>
 				<button type="button" class="button" id="add-estimate">
-					<?php echo __('Add another estimate', Kanban::get_text_domain()) ?>
+					<?php echo __('Add another estimate', 'kanban') ?>
 				</button>
 			</p>
 
 			<?php submit_button(
-				__('Save your Settings', Kanban::get_text_domain()),
+				__('Save your Settings', 'kanban'),
 					'primary',
 					'submit'
 			) ?>

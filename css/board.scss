@@ -518,6 +518,11 @@ body.view-compact {
 				}
 			}
 
+			.btn-task-hours,
+			.btn-estimate {
+				overflow: hidden;
+			}
+
 			.task-estimate,
 			.task-hour-count {
 				font-size: 1.618em;
@@ -552,6 +557,22 @@ body.view-compact {
 		}
 
 	} // row-tasks
+
+	// disable sidebar hiding
+	&.show_all_cols {
+		#row-statuses,
+		#row-tasks {
+			left: auto;
+			position: static;
+			width: auto;
+		}
+
+		.toggle-sidebar {
+			display: none !important;
+		}
+	}
+
+
 }
 
 

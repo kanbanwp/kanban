@@ -4,27 +4,27 @@
 
 <div class="wrap">
 	<h1>
-		<?php echo __(sprintf('About %s', Kanban::get_instance()->settings->pretty_name), Kanban::get_text_domain()) ?>
+		<?php echo sprintf(__('About %s', 'kanban'), Kanban::get_instance()->settings->pretty_name) ?>
 	</h1>
 
 
 
 	<?php if ( isset($_GET['activation']) ) : ?>
 		<div class="updated notice">
-			<p><?php echo __('Thanks for using Kanban for WordPress!', Kanban::get_text_domain()) ?></p>
+			<p><?php echo __('Thanks for using Kanban for WordPress!', 'kanban') ?></p>
 			<button type="button" class="notice-dismiss">
-				<span class="screen-reader-text"><?php echo __('Dismiss this notice.', Kanban::get_text_domain()) ?></span>
+				<span class="screen-reader-text"><?php echo __('Dismiss this notice.', 'kanban') ?></span>
 			</button>
 		</div>
 	<?php endif ?>
 
 	<p>
 		<a href="<?php echo sprintf( '%s/%s/board', home_url(), Kanban::$slug ) ?>" class="button-primary" target="_blank">
-			<?php echo __('Go to your board', Kanban::get_text_domain()) ?>
+			<?php echo __('Go to your board', 'kanban') ?>
 		</a>
 		<a href="http://kanbanwp.com/documentation" class="button" target="_blank">
-			<?php echo __('Documentation', Kanban::get_text_domain()) ?>
-			<?php echo __('(On kanbanwp.com)', Kanban::get_text_domain()) ?>
+			<?php echo __('Documentation', 'kanban') ?>
+			<?php echo __('(On kanbanwp.com)', 'kanban') ?>
 		</a>
 	</p>
 	<h3>Intro to Kanban for WordPress</h3>

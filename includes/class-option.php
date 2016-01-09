@@ -28,7 +28,9 @@ class Kanban_Option extends Kanban_Db
 	// defaults for all options, so at least something is returned
 	protected static $defaults = array (
 		'hour_interval' => '1',
-		'allowed_users' => ''
+		'allowed_users' => '',
+		'show_all_cols' => 0,
+		'default_to_compact_view' => 0
 	);
 
 	// store the options on first load, to prevent mulitple db calls
@@ -72,7 +74,14 @@ class Kanban_Option extends Kanban_Db
 		// make sure there's always at least one user
 		self::$defaults['allowed_users'] = serialize(array(get_current_user_id()));
 
-		return self::$defaults;
+
+		return apply_filters(
+			sprintf(
+				'%s_options_defaults',
+				Kanban::get_instance()->settings->basename
+			),
+			self::$defaults
+		);
 	}
 
 
@@ -353,7 +362,7 @@ class Kanban_Option extends Kanban_Db
 
 		$url = add_query_arg(
 			array(
-				'message' => urlencode(__('Settings saved', Kanban::get_text_domain() ))
+				'message' => urlencode(__('Settings saved', 'kanban' ))
 			),
 			$_POST['_wp_http_referer']
 		);

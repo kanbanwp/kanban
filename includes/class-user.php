@@ -44,28 +44,34 @@ class Kanban_User
 
 		wp_mail(
 			$admin_email,
-			__( sprintf(
-				'%s: %s has requested access',
+			 sprintf(
+				__(
+					'%s: %s has requested access',
+					'kanban'
+					),
 				Kanban::get_instance()->settings->pretty_name,
 				Kanban_User::get_username_long ($current_user)
-			), Kanban::get_text_domain() ),
-			__( sprintf(
-				'The following user has requested access. ' . "\n"
-				. '%s' . "\n\n"
-				. 'To grant them access, please visit this link:' . "\n"
-				. '%s' . "\n"
-				. 'And select them as an allowed user.',
+			),
+			sprintf(
+				__(
+					'The following user has requested access. ' . "\n"
+					. '%s' . "\n\n"
+					. 'To grant them access, please visit this link:' . "\n"
+					. '%s' . "\n"
+					. 'And select them as an allowed user.'
+					, 'kanban'
+				),
 				Kanban_User::get_username_long ($current_user),
 				admin_url('admin.php?page=' . Kanban::get_instance()->settings->basename)
-			), Kanban::get_text_domain() ),
+			),
 			$headers
 		);
 
 
 
-		Kanban::get_instance()->flash->add(
-			'success',
-			__( 'Your request has been sent.', Kanban::get_text_domain() )
+		Kanban_Flash::flash (
+			__( 'Your request has been sent.', 'kanban' ),
+			'success'
 		);
 
 
@@ -91,10 +97,11 @@ class Kanban_User
 
 			if ( empty($user) )
 			{
-				Kanban::get_instance()->flash->add(
-					'danger',
-					__( 'Whoops! We can\'t find an account for that email address.', Kanban::get_text_domain() )
+				Kanban_Flash::flash (
+					__( 'Whoops! We can\'t find an account for that email address.', 'kanban' ),
+					'danger'
 				);
+
 				wp_redirect($_POST['_wp_http_referer']);
 				exit;
 			}
@@ -105,10 +112,11 @@ class Kanban_User
 
 			if ( empty($user) )
 			{
-				Kanban::get_instance()->flash->add(
-					'danger',
-					__( 'Whoops! We can\'t find an account for that username.', Kanban::get_text_domain() )
+				Kanban_Flash::flash (
+					__( 'Whoops! We can\'t find an account for that username.', 'kanban' ),
+					'danger'
 				);
+
 				wp_redirect($_POST['_wp_http_referer']);
 				exit;
 			}
@@ -127,10 +135,11 @@ class Kanban_User
 
 		if ( is_wp_error($user) )
 		{
-			Kanban::get_instance()->flash->add(
-				'danger',
-				__( 'Whoops! That password is incorrect for this email address.', Kanban::get_text_domain() )
+			Kanban_Flash::flash (
+				__( 'Whoops! That password is incorrect for this email address.', 'kanban' ),
+				'danger'
 			);
+
 			wp_redirect($_POST['_wp_http_referer']);
 			exit;
 		}

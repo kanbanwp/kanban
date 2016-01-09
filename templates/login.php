@@ -7,14 +7,13 @@
 
 
 	<form action="" method="post" class="col-sm-4 col-sm-offset-4">
-			<img src="<?php echo Kanban::get_instance()->settings->uri ?>/img/kanbanwp-logo.png" class="img-responsive" style="margin: 0 auto 30px;">
+		<img src="<?php echo Kanban::get_instance()->settings->uri ?>/img/kanbanwp-logo.png" class="img-responsive" style="margin: 0 auto 30px;">
 
 
-<?php if ( Kanban::$instance->flash->hasMessages() ) : ?>
-			<div id="alerts-site-wide">
-				<?php echo Kanban::$instance->flash->display(); ?>
-			</div><!-- container -->
-<?php endif // has messages ?>
+
+		<?php Kanban_Flash::flash() ?>
+
+
 
 		<div class="panel panel-default">
 			<div class="panel-heading">
@@ -22,29 +21,29 @@
 				<h2><?php echo __('Please Login', Kanban::$instance->settings->file) ?></h2>
 				<div class="form-group">
 					<label for="email" class="sr-only">
-						<?php echo __('Email or username', Kanban::get_text_domain()) ?>
+						<?php echo __('Email or username', 'kanban') ?>
 					</label>
-					<input type="text" name="email" id="email" class="form-control input-lg" placeholder="<?php echo __('Email or username', Kanban::get_text_domain()) ?>" required autofocus>
+					<input type="text" name="email" id="email" class="form-control input-lg" placeholder="<?php echo __('Email or username', 'kanban') ?>" required autofocus>
 				</div><!-- form group -->
 				<div class="form-group">
 					<label for="password" class="sr-only">
-						<?php echo __('Password', Kanban::get_text_domain()) ?>
+						<?php echo __('Password', 'kanban') ?>
 					</label>
-					<input type="password" name="password" id="password" class="form-control input-lg" placeholder="<?php echo __('Password', Kanban::get_text_domain()) ?>" required autofocus>
+					<input type="password" name="password" id="password" class="form-control input-lg" placeholder="<?php echo __('Password', 'kanban') ?>" required autofocus>
 				</div><!-- form group -->
 				<div>
 					<button type="submit" class="btn btn-lg btn-primary btn-block">
-						<?php echo __('Log in', Kanban::get_text_domain()) ?>
+						<?php echo __('Log in', 'kanban') ?>
 					</button>
 					<?php wp_nonce_field( 'login', Kanban_Utils::get_nonce() ); ?>
 				</div>
 <?php else : // is_user_logged_in ?>
 				<p>
-					<?php echo __('Whoops, looks like you haven\'t been granted access yet. Click below to request access.', Kanban::get_text_domain()) ?>
+					<?php echo __('Whoops, looks like you haven\'t been granted access yet. Click below to request access.', 'kanban') ?>
 				</p>
 				<p class="text-center">
 					<button type="submit" class="btn btn-primary btn-lg">
-						<?php echo __('Request access', Kanban::get_text_domain()) ?>
+						<?php echo __('Request access', 'kanban') ?>
 					</button>
 					<?php wp_nonce_field( 'request_access', Kanban_Utils::get_nonce() ); ?>
 				</p>

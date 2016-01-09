@@ -104,11 +104,27 @@ class Kanban_Template
 
 		}
 
+
+
 		// allow for addition checks
-		do_action( sprintf('%s_protect_slug', Kanban::get_instance()->settings->basename) );
+		$can_view = apply_filters (
+			sprintf(
+				'%s_protect_slug',
+				Kanban::get_instance()->settings->basename
+			),
+			FALSE
+		);
+
+
+
+		if ( $can_view ) return;
+
+
 
 		// anyone can see login screen
 	    if ( strpos($_SERVER['REQUEST_URI'], sprintf('/%s/login', Kanban::$slug)) !== FALSE ) return;
+
+
 
 	    // otherwise redirect to login
 		wp_redirect(sprintf('%s/%s/login', site_url(), Kanban::$slug));

@@ -65,13 +65,13 @@ class Kanban_Board extends Kanban_Db
 		{
 			?>
 			<p>
-			<?php echo sprintf(__('We\'ve found %s kanban records that need to be migrated for the latest version of Kanban for WordPress!', Kanban::get_text_domain()), Kanban::get_instance()->settings->records_to_move); ?>
+			<?php echo sprintf(__('We\'ve found %s kanban records that need to be migrated for the latest version of Kanban for WordPress!', 'kanban'), Kanban::get_instance()->settings->records_to_move); ?>
 			</p>
 			<p>
 			<?php echo sprintf(
 					__(
 						'Please visit the <a href="%s">Kanban welcome page</a> to migrate your data.',
-						Kanban::get_text_domain()
+						'kanban'
 					),
 					add_query_arg(
 						'page',

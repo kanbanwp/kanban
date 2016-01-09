@@ -1,6 +1,8 @@
 <?php include Kanban_Template::find_template('inc/header') ?>
 
-<div id="wrapper-board">
+
+
+<div id="wrapper-board" class="<?php echo $wp_query->query_vars['kanban']->board->settings['show_all_cols'] ? 'show_all_cols' : '' ?>">
 	<div class="row" id="row-statuses">
 	</div><!-- row -->
 
@@ -12,18 +14,18 @@
 
 <div id="wrapper-footer">
 	<div id="filter-wrapper">
-		<?php echo __('Filter by', Kanban::get_text_domain()) ?>: 
+		<?php echo __('Filter by', 'kanban') ?>:
 		<span class="dropup" id="filter-projects">
 			<button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">
 				<span class="btn-label" data-id="">
-					-- <?php echo __('Project', Kanban::get_text_domain()) ?> --
+					-- <?php echo __('Project', 'kanban') ?> --
 				</span>
 			</button>
 			<ul class="dropdown-menu" id="filter-projects-dropdown">
 				<li class="divider"></li>
 				<li>
 					<a href="#" data-id="0">
-						<?php echo __('No project assigned') ?>
+						<?php echo __('No project assigned', 'kanban') ?>
 					</a>
 				</li>
 			</ul>
@@ -32,24 +34,24 @@
 		<span class="dropup" id="filter-users">
 			<button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">
 				<span class="btn-label" data-id="">
-					-- <?php echo __('User', Kanban::get_text_domain()) ?> --
+					-- <?php echo __('User', 'kanban') ?> --
 				</span>
 			</button>
 			<ul class="dropdown-menu" id="filter-users-dropdown">
 				<li class="divider"></li>
 				<li>
 					<a href="#" data-id="0">
-						<?php echo __('No user assigned') ?>
+						<?php echo __('No user assigned', 'kanban') ?>
 					</a>
 				</li>
 			</ul>
 		</span>
 
 		<button type="button" class="btn btn-primary" id="btn-filter-apply">
-			<?php echo __('Filter', Kanban::get_text_domain()) ?>
+			<?php echo __('Filter', 'kanban') ?>
 		</button>
 		<button type="button" class="btn btn-warning" id="btn-filter-reset" style="display: none;">
-			<?php echo __('Show All', Kanban::get_text_domain()) ?>
+			<?php echo __('Show All', 'kanban') ?>
 		</button>
 
 	</div><!-- filter-wrapper -->
@@ -57,9 +59,9 @@
 
 
 	<div class="form-inline" id="search-wrapper">
-		<input type="search" id="board-search" class="form-control" placeholder="<?php echo __('Search', Kanban::get_text_domain()) ?>">
+		<input type="search" id="board-search" class="form-control" placeholder="<?php echo __('Search', 'kanban') ?>">
 		<button type="button" class="btn btn-warning" id="board-search-reset" style="display: none;">
-			<?php echo __('Show All', Kanban::get_text_domain()) ?>
+			<?php echo __('Show All', 'kanban') ?>
 		</button>
 	</div><!-- search-wrapper -->
 
@@ -80,7 +82,7 @@
 
 <?php if ( in_array('write', $wp_query->query_vars['kanban']->board->current_user->caps) ) : ?>
 	<a href="<?php echo admin_url( sprintf('admin.php?page=%s_settings', Kanban::$instance->settings->basename) ) ?>" class="btn btn-default" target="_blank">
-		<?php echo __('Settings', Kanban::get_text_domain()) ?>
+		<?php echo __('Settings', 'kanban') ?>
 	</a>
 <?php endif ?>
 
@@ -96,7 +98,7 @@
 		<div class="modal-content">
 			<div class="modal-body">
 				<button type="button" class=" btn btn-default btn-close" data-dismiss="modal">
-					<?php echo __('Close', Kanban::get_text_domain()) ?>
+					<?php echo __('Close', 'kanban') ?>
 				</button>
 
 				<div class="panel-group" id="accordion-projects">
@@ -114,14 +116,14 @@
 	<div class="modal-dialog modal-lg" role="document">
 		<div class="modal-content">
 			<div class="modal-body">
-				<p class="lead text-center" id="empty-archive-confirmation-label" data-label="<?php echo __('Delete all tasks in &quot;{0}&quot;?', Kanban::get_text_domain()) ?>">
+				<p class="lead text-center" id="empty-archive-confirmation-label" data-label="<?php echo __('Delete all tasks in &quot;{0}&quot;?', 'kanban') ?>">
 				</p>
 				<p class="text-center">
 					<button type="button" class="btn btn-default" id="btn-empty-status-tasks-cancel" data-dismiss="modal">
-						<?php echo __('Cancel', Kanban::get_text_domain()) ?>
+						<?php echo __('Cancel', 'kanban') ?>
 					</button>
 					<button type="button" class="btn btn-primary" id="btn-empty-status-tasks" data-status-col-id="">
-						<?php echo __('Archive', Kanban::get_text_domain()) ?>
+						<?php echo __('Archive', 'kanban') ?>
 					</button>
 				</p>
 			</div>

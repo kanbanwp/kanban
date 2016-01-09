@@ -437,6 +437,12 @@ jQuery(function($)
 
 
 
+	if ( board.settings().default_to_compact_view == 1 )
+	{
+		$('#btn-group-view-compact .btn:has([name="view-compact"])').trigger('click');
+	}
+
+
 	var hash = [];
 	if (location.hash)
 	{

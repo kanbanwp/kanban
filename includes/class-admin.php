@@ -61,21 +61,21 @@ class Kanban_Admin
 		?>
 		<div class="updated error">
 			<p style="font-size: 1.236em;">
-				<b><?php echo __('Warning!', Kanban::get_text_domain()) ?></b>
-				<?php echo sprintf(__('We\'ve found %s kanban records that need to be migrated for the latest version of Kanban for WordPress!', Kanban::get_text_domain()), Kanban::get_instance()->settings->records_to_move) ?>
+				<b><?php echo __('Warning!', 'kanban') ?></b>
+				<?php echo sprintf(__('We\'ve found %s kanban records that need to be migrated for the latest version of Kanban for WordPress!', 'kanban'), Kanban::get_instance()->settings->records_to_move) ?>
 			</p>
 			<p>
-				<?php echo __('Please click "migrate" below and we\'ll move them for you.', Kanban::get_text_domain()) ?>
+				<?php echo __('Please click "migrate" below and we\'ll move them for you.', 'kanban') ?>
 			</p>
 			<p>
 				<button type="button" class="button-primary" id="kanban-migrate-start">
-					<?php echo __('Migrate', Kanban::get_text_domain()) ?>
+					<?php echo __('Migrate', 'kanban') ?>
 				</button>
 			</p>
 
 			<div id="kanban-migrate-progress">
-				<?php echo __('Migration Progress', Kanban::get_text_domain()) ?>
-				<?php echo __('(Please do not browse away from the page until migration is complete)', Kanban::get_text_domain()) ?>:
+				<?php echo __('Migration Progress', 'kanban') ?>
+				<?php echo __('(Please do not browse away from the page until migration is complete)', 'kanban') ?>:
 				<div id="kanban-migrate-progress-outer">
 					<div id="kanban-migrate-progress-inner">
 						&nbsp;

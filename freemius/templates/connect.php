@@ -6,15 +6,11 @@
 	 * @since       1.0.7
 	 */
 
-	wp_enqueue_script( 'jquery' );
-	wp_enqueue_script( 'json2' );
-	fs_enqueue_local_script( 'postmessage', 'nojquery.ba-postmessage.min.js' );
-	fs_enqueue_local_script( 'fs-postmessage', 'postmessage.js' );
+	$slug = $VARS['slug'];
+	$fs   = freemius( $slug );
 
-	fs_enqueue_local_style( 'fs_connect', '/admin/connect.css' );
+	$fs->_enqueue_connect_essentials();
 
-	$slug         = $VARS['slug'];
-	$fs           = freemius( $slug );
 	$current_user = wp_get_current_user();
 
 	$first_name = $current_user->user_firstname;
@@ -48,15 +44,22 @@
 	</div>
 	<div class="fs-content">
 		<p><?php
-				echo $fs->apply_filters( 'connect_message', sprintf(
-					__fs( 'hey-x' ) . '<br>' .
-					__fs( 'connect-message' ),
+				echo $fs->apply_filters( 'connect_message',
+					sprintf(
+						__fs( 'hey-x' ) . '<br>' .
+						__fs( 'connect-message' ),
+						$first_name,
+						'<b>' . $fs->get_plugin_name() . '</b>',
+						'<b>' . $current_user->user_login . '</b>',
+						'<a href="' . $site_url . '" target="_blank">' . $site_url . '</a>',
+						'<a href="' . $freemius_site_url . '" target="_blank">freemius.com</a>'
+					),
 					$first_name,
-					'<b>' . $fs->get_plugin_name() . '</b>',
-					'<b>' . $current_user->user_login . '</b>',
+					$fs->get_plugin_name(),
+					$current_user->user_login,
 					'<a href="' . $site_url . '" target="_blank">' . $site_url . '</a>',
 					'<a href="' . $freemius_site_url . '" target="_blank">freemius.com</a>'
-				) );
+				);
 			?></p>
 	</div>
 	<div class="fs-actions">
@@ -70,8 +73,7 @@
 				<input type="hidden" name="fs_action" value="<?php echo $slug ?>_activate_existing">
 				<?php wp_nonce_field( 'activate_existing_' . $fs->get_public_key() ) ?>
 				<button class="button button-primary" tabindex="1"
-				        type="submit"><?php _efs( 'opt-in-connect' ) ?>
-					&nbsp;&#10140;</button>
+				        type="submit"><?php _efs( 'opt-in-connect' ) ?></button>
 			</form>
 		<?php else : ?>
 			<form method="post" action="<?php echo WP_FS__ADDRESS ?>/action/service/user/install/">
@@ -122,8 +124,7 @@
 					<input type="hidden" name="<?php echo $name ?>" value="<?php echo esc_attr( $value ) ?>">
 				<?php endforeach ?>
 				<button class="button button-primary" tabindex="1"
-				        type="submit"><?php _efs( 'opt-in-connect' ) ?>
-					&nbsp;&#10140;</button>
+				        type="submit"><?php _efs( 'opt-in-connect' ) ?></button>
 			</form>
 		<?php endif ?>
 	</div>

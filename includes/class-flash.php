@@ -13,14 +13,10 @@ Kanban_Flash::init();
 
 class Kanban_Flash
 {
-	static function init()
-	{
-		add_action('init', array(__CLASS__, 'setup_flash_messages'));
-	}
+	static $namespace = 'kanban-flash';
 
 
-
-	static function setup_flash_messages()
+	static function init ()
 	{
 		// @link http://stackoverflow.com/a/28377350/38241
 		if(version_compare(phpversion(), "5.4.0") != -1)
@@ -37,23 +33,49 @@ class Kanban_Flash
 				session_start();
 			}
 		}
-
-		Kanban::get_instance()->flash = new Kanban_Messages();
-
-
-
-		Kanban::get_instance()->flash->msgTypes = array( 'default', 'info', 'warning', 'success', 'danger' );
-		Kanban::get_instance()->flash->msgClass = 'alert alert-';
-		Kanban::get_instance()->flash->msgWrapper = '<div class="%s%s alert-dismissible">
-								%s
-								</div>'
-								. "\n";
-
-
-		Kanban::get_instance()->flash = apply_filters(
-			sprintf('%s_after_setup_flash_messages', Kanban::get_instance()->settings->basename),
-			Kanban::get_instance()->flash
-		);
-
 	}
+
+
+	/**
+	 * Function to create and display error and success messages
+	 * @link http://www.phpdevtips.com/2013/05/simple-session-based-flash-messages/
+	 * @param string message
+	 * @param string display class
+	 * @return string message
+	 */
+	static function flash ($message = '', $class = 'success' )
+	{
+		//No message, create it
+		if( !empty( $message ) )
+		{
+			self::clear();
+
+			$_SESSION[self::$namespace] = $message;
+			$_SESSION[self::$namespace.'_class'] = $class;
+		}
+		//Message exists, display it
+		elseif( !empty( $_SESSION[self::$namespace] ) )
+		{
+			$class = !empty( $_SESSION[self::$namespace.'_class'] ) ? $_SESSION[self::$namespace.'_class'] : 'success';
+			echo sprintf(
+				'<div class="alert alert-%s">%s</div>',
+				$class,
+				$_SESSION[self::$namespace]
+			);
+
+			self::clear();
+		}
+	}
+
+
+
+	static function clear ()
+	{
+		unset($_SESSION[self::$namespace]);
+		unset($_SESSION[self::$namespace.'_class']);
+	}
+
 }
+
+
+

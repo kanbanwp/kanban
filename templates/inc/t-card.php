@@ -9,7 +9,7 @@
 				<li>
 					<a href="#" class="delete-task text-danger">
 						<span class="glyphicon glyphicon-remove text-danger"></span>
-						<?php _e( 'Delete this task', Kanban::get_text_domain() ); ?>
+						<?php echo __( 'Delete this task', 'kanban' ); ?>
 					</a>
 				</li>
 			</ul>
@@ -17,12 +17,12 @@
 		</div>
 
 		<div class="project">
-			<input type="text" class="editable-input project_title" data-id="" value="" placeholder="<?php _e( 'Task project', Kanban::get_text_domain() ); ?>" readonly>
+			<input type="text" class="editable-input project_title" data-id="" value="" placeholder="<?php echo __( 'Task project', 'kanban' ); ?>" readonly>
 {{current_user_can_write}}
 			<ul class="list-group" style="display: none;">
 				<li class="list-group-edit">
 					<a href="#" class="btn btn-xs btn-edit-projects" data-toggle="modal" data-target="#modal-projects">
-						<?php _e( 'Edit', Kanban::get_text_domain() ); ?>
+						<?php echo __( 'Edit', 'kanban' ); ?>
 					</a>
 				</li>
 			</ul>
@@ -30,7 +30,7 @@
 		</div>
 
 		<h3 class="h4 wrapper-task-title">
-			<textarea class="editable-input task_title resize" rows="1" placeholder="<?php _e( 'Task name', Kanban::get_text_domain() ); ?>" readonly>{{=task.title}}</textarea>
+			<textarea class="editable-input task_title resize" rows="1" placeholder="<?php echo __( 'Task name', 'kanban' ); ?>" readonly>{{=task.title}}</textarea>
 		</h3>
 
 		<div class="row row-worked">

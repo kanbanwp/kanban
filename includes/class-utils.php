@@ -54,15 +54,28 @@ class Kanban_Utils
 
 
 
-	static function order_array_of_objects_by_property ($arr, $property)
+	static function order_array_of_objects_by_property ($arr, $property, $cmp_type = 'str')
 	{
-		usort(
-			$arr,
-			function($a, $b) use ($property)
-			{
-				return strcmp($a->$property, $b->$property);
-			}
-		);
+		if ( $cmp_type == 'int' )
+		{
+			usort(
+				$arr,
+				function($a, $b) use ($property)
+				{
+					return ($a < $b) ? -1 : 1;
+				}
+			);
+		}
+		else
+		{
+			usort(
+				$arr,
+				function($a, $b) use ($property)
+				{
+					return strcmp($a->$property, $b->$property);
+				}
+			);
+		}
 
 		return $arr;
 	}

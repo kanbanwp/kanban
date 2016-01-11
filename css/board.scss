@@ -562,9 +562,8 @@ body.view-compact {
 	&.show_all_cols {
 		#row-statuses,
 		#row-tasks {
-			left: auto;
-			position: static;
-			width: auto;
+			left: 0;
+			width: 100%;
 		}
 
 		.toggle-sidebar {

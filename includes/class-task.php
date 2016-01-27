@@ -78,6 +78,13 @@ class Kanban_Task extends Kanban_Db
 
 
 
+		if ( !isset($_POST['task']['id']) )
+		{
+			$_POST['task']['id'] = '';
+		}
+
+
+
 		do_action('kanban_task_ajax_save_before', $_POST['task']['id']);
 
 
@@ -97,7 +104,7 @@ class Kanban_Task extends Kanban_Db
 
 
 
-		$task_id = isset($_POST['task']['id']) ? $_POST['task']['id'] : self::_insert_id();
+		$task_id = !empty($_POST['task']['id']) ? $_POST['task']['id'] : self::_insert_id();
 
 
 

@@ -1,4 +1,8 @@
-<?php include Kanban_Template::find_template('inc/header') ?>
+<?php
+
+do_action('kanban_board_template_before', $wp_query->query_vars['kanban']->board);
+
+include Kanban_Template::find_template('inc/header') ?>
 
 
 
@@ -150,6 +154,8 @@
 <script type="text/javascript">
 var ajaxurl = '<?php echo admin_url('admin-ajax.php'); ?>';
 
+var alert = "<?php echo addslashes($wp_query->query_vars['kanban']->board->alert) ?>";
+
 var board = {
 	settings: function ()
 	{
@@ -205,4 +211,10 @@ foreach ($js_templates as $js_template) : ?>
 
 
 
-<?php include Kanban_Template::find_template('inc/footer') ?>
+<?php
+
+include Kanban_Template::find_template('inc/footer');
+
+do_action('kanban_board_template_after', $wp_query->query_vars['kanban']->board);
+
+?>

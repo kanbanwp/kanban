@@ -117,7 +117,7 @@ $.fn.board_filter = function(task)
 				}
 
 				$label
-				.text(user.data.long_name_email)
+				.text(user.long_name_email)
 				.attr('data-id', user_id);
 
 				$('#btn-filter-apply', $wrapper).trigger('click');

@@ -35,6 +35,7 @@ class Kanban_Option extends Kanban_Db
 
 	// store the options on first load, to prevent mulitple db calls
 	protected static $options = array();
+	protected static $options_raw = array();
 
 
 
@@ -51,6 +52,31 @@ class Kanban_Option extends Kanban_Db
 	// extend parent, so it's accessible from other classes
 	static function replace ($data)
 	{
+		return self::_replace($data);
+	}
+
+
+
+	static function update ($key, $value)
+	{
+		if (is_array($value) || is_object($value) )
+		{
+			$value = serialize($value);
+		}
+
+
+		$data = (object) array(
+			'name' => $key,
+			'value' => $value
+		);
+
+		$option = self::get_option_raw($key);
+
+		if ( $option )
+		{
+			$data->id = $option->id;
+		}
+
 		return self::_replace($data);
 	}
 
@@ -75,45 +101,41 @@ class Kanban_Option extends Kanban_Db
 		self::$defaults['allowed_users'] = serialize(array(get_current_user_id()));
 
 
-		return apply_filters(
-			sprintf(
-				'%s_options_defaults',
-				Kanban::get_instance()->settings->basename
-			),
-			self::$defaults
-		);
+		return apply_filters('kanban_option_get_defaults_return', self::$defaults);
 	}
 
 
 
 	static function get_all_raw ()
 	{
-		$table_name = self::table_name();
-
-		$sql = "SELECT *
-				FROM `{$table_name}`
-		;";
-
-		$sql = apply_filters(
-			sprintf(
-				'%s_sql_%s_get_all',
-				Kanban::get_instance()->settings->basename,
-				self::$table_name
-			),
-			$sql
-		);
-
-		$records = parent::get_all($sql);
-
-		// unserialize arrays
-		foreach ($records as $key => $record)
+		if ( empty(self::$options_raw) )
 		{
-			if ( !is_serialized($record->value) ) continue;
 
-			$records[$key]->value = unserialize($record->value);
+			$table_name = self::table_name();
+
+			$sql = "SELECT *
+					FROM `{$table_name}`
+			;";
+
+			$sql = apply_filters('kanban_option_get_all_raw_sql', $sql);
+
+			self::$options_raw = parent::get_all($sql);
+
+			self::$options_raw = Kanban_Utils::build_array_with_id_keys(self::$options_raw, 'id');
+
+			// unserialize arrays
+			foreach (self::$options_raw as $key => $record)
+			{
+				if ( !is_serialized($record->value) ) continue;
+
+				self::$options_raw[$key]->value = unserialize($record->value);
+			}
 		}
 
-		return $records;
+		return apply_filters(
+			'kanban_option_get_all_raw_return',
+			self::$options_raw
+		);
 	}
 
 
@@ -153,6 +175,22 @@ class Kanban_Option extends Kanban_Db
 		}
 
 		return $options[$name];
+	}
+
+
+
+	static function get_option_raw ($option_name)
+	{
+		foreach ( self::get_all_raw() as $option )
+		{
+			if ( $option->name == $option_name )
+			{
+				return $option;
+				break;
+			}
+		}
+
+		return FALSE;
 	}
 
 
@@ -217,7 +255,8 @@ class Kanban_Option extends Kanban_Db
 
 	static function save_settings ()
 	{
-		if (  !isset( $_POST[Kanban_Utils::get_nonce()] ) || ! wp_verify_nonce( $_POST[Kanban_Utils::get_nonce()], sprintf('%s-%s', Kanban::get_instance()->settings->basename, Kanban_Option::table_name())) || !is_user_logged_in() ) return;
+		if (  !isset( $_POST[Kanban_Utils::get_nonce()] ) || ! wp_verify_nonce( $_POST[Kanban_Utils::get_nonce()], 'kanban-options') || !is_user_logged_in() ) return;
+
 
 
 		$statuses = Kanban_Status::get_all();

@@ -54,10 +54,7 @@ class Kanban_Template
 
 	static function init()
 	{
-		self::$page_slugs = apply_filters(
-			sprintf('%s_Template_init', Kanban::get_instance()->settings->basename),
-			self::$page_slugs
-		);
+		self::$page_slugs = apply_filters('kanban_template_init_slugs', self::$page_slugs);
 
 		add_action( 'init', array(__CLASS__, 'protect_slug') );
 
@@ -107,13 +104,7 @@ class Kanban_Template
 
 
 		// allow for addition checks
-		$can_view = apply_filters (
-			sprintf(
-				'%s_protect_slug',
-				Kanban::get_instance()->settings->basename
-			),
-			FALSE
-		);
+		$can_view = apply_filters ('kanban_template_protect_slug_check', FALSE );
 
 
 
@@ -148,9 +139,6 @@ class Kanban_Template
 		if ( strpos($_SERVER['REQUEST_URI'], sprintf('/%s/', Kanban::$slug)) === FALSE ) return $template;
 
 
-
-		// allow for additional pages
-		self::$page_slugs = apply_filters( sprintf('%s_template_pages', Kanban::get_instance()->settings->basename), self::$page_slugs );
 
 		foreach (self::$page_slugs as $slug => $data)
 		{
@@ -207,7 +195,7 @@ class Kanban_Template
 		status_header(200);
 
 		// allow additional templates
-		return apply_filters( sprintf('%s_after_template_chooser', Kanban::get_instance()->settings->basename), $template );
+		return apply_filters( 'kanban_template_chooser_return', $template );
 	}
 
 
@@ -237,10 +225,17 @@ class Kanban_Template
 		// if not found, use the original
 		if ( !is_file($template) )
 		{
-			$template = false;
+			if ( is_file($basename) )
+			{
+				$template = $basename;
+			}
+			else
+			{
+				$template = false;
+			}
 		}
 
-		return apply_filters( sprintf('%s_find_template', Kanban::get_instance()->settings->basename), $template );
+		return apply_filters( 'kanban_template_find_template_return', $template );
 	}
 
 

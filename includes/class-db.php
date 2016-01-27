@@ -60,7 +60,7 @@ abstract class Kanban_Db
 
 
 
-	static function get_row ( $key, $value )
+	protected static function get_row ( $key, $value )
 	{
 		global $wpdb;
 		return $wpdb->get_row( self::_fetch_sql( $key, $value ) );
@@ -84,7 +84,7 @@ abstract class Kanban_Db
 	{
 		$data = self::sanitize_data($data);
 
-		if ( isset($data->data['id']) )
+		if ( isset($data->data['id']) && (int) $data->data['id'] > 0 )
 		{
 			$success = (bool) self::_update(
 						$data->data,

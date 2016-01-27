@@ -94,6 +94,9 @@ class Kanban_Board extends Kanban_Db
 		$wp_query->query_vars['kanban']->board = (object) array();
 
 
+		// add passed alert
+		$wp_query->query_vars['kanban']->board->alert = !empty($_GET['alert']) ? stripcslashes($_GET['alert']) : '';
+
 		// get all data for the javascript
 		$wp_query->query_vars['kanban']->board->settings = Kanban_Option::get_all();
 

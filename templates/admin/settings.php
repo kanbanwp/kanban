@@ -23,13 +23,7 @@
 		<a href="#tab-statuses" class="nav-tab"><?php echo __('Statuses', 'kanban' ) ?></a>
 		<a href="#tab-estimates" class="nav-tab"><?php echo __('Estimates', 'kanban' ) ?></a>
 		<?php
-		echo apply_filters(
-			sprintf(
-				'%s_settings_tabs',
-				Kanban::get_instance()->settings->basename
-			),
-			''
-		);
+		echo apply_filters('kanban_settings_tabs', '' );
 		?>
 	</h2>
 
@@ -124,15 +118,7 @@
 						</td>
 					</tr>
 
-					<?php
-					echo apply_filters(
-						sprintf(
-							'%s_settings_tab_users_content',
-							Kanban::get_instance()->settings->basename
-						),
-						''
-					);
-					?>
+					<?php echo apply_filters( 'kanban_settings_tab_users_content', '' ); ?>
 
 				</tbody>
 			</table>
@@ -190,26 +176,11 @@
 
 
 
-		<?php
-		echo apply_filters(
-			sprintf(
-				'%s_settings_tabs_content',
-				Kanban::get_instance()->settings->basename
-			),
-			''
-		);
-		?>
+		<?php echo apply_filters( 'kanban_settings_tabs_content', '' ); ?>
 
 
 
-		<?php wp_nonce_field(
-				sprintf(
-					'%s-%s',
-					Kanban::$instance->settings->basename,
-					Kanban_Option::table_name()
-				),
-				Kanban_Utils::get_nonce()
-			); ?>
+		<?php wp_nonce_field( 'kanban-options', Kanban_Utils::get_nonce() ); ?>
 
 	</form>
 

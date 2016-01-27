@@ -516,6 +516,19 @@ jQuery(function($)
 
 
 
+	// if an alert is passed, show it
+	if ( alert !== '' )
+	{
+		$.bootstrapGrowl(
+			alert,
+			{
+				type: 'info',
+  				allow_dismiss: true
+			}
+		);
+	}
+
+
 }); // jquery
 
 

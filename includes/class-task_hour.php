@@ -47,7 +47,7 @@ class Kanban_Task_Hour extends Kanban_Db
 
 
 
-		do_action( sprintf('%s_before_%s_ajax_save', Kanban::get_instance()->settings->basename, self::$slug) );
+		do_action( 'kanban_task_hour_ajax_save_before', $_POST['task']['id']);
 
 
 
@@ -93,21 +93,21 @@ class Kanban_Task_Hour extends Kanban_Db
 
 
 
-		do_action( sprintf('%s_after_%s_ajax_save', Kanban::get_instance()->settings->basename, self::$slug) );
+		do_action( 'kanban_task_hour_ajax_save_after', $data);
 
 
 
 		if ( !empty($_POST['comment']) )
 		{
-			do_action( sprintf('%s_before_%s_ajax_comment_save', Kanban::get_instance()->settings->basename, self::$slug) );
+			do_action('kanban_task_hour_ajax_save_before_comment');
 
 			Kanban_Comment::add(
 				$_POST['comment'],
 				'system',
-				$_POST['task']['id']
+				$task_id
 			);
 
-			do_action( sprintf('%s_after_%s_ajax_comment_save', Kanban::get_instance()->settings->basename, self::$slug) );
+			do_action('kanban_task_hour_ajax_save_after_comment');
 		}
 
 

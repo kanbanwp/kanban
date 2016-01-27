@@ -78,7 +78,7 @@ class Kanban_Task extends Kanban_Db
 
 
 
-		do_action( sprintf('%s_before_%s_ajax_save', Kanban::get_instance()->settings->basename, self::$slug) );
+		do_action('kanban_task_ajax_save_before', $_POST['task']['id']);
 
 
 
@@ -107,13 +107,13 @@ class Kanban_Task extends Kanban_Db
 
 
 
-		do_action( sprintf('%s_after_%s_ajax_save', Kanban::get_instance()->settings->basename, self::$slug) );
+		do_action('kanban_task_ajax_save_after', $post_data);
 
 
 
 		if ( !empty($_POST['comment']) )
 		{
-			do_action( sprintf('%s_before_%s_ajax_comment_save', Kanban::get_instance()->settings->basename, self::$slug) );
+			do_action('kanban_task_ajax_save_before_comment');
 
 			Kanban_Comment::add(
 				$_POST['comment'],
@@ -121,14 +121,14 @@ class Kanban_Task extends Kanban_Db
 				$task_id
 			);
 
-			do_action( sprintf('%s_after_%s_ajax_comment_save', Kanban::get_instance()->settings->basename, self::$slug) );
+			do_action('kanban_task_ajax_save_after_comment');
 		}
 
 
 
 		if ( isset($_POST['status_id_old']) )
 		{
-			do_action( sprintf('%s_before_%s_ajax_status_change_save', Kanban::get_instance()->settings->basename, self::$slug) );
+			do_action('kanban_task_ajax_save_before_status_change');
 
 			Kanban_Status_Change::add(
 				$task_id,
@@ -136,7 +136,7 @@ class Kanban_Task extends Kanban_Db
 				$_POST['status_id_old']
 			);
 
-			do_action( sprintf('%s_after_%s_ajax_status_change_save', Kanban::get_instance()->settings->basename, self::$slug) );
+			do_action('kanban_task_ajax_save_after_status_change');
 		}
 
 
@@ -164,7 +164,7 @@ class Kanban_Task extends Kanban_Db
 
 
 
-		do_action( sprintf('%s_before_%s_ajax_delete', Kanban::get_instance()->settings->basename, self::$slug) );
+		do_action('kanban_task_ajax_delete_before', $_POST['task']['id']);
 
 
 
@@ -173,7 +173,22 @@ class Kanban_Task extends Kanban_Db
 
 
 
-		do_action( sprintf('%s_after_%s_ajax_delete', Kanban::get_instance()->settings->basename, self::$slug) );
+		do_action('kanban_task_ajax_delete_after', $_POST['task']['id']);
+
+
+
+		if ( !empty($_POST['comment']) )
+		{
+			do_action('kanban_task_ajax_delete_before_comment');
+
+			Kanban_Comment::add(
+				$_POST['comment'],
+				'system',
+				$_POST['task']['id']
+			);
+
+			do_action('kanban_task_ajax_delete_after_comment');
+		}
 
 
 
@@ -211,6 +226,16 @@ class Kanban_Task extends Kanban_Db
 	}
 
 
+	static function get_one ($task_id)
+	{
+		$record = parent::get_row('ID', $task_id);
+		$record->title = Kanban_Utils::str_for_frontend($record->title);
+		$record->description = Kanban_Utils::str_for_frontend($record->description);
+
+		return $record;
+	}
+
+
 
 	static function get_all ($sql = NULL)
 	{
@@ -230,12 +255,11 @@ class Kanban_Task extends Kanban_Db
 				GROUP BY tasks.id
 		;";
 
-		$sql = apply_filters(
-			sprintf('%s_sql_%s_get_all', Kanban::get_instance()->settings->basename, self::$slug),
-			$sql
-		);
+		$sql = apply_filters('kanban_task_get_all_sql', $sql);
 
 		$records = parent::get_all($sql);
+
+
 
 		foreach ($records as $key => $record)
 		{
@@ -243,7 +267,12 @@ class Kanban_Task extends Kanban_Db
 			$records[$key]->description = Kanban_Utils::str_for_frontend($records[$key]->description);
 		}
 
-		return Kanban_Utils::build_array_with_id_keys ($records, 'id');;
+
+
+		return apply_filters(
+			'kanban_task_get_all_return',
+			Kanban_Utils::build_array_with_id_keys ($records, 'id')
+		);
 	}
 
 

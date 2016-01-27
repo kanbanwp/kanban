@@ -22,6 +22,8 @@ class Kanban_Utils
 
 		foreach ($arr as $obj)
 		{
+			if ( is_array($obj) ) $obj = (object) $obj;
+
 			$return[$obj->$id_key] = $obj;
 		}
 
@@ -56,13 +58,17 @@ class Kanban_Utils
 
 	static function order_array_of_objects_by_property ($arr, $property, $cmp_type = 'str')
 	{
+
 		if ( $cmp_type == 'int' )
 		{
 			usort(
 				$arr,
 				function($a, $b) use ($property)
 				{
-					return ($a < $b) ? -1 : 1;
+					if ( is_array($a) ) $a = (object) $a;
+					if ( is_array($b) ) $b = (object) $b;
+
+					return ((int) $a->$property < (int) $b->$property) ? -1 : 1;
 				}
 			);
 		}
@@ -72,6 +78,9 @@ class Kanban_Utils
 				$arr,
 				function($a, $b) use ($property)
 				{
+					if ( is_array($a) ) $a = (object) $a;
+					if ( is_array($b) ) $b = (object) $b;
+
 					return strcmp($a->$property, $b->$property);
 				}
 			);
@@ -91,7 +100,7 @@ class Kanban_Utils
 
 	static function str_for_frontend ($str)
 	{
-			return htmlspecialchars(stripcslashes(stripcslashes(stripcslashes($str))), ENT_QUOTES);
+			return htmlentities(stripcslashes(stripcslashes(stripcslashes($str))), ENT_QUOTES);
 	}
 }
 

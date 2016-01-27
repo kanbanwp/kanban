@@ -365,6 +365,8 @@ body.view-compact {
 
 			.panel-body {
 				padding: $margin/3 $margin/2;
+				position: relative;
+				z-index: 1;
 			}
 
 			.task-id {
@@ -446,9 +448,14 @@ body.view-compact {
 				}
 
 				.col > .btn {
+					background: transparent;
 					border: 0;
 					padding: $margin/3;
 					width: 100%;
+
+					&:hover {
+						background: lighten($color-grey-wp, 65);
+					}
 				}
 
 				.dropdown-menu {
@@ -601,6 +608,7 @@ body.view-compact {
 	width: 100%;
 
 	&[readonly] {
+		background: transparent;
 		border: 1px solid transparent;
 		&:hover {
 			background: lighten($color-grey-wp, 65);

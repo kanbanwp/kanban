@@ -44,14 +44,7 @@ class Kanban_Status extends Kanban_Db
 				ORDER BY `position` ASC
 		;";
 
-		$sql = apply_filters(
-			sprintf(
-				'%s_sql_%s_get_all',
-				Kanban::get_instance()->settings->basename,
-				self::$table_name
-			),
-			$sql
-		);
+		$sql = apply_filters('kanban_status_get_all_sql', $sql);
 
 		$records = parent::get_all($sql);
 
@@ -60,7 +53,10 @@ class Kanban_Status extends Kanban_Db
 			$records[$key]->title = Kanban_Utils::str_for_frontend($records[$key]->title);
 		}
 
-		return Kanban_Utils::build_array_with_id_keys ($records, 'id');
+		return apply_filters(
+			'kanban_status_get_all_return',
+			Kanban_Utils::build_array_with_id_keys ($records, 'id')
+		);
 	}
 
 

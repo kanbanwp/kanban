@@ -1,3 +1,26 @@
+// (re)set positions with padding
+function set_positions ()
+{
+	jQuery('.sortable').each(function()
+	{
+		jQuery('li', this).each(function(i)
+		{
+			// add zeros
+			// @link http://stackoverflow.com/a/1699980
+			var s = i+"";
+			while ( s.length < 3 )
+			{
+				s = "0" + s;
+			}
+
+			// set position
+			jQuery('.position', this).val(s);
+		});
+	});
+}
+
+
+
 jQuery(function($)
 {
 	function toggle_tabs (tab_id)
@@ -6,29 +29,6 @@ jQuery(function($)
 		$('.nav-tab').not('[href=' + tab_id + ']').removeClass('nav-tab-active');
 		$('.tab').not(tab_id).hide();
 		$(tab_id).show();
-	}
-
-
-
-	// (re)set positions with padding
-	function set_positions ()
-	{
-		$('.sortable').each(function()
-		{
-			$('li', this).each(function(i)
-			{
-				// add zeros
-				// @link http://stackoverflow.com/a/1699980
-				var s = i+"";
-				while ( s.length < 3 )
-				{
-					s = "0" + s;
-				}
-
-				// set position
-				$('.position', this).val(s);
-			});
-		});
 	}
 
 
@@ -50,7 +50,7 @@ jQuery(function($)
 
 	if ( typeof window.location.hash !== 'undefined' )
 	{
-		if ( window.location.hash != '' )
+		if ( window.location.hash !== '' )
 		{
 			toggle_tabs(window.location.hash);
 		}
@@ -168,7 +168,7 @@ jQuery(function($)
 		helper: 'clone', // fixHelper,
 		items: 'li',
 		handle: '.handle',
-		stop: function( event, ui )
+		stop: function()
 		{
 			set_positions ();
 		}

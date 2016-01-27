@@ -1,4 +1,6 @@
 <div class="panel panel-default card task" id="task-{{=task.id}}" data-id="{{=task.id}}">
+
+
 	<div class="panel-body">
 		<div class="pull-right text-muted task-id">
 			<div class="badge" data-toggle="dropdown">
@@ -12,6 +14,7 @@
 						<?php echo __( 'Delete this task', 'kanban' ); ?>
 					</a>
 				</li>
+				<?php echo apply_filters('kanban_card_id_dropdown', '' ); ?>
 			</ul>
 {{/current_user_can_write}}
 		</div>
@@ -77,4 +80,6 @@
 
 	<div class="task-handle" style="background: {{=task.status_color}};">
 	</div>
+
+	<?php echo apply_filters('kanban_card_append', '' ); ?>
 </div>

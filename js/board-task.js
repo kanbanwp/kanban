@@ -4,6 +4,9 @@ $.fn.board_task = function(task)
     return this.each(function()
     {
     	var $task = $(this);
+
+		$(document).trigger('/task/added/', task);
+
     	$task.timers = [];
 
 		var $projects_dropdown = $('.project .list-group', $task);
@@ -65,7 +68,7 @@ $.fn.board_task = function(task)
 
 		$task.on(
 			'delete',
-			function (e)
+			function ()
 			{
 				if ( !current_user_has_cap('write') )
 				{
@@ -84,7 +87,7 @@ $.fn.board_task = function(task)
 					url: ajaxurl,
 					data: task_data
 				})
-				.done(function(response )
+				.done(function()
 				{
 					delete board.task_records[task.ID];
 
@@ -120,7 +123,7 @@ $.fn.board_task = function(task)
 					var $input = $('.project_title', $task);
 					var project_title = $input.val();
 
-					if ( typeof project_title === 'undefined' || project_title == '' )
+					if ( typeof project_title === 'undefined' || project_title === '' )
 					{
 						return;
 					}
@@ -133,7 +136,7 @@ $.fn.board_task = function(task)
 						var project = board.project_records[i];
 
 						// it is NOT a new project
-						if ( project_title == project.title )
+						if ( project_title === project.title )
 						{
 							is_new_project = false;
 							break;
@@ -250,7 +253,7 @@ $.fn.board_task = function(task)
 			{
 				show_growl_msg(response);
 			});
-		} // add_work_hour
+		}; // add_work_hour
 
 
 
@@ -299,14 +302,14 @@ $.fn.board_task = function(task)
 				var $input = $(this);
 
 				// enter
-				if(e.keyCode==13)
+				if(e.keyCode === 13)
 				{
 					// save it
 					$input.trigger('blur');
 				}
 
 				// escape
-				if(e.keyCode==27)
+				if(e.keyCode === 27)
 				{
 					// get prev value
 					var orig = $input.data('orig');
@@ -324,7 +327,7 @@ $.fn.board_task = function(task)
 		$task.on(
 			'blur',
 			'.editable-input',
-			function(e)
+			function()
 			{
 				var $input = $(this);
 
@@ -344,7 +347,7 @@ $.fn.board_task = function(task)
 
 				return false;
 			}
-		)
+		);
 
 
 
@@ -398,7 +401,7 @@ $.fn.board_task = function(task)
 					board.estimate_records()[estimate_id].title
 				);
 
-				$task.trigger('save');
+				$task.trigger('save', {comment: comment});
 				$task.trigger('populate_estimate');
 			}
 		);
@@ -430,7 +433,7 @@ $.fn.board_task = function(task)
 				}
 
 				var $btn = $(this);
-				var operator = $btn.val();
+				var operator = $btn.val() === '+1' ? '+1' : '-1' ;
 
 				var current = parseFloat(task.hour_count);
 
@@ -492,12 +495,11 @@ $.fn.board_task = function(task)
 			function(e)
 			{
 				var $input = $(this);
-				var val = $input.val();
 
 
 
 				// enter
-				if(e.keyCode==13)
+				if(e.keyCode === 13)
 				{
 					$task.trigger('projects_dropdown_hide');
 					return;
@@ -506,7 +508,7 @@ $.fn.board_task = function(task)
 
 
 				// escape
-				if(e.keyCode==27)
+				if(e.keyCode === 27)
 				{
 					$task.trigger('projects_dropdown_hide');
 					return;
@@ -534,7 +536,7 @@ $.fn.board_task = function(task)
 					}
 				}
 
-				if ( $('.list-group-item', $task).length == 0 )
+				if ( $('.list-group-item', $task).length === 0 )
 				{
 					$task.trigger('projects_dropdown_hide');
 				}
@@ -546,12 +548,12 @@ $.fn.board_task = function(task)
 		$task.on(
 			'blur',
 			'.project_title',
-			function(e)
+			function()
 			{
 				var $btn_project_edit = $('.btn-edit-projects', $task);
 
 				// don't save if "edit projects" was clicked
-				if ( $last_clicked[0] == $btn_project_edit[0] )
+				if ( $last_clicked[0] === $btn_project_edit[0] )
 				{
 					// trigger escape
 					var e = jQuery.Event("keyup");
@@ -575,7 +577,7 @@ $.fn.board_task = function(task)
 		$task.on(
 			'focus',
 			'.project_title',
-			function(e)
+			function()
 			{
 				if ( !current_user_has_cap('write') )
 				{
@@ -678,7 +680,7 @@ $.fn.board_task = function(task)
 			})
 			.removeClass('progress-bar-success progress-bar-warning progress-bar-danger')
 			.addClass('progress-bar-' + progress_type);
-		}
+		};
 
 
 
@@ -688,10 +690,8 @@ $.fn.board_task = function(task)
 			'keydown',
 			function(e)
 			{
-				var $input = $(this);
-
 				// enter
-				if(e.keyCode==13)
+				if(e.keyCode === 13)
 				{
 					return false;
 				}
@@ -699,14 +699,27 @@ $.fn.board_task = function(task)
 		) // keyup
 		.on(
 			'blur',
-			function(e)
+			function()
 			{
+				var is_new_task = false;
+				if ( task.title === '' )
+				{
+					is_new_task = true;
+				}
+
 				var $input = $(this);
 				task.title = $input.val();
 
 				var comment = '{0} updated the task title'.sprintf (
+					board.current_user().short_name
+				);
+
+				if ( is_new_task )
+				{
+					comment = '{0} added the task'.sprintf (
 							board.current_user().short_name
 						);
+				}
 
 				$task.trigger('save', {comment: comment});
 			}
@@ -735,13 +748,10 @@ $.fn.board_task = function(task)
 				// populate estimate
 				var estimate = board.estimate_records()[task.estimate_id];
 
-				if ( typeof estimate === 'undefined' )
+				var label = '--';
+				if ( typeof estimate !== 'undefined' )
 				{
-					var label = '--';
-				}
-				else
-				{
-					var label = estimate.title;
+					label = estimate.title;
 				}
 
 				var data = {
@@ -784,7 +794,7 @@ $.fn.board_task = function(task)
 				var user;
 				try
 				{
-					var user = board.allowed_users()[task.user_id_assigned];
+					user = board.allowed_users()[task.user_id_assigned];
 					$task.attr('data-assigned-to', task.user_id_assigned);
 				}
 				catch (err) {}

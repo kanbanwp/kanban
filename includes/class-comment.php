@@ -47,7 +47,7 @@ class Kanban_Comment extends Kanban_Db
 	{
 
 
-		do_action( sprintf('%s_before_%s_add', Kanban::get_instance()->settings->basename, self::$slug) );
+		do_action( 'kanban_comment_add_before');
 
 
 
@@ -70,11 +70,7 @@ class Kanban_Comment extends Kanban_Db
 
 
 
-		do_action(
-			sprintf('%s_after_%s_add', Kanban::get_instance()->settings->basename, self::$slug),
-			$success,
-			$data
-		);
+		do_action( 'kanban_comment_add_after', $success, $data);
 
 
 

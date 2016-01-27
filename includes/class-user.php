@@ -214,10 +214,7 @@ class Kanban_User
 			}
 		}
 
-		return apply_filters(
-			sprintf('%s_after_get_allowed_users', Kanban::get_instance()->settings->basename),
-			Kanban_User::get_instance()->allowed_users
-		);
+		return apply_filters('kanban_user_get_allowed_users_return', Kanban_User::get_instance()->allowed_users );
 	}
 
 
@@ -296,14 +293,23 @@ class Kanban_User
 	static function validate_gravatar($id_or_email) {
 	  //id or email code borrowed from wp-includes/pluggable.php
 		$email = '';
-		if ( is_numeric($id_or_email) ) {
+		if ( is_numeric($id_or_email) )
+		{
 			$id = (int) $id_or_email;
 			$user = get_userdata($id);
 			if ( $user )
+			{
 				$email = $user->user_email;
-		} elseif ( is_object($id_or_email) ) {
+			}
+		}
+		elseif ( is_object($id_or_email) )
+		{
 			// No avatar for pingbacks or trackbacks
-			$allowed_comment_types = apply_filters( 'get_avatar_comment_types', array( 'comment' ) );
+			$allowed_comment_types = apply_filters(
+				'get_avatar_comment_types',
+				array( 'comment' )
+			);
+
 			if ( ! empty( $id_or_email->comment_type ) && ! in_array( $id_or_email->comment_type, (array) $allowed_comment_types ) )
 				return false;
 

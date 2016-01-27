@@ -48,7 +48,7 @@ class Kanban_Project extends Kanban_Db
 
 
 
-		do_action( sprintf('%s_before_%s_ajax_save', Kanban::get_instance()->settings->basename, self::$slug) );
+		do_action( 'kanban_project_ajax_save_before', $_POST['project']['id']);
 
 
 
@@ -71,7 +71,7 @@ class Kanban_Project extends Kanban_Db
 
 
 
-		do_action( sprintf('%s_after_%s_ajax_save', Kanban::get_instance()->settings->basename, self::$slug) );
+		do_action( 'kanban_project_ajax_save_after', $post_data);
 
 
 
@@ -98,7 +98,7 @@ class Kanban_Project extends Kanban_Db
 
 
 
-		do_action( sprintf('%s_before_%s_ajax_delete', Kanban::get_instance()->settings->basename, self::$slug) );
+		do_action('kanban_project_ajax_delete_before', $_POST['id']);
 
 
 
@@ -106,7 +106,7 @@ class Kanban_Project extends Kanban_Db
 
 
 
-		do_action( sprintf('%s_after_%s_ajax_delete', Kanban::get_instance()->settings->basename, self::$slug) );
+		do_action('kanban_project_ajax_delete_after', $_POST['id']);
 
 
 
@@ -161,10 +161,7 @@ class Kanban_Project extends Kanban_Db
 				WHERE `projects`.`is_active` = 1
 		;";
 
-		$sql = apply_filters(
-			sprintf('%s_sql_%s_get_all', Kanban::get_instance()->settings->basename, self::$slug),
-			$sql
-		);
+		$sql = apply_filters('kanban_project_get_all_sql', $sql);
 
 		$records = parent::get_all($sql);
 
@@ -173,7 +170,10 @@ class Kanban_Project extends Kanban_Db
 			$records[$key]->title = Kanban_Utils::str_for_frontend($records[$key]->title);
 		}
 
-		return Kanban_Utils::build_array_with_id_keys ($records, 'id');;
+		return apply_filters(
+			'kanban_project_get_all_return',
+			Kanban_Utils::build_array_with_id_keys ($records, 'id')
+		);
 	}
 
 

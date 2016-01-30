@@ -44,7 +44,14 @@ class Kanban_Project extends Kanban_Db
 
 	static function ajax_save ()
 	{
-		if (  !isset( $_POST[Kanban_Utils::get_nonce()] ) || ! wp_verify_nonce( $_POST[Kanban_Utils::get_nonce()], sprintf('%s-save', Kanban::get_instance()->settings->basename)) || !is_user_logged_in() ) wp_send_json_error();
+		if (  !isset( $_POST[Kanban_Utils::get_nonce()] ) || ! wp_verify_nonce( $_POST[Kanban_Utils::get_nonce()], 'kanban-save') || !is_user_logged_in() ) wp_send_json_error();
+
+
+
+		if ( !isset($_POST['project']['id']) )
+		{
+			$_POST['project']['id'] = '';
+		}
 
 
 
@@ -61,7 +68,7 @@ class Kanban_Project extends Kanban_Db
 
 
 
-		$project_id = isset($_POST['project']['id']) ? $_POST['project']['id'] : self::_insert_id();
+		$project_id = !empty($_POST['project']['id']) ? $_POST['project']['id'] : self::_insert_id();
 
 
 
@@ -94,7 +101,7 @@ class Kanban_Project extends Kanban_Db
 
 	static function ajax_delete ()
 	{
-		if (  !isset( $_POST[Kanban_Utils::get_nonce()] ) || ! wp_verify_nonce( $_POST[Kanban_Utils::get_nonce()], sprintf('%s-save', Kanban::get_instance()->settings->basename)) || !is_user_logged_in() ) wp_send_json_error();
+		if (  !isset( $_POST[Kanban_Utils::get_nonce()] ) || ! wp_verify_nonce( $_POST[Kanban_Utils::get_nonce()], 'kanban-save') || !is_user_logged_in() ) wp_send_json_error();
 
 
 

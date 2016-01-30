@@ -128,7 +128,6 @@ $.fn.board_task = function(task)
 						return;
 					}
 
-
 					// see if typed value matches existing project
 					var is_new_project = true;
 					for ( var i in board.project_records )
@@ -371,10 +370,14 @@ $.fn.board_task = function(task)
 				var $btn = $(this);
 				var user_id = $btn.val();
 
-				var comment = '{0} assigned the task to {1}'.sprintf (
-					board.current_user().short_name,
-					$('.task-assigned-to-short_name', $task).text()
-				);
+				var comment = '';
+				if ( $('.task-assigned-to-short_name', $task).not('.empty') )
+				{
+					comment = '{0} assigned the task to {1}'.sprintf (
+						board.current_user().short_name,
+						$('.task-assigned-to-short_name', $task).text()
+					);
+				}
 
 				task.user_id_assigned = user_id;
 				$task.trigger('save', {comment: comment});

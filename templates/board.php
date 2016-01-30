@@ -147,7 +147,7 @@ include Kanban_Template::find_template('inc/header') ?>
 
 
 
-<?php wp_nonce_field( sprintf('%s-save', Kanban::$instance->settings->basename), Kanban_Utils::get_nonce() ); ?>
+<?php wp_nonce_field( 'kanban-save', Kanban_Utils::get_nonce() ); ?>
 
 
 

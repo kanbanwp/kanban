@@ -5,7 +5,7 @@
 <div class="wrap">
 	<h1>
 		<?php echo __(sprintf('%s Settings', Kanban::get_instance()->settings->pretty_name), 'kanban') ?>
-		<a href="<?php echo sprintf( '%s/%s/board', home_url(), Kanban::$slug ) ?>" class="page-title-action" target="_blank">
+		<a href="<?php echo sprintf( '%s/%s/board', home_url(), Kanban::$slug ) ?>" class="page-title-action" target="_blank" id="btn-go-to-board" onclick="window.open('<?php echo sprintf( '%s/%s/board', home_url(), Kanban::$slug ) ?>', 'kanbanboard'); return false;">
 			<?php echo __('Go to your board', 'kanban') ?>
 		</a>
 

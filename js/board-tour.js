@@ -56,7 +56,7 @@ var board_tour = {
 
 		var current = this.tour[this.current];
 
-		if ( undefined === current )
+		if ( typeof current === 'undefined' )
 		{
 			this.current = 0;
 			this.show();

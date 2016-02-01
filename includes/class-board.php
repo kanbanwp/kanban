@@ -93,6 +93,11 @@ class Kanban_Board extends Kanban_Db
 		$wp_query->query_vars['kanban'] = (object) array();
 		$wp_query->query_vars['kanban']->board = (object) array();
 
+		// add default filters
+		$wp_query->query_vars['kanban']->board->filters = array(
+			'user' => (object) array(),
+			'project' => (object) array()
+		);
 
 		// add passed alert
 		$wp_query->query_vars['kanban']->board->alert = !empty($_GET['alert']) ? stripcslashes($_GET['alert']) : '';
@@ -116,6 +121,11 @@ class Kanban_Board extends Kanban_Db
 		$wp_query->query_vars['kanban']->board->col_percent_w = count($wp_query->query_vars['kanban']->board->statuses) > 0 ? 100/(count($wp_query->query_vars['kanban']->board->statuses)) : 100;
 		$wp_query->query_vars['kanban']->board->sidebar_w = count($wp_query->query_vars['kanban']->board->statuses) > 0 ? 100/(count($wp_query->query_vars['kanban']->board->statuses)-2) : 0;
 
+
+		apply_filters(
+			'kanban_board_query_vars',
+			$wp_query->query_vars['kanban']->board
+		);
 
 		return $template;
 	}

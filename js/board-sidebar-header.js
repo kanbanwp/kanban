@@ -82,7 +82,7 @@ $.fn.board_sidebar_header = function()
 			'doslide',
 			function (e, left)
 			{
-				if( typeof left === undefined )
+				if( typeof left === 'undefined' )
 				{
 					return false;
 				}
@@ -111,6 +111,17 @@ $.fn.board_sidebar_header = function()
 					task: {'status_id': status_id},
 					comment: 'Task added by {0}'.sprintf(board.current_user().short_name)
 				};
+
+				if ( typeof board.settings().default_estimate !== 'undefined' )
+				{
+					task_data.task.estimate_id = board.settings().default_estimate;
+				}
+
+				if ( typeof board.settings().default_assigned_to !== 'undefined' )
+				{
+					task_data.task.user_id_assigned = board.settings().default_assigned_to;
+				}
+
 				task_data.action = 'save_task';
 				task_data.kanban_nonce = $('#kanban_nonce').val();
 

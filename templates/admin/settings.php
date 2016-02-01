@@ -99,7 +99,7 @@
 				<tbody>
 					<tr>
 						<th width="33%" scope="row">
-							<label for="hour_interval">
+							<label for="default_estimate">
 								<?php echo __('Allowed users', 'kanban' ) ?><br>
 								<small>
 									<?php echo __('(Users who can make changes to the board)', 'kanban' ) ?>
@@ -115,6 +115,23 @@
 								</label><br>
 <?php endforeach // $all_users_arr ?>
 							</fieldset>
+						</td>
+					</tr>
+
+					<tr>
+						<th width="33%" scope="row">
+							<label for="default_assigned_to">
+								<?php echo __('Assign all users to', 'kanban' ) ?>
+							</label>
+						</th>
+						<td>
+							<select  name="settings[default_assigned_to]" style="min-width: 10em;">
+<?php foreach ($all_users_arr as $user_id => $user_name) : ?>
+								<option value="<?php echo $user_id ?>" <?php echo isset($settings['default_assigned_to']) ? $user_id == $settings['default_assigned_to'] ? 'selected' : '' : '' ?>>
+									<?php echo $user_name ?>
+								</option>
+<?php endforeach // $all_users_arr ?>
+							</select>
 						</td>
 					</tr>
 
@@ -166,6 +183,31 @@
 					<?php echo __('Add another estimate', 'kanban') ?>
 				</button>
 			</p>
+
+
+			<table class="form-table">
+				<tbody>
+					<tr>
+						<th width="33%" scope="row">
+							<label for="hour_interval">
+								<?php echo __('Default estimate', 'kanban' ) ?>
+							</label>
+						</th>
+						<td>
+							<select  name="settings[default_estimate]" style="min-width: 10em;">
+<?php foreach ($estimates as $estimate_id => $estimate) : ?>
+								<option value="<?php echo $estimate->id ?>" <?php echo isset($settings['default_estimate']) ? $estimate->id == $settings['default_estimate'] ? 'selected' : '' : '' ?>>
+									<?php echo $estimate->title ?>
+								</option>
+<?php endforeach // $estimates ?>
+							</select>
+						</td>
+					</tr>
+
+					<?php echo apply_filters( 'kanban_settings_tab_estimates_content', '' ); ?>
+
+				</tbody>
+			</table>
 
 			<?php submit_button(
 				__('Save your Settings', 'kanban'),

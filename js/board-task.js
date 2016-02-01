@@ -867,6 +867,45 @@ $.fn.board_task = function(task)
 		);
 
 
+
+		$('.col-assigned-to', $task).on(
+			'show.bs.dropdown',
+			function ()
+			{
+				$task.addClass('active');
+			}
+		);
+
+
+
+		$('.col-assigned-to', $task).on(
+			'hide.bs.dropdown',
+			function ()
+			{
+				$task.removeClass('active');
+			}
+		);
+
+
+
+		$('.col-estimate', $task).on(
+			'show.bs.dropdown',
+			function ()
+			{
+				$task.addClass('active');
+			}
+		);
+
+
+
+		$('.col-estimate', $task).on(
+			'hide.bs.dropdown',
+			function ()
+			{
+				$task.removeClass('active');
+			}
+		);
+
 	}); // each task
 }; // $.fn.task
 })( jQuery );

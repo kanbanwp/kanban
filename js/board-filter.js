@@ -13,6 +13,7 @@ $.fn.board_filter = function(task)
 
 
 
+    	// populate projects live from data
     	$('#filter-projects', $wrapper).on(
     		'show.bs.dropdown',
     		function()
@@ -30,6 +31,7 @@ $.fn.board_filter = function(task)
 
 
 
+    	// project dropdown behavior
 		$projects_dropdown.on(
 			'click',
 			'a',
@@ -51,16 +53,26 @@ $.fn.board_filter = function(task)
 				var $dropdown = $a.closest('.dropup');
 				var $label = $('.btn-label', $dropdown);
 
+				// save orig
 				if ( typeof $label.attr('data-orig') === 'undefined' )
 				{
 					$label.attr('data-orig', $label.text());
 				}
 
-				$label
-				.text(project.title)
-				.attr('data-id', project_id);
+				$label.text(project.title);
+				// $dropdown.attr('data-id', project_id);
 
-				$('#btn-filter-apply', $wrapper).trigger('click');
+
+
+				if ( typeof project_id !== 'undefined' && project_id != '' )
+				{
+					board.filters.project.selector = '[data-project-id=' + project_id + ']';
+					board.filters.project.hash = 'filter_project=' + project_id + '&';
+
+					$('#btn-filter-apply', $wrapper).trigger('click');
+				}
+
+
 
 				return false;
 			}
@@ -68,6 +80,7 @@ $.fn.board_filter = function(task)
 
 
 
+		// populate users from live data
     	$('#filter-users', $wrapper).on(
     		'show.bs.dropdown',
     		function()
@@ -116,11 +129,21 @@ $.fn.board_filter = function(task)
 					$label.attr('data-orig', $label.text());
 				}
 
-				$label
-				.text(user.long_name_email)
-				.attr('data-id', user_id);
+				$label.text(user.long_name_email);
+				// $dropdown.attr('data-id', user_id);
 
-				$('#btn-filter-apply', $wrapper).trigger('click');
+
+
+				if ( typeof user_id !== 'undefined' && user_id != '' )
+				{
+					board.filters.user.selector = '[data-assigned-to=' + user_id + ']';
+					board.filters.user.hash = 'filter_user=' + user_id + '&';
+
+					$('#btn-filter-apply', $wrapper).trigger('click');
+
+				}
+
+
 
 				return false;
 			}
@@ -137,19 +160,20 @@ $.fn.board_filter = function(task)
 				var selector = '';
 				var hash = '#';
 
-				var project_id = $('#filter-projects .btn-label').attr('data-id');
-				if ( typeof project_id !== 'undefined' && project_id != '' )
+				// build selector and hash
+				for ( var filter in board.filters )
 				{
-					selector += '[data-project-id=' + project_id + ']';
-					hash += 'filter_project=' + project_id + '&';
+					if ( typeof board.filters[filter].selector !== 'undefined' )
+					{
+						selector += board.filters[filter].selector;
+					}
+
+					if ( typeof board.filters[filter].hash !== 'undefined' )
+					{
+						hash += board.filters[filter].hash;
+					}
 				}
 
-				var user_id = $('#filter-users .btn-label').attr('data-id');
-				if ( typeof user_id !== 'undefined' && user_id != '' )
-				{
-					selector += '[data-assigned-to=' + user_id + ']';
-					hash += 'filter_user=' + user_id + '&';
-				}
 				var $tasks_to_show = $('.task' + selector);
 
 				location.hash = hash;
@@ -173,9 +197,14 @@ $.fn.board_filter = function(task)
 				{
 					var $label = $(this);
 					$label
-					.attr('data-id', '')
 					.text( $label.attr('data-orig') );
 				});
+
+				// clear filters
+				for ( var filter in board.filters )
+				{
+					board.filters[filter] = {};
+				}
 
 				location.hash = '#';
 			}

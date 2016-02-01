@@ -19,7 +19,7 @@ include Kanban_Template::find_template('inc/header') ?>
 <div id="wrapper-footer">
 	<div id="filter-wrapper">
 		<?php echo __('Filter by', 'kanban') ?>:
-		<span class="dropup" id="filter-projects">
+		<span class="filter dropup" id="filter-projects">
 			<button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">
 				<span class="btn-label" data-id="">
 					-- <?php echo __('Project', 'kanban') ?> --
@@ -35,7 +35,7 @@ include Kanban_Template::find_template('inc/header') ?>
 			</ul>
 		</span>
 
-		<span class="dropup" id="filter-users">
+		<span class="filter dropup" id="filter-users">
 			<button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">
 				<span class="btn-label" data-id="">
 					-- <?php echo __('User', 'kanban') ?> --
@@ -50,6 +50,8 @@ include Kanban_Template::find_template('inc/header') ?>
 				</li>
 			</ul>
 		</span>
+
+		<?php echo apply_filters('kanban_board_filter_html', '' ); ?>
 
 		<button type="button" class="btn btn-primary" id="btn-filter-apply">
 			<?php echo __('Filter', 'kanban') ?>
@@ -161,6 +163,7 @@ var board = {
 	{
 		return <?php echo json_encode($wp_query->query_vars['kanban']->board->settings) ?>;
 	},
+	filters: <?php echo json_encode($wp_query->query_vars['kanban']->board->filters) ?>,
 	status_records: function ()
 	{
 		return <?php echo json_encode($wp_query->query_vars['kanban']->board->statuses) ?>;

@@ -154,7 +154,7 @@ var add_task_to_status_col = function(task)
 	}));
 	$task.prependTo('#status-{0}-tasks'.sprintf(task.status_id)).board_task(task);
 
-	$('.col-tasks').same_height();
+	$('.col-tasks').matchHeight();
 
 	return $task;
 };
@@ -356,7 +356,7 @@ jQuery(function($)
 
 				ui.item.trigger('status_change', [status_id_new]);
 
-				$('.col-tasks').same_height();
+				$('.col-tasks').matchHeight();
 			} // receive
 		}).disableSelection();
 	}
@@ -505,13 +505,14 @@ jQuery(function($)
 
 
 	$(window).load(function() {
-		$('.col-tasks').same_height();
+		
+		$('.col-tasks').matchHeight();
 	});
 
 
 
 	$(window).resize(function(){
-		$('.col-tasks').same_height();
+		$('.col-tasks').matchHeight();
 	});
 
 

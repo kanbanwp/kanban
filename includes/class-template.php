@@ -31,7 +31,7 @@ class Kanban_Template
 				'bootstrap' => "%sbootstrap/js/bootstrap.min.js", // "//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js,
 				'bootstrap-growl' => "%sjs/jquery.bootstrap-growl.min.js", // "//cdnjs.cloudflare.com/ajax/libs/bootstrap-growl/1.0.0/jquery.bootstrap-growl.min.js",
 				'autoresize' => "%sjs/jquery.textarea.autoresize.min.js",
-				'same-height' => "%sjs/jquery.same-height.min.js",
+				'matchHeight' => "%sjs/jquery.matchHeight.min.js",
 				't' => "%sjs/t.min.js",
 				'board-modal-projects' => "%sjs/board-modal-projects.min.js",
 				'board-sidebar-header' => "%sjs/board-sidebar-header.min.js",

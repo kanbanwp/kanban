@@ -60,7 +60,7 @@ $.fn.board_task = function(task)
 					show_growl_msg(response);
 				});
 
-				$('.col-tasks').same_height();
+				$('.col-tasks').matchHeight();
 			}
 		); // save
 
@@ -94,7 +94,7 @@ $.fn.board_task = function(task)
 					$task.slideUp('fast', function()
 					{
 						$task.remove();
-						$('.col-tasks').same_height();
+						$('.col-tasks').matchHeight();
 					});
 				})
 				// .fail(function() {

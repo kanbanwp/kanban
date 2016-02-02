@@ -6,6 +6,10 @@
 	 * @since       1.0.3
 	 */
 
+	if ( ! defined( 'ABSPATH' ) ) {
+		exit;
+	}
+
 	wp_enqueue_script( 'jquery' );
 	wp_enqueue_script( 'json2' );
 	fs_enqueue_local_script( 'postmessage', 'nojquery.ba-postmessage.min.js' );
@@ -34,6 +38,7 @@
 	$query_params = array_merge( $_GET, array_merge( $context_params, array(
 		'plugin_version' => $fs->get_plugin_version(),
 		'wp_login_url'   => wp_login_url(),
+		'site_url'       => get_site_url(),
 //		'wp_admin_css' => get_bloginfo('wpurl') . "/wp-admin/load-styles.php?c=1&load=buttons,wp-admin,dashicons",
 	) ) );
 ?>

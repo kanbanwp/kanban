@@ -6,6 +6,10 @@
 	 * @since       1.0.9
 	 */
 
+	if ( ! defined( 'ABSPATH' ) ) {
+		exit;
+	}
+
 	wp_enqueue_script( 'jquery' );
 	wp_enqueue_script( 'json2' );
 	fs_enqueue_local_script( 'postmessage', 'nojquery.ba-postmessage.min.js' );
@@ -52,8 +56,8 @@
 	<div class="fs-content">
 		<p><?php
 				echo $fs->apply_filters( 'pending_activation_message', sprintf(
-					__fs( 'thanks-x' ) . '<br>' .
-					__fs( 'pending-activation-message' ),
+					__fs( 'thanks-x', $slug ) . '<br>' .
+					__fs( 'pending-activation-message', $slug ),
 					$first_name,
 					'<b>' . $fs->get_plugin_name() . '</b>',
 					'<b>' . $current_user->user_email . '</b>'
@@ -92,45 +96,69 @@
 				<input type="hidden" name="<?php echo $name ?>" value="<?php echo esc_attr( $value ) ?>">
 			<?php endforeach ?>
 			<button class="button button-primary" tabindex="1"
-			        type="submit"><?php _efs( 'resend-activation-email' ) ?></button>
+			        type="submit"><?php _efs( 'resend-activation-email', $slug ) ?></button>
 		</form>
-	</div>
-	<div class="fs-permissions">
-		<a class="fs-trigger" href="#"><?php _efs( 'what-permissions' ) ?></a>
-		<ul>
-			<li>
-				<i class="dashicons dashicons-admin-users"></i>
+    </div><?php
 
-				<div>
-					<span><?php _efs( 'permissions-profile' ) ?></span>
+    // Set core permission list items.
+    $permissions = array(
+        'profile'    => array(
+            'icon-class' => 'dashicons dashicons-admin-users',
+            'label'      => __fs( 'permissions-profile' ),
+            'desc'       => __fs( 'permissions-profile_desc' ),
+            'priority'   => 5,
+        ),
+        'site'       => array(
+            'icon-class' => 'dashicons dashicons-wordpress',
+            'label'      => __fs( 'permissions-site' ),
+            'desc'       => __fs( 'permissions-site_desc' ),
+            'priority'   => 10,
+        ),
+        'events'     => array(
+            'icon-class' => 'dashicons dashicons-admin-plugins',
+            'label'      => __fs( 'permissions-events' ),
+            'desc'       => __fs( 'permissions-events_desc' ),
+            'priority'   => 20,
+        ),
+    );
 
-					<p><?php _efs( 'permissions-profile_desc' ) ?></p>
-				</div>
-			</li>
-			<li>
-				<i class="dashicons dashicons-wordpress"></i>
+    // Add newsletter permissions if enabled.
+    if ( $fs->is_permission_requested( 'newsletter' ) ) {
+        $permissions['newsletter'] = array(
+            'icon-class' => 'dashicons dashicons-email-alt',
+            'label'      => __fs( 'permissions-newsletter' ),
+            'desc'       => __fs( 'permissions-newsletter_desc' ),
+            'priority'   => 15,
+        );
+    }
 
-				<div>
-					<span><?php _efs( 'permissions-site' ) ?></span>
+    // Allow filtering of the permissions list.
+    $permissions = $fs->apply_filters( 'permission_list', $permissions );
 
-					<p><?php _efs( 'permissions-site_desc' ) ?></p>
-				</div>
-			</li>
-			<li>
-				<i class="dashicons dashicons-admin-plugins"></i>
+    // Sort by priority.
+    uasort( $permissions, 'fs_sort_by_priority' );
 
-				<div>
-					<span><?php _efs( 'permissions-events' ) ?></span>
+    if ( ! empty( $permissions ) ) : ?>
+        <div class="fs-permissions">
+            <a class="fs-trigger" href="#"><?php _efs( 'what-permissions', $slug ) ?></a>
+            <ul><?php
+                foreach( $permissions as $id => $permission ) : ?>
+                    <li id="fs-permission-<?php esc_attr_e( $id ); ?>" class="fs-permission fs-<?php esc_attr_e( $id ); ?>">
+                        <i class="<?php esc_attr_e( $permission['icon-class'] ); ?>"></i>
+                        <div>
+                            <span><?php esc_html_e( $permission['label'] ); ?></span>
+                            <p><?php esc_html_e( $permission['desc'] ); ?></p>
+                        </div>
+                    </li>
+                <?php endforeach; ?>
+            </ul>
+        </div>
+    <?php endif; ?>
 
-					<p><?php _efs( 'permissions-events_desc' ) ?></p>
-				</div>
-			</li>
-		</ul>
-	</div>
-	<div class="fs-terms">
-		<a href="https://freemius.com/privacy/" target="_blank"><?php _efs( 'privacy-policy' ) ?></a>
+    <div class="fs-terms">
+		<a href="https://freemius.com/privacy/" target="_blank"><?php _efs( 'privacy-policy', $slug ) ?></a>
 		&nbsp;&nbsp;-&nbsp;&nbsp;
-		<a href="https://freemius.com/terms/" target="_blank"><?php _efs( 'tos' ) ?></a>
+		<a href="https://freemius.com/terms/" target="_blank"><?php _efs( 'tos', $slug ) ?></a>
 	</div>
 </div>
 <script type="text/javascript">

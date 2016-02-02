@@ -6,6 +6,10 @@
 	 * @since       1.0.7
 	 */
 
+	if ( ! defined( 'ABSPATH' ) ) {
+		exit;
+	}
+
 	$slug = $VARS['slug'];
 	$fs   = freemius( $slug );
 
@@ -44,10 +48,26 @@
 	</div>
 	<div class="fs-content">
 		<p><?php
-				echo $fs->apply_filters( 'connect_message',
+				$filter                = 'connect_message';
+				$default_optin_message = 'connect-message';
+
+				if ( $fs->is_plugin_update() ) {
+					// If Freemius was added on a plugin update, set different
+					// opt-in message.
+					$default_optin_message = 'connect-message_on-update';
+
+					// If user customized the opt-in message on update, use
+					// that message. Otherwise, fallback to regular opt-in
+					// custom message if exist.
+					if ( $fs->has_filter( 'connect_message_on_update' ) ) {
+						$filter = 'connect_message_on_update';
+					}
+				}
+
+				echo $fs->apply_filters( $filter,
 					sprintf(
-						__fs( 'hey-x' ) . '<br>' .
-						__fs( 'connect-message' ),
+						__fs( 'hey-x', $slug ) . '<br>' .
+						__fs( $default_optin_message, $slug ),
 						$first_name,
 						'<b>' . $fs->get_plugin_name() . '</b>',
 						'<b>' . $current_user->user_login . '</b>',
@@ -65,7 +85,7 @@
 	<div class="fs-actions">
 		<?php if ( $fs->enable_anonymous() ) : ?>
 			<a href="<?php echo wp_nonce_url( $fs->_get_admin_page_url( '', array( 'fs_action' => $slug . '_skip_activation' ) ), $slug . '_skip_activation' ) ?>"
-			   class="button button-secondary" tabindex="2"><?php _efs( 'skip' ) ?></a>
+			   class="button button-secondary" tabindex="2"><?php _efs( 'skip', $slug ) ?></a>
 		<?php endif ?>
 		<?php $fs_user = Freemius::_get_user_by_email( $current_user->user_email ) ?>
 		<?php if ( is_object( $fs_user ) ) : ?>
@@ -73,7 +93,7 @@
 				<input type="hidden" name="fs_action" value="<?php echo $slug ?>_activate_existing">
 				<?php wp_nonce_field( 'activate_existing_' . $fs->get_public_key() ) ?>
 				<button class="button button-primary" tabindex="1"
-				        type="submit"><?php _efs( 'opt-in-connect' ) ?></button>
+				        type="submit"><?php _efs( 'opt-in-connect', $slug ) ?></button>
 			</form>
 		<?php else : ?>
 			<form method="post" action="<?php echo WP_FS__ADDRESS ?>/action/service/user/install/">
@@ -83,7 +103,7 @@
 						'user_lastname'     => $current_user->user_lastname,
 						'user_nickname'     => $current_user->user_nicename,
 						'user_email'        => $current_user->user_email,
-						'user_ip'           => fs_get_ip(),
+						'user_ip'           => WP_FS__REMOTE_ADDR,
 						'plugin_slug'       => $slug,
 						'plugin_id'         => $fs->get_id(),
 						'plugin_public_key' => $fs->get_public_key(),
@@ -124,46 +144,70 @@
 					<input type="hidden" name="<?php echo $name ?>" value="<?php echo esc_attr( $value ) ?>">
 				<?php endforeach ?>
 				<button class="button button-primary" tabindex="1"
-				        type="submit"><?php _efs( 'opt-in-connect' ) ?></button>
+				        type="submit"><?php _efs( 'opt-in-connect', $slug ) ?></button>
 			</form>
 		<?php endif ?>
-	</div>
-	<div class="fs-permissions">
-		<a class="fs-trigger" href="#"><?php _efs( 'what-permissions' ) ?></a>
-		<ul>
-			<li>
-				<i class="dashicons dashicons-admin-users"></i>
+	</div><?php
 
-				<div>
-					<span><?php _efs( 'permissions-profile' ) ?></span>
+    // Set core permission list items.
+    $permissions = array(
+        'profile'    => array(
+            'icon-class' => 'dashicons dashicons-admin-users',
+            'label'      => __fs( 'permissions-profile' ),
+            'desc'       => __fs( 'permissions-profile_desc' ),
+            'priority'   => 5,
+        ),
+        'site'       => array(
+            'icon-class' => 'dashicons dashicons-wordpress',
+            'label'      => __fs( 'permissions-site' ),
+            'desc'       => __fs( 'permissions-site_desc' ),
+            'priority'   => 10,
+        ),
+        'events'     => array(
+            'icon-class' => 'dashicons dashicons-admin-plugins',
+            'label'      => __fs( 'permissions-events' ),
+            'desc'       => __fs( 'permissions-events_desc' ),
+            'priority'   => 20,
+        ),
+    );
 
-					<p><?php _efs( 'permissions-profile_desc' ) ?></p>
-				</div>
-			</li>
-			<li>
-				<i class="dashicons dashicons-wordpress"></i>
+    // Add newsletter permissions if enabled.
+    if ( $fs->is_permission_requested( 'newsletter' ) ) {
+        $permissions['newsletter'] = array(
+            'icon-class' => 'dashicons dashicons-email-alt',
+            'label'      => __fs( 'permissions-newsletter' ),
+            'desc'       => __fs( 'permissions-newsletter_desc' ),
+            'priority'   => 15,
+        );
+    }
 
-				<div>
-					<span><?php _efs( 'permissions-site' ) ?></span>
+    // Allow filtering of the permissions list.
+    $permissions = $fs->apply_filters( 'permission_list', $permissions );
 
-					<p><?php _efs( 'permissions-site_desc' ) ?></p>
-				</div>
-			</li>
-			<li>
-				<i class="dashicons dashicons-admin-plugins"></i>
+    // Sort by priority.
+    uasort( $permissions, 'fs_sort_by_priority' );
 
-				<div>
-					<span><?php _efs( 'permissions-events' ) ?></span>
+    if ( ! empty( $permissions ) ) : ?>
+    <div class="fs-permissions">
+        <a class="fs-trigger" href="#"><?php _efs( 'what-permissions', $slug ) ?></a>
+        <ul><?php
+            foreach( $permissions as $id => $permission ) : ?>
+                <li id="fs-permission-<?php esc_attr_e( $id ); ?>" class="fs-permission fs-<?php esc_attr_e( $id ); ?>">
+                    <i class="<?php esc_attr_e( $permission['icon-class'] ); ?>"></i>
+                    <div>
+                        <span><?php esc_html_e( $permission['label'] ); ?></span>
+                        <p><?php esc_html_e( $permission['desc'] ); ?></p>
+                    </div>
+                </li>
+            <?php endforeach; ?>
+        </ul>
+    </div>
+    <?php endif; ?>
 
-					<p><?php _efs( 'permissions-events_desc' ) ?></p>
-				</div>
-			</li>
-		</ul>
-	</div>
 	<div class="fs-terms">
-		<a href="https://freemius.com/privacy/" target="_blank"><?php _efs( 'privacy-policy' ) ?></a>
+		<a href="https://freemius.com/privacy/" target="_blank"><?php _efs( 'privacy-policy', $slug ) ?></a>
 		&nbsp;&nbsp;-&nbsp;&nbsp;
-		<a href="https://freemius.com/terms/" target="_blank"><?php _efs( 'tos' ) ?></a>
+		<a href="https://freemius.com/terms/" target="_blank"><?php _efs( 'tos', $slug ) ?></a>
 	</div>
 </div>
 <script type="text/javascript">
@@ -173,7 +217,8 @@
 			$(document.body).css({'cursor': 'wait'});
 		});
 		$('.button.button-primary').on('click', function () {
-			$(this).html('<?php _efs( 'activating' ) ?>...').css({'cursor': 'wait'});
+			$(this).addClass('fs-loading');
+			$(this).html('<?php _efs(  'activating' , $slug ) ?>...').css({'cursor': 'wait'});
 		});
 		$('.fs-permissions .fs-trigger').on('click', function () {
 			$('.fs-permissions').toggleClass('fs-open');

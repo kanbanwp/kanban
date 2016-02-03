@@ -167,6 +167,8 @@ class Kanban_User
 	{
 		if ( !isset(Kanban_User::get_instance()->allowed_users) )
 		{
+			global $wpdb;
+
 			// get all settings
 			$allowed_users = Kanban_Option::get_option('allowed_users');
 
@@ -184,14 +186,29 @@ class Kanban_User
 			}
 
 			// load actual users
-			$users = get_users(array(
-				'include' => $allowed_user_ids,
-				'fields' => array(
-					'ID',
-					'user_email',
+			// $users = get_users(array(
+			// 	'include' => $allowed_user_ids,
+			// 	'fields' => array(
+			// 		'ID',
+			// 		'user_email',
 
-				)
-			));
+			// 	)
+			// ));
+
+			$allowed_user_ids_str = implode(',', $allowed_user_ids);
+
+			$users = $wpdb->get_results("SELECT {$wpdb->users}.ID,
+			{$wpdb->users}.user_email,
+			first_name.meta_value AS 'first_name',
+			last_name.meta_value AS 'last_name'
+			FROM {$wpdb->users}
+			LEFT JOIN {$wpdb->usermeta} first_name
+			ON {$wpdb->users}.ID = first_name.user_id
+			AND first_name.meta_key = 'first_name'
+			LEFT JOIN {$wpdb->usermeta} last_name
+			ON {$wpdb->users}.ID = last_name.user_id
+			AND last_name.meta_key = 'last_name'
+			WHERE {$wpdb->users}.ID IN ($allowed_user_ids_str);");
 
 			// add users to object
 			Kanban_User::get_instance()->allowed_users = Kanban_Utils::build_array_with_id_keys($users, 'ID');

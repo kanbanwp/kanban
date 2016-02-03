@@ -121,7 +121,7 @@
 					<tr>
 						<th width="33%" scope="row">
 							<label for="default_assigned_to">
-								<?php echo __('Assign all users to', 'kanban' ) ?>
+								<?php echo __('Assign all tasks to', 'kanban' ) ?>
 							</label>
 						</th>
 						<td>
@@ -131,6 +131,9 @@
 									<?php echo $user_name ?>
 								</option>
 <?php endforeach // $all_users_arr ?>
+								<option value="" <?php echo !isset($settings['default_assigned_to']) || empty($settings['default_assigned_to']) ? 'selected' : '' ?>>
+									<?php echo $user_name ?>
+								</option>
 							</select>
 						</td>
 					</tr>

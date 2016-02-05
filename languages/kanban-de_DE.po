@@ -1,0 +1,265 @@
+# Copyright (C) 2015 Kanban for WordPress
+# This file is distributed under the same license as the Kanban for WordPress package.
+msgid ""
+msgstr ""
+"Project-Id-Version: Kanban for WordPress\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/kanban\n"
+"POT-Creation-Date: 2016-02-05 23:25+0100\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"PO-Revision-Date: 2016-02-05 23:48+0100\n"
+"Language-Team: \n"
+"X-Generator: Poedit 1.8.7\n"
+"Last-Translator: \n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Language: de_DE\n"
+
+#: includes/class-admin.php:56
+msgid "Warning!"
+msgstr "Achtung!"
+
+#: includes/class-admin.php:57 includes/class-board.php:43
+msgid ""
+"We've found %s kanban records that need to be migrated for the latest "
+"version of Kanban for WordPress!"
+msgstr ""
+"Wir haben %s Kanban Datensätze gefunden, die für die neueste Version von "
+"Kanban für WordPress migriert werden müssen!"
+
+#: includes/class-admin.php:60
+msgid "Please click \"migrate\" below and we'll move them for you."
+msgstr ""
+"Klicken Sie bitte auf \"migrieren\"und wir werde sie für dich verarbeiten\n"
+"."
+
+#: includes/class-admin.php:64
+msgid "Migrate"
+msgstr "Migrieren"
+
+#: includes/class-admin.php:69
+msgid "Migration Progress"
+msgstr "Migrationsstatus"
+
+#: includes/class-admin.php:70
+msgid "(Please do not browse away from the page until migration is complete)"
+msgstr ""
+"Bitte verlassen Sie diese Seite nicht, bis die Migration abgeschlossen ist."
+
+#: includes/class-admin.php:379
+msgid "Settings saved"
+msgstr "Einstellungen gespeichert!"
+
+#: includes/class-board.php:47
+msgid ""
+"Please visit the <a href=\"%s\">Kanban welcome page</a> to migrate your data."
+msgstr ""
+"Besuchen Sie die <a href=\"%s\">Kanban \"Willkommen Seite\"\n"
+"</a> um Ihre Daten zu migrieren."
+
+#: includes/class-user.php:61
+msgid "Your request has been sent."
+msgstr "Ihre Anfrage wurde gesendet."
+
+#: includes/class-user.php:84
+msgid "Whoops! We can't find an account for that email address."
+msgstr "Leider können wir kein Konto mit dieser E-Mail-Adresse finden."
+
+#: includes/class-user.php:105
+msgid "Whoops! That password is incorrect for this email address."
+msgstr "Ihr Passwort ist falsch für diese E-Mail-Adresse."
+
+#: kanban.php:91
+msgid "Kanban"
+msgstr "Kanban"
+
+#: kanban.php:178
+msgid ""
+"The %s plugin requires at least PHP 5.3. You have %s. Please upgrade and "
+"then re-install the plugin."
+msgstr ""
+"Sie benötigen mindestens PHP 5.3 um dieses Plugin zu nutzen. Sie nutzen "
+"aktuell %s. Bitte aktualisieren Sie ihre PHP Version und installieren Sie "
+"das Plugin erneut."
+
+#: templates/admin/settings.php:9 templates/admin/welcome.php:23
+msgid "Go to your board"
+msgstr "Zum Board"
+
+#: templates/admin/settings.php:21 templates/board.php:82
+msgid "Settings"
+msgstr "Einstellungen"
+
+#: templates/admin/settings.php:23
+msgid "Statuses"
+msgstr "Status"
+
+#: templates/admin/settings.php:24
+msgid "Estimates"
+msgstr "Schätzungen"
+
+#: templates/admin/settings.php:38
+msgid "Work hour interval"
+msgstr "Intervall für Arbeitszeiten"
+
+#: templates/admin/settings.php:39
+msgid "in hours"
+msgstr "in Stunden"
+
+#: templates/admin/settings.php:45
+msgid ""
+"Example: If you want to track work in 10 minute increments, enter \".1667\" "
+"here."
+msgstr ""
+"Beispiel: Um ihre Arbeitszeiten in 10 Minuten Schritten zu erfassen geben "
+"Sie bitte \".1667\" ein."
+
+#: templates/admin/settings.php:53 templates/admin/settings.php:86
+#: templates/admin/settings.php:108 templates/admin/settings.php:130
+msgid "Save your Settings"
+msgstr "Einstellungen speichern"
+
+#: templates/admin/settings.php:68
+msgid "Allowed users"
+msgstr "Berechtigte Benutzer"
+
+#: templates/admin/settings.php:103
+msgid "Add another status"
+msgstr "Status hinzufügen"
+
+#: templates/admin/settings.php:125
+msgid "Add another estimate"
+msgstr "Schätzung hinzufügen"
+
+#: templates/admin/t-estimate.php:2 templates/admin/t-status.php:2
+msgid "Reorder"
+msgstr "Neu ordnen"
+
+#: templates/admin/t-estimate.php:8
+msgid "Hours"
+msgstr "Stunden"
+
+#: templates/admin/t-estimate.php:12 templates/admin/t-status.php:11
+msgid "Delete"
+msgstr "Löschen"
+
+#: templates/admin/welcome.php:14
+msgid "Thanks for using Kanban for WordPress!"
+msgstr "Vielen dank das Sie Kanban für Wordpress nutzen!"
+
+#: templates/admin/welcome.php:16
+msgid "Dismiss this notice."
+msgstr "Diese Nachricht ignorieren."
+
+#: templates/admin/welcome.php:26
+msgid "Documentation"
+msgstr "Dokumentation"
+
+#: templates/admin/welcome.php:27
+msgid "(On kanbanwp.com)"
+msgstr "(auf kanbanwp.com)"
+
+#: templates/board.php:15
+msgid "Filter by"
+msgstr "Filtern nach"
+
+#: templates/board.php:19
+msgid "Project"
+msgstr "Projekt"
+
+#: templates/board.php:26
+msgid "No project assigned"
+msgstr "Kein Projekt zugewiesen"
+
+#: templates/board.php:35
+msgid "User"
+msgstr "Benutzer"
+
+#: templates/board.php:42
+msgid "No user assigned"
+msgstr "Kein Benutzer zugewiesen"
+
+#: templates/board.php:49
+msgid "Filter"
+msgstr "Filter"
+
+#: templates/board.php:52 templates/board.php:62
+msgid "Show All"
+msgstr "Alle zeigen"
+
+#: templates/board.php:60
+msgid "Search"
+msgstr "Suchen"
+
+#: templates/board.php:94
+msgid "Close"
+msgstr "Schliessen"
+
+#. Plugin Name of the plugin/theme
+#: templates/inc/header.php:8
+msgid "Kanban for WordPress"
+msgstr "Kanban für Wordpress"
+
+#: templates/inc/t-card-estimate.php:2
+msgid "Estimate:"
+msgstr "Schätzung:"
+
+#: templates/inc/t-card-project.php:2 templates/inc/t-card.php:18
+msgid "Task project"
+msgstr "Arbeitspaket / Projekt"
+
+#: templates/inc/t-card-project.php:6 templates/inc/t-card.php:22
+msgid "Edit"
+msgstr "Bearbeiten"
+
+#: templates/inc/t-card-task-hours.php:2
+msgid "Worked:"
+msgstr "Arbeitszeit"
+
+#: templates/inc/t-card.php:11
+msgid "Delete this task"
+msgstr "Dieses Arbeitspaket löschen"
+
+#: templates/inc/t-card.php:29
+msgid "Task name"
+msgstr "Name des Arbeitspakets"
+
+#: templates/login.php:6
+msgid "Login"
+msgstr "Login"
+
+#: templates/login.php:26
+msgid "email"
+msgstr "Email"
+
+#: templates/login.php:30
+msgid "Password"
+msgstr "Passwort"
+
+#: templates/login.php:32
+msgid "password"
+msgstr "Passwort"
+
+#: templates/login.php:36
+msgid "Log in"
+msgstr "Login"
+
+#: templates/login.php:42
+msgid ""
+"Whoops, looks like you haven't been granted access yet. Click below to "
+"request access."
+msgstr ""
+"Sie haben nicht die notwendigen Berechtigungen für diese Aktion. Klicken Sie "
+"unten um diese anzufordern."
+
+#: templates/login.php:46
+msgid "Request access"
+msgstr "Berechtigung anfordern"
+
+#. Description of the plugin/theme
+msgid ""
+"A complete kanban board for WordPress. Use agile project management to get "
+"more done, right inside your WordPress site!"
+msgstr ""
+"Vollständiges Kanban Board für WordPress. Benutzen Sie agiles "
+"Projektmanagement direkt in ihrer eigenen WordPress Seite!"

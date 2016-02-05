@@ -45,6 +45,8 @@ class Kanban_Admin
 
 		// if migrating from older version, show upgrade notice with progress bar
 		add_action( 'admin_notices', array(__CLASS__, 'render_upgrade_notice') );
+
+		add_action( 'admin_bar_menu', array(__CLASS__, 'add_admin_bar_link_to_board'), 999 );
 	}
 
 
@@ -297,6 +299,19 @@ class Kanban_Admin
 		);
 
 	} // admin_menu
+
+
+
+	static function add_admin_bar_link_to_board ( $wp_admin_bar )
+	{
+		$args = array(
+			'id'    => 'kanban_board',
+			'title' => 'Kanban Board',
+			'href'  => '/kanban/board',
+			'meta'  => array( 'class' => 'kanban-board' )
+		);
+		$wp_admin_bar->add_node( $args );
+	}
 
 
 

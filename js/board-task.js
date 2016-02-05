@@ -436,7 +436,19 @@ $.fn.board_task = function(task)
 				}
 
 				var $btn = $(this);
-				var operator = $btn.val() === '+1' ? '+1' : '-1' ;
+				var btn_val = $btn.val();
+
+				if ( btn_val.substring(0, 1) != '+' && btn_val.substring(0, 1) != '-' )
+				{
+					return false;
+				}
+
+				var operator = parseFloat(btn_val);
+
+				if ( isNaN(operator) )
+				{
+					return false;
+				}
 
 				var current = parseFloat(task.hour_count);
 

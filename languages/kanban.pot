@@ -74,7 +74,7 @@ msgid "Go to your board"
 msgstr ""
 
 #: templates/admin/settings.php:21 templates/board.php:82
-msgid "Settings"
+msgid "General"
 msgstr ""
 
 #: templates/admin/settings.php:23

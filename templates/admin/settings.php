@@ -225,6 +225,25 @@
 
 
 
+		<div class="tab" id="tab-licenses" style="display: none;">
+			<p>
+				<?php echo __('Add your purchased add-on licenses below.', 'kanban') ?>
+			</p>
+			<table class="form-table">
+				<tbody>
+					<?php echo apply_filters( 'kanban_settings_licenses', '' ); ?>
+				</tbody>
+			</table>
+
+			<?php submit_button(
+				__('Save your Settings', 'kanban'),
+					'primary',
+					'submit'
+			) ?>
+		</div><!-- tab-licenses -->
+
+
+
 		<?php wp_nonce_field( 'kanban-options', Kanban_Utils::get_nonce() ); ?>
 
 	</form>

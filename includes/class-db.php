@@ -22,25 +22,6 @@ abstract class Kanban_Db
 		add_action('plugins_loaded', array(__CLASS__, 'check_for_updates'));
 
 		add_action( 'wp_ajax_kanban_migrate_db', array(__CLASS__, 'ajax_migrate_records') );
-
-		global $kan_fs;
-		echo $kan_fs->add_filter( 'connect_message', array(__CLASS__, 'custom_freemius_optin_message') );
-	}
-
-
-
-	static function custom_freemius_optin_message ( $html_msg )
-	{
-		global $kan_fs;
-
-	     return sprintf(
-		     	'<b>Please help us improve %s!</b><br>
-		     	If you opt-in, some data about your usage of <b>%s</b> will be sent to <a href="https://freemius.com/wordpress/" target="_blank">freemius.com</a>.
-		     	If you skip this, that\'s okay! <b>%s</b> will still work just fine.'
-		     	, $kan_fs->get_plugin_name()
-		     	, $kan_fs->get_plugin_name()
-		     	, $kan_fs->get_plugin_name()
-	     	);
 	}
 
 

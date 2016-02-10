@@ -3,7 +3,7 @@
 Plugin Name:	Kanban for WordPress
 Plugin URI:		http://kanbanwp.com/
 Description:	A complete kanban board for WordPress. Use agile project management to get more done, right inside your WordPress site!
-Version:		1.2.3
+Version:		1.2.4
 Author:			Gelform Inc
 Author URI:		http://gelwp.com
 License:		GPL2
@@ -35,41 +35,6 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 
 
 
-#region Freemius
-
-// Create a helper function for easy SDK access.
-function kan_fs() {
-    global $kan_fs;
-
-    if ( ! isset( $kan_fs ) ) {
-        // Include Freemius SDK.
-        require_once dirname(__FILE__) . '/freemius/start.php';
-
-        $kan_fs = fs_dynamic_init( array(
-            'id'                => '70',
-            'slug'              => 'kanban',
-            'public_key'        => 'pk_79c5063358baad9d6247046db9a6b',
-            'is_premium'        => false,
-            'has_addons'        => true,
-            'has_paid_plans'    => false,
-            'menu'              => array(
-                'slug'       => 'kanban_welcome',
-                'account'    => false,
-                'support'    => false,
-            ),
-        ) );
-    }
-
-    return $kan_fs;
-}
-
-// Init Freemius.
-kan_fs();
-
-#endregion Freemius
-
-
-
 // instantiate the plugin
 Kanban::init();
 
@@ -87,10 +52,17 @@ class Kanban
 		// get instance
 		self::$instance = self::get_instance();
 
+
+
 		// build settings
 		Kanban::get_instance()->settings = (object) array();
 		Kanban::get_instance()->settings->path = dirname(__FILE__);
 		Kanban::get_instance()->settings->file = basename(__FILE__, '.php');
+
+		if ( !function_exists('get_plugin_data') )
+		{
+			require_once( ABSPATH . 'wp-admin/includes/plugin.php' );
+		}
 		Kanban::get_instance()->settings->plugin_data = get_plugin_data(__FILE__);
 		Kanban::get_instance()->settings->basename = strtolower(__CLASS__);
 		Kanban::get_instance()->settings->plugin_basename = plugin_basename(__FILE__);

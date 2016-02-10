@@ -18,7 +18,7 @@
 <?php endif // message ?>
 
 	<h2 class="nav-tab-wrapper">
-		<a href="#tab-settings" class="nav-tab nav-tab-active"><?php echo __('Settings', 'kanban' ) ?></a>
+		<a href="#tab-settings" class="nav-tab nav-tab-active"><?php echo __('General', 'kanban' ) ?></a>
 		<a href="#tab-users" class="nav-tab"><?php echo __('Users', 'kanban' ) ?></a>
 		<a href="#tab-statuses" class="nav-tab"><?php echo __('Statuses', 'kanban' ) ?></a>
 		<a href="#tab-estimates" class="nav-tab"><?php echo __('Estimates', 'kanban' ) ?></a>

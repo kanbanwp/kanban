@@ -36,6 +36,8 @@
 			<textarea class="editable-input task_title resize" rows="1" placeholder="<?php echo __( 'Task name', 'kanban' ); ?>" readonly>{{=task.title}}</textarea>
 		</h3>
 
+		<?php echo apply_filters('kanban_card_after_title', '' ); ?>
+
 		<div class="row row-worked">
 			<div class="col col-xs-4 col-task-hours">
 				<div class="btn btn-default btn-task-hours">

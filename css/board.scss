@@ -579,6 +579,11 @@ body.view-compact {
 	}
 
 
+	&.hide_progress_bar {
+		.progress {
+			display: none;
+		}
+	}
 }
 
 

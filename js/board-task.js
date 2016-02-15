@@ -301,7 +301,7 @@ $.fn.board_task = function(task)
 				var $input = $(this);
 
 				// enter
-				if(e.keyCode === 13)
+				if (e.keyCode == 13 && !e.shiftKey)
 				{
 					// save it
 					$input.trigger('blur');
@@ -706,7 +706,7 @@ $.fn.board_task = function(task)
 			function(e)
 			{
 				// enter
-				if(e.keyCode === 13)
+				if (e.keyCode == 13 && !e.shiftKey)
 				{
 					return false;
 				}

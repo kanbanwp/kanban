@@ -358,7 +358,8 @@ jQuery(function($)
 
 				$('.col-tasks').matchHeight();
 			} // receive
-		}).disableSelection();
+		});
+		// .disableSelection();
 	}
 
 
@@ -368,7 +369,7 @@ jQuery(function($)
 		'keydown',
 		function(e)
 		{
-			var $any_input = $('input:focus, textarea:focus');
+			var $any_input = $('input:focus, textarea:focus, [contenteditable]:focus');
 
 
 

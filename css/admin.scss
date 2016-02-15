@@ -121,3 +121,34 @@
 .switch-field label:last-of-type {
   border-radius: 0 4px 4px 0;
 }
+
+
+
+#row-addons {
+	.addon {
+		margin: 0 1% 15px 0;
+		width: 30%;
+
+		.addon-header {
+			background: #21759b;
+			color: white;
+			min-height: 2em;
+	
+			img {
+				display: block;
+				max-width: 100%;
+			}
+		}
+
+		.addon-body {
+			background: white;
+			padding: 15px;
+
+			.button {
+				text-align: center;
+				width: 100%;
+			}
+		}
+
+	}
+}

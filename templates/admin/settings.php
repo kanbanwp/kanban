@@ -81,6 +81,19 @@
 							</div>
 						</td>
 					</tr>
+					<tr>
+						<th width="33%" scope="row">
+							<?php echo __('Hide progress bars', 'kanban' ) ?>
+						</th>
+						<td>
+							<div class="switch-field">
+								<input type="radio" id="hide_progress_bar_1" name="settings[hide_progress_bar]" value="1" <?php echo (bool) $settings['hide_progress_bar'] ? 'checked' : '' ?>>
+								<label for="hide_progress_bar_1">Yes</label>
+								<input type="radio" id="hide_progress_bar_0" name="settings[hide_progress_bar]" value="0" <?php echo !(bool) $settings['hide_progress_bar'] ? 'checked' : '' ?>>
+								<label for="hide_progress_bar_0">No</label>
+							</div>
+						</td>
+					</tr>
 				</tbody>
 			</table>
 

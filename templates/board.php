@@ -6,7 +6,7 @@ include Kanban_Template::find_template('inc/header') ?>
 
 
 
-<div id="wrapper-board" class="<?php echo $wp_query->query_vars['kanban']->board->settings['show_all_cols'] ? 'show_all_cols' : '' ?>">
+<div id="wrapper-board" class="<?php echo $wp_query->query_vars['kanban']->board->settings['show_all_cols'] ? 'show_all_cols' : '' ?> <?php echo $wp_query->query_vars['kanban']->board->settings['hide_progress_bar'] ? 'hide_progress_bar' : '' ?>">
 	<div class="row" id="row-statuses">
 	</div><!-- row -->
 

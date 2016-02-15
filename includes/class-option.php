@@ -30,7 +30,8 @@ class Kanban_Option extends Kanban_Db
 		'hour_interval' => '1',
 		'allowed_users' => '',
 		'show_all_cols' => 0,
-		'default_to_compact_view' => 0
+		'default_to_compact_view' => 0,
+		'hide_progress_bar' => 0
 	);
 
 	// store the options on first load, to prevent mulitple db calls
@@ -256,6 +257,10 @@ class Kanban_Option extends Kanban_Db
 	static function save_settings ()
 	{
 		if (  !isset( $_POST[Kanban_Utils::get_nonce()] ) || ! wp_verify_nonce( $_POST[Kanban_Utils::get_nonce()], 'kanban-options') || !is_user_logged_in() ) return;
+
+
+
+		do_action('kanban_option_save_settings_before', $_POST);
 
 
 

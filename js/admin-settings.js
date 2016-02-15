@@ -172,7 +172,8 @@ jQuery(function($)
 		{
 			set_positions ();
 		}
-	}).disableSelection();
+	});
+	// .disableSelection();
 
 
 	// $('.group-order').each(function()

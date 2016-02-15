@@ -271,6 +271,7 @@ abstract class Kanban_Db
 			'Kanban_Status_Change',
 			'Kanban_Status',
 			'Kanban_Task',
+			'Kanban_Taskmeta',
 			'Kanban_Task_Hour'
 		);
 
@@ -1139,12 +1140,7 @@ abstract class Kanban_Db
 		if ( !isset(self::$installed_ver) )
 		{
 			// get it from the db, and store it
-			self::$installed_ver = get_option(
-				sprintf(
-					'%s_db_version',
-					Kanban::get_instance()->settings->basename
-				)
-			);
+			self::$installed_ver = get_option('kanban_db_version');
 		}
 
 		// return the stored db version

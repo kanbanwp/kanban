@@ -54,8 +54,6 @@ class Kanban_Template
 
 	static function init()
 	{
-		self::$page_slugs = apply_filters('kanban_template_init_slugs', self::$page_slugs);
-
 		add_action( 'init', array(__CLASS__, 'protect_slug') );
 
 		add_filter('template_include', array(__CLASS__, 'template_chooser'), 99);
@@ -137,6 +135,10 @@ class Kanban_Template
 
 		// if url doesn't include our slug, return
 		if ( strpos($_SERVER['REQUEST_URI'], sprintf('/%s/', Kanban::$slug)) === FALSE ) return $template;
+
+
+
+		self::$page_slugs = apply_filters('kanban_template_chooser_slugs', self::$page_slugs);
 
 
 

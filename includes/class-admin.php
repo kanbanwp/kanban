@@ -257,6 +257,64 @@ class Kanban_Admin
 
 
 	/**
+	 * render the welcome page
+	 */
+	static function addons_page()
+	{
+
+
+		wp_enqueue_script(
+			'addon',
+			get_stylesheet_directory_uri() . '/js/addon.js',
+			array('jquery', 'masonry')
+		);
+
+
+
+		global $wpdb;
+
+		$current_user_id = get_current_user_id();
+		$lastRun = (int) Kanban_Option::get_option('admin-addons-check');
+
+		if (time() - $lastRun >= 60*60*24) // 1 day
+		{
+			Kanban_Option::update('admin-addons-check', time());
+
+			$response = wp_remote_get('https://kanbanwp.com?feed=addons');
+
+			try
+			{
+				$addons = json_decode($response['body']);
+			}
+			catch (Exception $e)
+			{
+				$addons = array();
+			}
+
+			Kanban_Option::update('admin-addons', $addons);
+		}
+		else
+		{
+			$addons = Kanban_Option::get_option('admin-addons');
+		}
+
+
+
+		// get the template data
+		global $wp_query;
+
+		// attach our object to the template data
+		$wp_query->query_vars['addons'] = $addons;
+
+
+
+		$template = Kanban_Template::find_template('admin/addons');
+
+		include_once $template;
+	}
+
+
+	/**
 	 * add pages to admin menu, including custom icon
 	 * @return [type] [description]
 	 */
@@ -296,6 +354,15 @@ class Kanban_Admin
 			'manage_options',
 			sprintf('%s_settings', Kanban::get_instance()->settings->basename),
 			array('Kanban_Option', 'settings_page')
+		);
+
+		add_submenu_page(
+			sprintf('%s_welcome', Kanban::get_instance()->settings->basename),
+			'Add-ons',
+			'Add-ons',
+			'manage_options',
+			sprintf('%s_addons', Kanban::get_instance()->settings->basename),
+			array(__CLASS__, 'addons_page')
 		);
 
 	} // admin_menu

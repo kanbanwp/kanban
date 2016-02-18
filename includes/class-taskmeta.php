@@ -68,7 +68,8 @@ class Kanban_Taskmeta extends Kanban_Db
 			meta_key varchar(255) DEFAULT NULL,
 			meta_value longtext,
 			UNIQUE KEY  (id),
-			KEY task_id (task_id)
+			KEY task_id (task_id),
+			KEY meta_key (meta_key)
 			)";
 	} // db_table
 }

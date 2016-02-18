@@ -95,8 +95,8 @@ class Kanban_Board extends Kanban_Db
 
 		// add default filters
 		$wp_query->query_vars['kanban']->board->filters = array(
-			'user' => (object) array(),
-			'project' => (object) array()
+			'user_id_assigned' => (object) array(),
+			'project_id' => (object) array()
 		);
 
 		// add passed alert

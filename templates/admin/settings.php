@@ -145,7 +145,7 @@
 								</option>
 <?php endforeach // $all_users_arr ?>
 								<option value="" <?php echo !isset($settings['default_assigned_to']) || empty($settings['default_assigned_to']) ? 'selected' : '' ?>>
-									<?php echo $user_name ?>
+									No one
 								</option>
 							</select>
 						</td>
@@ -216,6 +216,9 @@
 									<?php echo $estimate->title ?>
 								</option>
 <?php endforeach // $estimates ?>
+								<option value="" <?php echo !isset($settings['default_estimate']) || empty($settings['default_estimate']) ? 'selected' : '' ?>>
+									None
+								</option>
 							</select>
 						</td>
 					</tr>

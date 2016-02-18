@@ -1144,7 +1144,7 @@ abstract class Kanban_Db
 		}
 
 		// return the stored db version
-		return self::$installed_ver;
+		return (float) self::$installed_ver;
 	}
 
 

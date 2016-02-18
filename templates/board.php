@@ -19,13 +19,13 @@ include Kanban_Template::find_template('inc/header') ?>
 <div id="wrapper-footer">
 	<div id="filter-wrapper">
 		<?php echo __('Filter by', 'kanban') ?>:
-		<span class="filter dropup" id="filter-projects">
+		<span class="filter dropup" id="filter-project_id">
 			<button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">
 				<span class="btn-label" data-id="">
 					-- <?php echo __('Project', 'kanban') ?> --
 				</span>
 			</button>
-			<ul class="dropdown-menu" id="filter-projects-dropdown">
+			<ul class="dropdown-menu" id="filter-project_id-dropdown">
 				<li class="divider"></li>
 				<li>
 					<a href="#" data-id="0">
@@ -35,13 +35,13 @@ include Kanban_Template::find_template('inc/header') ?>
 			</ul>
 		</span>
 
-		<span class="filter dropup" id="filter-users">
+		<span class="filter dropup" id="filter-user_id_assigned">
 			<button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">
 				<span class="btn-label" data-id="">
 					-- <?php echo __('User', 'kanban') ?> --
 				</span>
 			</button>
-			<ul class="dropdown-menu" id="filter-users-dropdown">
+			<ul class="dropdown-menu" id="filter-user_id_assigned-dropdown">
 				<li class="divider"></li>
 				<li>
 					<a href="#" data-id="0">

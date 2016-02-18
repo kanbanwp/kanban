@@ -132,12 +132,25 @@ var add_task_to_status_col = function(task)
 		task.estimate_id = 0;
 	}
 
-	if ( typeof task.user_id_assigned === 'undefined' )
+	if ( typeof task.project_id === 'undefined' )
 	{
-		task.user_id_assigned = '';
+		task.project_id = 0;
+	}
+	else if ( typeof board.project_records[task.project_id] === 'undefined' )
+	{
+		task.project_id = 0;
 	}
 
-	if ( typeof board.status_records()[task.status_id] != 'undefined' )
+	if ( typeof task.user_id_assigned === 'undefined' )
+	{
+		task.user_id_assigned = 0;
+	}
+	else if ( typeof board.allowed_users()[task.user_id_assigned] === 'undefined' )
+	{
+		task.user_id_assigned = 0;
+	}
+
+	if ( typeof board.status_records()[task.status_id] !== 'undefined' )
 	{
 		task.status_color = board.status_records()[task.status_id].color_hex;
 	}
@@ -324,6 +337,8 @@ jQuery(function($)
 		add_task_to_status_col(task);
 	}
 
+	$(document).trigger('/tasks/added/', task);
+
 
 
 	if ( current_user_has_cap('write') )
@@ -444,6 +459,7 @@ jQuery(function($)
 	}
 
 
+
 	var hash = [];
 	if (location.hash)
 	{
@@ -462,17 +478,33 @@ jQuery(function($)
 
 
 	var is_filtered = false;
-	if ( typeof hash.filter_project !== 'undefined' )
+
+	for ( var filter_type in hash )
 	{
-		$('#filter-projects-dropdown [data-id=' + hash.filter_project + ']').click();
+		if ( filter_type.indexOf('filter_') !== 0 ) continue;
+
+		var id = hash[filter_type];
+		var type = filter_type.substring( 'filter_'.length );
+
+		// store filters
+		board_filter_store(type, id);
+
+		// get filter
+		var $filter = $('#filter-{0}'.sprintf(type) );
+
+		// populate dropdown
+		$filter.trigger('show.bs.dropdown');
+
+		// get option
+		var $a = $('[data-id={1}]'.sprintf(type, id), $filter );
+
+		// propulate button label
+		$a.trigger('populate_dropdown', [$a.text()]);
+
 		is_filtered = true;
 	}
 
-	if ( typeof hash.filter_user !== 'undefined' )
-	{
-		$('#filter-users-dropdown [data-id=' + hash.filter_user + ']').click();
-		is_filtered = true;
-	}
+
 
 	if ( is_filtered )
 	{

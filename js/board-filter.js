@@ -1,3 +1,14 @@
+function board_filter_store (type, id)
+{
+	board.filters[type] = {
+		// selector: '[data-' + type + '-id=' + id + ']',
+		hash: 'filter_' + type + '=' + id + '&',
+		id: id
+	};
+}
+
+
+
 (function( $ ) {
 $.fn.board_filter = function(task)
 {
@@ -8,13 +19,40 @@ $.fn.board_filter = function(task)
     	var t_filter_project = new t($('#t-filter-project').html());
     	var t_filter_user = new t($('#t-filter-user').html());
 
-    	var $projects_dropdown = $('#filter-projects-dropdown', $wrapper);
-    	var $users_dropdown = $('#filter-users-dropdown', $wrapper);
+    	var $projects_dropdown = $('#filter-project_id-dropdown', $wrapper);
+    	var $users_dropdown = $('#filter-user_id_assigned-dropdown', $wrapper);
+
+
+
+		$('.filter', $wrapper)
+		.on(
+    		'populate_dropdown',
+    		'a',
+    		function(e, title)
+    		{
+    			var $a = $(this);
+				var $dropdown = $a.closest('.dropup');
+				var $label = $('.btn-label', $dropdown);
+
+				if ( typeof title === 'undefined' )
+				{
+					title = $a.text();
+				}
+
+				// save orig
+				if ( typeof $label.attr('data-orig') === 'undefined' )
+				{
+					$label.attr('data-orig', $label.text());
+				}
+
+				$label.text(title);
+			}
+		);
 
 
 
     	// populate projects live from data
-    	$('#filter-projects', $wrapper).on(
+    	$('#filter-project_id', $wrapper).on(
     		'show.bs.dropdown',
     		function()
     		{
@@ -40,37 +78,21 @@ $.fn.board_filter = function(task)
 				var $a = $(this);
 				var project_id = $a.attr('data-id');
 
-				var project = board.project_records[project_id];
-
-				// if not found
-				if ( typeof project === 'undefined' )
+				if ( typeof board.project_records[project_id] !== 'undefined' )
 				{
-					project = {
-						title: $a.text()
-					};
+					var project = board.project_records[project_id];
+					var title = project.title;
 				}
 
-				var $dropdown = $a.closest('.dropup');
-				var $label = $('.btn-label', $dropdown);
 
-				// save orig
-				if ( typeof $label.attr('data-orig') === 'undefined' )
-				{
-					$label.attr('data-orig', $label.text());
-				}
 
-				$label.text(project.title);
-				// $dropdown.attr('data-id', project_id);
+				$a.trigger('populate_dropdown', [title]);
 
 
 
-				if ( typeof project_id !== 'undefined' && project_id != '' )
-				{
-					board.filters.project.selector = '[data-project-id=' + project_id + ']';
-					board.filters.project.hash = 'filter_project=' + project_id + '&';
+				board_filter_store('project_id', project_id);
 
-					$('#btn-filter-apply', $wrapper).trigger('click');
-				}
+				$('#btn-filter-apply', $wrapper).trigger('click');
 
 
 
@@ -81,7 +103,7 @@ $.fn.board_filter = function(task)
 
 
 		// populate users from live data
-    	$('#filter-users', $wrapper).on(
+    	$('#filter-user_id_assigned', $wrapper).on(
     		'show.bs.dropdown',
     		function()
     		{
@@ -111,37 +133,21 @@ $.fn.board_filter = function(task)
 			{
 				var $a = $(this);
 				var user_id = $a.attr('data-id');
-				var user = board.allowed_users()[user_id];
 
-				// if not found
-				if ( typeof user === 'undefined' )
+				if ( typeof board.allowed_users()[user_id] !== 'undefined' )
 				{
-					user = {
-						long_name_email: $a.text()
-					};
+					var user = board.allowed_users()[user_id];
+					var title = user.long_name_email;
 				}
 
-				var $dropdown = $a.closest('.dropup');
-				var $label = $('.btn-label', $dropdown);
 
-				if ( typeof $label.attr('data-orig') === 'undefined' )
-				{
-					$label.attr('data-orig', $label.text());
-				}
 
-				$label.text(user.long_name_email);
-				// $dropdown.attr('data-id', user_id);
+				$a.trigger('populate_dropdown', [title]);
 
 
 
-				if ( typeof user_id !== 'undefined' && user_id != '' )
-				{
-					board.filters.user.selector = '[data-assigned-to=' + user_id + ']';
-					board.filters.user.hash = 'filter_user=' + user_id + '&';
-
-					$('#btn-filter-apply', $wrapper).trigger('click');
-
-				}
+				board_filter_store('user_id_assigned', user_id);
+				$('#btn-filter-apply', $wrapper).trigger('click');
 
 
 
@@ -160,27 +166,50 @@ $.fn.board_filter = function(task)
 				var selector = '';
 				var hash = '#';
 
-				// build selector and hash
+
+
+				// build selector and hash for TASKS TO HIDE, to support multiple filtesr
 				for ( var filter in board.filters )
 				{
-					if ( typeof board.filters[filter].selector !== 'undefined' )
+					if ( typeof board.filters[filter].id === 'undefined' )
 					{
-						selector += board.filters[filter].selector;
+						continue;
 					}
 
 					if ( typeof board.filters[filter].hash !== 'undefined' )
 					{
 						hash += board.filters[filter].hash;
 					}
+
+					var filter_id = board.filters[filter].id;
+
+					for ( var task_id in board.task_records )
+					{
+						var task = board.task_records[task_id];
+						if ( task[filter] != filter_id ) // NOT, so we're hiding tasks
+						{
+							selector += '#task-' + task_id + ',';
+						}
+					}
 				}
 
-				var $tasks_to_show = $('.task' + selector);
 
+
+				// trim trailing comma
+				selector = selector.replace(/(^,)|(,$)/g, "");
+				var $tasks_to_hide = $(selector);
+
+
+
+				// update hash
 				location.hash = hash;
 
-				$('.task').not($tasks_to_show).slideUp('fast');
 
-				$tasks_to_show.slideDown('fast');
+
+				// show/hide tasks
+				$tasks_to_hide.slideUp('fast');
+				$('.task').not($tasks_to_hide).slideDown('fast');
+
 			}
 		);
 

@@ -42,6 +42,14 @@ jQuery(function($)
 
 			toggle_tabs(tab_id);
 
+			// update url hash without jump
+			// @link http://stackoverflow.com/a/2598160/38241
+			var id = tab_id.replace(/^.*#/, ''),
+			elem = document.getElementById(id);
+			elem.id = id+'-tmp';
+			window.location.hash = tab_id;
+			elem.id = id;
+
 			return false;
 		}
 	);

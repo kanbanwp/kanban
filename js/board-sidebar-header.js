@@ -112,14 +112,24 @@ $.fn.board_sidebar_header = function()
 					comment: 'Task added by {0}'.sprintf(board.current_user().short_name)
 				};
 
+				// if default estimate is set
 				if ( typeof board.settings().default_estimate !== 'undefined' )
 				{
-					task_data.task.estimate_id = board.settings().default_estimate;
+					// and default estimate exists 
+					if ( typeof board.estimate_records()[board.settings().default_estimate] !== 'undefined' )
+					{
+						task_data.task.estimate_id = board.settings().default_estimate;
+					}
 				}
 
+				// if default assigned to is set
 				if ( typeof board.settings().default_assigned_to !== 'undefined' )
 				{
-					task_data.task.user_id_assigned = board.settings().default_assigned_to;
+					// and default assigned to exists
+					if ( typeof board.allowed_users()[board.settings().default_assigned_to] !== 'undefined' )
+					{
+						task_data.task.user_id_assigned = board.settings().default_assigned_to;
+					}
 				}
 
 				task_data.action = 'save_task';

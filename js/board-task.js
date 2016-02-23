@@ -301,7 +301,7 @@ $.fn.board_task = function(task)
 				var $input = $(this);
 
 				// enter
-				if (e.keyCode == 13 && !e.shiftKey)
+				if (e.keyCode === 13 && !e.shiftKey)
 				{
 					// save it
 					$input.trigger('blur');
@@ -350,14 +350,156 @@ $.fn.board_task = function(task)
 
 
 
-		// https://github.com/AndrewDryga/jQuery.Textarea.Autoresize
-		$('textarea.resize', $task).autoresize({
-			onResize: function()
+
+	function save_contenteditable ($div)
+	{
+		// prevent saving twice, if they blur instead of timeout
+		clearTimeout($div.data('save_timer'));
+
+		encode_urls_emails ($div);
+
+
+
+		var is_new_task = false;
+		if ( task.title === '' )
+		{
+			is_new_task = true;
+		}
+
+
+
+		var val = $div.html();
+		task.title = val;
+
+		var comment = '{0} updated the task {1} to {2}'.sprintf (
+			board.current_user().short_name,
+			task.title,
+			val
+		);
+
+		if ( is_new_task )
+		{
+			comment = '{0} added the task'.sprintf (
+					board.current_user().short_name
+				);
+		}
+
+		$task.trigger('save', {comment: comment});
+	}
+
+
+
+	$('.task-title', $task)
+	.on(
+		'focus',
+		function(e)
+		{
+			if ( !current_user_has_cap('write') )
 			{
-				$(this).addClass('autoresize');
+				return false;
 			}
-		})
-		.trigger('keydown');
+
+			var $div = $(this);
+
+			if ( $(e.target).is('a') )
+			{
+				return false;
+			}
+
+			$div.data('orig', $div.html());			
+
+			$div.html( sanitizeString($div.html()) );
+		}
+	);
+
+	$('.task-title', $task)
+	.on(
+		'keydown',
+		function(e)
+		{
+			if ( !current_user_has_cap('write') )
+			{
+				return false;
+			}
+
+			var $div = $(this);
+
+			// escape
+			if(e.keyCode === 27)
+			{
+				// get prev value
+				var orig = $div.data('orig');
+
+				// restore prev value
+				$div.html(orig);
+
+				// trigger save
+				$div.blur();
+
+				return;
+			}
+
+			// enter
+			if (e.keyCode === 13 && !e.shiftKey)
+			{
+				$div.blur();
+			}
+		}
+	);
+
+	$('.task-title', $task)
+	.on(
+		'keyup',
+		function()
+		{
+			if ( !current_user_has_cap('write') )
+			{
+				return false;
+			}
+
+			var $div = $(this);
+
+			// delete prev timer
+			clearTimeout($div.data('save_timer'));
+
+			// set new timer
+			var save_timer = setTimeout(function()
+			{
+				save_contenteditable ($div);	
+			}, 3000);
+			
+			$div.data('save_timer', save_timer);
+		}
+	);
+
+	$('.task-title', $task)
+	.on(
+		'blur',
+		function()
+		{
+			if ( !current_user_has_cap('write') )
+			{
+				return false;
+			}
+
+			var $div = $(this);
+			save_contenteditable ($div);
+			window.getSelection().removeAllRanges();
+		}
+	); // blur
+
+
+
+
+
+		// https://github.com/AndrewDryga/jQuery.Textarea.Autoresize
+		// $('textarea.resize', $task).autoresize({
+		// 	onResize: function()
+		// 	{
+		// 		$(this).addClass('autoresize');
+		// 	}
+		// })
+		// .trigger('keydown');
 
 
 
@@ -700,45 +842,45 @@ $.fn.board_task = function(task)
 
 
 		// prevent enter in task title
-		$('.task_title', $task)
-		.on(
-			'keydown',
-			function(e)
-			{
-				// enter
-				if (e.keyCode == 13 && !e.shiftKey)
-				{
-					return false;
-				}
-			}
-		) // keyup
-		.on(
-			'blur',
-			function()
-			{
-				var is_new_task = false;
-				if ( task.title === '' )
-				{
-					is_new_task = true;
-				}
+		// $('.task-title', $task)
+		// .on(
+		// 	'keydown',
+		// 	function(e)
+		// 	{
+		// 		// enter
+		// 		if (e.keyCode == 13 && !e.shiftKey)
+		// 		{
+		// 			return false;
+		// 		}
+		// 	}
+		// ) // keyup
+		// .on(
+		// 	'blur',
+		// 	function()
+		// 	{
+		// 		var is_new_task = false;
+		// 		if ( task.title === '' )
+		// 		{
+		// 			is_new_task = true;
+		// 		}
 
-				var $input = $(this);
-				task.title = $input.val();
+		// 		var $input = $(this);
+		// 		task.title = $input.val();
 
-				var comment = '{0} updated the task title'.sprintf (
-					board.current_user().short_name
-				);
+		// 		var comment = '{0} updated the task title'.sprintf (
+		// 			board.current_user().short_name
+		// 		);
 
-				if ( is_new_task )
-				{
-					comment = '{0} added the task'.sprintf (
-							board.current_user().short_name
-						);
-				}
+		// 		if ( is_new_task )
+		// 		{
+		// 			comment = '{0} added the task'.sprintf (
+		// 					board.current_user().short_name
+		// 				);
+		// 		}
 
-				$task.trigger('save', {comment: comment});
-			}
-		); // blur
+		// 		$task.trigger('save', {comment: comment});
+		// 	}
+		// ); // blur
 
 
 

@@ -229,13 +229,13 @@ $.fn.board_sidebar_header = function()
 				var next_status_id = $sidebar_next.attr('data-id');
 				$sidebar_next.show();
 				$('#status-{0}-tasks'.sprintf(next_status_id)).show();
-				$('textarea.resize').autoresize({
-					onResize: function()
-					{
-						$(this).addClass('autoresize');
-					}
-				})
-				.trigger('keydown');
+				// $('textarea.resize').autoresize({
+				// 	onResize: function()
+				// 	{
+				// 		$(this).addClass('autoresize');
+				// 	}
+				// })
+				// .trigger('keydown');
 			}
 		);
 

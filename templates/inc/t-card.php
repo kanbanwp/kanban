@@ -33,7 +33,7 @@
 		</div>
 
 		<h3 class="h4 wrapper-task-title">
-			<textarea class="editable-input task_title resize" rows="1" placeholder="<?php echo __( 'Task name', 'kanban' ); ?>" readonly>{{=task.title}}</textarea>
+			<div contenteditable="{{current_user_can_write}}true{{:current_user_can_write}}false{{/current_user_can_write}}" class="task-title">{{=task.title}}</div>
 		</h3>
 
 		<?php echo apply_filters('kanban_card_after_title', '' ); ?>

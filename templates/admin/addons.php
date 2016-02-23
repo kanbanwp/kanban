@@ -29,7 +29,7 @@
 					<?php echo $addon->post_excerpt ?>
 				</p>
 				<p>
-					<a href="<?php echo $addon->post_link ?>" target="_blank" class="button button-primary">
+					<a href="<?php echo $addon->post_link ?>?utm_medium=product&amp;utm_source=<?php echo site_url() ?>&amp;utm_campaign=addons+page" target="_blank" class="button button-primary">
 						<?php echo __("More info", 'kanban') ?>
 					</a>
 				</p>

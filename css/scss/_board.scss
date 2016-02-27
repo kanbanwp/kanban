@@ -1,0 +1,24 @@
+#wrapper-board {
+	overflow-x: hidden;
+	width: 100%;
+
+	// disable sidebar hiding
+	&.show_all_cols {
+		#row-statuses,
+		#row-tasks {
+			left: 0;
+			width: 100%;
+		}
+
+		.toggle-sidebar {
+			display: none !important;
+		}
+	}
+
+
+	&.hide_progress_bar {
+		.progress {
+			display: none;
+		}
+	}
+}

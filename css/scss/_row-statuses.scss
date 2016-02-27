@@ -1,0 +1,146 @@
+#row-statuses {
+	/* Permalink - use to edit and share this gra/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#ffffff+0,ffffff+62,ffffff+100&amp;1+0,1+75,0+100 */
+	background: -moz-linear-gradient(top,  rgba(255,255,255,1) 0%, rgba(255,255,255,1) 62%, rgba(255,255,255,1) 75%, rgba(255,255,255,0) 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(255,255,255,1)), color-stop(62%,rgba(255,255,255,1)), color-stop(75%,rgba(255,255,255,1)), color-stop(100%,rgba(255,255,255,0))); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top,  rgba(255,255,255,1) 0%,rgba(255,255,255,1) 62%,rgba(255,255,255,1) 75%,rgba(255,255,255,0) 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top,  rgba(255,255,255,1) 0%,rgba(255,255,255,1) 62%,rgba(255,255,255,1) 75%,rgba(255,255,255,0) 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top,  rgba(255,255,255,1) 0%,rgba(255,255,255,1) 62%,rgba(255,255,255,1) 75%,rgba(255,255,255,0) 100%); /* IE10+ */
+	background: linear-gradient(to bottom,  rgba(255,255,255,1) 0%,rgba(255,255,255,1) 62%,rgba(255,255,255,1) 75%,rgba(255,255,255,0) 100%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#00ffffff',GradientType=0 ); /* IE6-9 */
+
+
+	margin: 0;
+	padding-top: $margin/2;
+	position: fixed;
+	// top: 50px;
+	z-index: 1;
+
+	.col-status {
+		padding: $margin*3 $margin/5 0;
+
+		.toggle-sidebar {
+			display: none;
+		}
+
+		&:first-child {
+			.toggle-sidebar {
+				display: inline-block;
+				margin-left: $margin;
+				position: absolute;
+				top: 0;
+				z-index: 1;
+
+				&.toggle-sidebar-open {
+					left: 0%;
+				}
+				&.toggle-sidebar-close {
+					left: 100%;
+				}
+			}
+		}
+
+		&:last-child {
+			.toggle-sidebar {
+				display: inline-block;
+				margin-right: $margin;
+				position: absolute;
+				top: 0;
+				z-index: 1;
+
+				&.toggle-sidebar-open {
+					right: 100%;
+				}
+				&.toggle-sidebar-close {
+					right: 0%;
+				}
+			}
+		}
+
+
+		h2 {
+			border-top: $margin/2 solid lighten($color-grey-wp, 45);
+			margin: 0 0 $margin;
+			text-align: center;
+		}
+
+		.btn-group-status-actions {
+			display: none;
+			right: $margin/3;
+			position: absolute;
+			bottom: 0;
+			z-index: 1;
+
+			.glyphicon {
+				color: white;
+			}
+		}
+
+		&:hover,
+		&.hover {
+			.btn-group-status-actions {
+				display: block;
+			}
+		}
+
+		@media screen and (max-width: $screen-sm-max) {
+			display :none;
+			padding: 0;
+			width: 100%;
+
+			&:first-child {
+				display: block;
+			}
+
+			.btn-group-status-actions {
+				display: none;
+			}
+
+			.toggle-sidebar {
+				display: none !important;
+			}
+
+			h2 {
+				padding-top: $margin/2;
+
+				&:before,
+				&:after {
+					cursor: pointer;
+					display: block;
+					height: 100%;
+					padding-top: $margin/2;
+					position: absolute;
+					top: $margin/2;
+					display: block;
+					font-family: 'Glyphicons Halflings';
+					font-style: normal;
+					font-weight: 400;
+					line-height: 1;
+					-webkit-font-smoothing: antialiased;
+					width: 50%;
+					z-index: 1;
+				}
+
+				&:before {
+					content: "\e079";
+					left: 0;
+				}
+
+				&:after {
+					content: "\e080";
+					right: 0;
+				}
+			}
+
+
+		}
+
+	} // col-status
+
+
+	@media screen and (max-width: $screen-sm-max) {
+		left: 0% !important;
+		padding: 0;
+		width: 100%;
+	}
+
+} // #row-statuses

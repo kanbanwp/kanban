@@ -1,0 +1,66 @@
+
+#wrapper-footer {
+	background: lighten($color-grey-wp, 45);
+	bottom: 0;
+	left: 0;
+	padding: $margin/2 0;
+	position: fixed;
+	text-align: center;
+	width: 100%;
+	z-index: 1;
+
+	#filter-wrapper {
+		display: inline-block;
+
+		position: fixed;
+		right: 0;
+		left: 0;
+		margin-right: auto;
+		margin-left: auto;
+		overflow: visible;
+		top: $margin/2;
+		white-space: nowrap;
+		width: 20%;
+
+		#btn-filter-apply {
+			display: none;
+		}
+
+		.dropdown-menu {
+			bottom: auto;
+		}
+
+		.dropdown-toggle {
+			max-width: 10em;
+			overflow: hidden;
+		}
+
+		@media screen and (max-width: $screen-sm-max) {
+			display: block;
+			margin-bottom: $margin/2;
+			position: static;
+			width: 100%;
+
+			.dropdown-menu {
+				bottom: 100%;
+			}
+
+		}
+
+	}
+
+	#search-wrapper {
+		display: inline-block;
+		margin: 0 $margin*2;
+
+		input {
+			display: inline;
+			max-width: 50%;
+		}
+
+		@media screen and (max-width: $screen-sm-max) {
+			display: block;
+			margin-bottom: $margin/2;
+		}
+	}
+}

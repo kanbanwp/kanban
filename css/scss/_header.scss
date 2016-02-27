@@ -1,0 +1,13 @@
+#navbar-boards {
+	background: #666;
+	border: 0;
+	margin: 0;
+	padding: 0;
+	.nav {
+		a {
+			background: #999;
+			color: white;
+			margin-right: $margin/5;
+		}
+	}
+}

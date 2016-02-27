@@ -44,6 +44,8 @@ class Kanban_Board extends Kanban_Db
 	{
 		// send board data to the board template
 		add_filter('template_include', array(__CLASS__, 'send_page_data_to_template'), 100); // must be higher than template
+
+		add_action('kanban_board_render_js_templates', array(__CLASS__, 'render_js_templates'));
 	}
 
 
@@ -128,6 +130,21 @@ class Kanban_Board extends Kanban_Db
 		);
 
 		return $template;
+	}
+
+
+
+	static function render_js_templates ()
+	{
+		// Automatically load router files
+		$js_templates = glob(Kanban::$instance->settings->path . '/templates/inc/t-*.php');
+		foreach ($js_templates as $js_template) : ?>
+		<script type="text/html" id="<?php echo basename($js_template, '.php') ?>">
+
+		<?php include $js_template ?>
+
+		</script>
+		<?php endforeach;
 	}
 
 

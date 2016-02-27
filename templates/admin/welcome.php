@@ -18,27 +18,88 @@
 		</div>
 	<?php endif ?>
 
-	<p>
-		<a href="<?php echo sprintf( '%s/%s/board', home_url(), Kanban::$slug ) ?>" class="button-primary" target="_blank" id="btn-go-to-board" onclick="window.open('<?php echo sprintf( '%s/%s/board', home_url(), Kanban::$slug ) ?>', 'kanbanboard'); return false;">
-			<?php echo __('Go to your board', 'kanban') ?>
-		</a>
-		<a href="http://kanbanwp.com/documentation" class="button" target="_blank">
-			<?php echo __('Documentation', 'kanban') ?>
-			<?php echo __('(On kanbanwp.com)', 'kanban') ?>
-		</a>
-	</p>
-	<h3>Intro to Kanban for WordPress</h3>
-	<p>Get started with the plugin in 60 seconds.</p>
-	<div class="video-wrapper" style="max-width: 1000px;">
-		<iframe src="https://player.vimeo.com/video/145274368" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
-	</div><!-- video-wrapper -->
-<?php /*
-	<h3>Intro to Kanban</h3>
-	<p>New to kanban? Here's one of our favorite intrudctory videos.</p>
-	<div class="video-wrapper">
-		<iframe width="640" height="360" src="https://www.youtube-nocookie.com/embed/ueVXZUaWhYw?rel=0&amp;showinfo=0" frameborder="0" allowfullscreen></iframe>
-	</div><!-- video-wrapper -->
-*/ ?>
+
+
+<div id="poststuff">
+			<div id="post-body" class="metabox-holder columns-2">
+
+				<div id="post-body-content">
+					<div class="meta-box-sortables ui-sortable">
+						<div class="postbox">
+
+							<h2><span>
+								<?php echo __('Kanban for WordPress', 'kanban') ?>
+							</span></h2>
+
+							<div class="inside">
+								<p>
+									<a href="<?php echo sprintf( '%s/%s/board', home_url(), Kanban::$slug ) ?>" class="button-primary" target="_blank" id="btn-go-to-board" onclick="window.open('<?php echo sprintf( '%s/%s/board', home_url(), Kanban::$slug ) ?>', 'kanbanboard'); return false;">
+										<?php echo __('Go to your board', 'kanban') ?>
+									</a>
+									<a href="http://kanbanwp.com/documentation" class="button" target="_blank">
+										<?php echo __('Documentation', 'kanban') ?>
+										<?php echo __('(On kanbanwp.com)', 'kanban') ?>
+									</a>
+									<a href="<?php echo admin_url('admin.php?page=kanban_settings') ?>" class="button">Settings</a>
+									<a href="<?php echo admin_url('admin.php?page=kanban_contact') ?>" class="button">Contact us</a>
+								</p>
+							</div>
+
+							<h2><span>
+								<?php echo __('Intro to Kanban for WordPress', 'kanban') ?>
+							</span></h2>
+
+							<div class="inside">
+								<p>Get started with the plugin in 60 seconds.</p>
+
+								<div class="video-wrapper" style="max-width: 1000px;">
+									<iframe src="https://player.vimeo.com/video/145274368" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+								</div><!-- video-wrapper -->
+
+							</div>
+						</div>
+					</div>
+				</div>
+
+
+
+				<div id="postbox-container-1" class="postbox-container">
+					<div class="meta-box-sortables">
+						<div class="postbox">
+
+							<h2><span>
+							<?php echo __('Stay up to date', 'kanban') ?>
+							</span></h2>
+
+							<div class="inside">
+								<form action="//gelform.us10.list-manage.com/subscribe/post?u=c69e4dc144a0f56c692d34515&amp;id=93b0fa6c8c" method="post" name="mc-embedded-subscribe-form" target="_blank">
+									<p>
+										<label for="mce-EMAIL">Subscribe to our mailing list for news and updates!
+									</label>
+									</p>
+
+									<p>
+										<input type="email" value="" name="EMAIL" class="large-text" id="mce-EMAIL" placeholder="Email address">
+									</p>
+
+									<p>
+										<button class="button-secondary" type="submit">Subscribe</button>
+									</p>
+
+								</form>
+							</div>
+
+						</div>
+					</div>
+				</div>
+
+			</div>
+			<br class="clear">
+		</div>
+
+
+
+
 </div><!-- wrap -->
 
 

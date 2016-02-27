@@ -47,6 +47,8 @@ class Kanban_Admin
 		add_action( 'admin_notices', array(__CLASS__, 'render_upgrade_notice') );
 
 		add_action( 'admin_bar_menu', array(__CLASS__, 'add_admin_bar_link_to_board'), 999 );
+
+		add_action('init', array(__CLASS__, 'contact_support'));
 	}
 
 
@@ -314,6 +316,47 @@ class Kanban_Admin
 	}
 
 
+
+	/**
+	 * render the welcome page
+	 */
+	static function contact_page()
+	{
+		$template = Kanban_Template::find_template('admin/contact');
+
+		include_once $template;
+	}
+
+
+
+	static function contact_support()
+	{
+		if (  !isset( $_POST[Kanban_Utils::get_nonce()] ) || ! wp_verify_nonce( $_POST[Kanban_Utils::get_nonce()], 'kanban-admin-comment') || !is_user_logged_in() ) return false;
+
+		try
+		{
+			wp_mail(
+				'support@kanbanwp.com',
+				sprintf('[kbwp] %s', $_POST['request']),
+				sprintf(
+					"%s\n\n%s\n%s",
+					stripcslashes($_POST['message']),
+					get_option('siteurl'),
+					$_SERVER['HTTP_USER_AGENT']
+				),
+				sprintf('From: "%s" <%s>', get_option('blogname'), $_POST['from'])
+			);
+
+			$_GET['alert'] = "Email sent! We'll get back to you as soon as we can.";
+		}
+		catch (Exception $e)
+		{
+			$_GET['alert'] = "Email could not be sent. Please contact us through <a href=\"http://kanbanwp.com\" target=\"_blank\">https://kanbanwp.com</a>.";	
+		}
+	}
+
+
+
 	/**
 	 * add pages to admin menu, including custom icon
 	 * @return [type] [description]
@@ -338,31 +381,40 @@ class Kanban_Admin
 		// redeclare same page to change name to settings
 		// @link https://codex.wordpress.org/Function_Reference/add_submenu_page#Inside_menu_created_with_add_menu_page.28.29
 		add_submenu_page(
-			sprintf('%s_welcome', Kanban::get_instance()->settings->basename),
+			'kanban_welcome',
 			'Welcome',
 			'Welcome',
 			'manage_options',
-			sprintf('%s_welcome', Kanban::get_instance()->settings->basename),
+			'kanban_welcome',
 			array(__CLASS__, 'welcome_page')
 		);
 
 		// add the settings admin page
 		add_submenu_page(
-			sprintf('%s_welcome', Kanban::get_instance()->settings->basename),
+			'kanban_welcome',
 			'Settings',
 			'Settings',
 			'manage_options',
-			sprintf('%s_settings', Kanban::get_instance()->settings->basename),
+			'kanban_settings',
 			array('Kanban_Option', 'settings_page')
 		);
 
 		add_submenu_page(
-			sprintf('%s_welcome', Kanban::get_instance()->settings->basename),
+			'kanban_welcome',
 			'Add-ons',
 			'Add-ons',
 			'manage_options',
-			sprintf('%s_addons', Kanban::get_instance()->settings->basename),
+			'kanban_addons',
 			array(__CLASS__, 'addons_page')
+		);
+
+		add_submenu_page(
+			'kanban_welcome',
+			'Contact Us',
+			'Contact Us',
+			'manage_options',
+			'kanban_contact',
+			array(__CLASS__, 'contact_page')
 		);
 
 	} // admin_menu

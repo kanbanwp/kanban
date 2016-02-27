@@ -1,4 +1,4 @@
-
+<?php /*
 
 <nav id="navbar-boards" class="navbar navbar-boards navbar-fixed-top">
 	<div class="navbar-header">
@@ -19,7 +19,7 @@
 
 
 
-
+*/ ?>
 
 
 </nav>

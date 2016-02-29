@@ -63,6 +63,7 @@ var board = {
 	{
 		return <?php echo json_encode($wp_query->query_vars['kanban']->board->current_user) ?>;
 	}
+	<?php echo apply_filters('kanban_board_js_onpage', '' ); ?>
 };
 
 var col_percent_w = <?php echo $wp_query->query_vars['kanban']->board->col_percent_w ?>;

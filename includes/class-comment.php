@@ -63,7 +63,9 @@ class Kanban_Comment extends Kanban_Db
 			'description' => $comment,
 			'comment_type' => $type,
 			'task_id' => $task_id,
-			'user_id_author' => $user_id_author
+			'user_id_author' => $user_id_author,
+			'created_dt_gmt' => Kanban_Utils::mysql_now_gmt(),
+			'modified_dt_gmt' => Kanban_Utils::mysql_now_gmt()
 		);
 
 		$success = self::_insert($data);
@@ -85,6 +87,27 @@ class Kanban_Comment extends Kanban_Db
 	{
 		return self::_insert($data);
 	}
+
+
+
+	static function get_all ($sql = NULL)
+	{
+		$table_name = self::table_name();
+
+		$sql = "SELECT *
+				FROM `{$table_name}`
+		;";
+
+		$sql = apply_filters('kanban_comment_get_all_sql', $sql );
+
+		$records = parent::get_all($sql);
+
+		return apply_filters(
+			'kanban_comment_get_all_return',
+			Kanban_Utils::build_array_with_id_keys ($records, 'id')
+		);
+	}
+
 
 
 

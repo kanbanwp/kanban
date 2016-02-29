@@ -19,6 +19,11 @@ class Kanban_Taskmeta extends Kanban_Db
 	// the table name of this class
 	protected static $table_name = 'taskmeta';
 
+	// define db table columns and their validation type
+	// protected static $table_columns = array(
+	// 	'meta_value' => 'text',
+	// 	'created_dt_gmt' => 'datetime'
+	// );
 
 
 	static function update($task_id, $meta_key, $meta_value)
@@ -44,6 +49,7 @@ class Kanban_Taskmeta extends Kanban_Db
 			array(
 				'meta_key' => $meta_key,
 				'meta_value' => $meta_value,
+				'created_dt_gmt' => Kanban_Utils::mysql_now_gmt(),
 				'task_id' => $task_id,
 			),
 			array(
@@ -65,6 +71,7 @@ class Kanban_Taskmeta extends Kanban_Db
 		return "CREATE TABLE " . self::table_name() . " (
 			id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
 			task_id bigint(20) unsigned NOT NULL DEFAULT '0',
+			created_dt_gmt datetime NOT NULL,
 			meta_key varchar(255) DEFAULT NULL,
 			meta_value longtext,
 			UNIQUE KEY  (id),

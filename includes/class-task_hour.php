@@ -82,7 +82,7 @@ class Kanban_Task_Hour extends Kanban_Db
 
 		$data = array(
 			'task_id' => $_POST['task']['id'],
-			'worked_dt_gmt' => Kanban_Utils::mysql_now_gmt(),
+			'created_dt_gmt' => Kanban_Utils::mysql_now_gmt(),
 			'hours' => $hours,
 			'status_is' => $_POST['task']['status_id'],
 			'user_id_author' => $user_id_author,

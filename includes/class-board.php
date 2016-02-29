@@ -138,6 +138,12 @@ class Kanban_Board extends Kanban_Db
 	{
 		// Automatically load router files
 		$js_templates = glob(Kanban::$instance->settings->path . '/templates/inc/t-*.php');
+
+		$js_templates = apply_filters(
+			'kanban_board_render_js_templates_before',
+			$js_templates
+		);
+
 		foreach ($js_templates as $js_template) : ?>
 		<script type="text/html" id="<?php echo basename($js_template, '.php') ?>">
 

@@ -51,6 +51,7 @@ class Kanban_Project extends Kanban_Db
 		if ( !isset($_POST['project']['id']) )
 		{
 			$_POST['project']['id'] = '';
+			$_POST['project']['created_dt_gmt'] = Kanban_Utils::mysql_now_gmt();
 		}
 
 

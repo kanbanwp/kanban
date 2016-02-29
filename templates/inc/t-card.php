@@ -3,6 +3,8 @@
 
 	<div class="panel-body">
 		<div class="pull-right text-muted task-id">
+			<?php echo apply_filters('kanban_card_id_before', '' ); ?>
+
 			<div class="badge" data-toggle="dropdown">
 				{{=task.id}}
 			</div>

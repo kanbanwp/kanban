@@ -55,6 +55,7 @@ class Kanban_Taskmeta extends Kanban_Db
 			array(
 				'%s',
 				'%s',
+				'%s',
 				'%d'
 			)
 		);
@@ -63,6 +64,7 @@ class Kanban_Taskmeta extends Kanban_Db
 
 		return $success;
 	}
+
 
 
 	// define the db schema

@@ -961,8 +961,6 @@ abstract class Kanban_Db
 	{
 		global $wpdb;
 
-
-
 		$status_table = Kanban_Status::table_name();
 
 		$sql = "SELECT count(`id`)
@@ -1127,6 +1125,8 @@ abstract class Kanban_Db
 
 			Kanban_Option::replace($data);
 		}
+
+		return true;
 	}
 
 

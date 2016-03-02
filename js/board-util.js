@@ -17,7 +17,8 @@ var timers = [];
 
 
 // @link http://stackoverflow.com/a/3492815/38241
-String.prototype.sprintf = function() {
+String.prototype.sprintf = function()
+{
     var formatted = this;
     for( var arg in arguments ) {
         formatted = formatted.replace("{" + arg + "}", arguments[arg]);
@@ -26,6 +27,33 @@ String.prototype.sprintf = function() {
 };
 
 
+// @link http://phpjs.org/functions/stripslashes/
+String.prototype.stripslashes = function()
+{
+	return (this + '')
+    .replace(/\\(.?)/g, function(s, n1)
+    {
+      switch (n1) {
+        case '\\':
+          return '\\';
+        case '0':
+          return '\u0000';
+        case '':
+          return '';
+        default:
+          return n1;
+      }
+    });
+};
+
+// @link http://stackoverflow.com/a/3605602/38241
+Number.prototype.padZero = function(len)
+{
+ var s= String(this), c= '0';
+ len= len || 2;
+ while(s.length < len) s= c + s;
+ return s;
+}
 
 // @link http://stackoverflow.com/a/6700/38241
 Object.size = function(obj) {
@@ -35,6 +63,15 @@ Object.size = function(obj) {
     }
     return size;
 };
+
+
+
+function mysql_dt_to_js_date (dt)
+{
+	var t = dt.split(/[- :]/);
+	return new Date(t[0], t[1]-1, t[2], t[3], t[4], t[5]);
+}
+
 
 
 // @link http://stackoverflow.com/a/11892228/38241
@@ -52,6 +89,8 @@ function usurp (p)
 	p.parentNode.removeChild(p);
 }
 
+
+
 function sanitize(el)
 {
 	var tags = Array.prototype.slice.apply(el.getElementsByTagName("*"), [0]);
@@ -64,6 +103,8 @@ function sanitize(el)
 	}
 }
 
+
+
 function sanitizeString(string)
 {
 	var div = document.createElement("div");
@@ -71,6 +112,8 @@ function sanitizeString(string)
 	sanitize(div);
 	return div.innerHTML;
 }
+
+
 
 function encode_urls_emails ($div)
 {
@@ -105,24 +148,25 @@ function encode_urls_emails ($div)
 }
 
 
-var get_screen_size = function ()
+
+function get_screen_size ()
 {
 	return $('#screen-size :visible').attr('data-size');
-};
+}
 
 
 
-var obj_to_arr = function (obj)
+function obj_to_arr (obj)
 {
 	return $.map(obj, function(value, index) {
 	    return [value];
 	});
-};
+}
 
 
 
 // friendly format hours
-var format_hours = function (h)
+function format_hours (h)
 {
 	if ( h == 0 )
 	{
@@ -158,17 +202,17 @@ var format_hours = function (h)
 		to_return += '{0}<small>m</small>'.sprintf(minutes);
 	}
 
-	if ( to_return == '' )
+	if ( to_return === '' )
 	{
 		to_return = format_hours(0);
 	}
 
 	return to_return;
-};
+}
 
 
 
-var show_growl_msg = function(response)
+function show_growl_msg (response)
 {
 	try
 	{
@@ -182,11 +226,11 @@ var show_growl_msg = function(response)
 		);
 	}
 	catch (err) {}
-};
+}
 
 
 
-var add_task_to_status_col = function(task)
+function add_task_to_status_col (task)
 {
 	if ( typeof task.estimate_id === 'undefined' )
 	{
@@ -231,7 +275,7 @@ var add_task_to_status_col = function(task)
 	$('.col-tasks').matchHeight();
 
 	return $task;
-};
+}
 
 
 
@@ -240,7 +284,7 @@ var add_task_to_status_col = function(task)
  * @param  {string} cap the cap we're looking for
  * @return {bool}     if current user has cap or not
  */
-var current_user_has_cap = function (cap)
+function current_user_has_cap (cap)
 {
 	return user_has_cap(cap, board.current_user());
 }
@@ -253,7 +297,7 @@ var current_user_has_cap = function (cap)
  * @param  {object} user the user to test against
  * @return {bool}     if user has cap or not
  */
-var user_has_cap = function (cap, user)
+function user_has_cap (cap, user)
 {
 	try
 	{
@@ -272,7 +316,7 @@ var user_has_cap = function (cap, user)
  * @param  {object} obj the objects we want to sort
  * @return {array}     an array of the objects, sorted by position
  */
-var records_by_position = function (obj)
+function records_by_position (obj)
 {
 	var obj_arr = $.map(obj, function(value, index) {
 	    return [value];
@@ -284,7 +328,7 @@ var records_by_position = function (obj)
 	});
 
 	return obj_arr;
-};
+}
 
 
 

@@ -4,16 +4,16 @@
 
 <div class="wrap">
 	<h1>
-		<?php echo sprintf(__('About %s', 'kanban'), Kanban::get_instance()->settings->pretty_name) ?>
+		<?php echo sprintf( __( 'About %s', 'kanban' ), Kanban::get_instance()->settings->pretty_name ); ?>
 	</h1>
 
 
 
-	<?php if ( isset($_GET['activation']) ) : ?>
+	<?php if ( isset( $_GET['activation'] ) ) : ?>
 		<div class="updated notice">
-			<p><?php echo __('Thanks for using Kanban for WordPress!', 'kanban') ?></p>
+			<p><?php echo __( 'Thanks for using Kanban for WordPress!', 'kanban' ); ?></p>
 			<button type="button" class="notice-dismiss">
-				<span class="screen-reader-text"><?php echo __('Dismiss this notice.', 'kanban') ?></span>
+				<span class="screen-reader-text"><?php echo __( 'Dismiss this notice.', 'kanban' ); ?></span>
 			</button>
 		</div>
 	<?php endif ?>
@@ -28,25 +28,25 @@
 						<div class="postbox">
 
 							<h2><span>
-								<?php echo __('Kanban for WordPress', 'kanban') ?>
+								<?php echo __( 'Kanban for WordPress', 'kanban' ); ?>
 							</span></h2>
 
 							<div class="inside">
 								<p>
-									<a href="<?php echo sprintf( '%s/%s/board', home_url(), Kanban::$slug ) ?>" class="button-primary" target="_blank" id="btn-go-to-board" onclick="window.open('<?php echo sprintf( '%s/%s/board', home_url(), Kanban::$slug ) ?>', 'kanbanboard'); return false;">
-										<?php echo __('Go to your board', 'kanban') ?>
+									<a href="<?php echo sprintf( '%s/%s/board', home_url(), Kanban::$slug ); ?>" class="button-primary" target="_blank" id="btn-go-to-board" onclick="window.open('<?php echo sprintf( '%s/%s/board', home_url(), Kanban::$slug ); ?>', 'kanbanboard'); return false;">
+										<?php echo __( 'Go to your board', 'kanban' ); ?>
 									</a>
 									<a href="http://kanbanwp.com/documentation" class="button" target="_blank">
-										<?php echo __('Documentation', 'kanban') ?>
-										<?php echo __('(On kanbanwp.com)', 'kanban') ?>
+										<?php echo __( 'Documentation', 'kanban' ); ?>
+										<?php echo __( '(On kanbanwp.com)', 'kanban' ); ?>
 									</a>
-									<a href="<?php echo admin_url('admin.php?page=kanban_settings') ?>" class="button">Settings</a>
-									<a href="<?php echo admin_url('admin.php?page=kanban_contact') ?>" class="button">Contact us</a>
+									<a href="<?php echo admin_url('admin.php?page=kanban_settings'); ?>" class="button">Settings</a>
+									<a href="<?php echo admin_url('admin.php?page=kanban_contact'); ?>" class="button">Contact us</a>
 								</p>
 							</div>
 
 							<h2><span>
-								<?php echo __('Intro to Kanban for WordPress', 'kanban') ?>
+								<?php echo __( 'Intro to Kanban for WordPress', 'kanban' ); ?>
 							</span></h2>
 
 							<div class="inside">
@@ -68,7 +68,7 @@
 						<div class="postbox">
 
 							<h2><span>
-							<?php echo __('Stay up to date', 'kanban') ?>
+							<?php echo __( 'Stay up to date', 'kanban' ); ?>
 							</span></h2>
 
 							<div class="inside">
@@ -101,6 +101,3 @@
 
 
 </div><!-- wrap -->
-
-
-

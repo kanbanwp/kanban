@@ -26,7 +26,7 @@ class Kanban_Taskmeta extends Kanban_Db
 	// );
 
 
-	static function update($task_id, $meta_key, $meta_value)
+	static function update( $task_id, $meta_key, $meta_value )
 	{
 		global $wpdb;
 
@@ -36,7 +36,7 @@ class Kanban_Taskmeta extends Kanban_Db
 		$wpdb->delete(
 			self::table_name(),
 			array(
-				'task_id' => $task_id,
+				'task_id'  => $task_id,
 				'meta_key' => $meta_key
 			)
 		);
@@ -47,10 +47,10 @@ class Kanban_Taskmeta extends Kanban_Db
 		$success = $wpdb->insert(
 			self::table_name(),
 			array(
-				'meta_key' => $meta_key,
-				'meta_value' => $meta_value,
+				'meta_key'       => $meta_key,
+				'meta_value'     => $meta_value,
 				'created_dt_gmt' => Kanban_Utils::mysql_now_gmt(),
-				'task_id' => $task_id,
+				'task_id'        => $task_id,
 			),
 			array(
 				'%s',
@@ -68,9 +68,9 @@ class Kanban_Taskmeta extends Kanban_Db
 
 
 	// define the db schema
-	static function db_table ()
+	static function db_table()
 	{
-		return "CREATE TABLE " . self::table_name() . " (
+		return 'CREATE TABLE ' . self::table_name() . " (
 			id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
 			task_id bigint(20) unsigned NOT NULL DEFAULT '0',
 			created_dt_gmt datetime NOT NULL,
@@ -82,7 +82,3 @@ class Kanban_Taskmeta extends Kanban_Db
 			)";
 	} // db_table
 }
-
-
-
-

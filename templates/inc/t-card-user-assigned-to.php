@@ -11,4 +11,3 @@
 	</small>
 	<input type="hidden" class="assigned-to-id" value="{{=ID}}">
 </div>
-

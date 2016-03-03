@@ -2,20 +2,20 @@
 
 <div class="wrap">
 	<h1>
-		<?php echo __('Contact us', 'kanban') ?>
-		<a href="<?php echo sprintf( '%s/%s/board', home_url(), Kanban::$slug ) ?>" class="page-title-action" target="_blank" id="btn-go-to-board" onclick="window.open('<?php echo sprintf( '%s/%s/board', home_url(), Kanban::$slug ) ?>', 'kanbanboard'); return false;">
-			<?php echo __('Go to your board', 'kanban') ?>
+		<?php echo __( 'Contact us', 'kanban' ); ?>
+		<a href="<?php echo sprintf( '%s/%s/board', home_url(), Kanban::$slug ); ?>" class="page-title-action" target="_blank" id="btn-go-to-board" onclick="window.open('<?php echo sprintf( '%s/%s/board', home_url(), Kanban::$slug ); ?>', 'kanbanboard'); return false;">
+			<?php echo __( 'Go to your board', 'kanban' ); ?>
 		</a>
 	</h1>
 
 
 
-<?php if ( isset($_GET['alert']) ) : ?>
+<?php if ( isset( $_GET['alert'] ) ) : ?>
 	<div class="notice notice-success">
 		<p>
-			<?php echo $_GET['alert'] ?>
+			<?php echo $_GET['alert']; ?>
 		</p>
-	</div>	
+	</div>
 <?php endif // alert ?>
 
 
@@ -28,7 +28,7 @@
 						<label for="from">From</label>
 					</th>
 					<td>
-						<input name="from" type="text" id="from" value="<?php echo get_option('admin_email') ?>"  class="large-text">
+						<input name="from" type="text" id="from" value="<?php echo get_option('admin_email'); ?>"  class="large-text">
 					</td>
 				</tr>
 				<tr>

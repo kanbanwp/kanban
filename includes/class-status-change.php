@@ -24,10 +24,10 @@ class Kanban_Status_Change extends Kanban_Db
 
 	// define db table columns and their validation type
 	protected static $table_columns = array(
-		'task_id' => 'int',
+		'task_id'        => 'int',
 		'created_dt_gmt' => 'datetime',
-		'status_id_old' => 'int',
-		'status_id_new' => 'int',
+		'status_id_old'  => 'int',
+		'status_id_new'  => 'int',
 		'user_id_author' => 'int',
 	);
 
@@ -88,9 +88,9 @@ class Kanban_Status_Change extends Kanban_Db
 
 
 
-	static function add ($task_id, $status_id_new, $status_id_old = 0, $user_id_author = NULL)
+	static function add( $task_id, $status_id_new, $status_id_old = 0, $user_id_author = NULL )
 	{
-		if ( !$user_id_author )
+		if ( ! $user_id_author )
 		{
 			$user_id_author = get_current_user_id();
 		}
@@ -98,22 +98,22 @@ class Kanban_Status_Change extends Kanban_Db
 
 
 		$data = array(
-			'task_id' => $task_id,
+			'task_id'        => $task_id,
 			'created_dt_gmt' => Kanban_Utils::mysql_now_gmt(),
-			'status_id_old' => $status_id_old,
-			'status_id_new' => $status_id_new,
+			'status_id_old'  => $status_id_old,
+			'status_id_new'  => $status_id_new,
 			'user_id_author' => $user_id_author
 		);
 
-		$id = self::_insert($data);
+		$id = self::_insert( $data );
 	}
 
 
 
 	// define the db schema
-	static function db_table ()
+	static function db_table()
 	{
-		return "CREATE TABLE " . self::table_name() . " (
+		return 'CREATE TABLE ' . self::table_name() . ' (
 					id bigint(20) NOT NULL AUTO_INCREMENT,
 					task_id bigint(20) NOT NULL,
 					created_dt_gmt datetime NOT NULL,
@@ -121,14 +121,14 @@ class Kanban_Status_Change extends Kanban_Db
 					status_id_new bigint(20) NOT NULL,
 					user_id_author bigint(20) NOT NULL,
 					UNIQUE KEY  (id)
-				)";
+				)';
 	} // db_table
 
 
 
 	/**
 	 * get the instance of this class
-	 * @return	object	the instance
+	 * @return object the instance
 	 */
 	public static function get_instance()
 	{
@@ -147,5 +147,3 @@ class Kanban_Status_Change extends Kanban_Db
 	private function __construct() { }
 
 }
-
-

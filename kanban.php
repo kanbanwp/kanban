@@ -47,7 +47,7 @@ class Kanban
 
 
 
-	static function init ()
+	static function init()
 	{
 		// get instance
 		self::$instance = self::get_instance();
@@ -56,25 +56,25 @@ class Kanban
 
 		// build settings
 		Kanban::get_instance()->settings = (object) array();
-		Kanban::get_instance()->settings->path = dirname(__FILE__);
-		Kanban::get_instance()->settings->file = basename(__FILE__, '.php');
+		Kanban::get_instance()->settings->path = dirname( __FILE__ );
+		Kanban::get_instance()->settings->file = basename( __FILE__, '.php' );
 
-		if ( !function_exists('get_plugin_data') )
+		if ( ! function_exists( 'get_plugin_data' ) )
 		{
 			require_once( ABSPATH . 'wp-admin/includes/plugin.php' );
 		}
-		Kanban::get_instance()->settings->plugin_data = get_plugin_data(__FILE__);
-		Kanban::get_instance()->settings->basename = strtolower(__CLASS__);
-		Kanban::get_instance()->settings->plugin_basename = plugin_basename(__FILE__);
-		Kanban::get_instance()->settings->uri = plugin_dir_url(__FILE__);
-		Kanban::get_instance()->settings->pretty_name = __('Kanban', Kanban::get_instance()->settings->file);
+		Kanban::get_instance()->settings->plugin_data = get_plugin_data( __FILE__ );
+		Kanban::get_instance()->settings->basename = strtolower( __CLASS__ );
+		Kanban::get_instance()->settings->plugin_basename = plugin_basename( __FILE__ );
+		Kanban::get_instance()->settings->uri = plugin_dir_url( __FILE__ );
+		Kanban::get_instance()->settings->pretty_name = __( 'Kanban', Kanban::get_instance()->settings->file );
 
 
 
 		// require at least PHP 5.3
-		if (version_compare(PHP_VERSION, '5.3', '<'))
+		if ( version_compare( PHP_VERSION, '5.3', '<' ) )
 		{
-			add_action('admin_notices', array(__CLASS__, 'notify_php_version') );
+			add_action( 'admin_notices', array( __CLASS__, 'notify_php_version' ) );
 			return;
 		}
 
@@ -85,10 +85,10 @@ class Kanban
 		include_once Kanban::get_instance()->settings->path . '/includes/class-db.php';
 
 		// Automatically load classes
-		$files = glob(Kanban::get_instance()->settings->path . '/includes/class-*.php');
-		foreach ($files as $file)
+		$files = glob( Kanban::get_instance()->settings->path . '/includes/class-*.php' );
+		foreach ( $files as $file )
 		{
-		    include_once $file;
+			include_once $file;
 		}
 
 
@@ -118,7 +118,7 @@ class Kanban
 		// populate defaults
 		if ( Kanban::get_instance()->settings->records_to_move == 0 )
 		{
-			add_action('init', Kanban_Db::add_defaults());
+			add_action( 'init', Kanban_Db::add_defaults() );
 		}
 
 
@@ -126,7 +126,7 @@ class Kanban
 		// redirect to welcome page
 		// @link http://premium.wpmudev.org/blog/tabbed-interface/
 		set_transient(
-			sprintf('_%s_welcome_screen_activation_redirect', Kanban::get_instance()->settings->basename),
+			sprintf( '_%s_welcome_screen_activation_redirect', Kanban::get_instance()->settings->basename ),
 			true,
 			30
 		);
@@ -148,13 +148,13 @@ class Kanban
 	 */
 	static function notify_php_version()
 	{
-		if( !is_admin() ) return;
+		if ( ! is_admin() ) return;
 		?>
 			<div class="error below-h2">
 				<p>
 				<?php
 				echo sprintf(
-					__('The %s plugin requires at least PHP 5.3. You have %s. Please upgrade and then re-install the plugin.'),
+					__( 'The %s plugin requires at least PHP 5.3. You have %s. Please upgrade and then re-install the plugin.' ),
 					Kanban::get_instance()->settings->pretty_name,
 					PHP_VERSION
 				);
@@ -168,7 +168,7 @@ class Kanban
 
 	/**
 	 * get the instance of this class
-	 * @return	object	the instance
+	 * @return object the instance
 	 */
 	public static function get_instance()
 	{
@@ -189,7 +189,3 @@ class Kanban
 
 
 } // Kanban
-
-
-
-

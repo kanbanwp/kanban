@@ -27,12 +27,12 @@ class Kanban_Comment extends Kanban_Db
 
 	// define db table columns and their validation type
 	protected static $table_columns = array(
-		'task_id' => 'int',
-		'created_dt_gmt' => 'datetime',
+		'task_id'         => 'int',
+		'created_dt_gmt'  => 'datetime',
 		'modified_dt_gmt' => 'datetime',
-		'comment_type' => 'text',
-		'description' => 'text',
-		'user_id_author' => 'int'
+		'comment_type'    => 'text',
+		'description'     => 'text',
+		'user_id_author'  => 'int'
 	);
 
 
@@ -43,16 +43,16 @@ class Kanban_Comment extends Kanban_Db
 
 
 
-	static function add ($comment, $type = 'system', $task_id = 0, $user_id_author = NULL)
+	static function add( $comment, $type = 'system', $task_id = 0, $user_id_author = NULL )
 	{
 
 
-		do_action( 'kanban_comment_add_before');
+		do_action( 'kanban_comment_add_before' );
 
 
 
 
-		if ( !$user_id_author )
+		if ( ! $user_id_author )
 		{
 			$user_id_author = get_current_user_id();
 		}
@@ -60,19 +60,19 @@ class Kanban_Comment extends Kanban_Db
 
 
 		$data = array(
-			'description' => $comment,
-			'comment_type' => $type,
-			'task_id' => $task_id,
-			'user_id_author' => $user_id_author,
-			'created_dt_gmt' => Kanban_Utils::mysql_now_gmt(),
+			'description'     => $comment,
+			'comment_type'    => $type,
+			'task_id'         => $task_id,
+			'user_id_author'  => $user_id_author,
+			'created_dt_gmt'  => Kanban_Utils::mysql_now_gmt(),
 			'modified_dt_gmt' => Kanban_Utils::mysql_now_gmt()
 		);
 
-		$success = self::_insert($data);
+		$success = self::_insert( $data );
 
 
 
-		do_action( 'kanban_comment_add_after', $success, $data);
+		do_action( 'kanban_comment_add_after', $success, $data );
 
 
 
@@ -83,14 +83,14 @@ class Kanban_Comment extends Kanban_Db
 
 
 	// extend parent, so it's accessible from other classes
-	static function insert ($data)
+	static function insert( $data )
 	{
-		return self::_insert($data);
+		return self::_insert( $data );
 	}
 
 
 
-	static function get_all ($sql = NULL)
+	static function get_all( $sql = NULL )
 	{
 		$table_name = self::table_name();
 
@@ -98,13 +98,13 @@ class Kanban_Comment extends Kanban_Db
 				FROM `{$table_name}`
 		;";
 
-		$sql = apply_filters('kanban_comment_get_all_sql', $sql );
+		$sql = apply_filters( 'kanban_comment_get_all_sql', $sql );
 
-		$records = parent::get_all($sql);
+		$records = parent::get_all( $sql );
 
 		return apply_filters(
 			'kanban_comment_get_all_return',
-			Kanban_Utils::build_array_with_id_keys ($records, 'id')
+			Kanban_Utils::build_array_with_id_keys ( $records, 'id' )
 		);
 	}
 
@@ -112,9 +112,9 @@ class Kanban_Comment extends Kanban_Db
 
 
 	// define the db schema
-	static function db_table ()
+	static function db_table()
 	{
-		return "CREATE TABLE " . self::table_name() . " (
+		return 'CREATE TABLE ' . self::table_name() . ' (
 					id bigint(20) NOT NULL AUTO_INCREMENT,
 					created_dt_gmt datetime NOT NULL,
 					modified_dt_gmt datetime NOT NULL,
@@ -123,14 +123,14 @@ class Kanban_Comment extends Kanban_Db
 					description text NOT NULL,
 					user_id_author bigint(20) NOT NULL,
 					UNIQUE KEY  (id)
-				)";
+				)';
 	} // db_table
 
 
 
 	/**
 	 * get the instance of this class
-	 * @return	object	the instance
+	 * @return object the instance
 	 */
 	public static function get_instance()
 	{
@@ -149,5 +149,3 @@ class Kanban_Comment extends Kanban_Db
 	private function __construct() { }
 
 }
-
-

@@ -23,32 +23,32 @@ class Kanban_Admin
 
 
 
-	static function init ()
+	static function init()
 	{
 		// redirect to welcome screen on activation
-		add_action( 'admin_init',array(__CLASS__, 'welcome_screen_do_activation_redirect') );
+		add_action( 'admin_init', array( __CLASS__, 'welcome_screen_do_activation_redirect' ) );
 
 		// add settings link
-  		add_filter(
-  			'plugin_action_links_' . Kanban::get_instance()->settings->plugin_basename,
-  			array(__CLASS__, 'add_plugin_settings_link')
-  		);
+		add_filter(
+			'plugin_action_links_' . Kanban::get_instance()->settings->plugin_basename,
+			array( __CLASS__, 'add_plugin_settings_link' )
+		);
 
 		// Remove Admin bar
-		if ( strpos($_SERVER['REQUEST_URI'], sprintf('/%s/', Kanban::$slug)) !== FALSE )
+		if ( strpos( $_SERVER['REQUEST_URI'], sprintf( '/%s/', Kanban::$slug ) ) !== FALSE )
 		{
-			add_filter('show_admin_bar', '__return_false');
+			add_filter( 'show_admin_bar', '__return_false' );
 		}
 
 		// add custom pages to admin
-		add_action( 'admin_menu', array(__CLASS__, 'admin_menu') );
+		add_action( 'admin_menu', array( __CLASS__, 'admin_menu' ) );
 
 		// if migrating from older version, show upgrade notice with progress bar
-		add_action( 'admin_notices', array(__CLASS__, 'render_upgrade_notice') );
+		add_action( 'admin_notices', array( __CLASS__, 'render_upgrade_notice' ) );
 
-		add_action( 'admin_bar_menu', array(__CLASS__, 'add_admin_bar_link_to_board'), 999 );
+		add_action( 'admin_bar_menu', array( __CLASS__, 'add_admin_bar_link_to_board' ), 999 );
 
-		add_action('init', array(__CLASS__, 'contact_support'));
+		add_action( 'init', array( __CLASS__, 'contact_support' ) );
 	}
 
 
@@ -56,7 +56,7 @@ class Kanban_Admin
 	/**
 	 * show upgrade notice with progress bar
 	 */
-	static function render_upgrade_notice ()
+	static function render_upgrade_notice()
 	{
 		// make sure something needs to be upgraded
 		if ( Kanban::get_instance()->settings->records_to_move <= 0 ) return;
@@ -65,21 +65,21 @@ class Kanban_Admin
 		?>
 		<div class="updated error">
 			<p style="font-size: 1.236em;">
-				<b><?php echo __('Warning!', 'kanban') ?></b>
-				<?php echo sprintf(__('We\'ve found %s kanban records that need to be migrated for the latest version of Kanban for WordPress!', 'kanban'), Kanban::get_instance()->settings->records_to_move) ?>
+				<b><?php echo __( 'Warning!', 'kanban' ); ?></b>
+				<?php echo sprintf( __( 'We\'ve found %s kanban records that need to be migrated for the latest version of Kanban for WordPress! ', 'kanban' ), Kanban::get_instance()->settings->records_to_move ); ?>
 			</p>
 			<p>
-				<?php echo __('Please click "migrate" below and we\'ll move them for you.', 'kanban') ?>
+				<?php echo __( 'Please click "migrate" below and we\'ll move them for you.', 'kanban' ); ?>
 			</p>
 			<p>
 				<button type="button" class="button-primary" id="kanban-migrate-start">
-					<?php echo __('Migrate', 'kanban') ?>
+					<?php echo __( 'Migrate', 'kanban' ); ?>
 				</button>
 			</p>
 
 			<div id="kanban-migrate-progress">
-				<?php echo __('Migration Progress', 'kanban') ?>
-				<?php echo __('(Please do not browse away from the page until migration is complete)', 'kanban') ?>:
+				<?php echo __( 'Migration Progress', 'kanban' ); ?>
+				<?php echo __( '(Please do not browse away from the page until migration is complete)', 'kanban' ); ?>:
 				<div id="kanban-migrate-progress-outer">
 					<div id="kanban-migrate-progress-inner">
 						&nbsp;
@@ -112,27 +112,27 @@ class Kanban_Admin
 			transition: width 1s ease-in-out;
 		}
 		#kanban-migrate-progress-inner:after {
-		  content: "";
-		  position: absolute;
-		  top: 0; left: 0; bottom: 0; right: 0;
-		  background-image: linear-gradient(
-		    -45deg,
-		    rgba(255, 255, 255, .2) 25%,
-		    transparent 25%,
-		    transparent 50%,
-		    rgba(255, 255, 255, .2) 50%,
-		    rgba(255, 255, 255, .2) 75%,
-		    transparent 75%,
-		    transparent
-		  );
-		  z-index: 1;
-		  background-size: 50px 50px;
-		  animation: move 2s linear infinite;
-		  border-top-right-radius: 8px;
-		  border-bottom-right-radius: 8px;
-		  border-top-left-radius: 20px;
-		  border-bottom-left-radius: 20px;
-		  overflow: hidden;
+			content: "";
+			position: absolute;
+			top: 0; left: 0; bottom: 0; right: 0;
+			background-image: linear-gradient(
+			-45deg,
+			rgba( 255, 255, 255, .2 ) 25%,
+			transparent 25%,
+			transparent 50%,
+			rgba( 255, 255, 255, .2 ) 50%,
+			rgba( 255, 255, 255, .2 ) 75%,
+			transparent 75%,
+			transparent
+			);
+			z-index: 1;
+			background-size: 50px 50px;
+			animation: move 2s linear infinite;
+			border-top-right-radius: 8px;
+			border-bottom-right-radius: 8px;
+			border-top-left-radius: 20px;
+			border-bottom-left-radius: 20px;
+			overflow: hidden;
 		}
 
 		@keyframes move {
@@ -145,19 +145,19 @@ class Kanban_Admin
 		}
 		</style>
 		<script>
-		jQuery(function($)
+		jQuery( function( $ )
 		{
 			// start with how many records need to be migrated
 			var records_to_move = <?php echo Kanban::get_instance()->settings->records_to_move ?>;
 
 			// if migration fails, show alert
-			function migration_failed ()
+			function migration_failed()
 			{
-				alert('Migration failed. Please refresh the page and try again.');
+				alert( 'Migration failed. Please refresh the page and try again.' );
 			}
 
 			// the loop to continually do migration, and update progress bar
-			function do_migrate ()
+			function do_migrate()
 			{
 				$.post(
 					ajaxurl,
@@ -165,11 +165,11 @@ class Kanban_Admin
 						action: 'kanban_migrate_db'
 					}
 				)
-				.done(function(data)
+				.done( function( data )
 				{
 					try
 					{
-						var percentage = 100-((100 * parseInt(data.data.posts_remaining))/records_to_move);
+						var percentage = 100-( ( 100 * parseInt(data.data.posts_remaining))/records_to_move);
 
 						if ( percentage > 100 )
 						{
@@ -181,9 +181,9 @@ class Kanban_Admin
 							percentage = 1;
 						}
 
-						$('#kanban-migrate-progress-inner').css('width', percentage + '%');
+						$( '#kanban-migrate-progress-inner' ).css( 'width', percentage + '%' );
 					}
-					catch (err)
+					catch ( err )
 					{
 						migration_failed();
 					}
@@ -191,25 +191,25 @@ class Kanban_Admin
 					// update the returned message
 					try
 					{
-						$('#kanban-migrate-message').text(data.data.message);
+						$( '#kanban-migrate-message' ).text( data.data.message );
 					}
-					catch (err) {}
+					catch ( err ) {}
 
 					// wait 2 seconds and do it again
 					try
 					{
 						if ( data.data.continue )
 						{
-							setTimeout(function()
+							setTimeout( function()
 							{
 								do_migrate();
-							}, 2000);
+							}, 2000 );
 						}
 						else
 						{
 							if ( data.data.done )
 							{
-								$('#kanban-migrate-progress').html('<b style="font-size: 1.618em;">Migration has completed! <a href="<?php echo site_url() ?>/kanban/board" class="button button-primary" target="_blank">Go to your board</a>.</b>');
+								$( '#kanban-migrate-progress' ).html( '<b style="font-size: 1.618em;">Migration has completed! <a href="<?php echo site_url(); ?>/kanban/board" class="button button-primary" target="_blank">Go to your board</a>.</b>' );
 							}
 							else
 							{
@@ -217,29 +217,29 @@ class Kanban_Admin
 							}
 						}
 					}
-					catch (err)
+					catch ( err )
 					{
 						migration_failed();
 					}
-				})
-				.fail(function(data)
+				} )
+				.fail( function( data )
 				{
 					migration_failed();
 					return false;
-				});
+				} );
 			}; // do_migrate
 
-			$('#kanban-migrate-start').on(
+			$( '#kanban-migrate-start' ).on(
 				'click',
 				function()
 				{
-					$(this).hide();
-					$('#kanban-migrate-progress').show();
+					$( this ).hide();
+					$( '#kanban-migrate-progress' ).show();
 
 					do_migrate();
 				}
 			)
-		});
+		} );
 		</script>
 		<?php
 	} // render_upgrade_notice
@@ -251,7 +251,7 @@ class Kanban_Admin
 	 */
 	static function welcome_page()
 	{
-		$template = Kanban_Template::find_template('admin/welcome');
+		$template = Kanban_Template::find_template( 'admin/welcome' );
 
 		include_once $template;
 	}
@@ -268,7 +268,7 @@ class Kanban_Admin
 		wp_enqueue_script(
 			'addon',
 			get_stylesheet_directory_uri() . '/js/addon.js',
-			array('jquery', 'masonry')
+			array( 'jquery', 'masonry' )
 		);
 
 
@@ -276,28 +276,28 @@ class Kanban_Admin
 		global $wpdb;
 
 		$current_user_id = get_current_user_id();
-		$lastRun = (int) Kanban_Option::get_option('admin-addons-check');
+		$lastRun = (int) Kanban_Option::get_option( 'admin-addons-check' );
 
-		if (time() - $lastRun >= 60*60*24) // 1 day
+		if ( time() - $lastRun >= 60*60*24 ) // 1 day
 		{
-			Kanban_Option::update('admin-addons-check', time());
+			Kanban_Option::update( 'admin-addons-check', time() );
 
-			$response = wp_remote_get('https://kanbanwp.com?feed=addons');
+			$response = wp_remote_get( 'https://kanbanwp.com?feed=addons' );
 
 			try
 			{
-				$addons = json_decode($response['body']);
+				$addons = json_decode( $response['body'] );
 			}
-			catch (Exception $e)
+			catch ( Exception $e )
 			{
 				$addons = array();
 			}
 
-			Kanban_Option::update('admin-addons', $addons);
+			Kanban_Option::update( 'admin-addons', $addons );
 		}
 		else
 		{
-			$addons = Kanban_Option::get_option('admin-addons');
+			$addons = Kanban_Option::get_option( 'admin-addons' );
 		}
 
 
@@ -310,7 +310,7 @@ class Kanban_Admin
 
 
 
-		$template = Kanban_Template::find_template('admin/addons');
+		$template = Kanban_Template::find_template( 'admin/addons' );
 
 		include_once $template;
 	}
@@ -322,7 +322,7 @@ class Kanban_Admin
 	 */
 	static function contact_page()
 	{
-		$template = Kanban_Template::find_template('admin/contact');
+		$template = Kanban_Template::find_template( 'admin/contact' );
 
 		include_once $template;
 	}
@@ -331,27 +331,27 @@ class Kanban_Admin
 
 	static function contact_support()
 	{
-		if (  !isset( $_POST[Kanban_Utils::get_nonce()] ) || ! wp_verify_nonce( $_POST[Kanban_Utils::get_nonce()], 'kanban-admin-comment') || !is_user_logged_in() ) return false;
+		if ( ! isset( $_POST[Kanban_Utils::get_nonce()] ) || ! wp_verify_nonce( $_POST[Kanban_Utils::get_nonce()], 'kanban-admin-comment' ) || ! is_user_logged_in() ) return false;
 
 		try
 		{
 			wp_mail(
 				'support@kanbanwp.com',
-				sprintf('[kbwp] %s', $_POST['request']),
+				sprintf( '[kbwp] %s', $_POST['request'] ),
 				sprintf(
-					"%s\n\n%s\n%s",
-					stripcslashes($_POST['message']),
-					get_option('siteurl'),
+					'%s\n\n%s\n%s',
+					stripcslashes( $_POST['message'] ),
+					get_option( 'siteurl' ),
 					$_SERVER['HTTP_USER_AGENT']
 				),
-				sprintf('From: "%s" <%s>', get_option('blogname'), $_POST['from'])
+				sprintf( 'From: "%s" <%s>', get_option( 'blogname' ), $_POST['from'] )
 			);
 
 			$_GET['alert'] = "Email sent! We'll get back to you as soon as we can.";
 		}
-		catch (Exception $e)
+		catch ( Exception $e )
 		{
-			$_GET['alert'] = "Email could not be sent. Please contact us through <a href=\"http://kanbanwp.com\" target=\"_blank\">https://kanbanwp.com</a>.";	
+			$_GET['alert'] = "Email could not be sent. Please contact us through <a href=\"http://kanbanwp.com\" target=\"_blank\">https://kanbanwp.com</a>.";
 		}
 	}
 
@@ -359,7 +359,7 @@ class Kanban_Admin
 
 	/**
 	 * add pages to admin menu, including custom icon
-	 * @return [type] [description]
+	 * @return   [type] [description]
 	 */
 	static function admin_menu()
 	{
@@ -371,7 +371,7 @@ class Kanban_Admin
 			Kanban::get_instance()->settings->pretty_name,
 			Kanban::get_instance()->settings->pretty_name,
 			'manage_options',
-			sprintf('%s_welcome', Kanban::get_instance()->settings->basename),
+			sprintf( '%s_welcome', Kanban::get_instance()->settings->basename ),
 			null,
 			$icon_svg
 		);
@@ -386,7 +386,7 @@ class Kanban_Admin
 			'Welcome',
 			'manage_options',
 			'kanban_welcome',
-			array(__CLASS__, 'welcome_page')
+			array( __CLASS__, 'welcome_page' )
 		);
 
 		// add the settings admin page
@@ -396,7 +396,7 @@ class Kanban_Admin
 			'Settings',
 			'manage_options',
 			'kanban_settings',
-			array('Kanban_Option', 'settings_page')
+			array( 'Kanban_Option', 'settings_page' )
 		);
 
 		add_submenu_page(
@@ -405,7 +405,7 @@ class Kanban_Admin
 			'Add-ons',
 			'manage_options',
 			'kanban_addons',
-			array(__CLASS__, 'addons_page')
+			array( __CLASS__, 'addons_page' )
 		);
 
 		add_submenu_page(
@@ -414,20 +414,20 @@ class Kanban_Admin
 			'Contact Us',
 			'manage_options',
 			'kanban_contact',
-			array(__CLASS__, 'contact_page')
+			array( __CLASS__, 'contact_page' )
 		);
 
 	} // admin_menu
 
 
 
-	static function add_admin_bar_link_to_board ( $wp_admin_bar )
+	static function add_admin_bar_link_to_board( $wp_admin_bar )
 	{
 		$args = array(
 			'id'    => 'kanban_board',
 			'title' => 'Kanban Board',
 			'href'  => '/kanban/board',
-			'meta'  => array( 'class' => 'kanban-board' )
+			'meta'  => array( 'class'  => 'kanban-board' )
 		);
 		$wp_admin_bar->add_node( $args );
 	}
@@ -448,7 +448,7 @@ class Kanban_Admin
 		);
 
 		$mylinks = array(
-			sprintf('<a href="%s">Settings</a>', $url)
+			sprintf( '<a href="%s">Settings</a>', $url )
 		);
 
 		return array_merge( $links, $mylinks );
@@ -461,13 +461,13 @@ class Kanban_Admin
 	static function welcome_screen_do_activation_redirect()
 	{
 		// Bail if no activation redirect
-		if ( ! get_transient( sprintf('_%s_welcome_screen_activation_redirect', Kanban::get_instance()->settings->basename) ) )
+		if ( ! get_transient( sprintf( '_%s_welcome_screen_activation_redirect', Kanban::get_instance()->settings->basename ) ) )
 		{
 			return;
 		}
 
 		// Delete the redirect transient
-		delete_transient( sprintf('_%s_welcome_screen_activation_redirect', Kanban::get_instance()->settings->basename) );
+		delete_transient( sprintf( '_%s_welcome_screen_activation_redirect', Kanban::get_instance()->settings->basename ) );
 
 		// Bail if activating from network, or bulk
 		if ( is_network_admin() || isset( $_GET['activate-multi'] ) )
@@ -479,7 +479,7 @@ class Kanban_Admin
 		wp_safe_redirect(
 			add_query_arg(
 				array(
-					'page' => sprintf('%s_welcome', Kanban::get_instance()->settings->basename),
+					'page'       => sprintf( '%s_welcome', Kanban::get_instance()->settings->basename ),
 					'activation' => '1'
 				),
 				admin_url( 'admin.php' )
@@ -491,7 +491,7 @@ class Kanban_Admin
 
 	/**
 	 * get the instance of this class
-	 * @return	object	the instance
+	 * @return object the instance
 	 */
 	public static function get_instance()
 	{
@@ -512,6 +512,3 @@ class Kanban_Admin
 
 
 } // Kanban_Admin
-
-
-

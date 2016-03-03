@@ -29,23 +29,23 @@ class Kanban_Board extends Kanban_Db
 
 	// define db table columns and their validation type
 	protected static $table_columns = array(
-		'title' => 'text',
-		'description' => 'text',
-		'created_dt_gmt' => 'datetime',
+		'title'           => 'text',
+		'description'     => 'text',
+		'created_dt_gmt'  => 'datetime',
 		'modified_dt_gmt' => 'datetime',
-		'user_id_author' => 'int',
-		'is_active' => 'bool'
+		'user_id_author'  => 'int',
+		'is_active'       => 'bool'
 	);
 
 
 
 	// add actions and filters
-	static function init ()
+	static function init()
 	{
 		// send board data to the board template
-		add_filter('template_include', array(__CLASS__, 'send_page_data_to_template'), 100); // must be higher than template
+		add_filter( 'template_include', array( __CLASS__, 'send_page_data_to_template' ), 100 ); // must be higher than template
 
-		add_action('kanban_board_render_js_templates', array(__CLASS__, 'render_js_templates'));
+		add_action( 'kanban_board_render_js_templates', array( __CLASS__, 'render_js_templates' ) );
 	}
 
 
@@ -55,10 +55,10 @@ class Kanban_Board extends Kanban_Db
 	 * @param  string $template the passed in template path
 	 * @return string           the same template path
 	 */
-	static function send_page_data_to_template ($template)
+	static function send_page_data_to_template( $template )
 	{
 		// make sure we're looking at the board
-		if ( !isset(Kanban_Template::get_instance()->slug) || Kanban_Template::get_instance()->slug != self::$slug ) return $template;
+		if ( ! isset( Kanban_Template::get_instance()->slug ) || Kanban_Template::get_instance()->slug != self::$slug ) return $template;
 
 
 
@@ -67,7 +67,7 @@ class Kanban_Board extends Kanban_Db
 		{
 			?>
 			<p>
-			<?php echo sprintf(__('We\'ve found %s kanban records that need to be migrated for the latest version of Kanban for WordPress!', 'kanban'), Kanban::get_instance()->settings->records_to_move); ?>
+			<?php echo sprintf( __( 'We\'ve found %s kanban records that need to be migrated for the latest version of Kanban for WordPress! ', 'kanban' ), Kanban::get_instance()->settings->records_to_move ); ?>
 			</p>
 			<p>
 			<?php echo sprintf(
@@ -78,7 +78,7 @@ class Kanban_Board extends Kanban_Db
 					add_query_arg(
 						'page',
 						'kanban_welcome',
-						admin_url('admin.php')
+						admin_url( 'admin.php' )
 					)
 				);
 			?>
@@ -98,11 +98,11 @@ class Kanban_Board extends Kanban_Db
 		// add default filters
 		$wp_query->query_vars['kanban']->board->filters = array(
 			'user_id_assigned' => (object) array(),
-			'project_id' => (object) array()
+			'project_id'       => (object) array()
 		);
 
 		// add passed alert
-		$wp_query->query_vars['kanban']->board->alert = !empty($_GET['alert']) ? stripcslashes($_GET['alert']) : '';
+		$wp_query->query_vars['kanban']->board->alert = ! empty( $_GET['alert'] ) ? stripcslashes( $_GET['alert'] ) : '';
 
 		// get all data for the javascript
 		$wp_query->query_vars['kanban']->board->settings = Kanban_Option::get_all();
@@ -120,8 +120,8 @@ class Kanban_Board extends Kanban_Db
 		$wp_query->query_vars['kanban']->board->current_user = $wp_query->query_vars['kanban']->board->allowed_users[$current_user_id];
 
 		// figure out percentages here (easier, quicker than in js)
-		$wp_query->query_vars['kanban']->board->col_percent_w = count($wp_query->query_vars['kanban']->board->statuses) > 0 ? 100/(count($wp_query->query_vars['kanban']->board->statuses)) : 100;
-		$wp_query->query_vars['kanban']->board->sidebar_w = count($wp_query->query_vars['kanban']->board->statuses) > 0 ? 100/(count($wp_query->query_vars['kanban']->board->statuses)-2) : 0;
+		$wp_query->query_vars['kanban']->board->col_percent_w = count( $wp_query->query_vars['kanban']->board->statuses ) > 0 ? 100/(count( $wp_query->query_vars['kanban']->board->statuses )) : 100;
+		$wp_query->query_vars['kanban']->board->sidebar_w = count( $wp_query->query_vars['kanban']->board->statuses ) > 0 ? 100/(count( $wp_query->query_vars['kanban']->board->statuses )-2) : 0;
 
 
 		apply_filters(
@@ -134,20 +134,20 @@ class Kanban_Board extends Kanban_Db
 
 
 
-	static function render_js_templates ()
+	static function render_js_templates()
 	{
 		// Automatically load router files
-		$js_templates = glob(Kanban::$instance->settings->path . '/templates/inc/t-*.php');
+		$js_templates = glob( Kanban::$instance->settings->path . '/templates/inc/t-*.php' );
 
 		$js_templates = apply_filters(
 			'kanban_board_render_js_templates_before',
 			$js_templates
 		);
 
-		foreach ($js_templates as $js_template) : ?>
-		<script type="text/html" id="<?php echo basename($js_template, '.php') ?>">
+		foreach ( $js_templates as $js_template ) : ?>
+		<script type="text/html" id="<?php echo basename($js_template, '.php'); ?>">
 
-		<?php include $js_template ?>
+		<?php include $js_template; ?>
 
 		</script>
 		<?php endforeach;
@@ -156,17 +156,17 @@ class Kanban_Board extends Kanban_Db
 
 
 	// extend parent replace, so it's accessible from other classes
-	static function replace ($data)
+	static function replace( $data )
 	{
-		return self::_replace($data);
+		return self::_replace( $data );
 	}
 
 
 
 	// define the db schema
-	static function db_table ()
+	static function db_table()
 	{
-		return "CREATE TABLE " . self::table_name() . " (
+		return 'CREATE TABLE ' . self::table_name() . ' (
 					id bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
 					title text NOT NULL,
 					description text NOT NULL,
@@ -176,14 +176,14 @@ class Kanban_Board extends Kanban_Db
 					is_active BOOLEAN NOT NULL DEFAULT TRUE,
 					UNIQUE KEY id (id),
 					KEY is_active (is_active)
-				)";
+				)';
 	} // db_table
 
 
 
 	/**
 	 * get the instance of this class
-	 * @return	object	the instance
+	 * @return object the instance
 	 */
 	public static function get_instance()
 	{
@@ -204,5 +204,3 @@ class Kanban_Board extends Kanban_Db
 
 
 } // Kanban_Board
-
-

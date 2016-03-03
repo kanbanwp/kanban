@@ -24,30 +24,30 @@ class Kanban_Task extends Kanban_Db
 
 	// define db table columns and their validation type
 	protected static $table_columns = array(
-		'title' => 'text',
-		'description' => 'text',
-		'created_dt_gmt' => 'datetime',
-		'modified_dt_gmt' => 'datetime',
-		'user_id_author' => 'int',
+		'title'            => 'text',
+		'description'      => 'text',
+		'created_dt_gmt'   => 'datetime',
+		'modified_dt_gmt'  => 'datetime',
+		'user_id_author'   => 'int',
 		'user_id_assigned' => 'int',
-		'status_id' => 'int',
-		'project_id' => 'int',
-		'estimate_id' => 'int',
-		'board_id' => 'int',
-		'is_active' => 'bool'
+		'status_id'        => 'int',
+		'project_id'       => 'int',
+		'estimate_id'      => 'int',
+		'board_id'         => 'int',
+		'is_active'        => 'bool'
 	);
 
 
 
 	static function init()
 	{
-		add_action( sprintf('wp_ajax_save_%s', self::$slug), array(__CLASS__, 'ajax_save') );
-		add_action( sprintf('wp_ajax_delete_%s', self::$slug), array(__CLASS__, 'ajax_delete') );
+		add_action( sprintf( 'wp_ajax_save_%s', self::$slug ), array( __CLASS__, 'ajax_save' ) );
+		add_action( sprintf( 'wp_ajax_delete_%s', self::$slug ), array( __CLASS__, 'ajax_delete' ) );
 	}
 
 
 
-	static function format_hours($hours)
+	static function format_hours( $hours )
 	{
 		if ( $hours < 0 )
 		{
@@ -56,15 +56,15 @@ class Kanban_Task extends Kanban_Db
 
 		if ( $hours < 1 )
 		{
-			$label = sprintf('%sm', ceil($hours*60/100));
+			$label = sprintf( '%sm', ceil( $hours*60/100));
 		}
 		elseif ( $hours < 8 )
 		{
-			$label = sprintf('%sh', $hours);
+			$label = sprintf( '%sh', $hours );
 		}
 		else
 		{
-			$label = sprintf('%sd %sh', floor($hours/8), $hours % 8);
+			$label = sprintf( '%sd %sh', floor( $hours/8 ), $hours % 8 );
 		}
 
 		return $label;
@@ -72,13 +72,13 @@ class Kanban_Task extends Kanban_Db
 
 
 
-	static function ajax_save ()
+	static function ajax_save()
 	{
-		if (  !isset( $_POST[Kanban_Utils::get_nonce()] ) || ! wp_verify_nonce( $_POST[Kanban_Utils::get_nonce()], 'kanban-save') || !is_user_logged_in() ) wp_send_json_error();
+		if ( ! isset( $_POST[Kanban_Utils::get_nonce()] ) || ! wp_verify_nonce( $_POST[Kanban_Utils::get_nonce()], 'kanban-save' ) || ! is_user_logged_in() ) wp_send_json_error();
 
 
 
-		if ( !isset($_POST['task']['id']) )
+		if ( ! isset( $_POST['task']['id'] ) )
 		{
 			$_POST['task']['id'] = '';
 			$_POST['task']['created_dt_gmt'] = Kanban_Utils::mysql_now_gmt();
@@ -86,7 +86,7 @@ class Kanban_Task extends Kanban_Db
 
 
 
-		do_action('kanban_task_ajax_save_before', $_POST['task']['id']);
+		do_action( 'kanban_task_ajax_save_before', $_POST['task']['id'] );
 
 
 
@@ -94,34 +94,34 @@ class Kanban_Task extends Kanban_Db
 
 
 
-		if ( !isset($_POST['task']['user_id_author']) )
+		if ( ! isset( $_POST['task']['user_id_author'] ) )
 		{
 			$_POST['task']['user_id_author'] = get_current_user_id();
 		}
 
 
 
-		$is_successful = self::_replace($_POST['task']);
+		$is_successful = self::_replace( $_POST['task'] );
 
 
 
-		$task_id = !empty($_POST['task']['id']) ? $_POST['task']['id'] : self::_insert_id();
+		$task_id = ! empty( $_POST['task']['id'] ) ? $_POST['task']['id'] : self::_insert_id();
 
 
 
-		$post_data = self::get_row('id', $task_id);
+		$post_data = self::get_row( 'id', $task_id );
 
-		if ( !$post_data ) wp_send_json_error();
-
-
-
-		do_action('kanban_task_ajax_save_after', $post_data);
+		if ( ! $post_data ) wp_send_json_error();
 
 
 
-		if ( !empty($_POST['comment']) )
+		do_action( 'kanban_task_ajax_save_after', $post_data );
+
+
+
+		if ( ! empty( $_POST['comment'] ) )
 		{
-			do_action('kanban_task_ajax_save_before_comment');
+			do_action( 'kanban_task_ajax_save_before_comment' );
 
 			Kanban_Comment::add(
 				$_POST['comment'],
@@ -129,14 +129,14 @@ class Kanban_Task extends Kanban_Db
 				$task_id
 			);
 
-			do_action('kanban_task_ajax_save_after_comment');
+			do_action( 'kanban_task_ajax_save_after_comment' );
 		}
 
 
 
-		if ( isset($_POST['status_id_old']) )
+		if ( isset( $_POST['status_id_old'] ) )
 		{
-			do_action('kanban_task_ajax_save_before_status_change');
+			do_action( 'kanban_task_ajax_save_before_status_change' );
 
 			Kanban_Status_Change::add(
 				$task_id,
@@ -144,50 +144,50 @@ class Kanban_Task extends Kanban_Db
 				$_POST['status_id_old']
 			);
 
-			do_action('kanban_task_ajax_save_after_status_change');
+			do_action( 'kanban_task_ajax_save_after_status_change' );
 		}
 
 
 
 		if ( $is_successful )
 		{
-			wp_send_json_success(array(
-				'message' => sprintf('%s saved', self::$slug),
+			wp_send_json_success( array(
+				'message' => sprintf( '%s saved', self::$slug ),
 				self::$slug => $post_data
-			));
+			) );
 		}
 		else
 		{
-			wp_send_json_error(array(
-				'message' => sprintf('Error saving %s', self::$slug)
-			));
+			wp_send_json_error( array(
+				'message' => sprintf( 'Error saving %s', self::$slug )
+			) );
 		}
 	}
 
 
 
-	static function ajax_delete ()
+	static function ajax_delete()
 	{
-		if (  !isset( $_POST[Kanban_Utils::get_nonce()] ) || ! wp_verify_nonce( $_POST[Kanban_Utils::get_nonce()], 'kanban-save') || !is_user_logged_in() ) wp_send_json_error();
+		if ( ! isset( $_POST[Kanban_Utils::get_nonce()] ) || ! wp_verify_nonce( $_POST[Kanban_Utils::get_nonce()], 'kanban-save' ) || ! is_user_logged_in() ) wp_send_json_error();
 
 
 
-		do_action('kanban_task_ajax_delete_before', $_POST['task']['id']);
+		do_action( 'kanban_task_ajax_delete_before', $_POST['task']['id'] );
 
 
 
 		// $is_successful = Kanban_Post::delete($_POST);
-		$is_successful = self::delete($_POST['task']['id']);
+		$is_successful = self::delete( $_POST['task']['id'] );
 
 
 
-		do_action('kanban_task_ajax_delete_after', $_POST['task']['id']);
+		do_action( 'kanban_task_ajax_delete_after', $_POST['task']['id'] );
 
 
 
-		if ( !empty($_POST['comment']) )
+		if ( ! empty( $_POST['comment'] ) )
 		{
-			do_action('kanban_task_ajax_delete_before_comment');
+			do_action( 'kanban_task_ajax_delete_before_comment' );
 
 			Kanban_Comment::add(
 				$_POST['comment'],
@@ -195,57 +195,57 @@ class Kanban_Task extends Kanban_Db
 				$_POST['task']['id']
 			);
 
-			do_action('kanban_task_ajax_delete_after_comment');
+			do_action( 'kanban_task_ajax_delete_after_comment' );
 		}
 
 
 
 		if ( $is_successful )
 		{
-			wp_send_json_success(array(
-				'message' => sprintf('%s deleted', self::$slug)
-			));
+			wp_send_json_success( array(
+				'message' => sprintf( '%s deleted', self::$slug )
+			) );
 		}
 		else
 		{
-			wp_send_json_error(array(
-				'message' => sprintf('Error deleting %s', self::$slug)
-			));
+			wp_send_json_error( array(
+				'message' => sprintf( 'Error deleting %s', self::$slug )
+			) );
 		}
 	}
 
 
 
 	// extend parent, so it's accessible from other classes
-	static function replace ($data)
+	static function replace( $data )
 	{
-		return self::_replace($data);
+		return self::_replace( $data );
 	}
 
 
 
 	// extend parent, so it's accessible from other classes
-	protected static function delete ($id)
+	protected static function delete( $id )
 	{
 		return self::_update(
-			array('is_active' => 0),
-			array('id' => $id)
+			array( 'is_active' => 0 ),
+			array( 'id' => $id )
 		);
 	}
 
 
-	static function get_one ($task_id)
+	static function get_one( $task_id )
 	{
-		$record = parent::get_row('ID', $task_id);
-		$record->title = Kanban_Utils::str_for_frontend($record->title);
-		$record->description = Kanban_Utils::str_for_frontend($record->description);
+		$record = parent::get_row( 'ID', $task_id );
+		$record->title = Kanban_Utils::str_for_frontend( $record->title );
+		$record->description = Kanban_Utils::str_for_frontend( $record->description );
 
 		return $record;
 	}
 
 
 
-	static function get_all ($sql = NULL)
+	static function get_all( $sql = NULL )
 	{
 		$table_name = self::table_name();
 
@@ -263,32 +263,32 @@ class Kanban_Task extends Kanban_Db
 				GROUP BY tasks.id
 		;";
 
-		$sql = apply_filters('kanban_task_get_all_sql', $sql);
+		$sql = apply_filters( 'kanban_task_get_all_sql', $sql );
 
-		$records = parent::get_all($sql);
+		$records = parent::get_all( $sql );
 
 
 
-		foreach ($records as $key => $record)
+		foreach ( $records as $key => $record )
 		{
-			$records[$key]->title = Kanban_Utils::str_for_frontend($records[$key]->title);
-			$records[$key]->description = Kanban_Utils::str_for_frontend($records[$key]->description);
+			$records[$key]->title = Kanban_Utils::str_for_frontend( $records[$key]->title );
+			$records[$key]->description = Kanban_Utils::str_for_frontend( $records[$key]->description );
 		}
 
 
 
 		return apply_filters(
 			'kanban_task_get_all_return',
-			Kanban_Utils::build_array_with_id_keys ($records, 'id')
+			Kanban_Utils::build_array_with_id_keys ( $records, 'id' )
 		);
 	}
 
 
 
 	// define the db schema
-	static function db_table ()
+	static function db_table()
 	{
-		return "CREATE TABLE " . self::table_name() . " (
+		return 'CREATE TABLE ' . self::table_name() . ' (
 					id bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
 					title text NOT NULL,
 					description text NOT NULL,
@@ -304,14 +304,14 @@ class Kanban_Task extends Kanban_Db
 					UNIQUE KEY  (id),
 					KEY is_active (is_active),
 					KEY board_id (board_id)
-				)";
+				)';
 	} // db_table
 
 
 
 	/**
 	 * get the instance of this class
-	 * @return	object	the instance
+	 * @return object the instance
 	 */
 	public static function get_instance()
 	{
@@ -330,6 +330,3 @@ class Kanban_Task extends Kanban_Db
 	private function __construct() { }
 
 } // Kanban_Task
-
-
-

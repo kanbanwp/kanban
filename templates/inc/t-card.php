@@ -3,7 +3,7 @@
 
 	<div class="panel-body">
 		<div class="pull-right text-muted task-id">
-			<?php echo apply_filters('kanban_card_id_before', '' ); ?>
+			<?php echo apply_filters( 'kanban_card_id_before', '' ); ?>
 
 			<div class="badge" data-toggle="dropdown">
 				{{=task.id}}
@@ -16,7 +16,7 @@
 						<?php echo __( 'Delete this task', 'kanban' ); ?>
 					</a>
 				</li>
-				<?php echo apply_filters('kanban_card_id_dropdown', '' ); ?>
+				<?php echo apply_filters( 'kanban_card_id_dropdown', '' ); ?>
 			</ul>
 {{/current_user_can_write}}
 		</div>
@@ -38,7 +38,7 @@
 			<div contenteditable="{{current_user_can_write}}true{{:current_user_can_write}}false{{/current_user_can_write}}" class="task-title">{{=task.title}}</div>
 		</h3>
 
-		<?php echo apply_filters('kanban_card_after_title', '' ); ?>
+		<?php echo apply_filters( 'kanban_card_after_title', '' ); ?>
 
 		<div class="row row-worked">
 			<div class="col col-xs-4 col-task-hours">
@@ -85,5 +85,5 @@
 	<div class="task-handle" style="background: {{=task.status_color}};">
 	</div>
 
-	<?php echo apply_filters('kanban_card_append', '' ); ?>
+	<?php echo apply_filters( 'kanban_card_append', '' ); ?>
 </div>

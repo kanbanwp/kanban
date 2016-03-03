@@ -4,7 +4,7 @@
 		<div class="modal-content">
 			<div class="modal-body">
 				<button type="button" class=" btn btn-default btn-close" data-dismiss="modal">
-					<?php echo __('Close', 'kanban') ?>
+					<?php echo __( 'Close', 'kanban' ); ?>
 				</button>
 
 				<div class="panel-group" id="accordion-projects">

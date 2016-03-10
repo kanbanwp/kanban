@@ -58,4 +58,4 @@
 
 
 
-<?php include Kanban_Template::find_template( 'inc/footer' )
+<?php include Kanban_Template::find_template( 'inc/footer' ); ?>

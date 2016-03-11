@@ -155,10 +155,47 @@ class Kanban_Board extends Kanban_Db
 
 
 
-	// extend parent replace, so it's accessible from other classes
+	static function get_all( $sql = NULL )
+	{
+		$table_name = self::table_name();
+
+		$sql = "SELECT *
+				FROM `{$table_name}`
+				WHERE `{$table_name}`.`is_active` = 1
+		;";
+
+		$sql = apply_filters( 'kanban_board_get_all_sql', $sql );
+
+		$records = parent::get_all( $sql );
+
+		return apply_filters(
+			'kanban_board_get_all_return',
+			$records
+		);
+	}
+
+
+
+	// extend parent, so it's accessible from other classes
 	static function replace( $data )
 	{
 		return self::_replace( $data );
+	}
+
+
+
+	// extend parent, so it's accessible from other classes
+	static function delete( $where )
+	{
+		return self::_delete( $where );
+	}
+
+
+
+	// extend parent, so it's accessible from other classes
+	static function insert_id()
+	{
+		return self::_insert_id();
 	}
 
 
@@ -173,6 +210,7 @@ class Kanban_Board extends Kanban_Db
 					created_dt_gmt datetime NOT NULL,
 					modified_dt_gmt datetime NOT NULL,
 					user_id_author bigint(20) NOT NULL,
+					position bigint(20) NOT NULL,
 					is_active BOOLEAN NOT NULL DEFAULT TRUE,
 					UNIQUE KEY id (id),
 					KEY is_active (is_active)

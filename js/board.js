@@ -56,6 +56,7 @@ jQuery(function($)
 	);
 
 
+
 	$(document).mousedown(function(e)
 	{
 		// The latest element clicked

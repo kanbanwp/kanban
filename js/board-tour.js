@@ -13,7 +13,7 @@ var board_tour = {
 			placement: 'auto bottom'
 		},
 		{
-			el: '.col-tasks:eq(1) .task:first .task_title',
+			el: '.col-tasks:eq(1) .task:first .task-title',
 			content: "Click on the task title to give your task a name. You can always click on the task title to update it.",
 			placement: 'auto bottom'
 		},

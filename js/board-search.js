@@ -34,7 +34,7 @@ $.fn.board_search = function()
 				$list.each(function()
 				{
 					var $task = $(this);
-					var text = $('.wrapper-task-title .task_title', $task).val();
+					var text = $('.wrapper-task-title .task-title', $task).val();
 					var textLower = $.trim(text.toLowerCase() );
 
 					var task_id = $task.attr('data-id');

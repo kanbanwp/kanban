@@ -1,10 +1,10 @@
 === Kanban for WordPress ===
 
 Contributors: gelform, mkrdip
-Tags: kanban board, agile, scrum, project management, team management, productivity, Trello
+Tags: kanban board, agile, scrum, project management, team management, productivity, Trello, GTD, manage projects, management, planning, projects, task management, tasks, team, todo, tracking
 Requires at least: 4.0
 Tested up to: 4.4
-Stable Tag: 1.2.9
+Stable Tag: 1.2.10
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -24,23 +24,36 @@ Here's a 60-second intro to how to use the board, once you have it installed:
 
 = Features =
 
+* Easy installation
 * Customize the board to work for your team, including custom swim lanes
 * Create tasks and projects quickly, right from the board. Most editing is "edit in place" for quick updating.
 * Assign tasks to team members as you complete tasks
 * Set estimates on how long you think tasks will take
 * Track hours, and see the progress of tasks as they get done
 * Create custom views by filtering and searching for tasks
-* Manage the users who have access to the board, in case some team members don't need to see it
+* Manage the users who have access to the board
+* Data is stored separately from your WordPress data, for better privacy and security
 * Works on mobile!
 
-While using this plugin if you find any bug or any conflict, please submit an issue at [Github](https://github.com/gelform/kanban/) (If possible with a pull request).
+
+
+While using this plugin if you find any bugs, please submit an issue at [Github](https://github.com/gelform/kanban/) or use the "Contact us" form included in the plugin.
+
+
+
+= Add-ons available at [KanbanWP.com](https://KanbanWP.com) =
+* Advanced User Management
+* Task Comments
+* Task colors
+* Task Details and Attachments
+* Notifications
 
 
 
 == Installation ==
 
 1. Download the plugin
-2. Unzip into /wp-content/plugins
+2. Unzip into /wp-content/plugins, or go to Plugins > Add New > Upload Plugin
 3. Visit the Plugins page in the WordPress admin
 4. Click "activate" under "Kanban for WordPress" to activate the plugin
 5. Visit the "Kanban" menu item that appears in the WordPress Admin menu. You can manage settings for your kanban board here.

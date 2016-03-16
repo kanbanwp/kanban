@@ -150,7 +150,7 @@ $.fn.board_sidebar_header = function()
 						board.task_records[response.data.task.id] = response.data.task;
 						$task = add_task_to_status_col(response.data.task);
 
-						$('.task_title', $task).trigger('click').focus();
+						$('.task-title', $task).trigger('click').focus();
 					}
 					catch (err) {}
 
@@ -210,7 +210,7 @@ $.fn.board_sidebar_header = function()
 					// left
 					$sidebar_next = $sidebar.prev('.col-status');
 
-					if ( $sidebar_next.length == 0 )
+					if ( $sidebar_next.length === 0 )
 					{
 						$sidebar_next = $('.col-status:last');
 					}
@@ -220,7 +220,7 @@ $.fn.board_sidebar_header = function()
 					// right
 					var $sidebar_next = $sidebar.next('.col-status');
 
-					if ( $sidebar_next.length == 0 )
+					if ( $sidebar_next.length === 0 )
 					{
 						$sidebar_next = $('.col-status:first');
 					}
@@ -229,16 +229,8 @@ $.fn.board_sidebar_header = function()
 				var next_status_id = $sidebar_next.attr('data-id');
 				$sidebar_next.show();
 				$('#status-{0}-tasks'.sprintf(next_status_id)).show();
-				// $('textarea.resize').autoresize({
-				// 	onResize: function()
-				// 	{
-				// 		$(this).addClass('autoresize');
-				// 	}
-				// })
-				// .trigger('keydown');
 			}
 		);
-
 
 
 

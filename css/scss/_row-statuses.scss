@@ -82,6 +82,12 @@
 			}
 		}
 
+		.task-count {
+			color: #CCC;
+			font-size: .618em;
+			font-weight: normal;
+		}
+
 		@media screen and (max-width: $screen-sm-max) {
 			display :none;
 			padding: 0;

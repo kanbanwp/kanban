@@ -95,6 +95,8 @@ $.fn.board_task = function(task)
 					{
 						$task.remove();
 						$('.col-tasks').matchHeight();
+
+						update_task_count();
 					});
 				})
 				// .fail(function() {
@@ -215,12 +217,12 @@ $.fn.board_task = function(task)
 				task.status_id = status_id_new;
 				$task.trigger('save', {comment: comment, status_id_old: status_id_old});
 
-
-
 				// update color
 				$('.task-handle', $task).css({
 					background: board.status_records()[status_id_new].color_hex
 				});
+
+				update_task_count();
 			} // function
 		);
 

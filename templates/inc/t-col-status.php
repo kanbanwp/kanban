@@ -14,6 +14,7 @@
 
 	<h2 class="h3" style="border-color: {{=status.color_hex}};">
 		{{=status.title}}
+		<sup class="task-count"></sup>
 	</h2>
 
 {{current_user_can_write}}

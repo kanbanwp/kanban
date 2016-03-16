@@ -274,7 +274,27 @@ function add_task_to_status_col (task)
 
 	$('.col-tasks').matchHeight();
 
+	update_task_count();
+
 	return $task;
+}
+
+
+
+function update_task_count()
+{
+	$('.col-status').each(function()
+	{
+		var $col = $(this);
+		var status_id = $col.attr('data-id');
+		var count = $( '#status-{0}-tasks .task'.sprintf(status_id) ).length;
+
+		$('.task-count', $col)
+		.css({
+			'visibility': ( count === 0 ? 'hidden' : 'visible')
+		})
+		.text(count);
+	});
 }
 
 

@@ -1,19 +1,19 @@
 === Kanban for WordPress ===
 
 Contributors: gelform, mkrdip
-Tags: kanban board, agile, scrum, project management, team management, productivity, Trello, GTD, manage projects, management, planning, projects, task management, tasks, team, todo, tracking
+Tags: kanban, agile, scrum, project management, team management, task management, productivity, Trello, GTD, manage projects, management, planning, tracking, todo, contractor, freelance, clients
 Requires at least: 4.0
 Tested up to: 4.4
-Stable Tag: 1.2.10
+Stable Tag: 1.2.11
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-A complete kanban board for agile project management inside your WordPress site.
+A complete project management suite for WordPress. Use agile project management to get more done, right inside your WordPress site! Get up and running in seconds. Customize your Kanban board for your team, for clients, for lead tracking (CRM), and more!
 
 
 == Description ==
 
-Kanban for WordPress lets you run a complete kanban board on your WordPress site. If you want to get more done, if you want to see or show progress on your projects, if you want to use agile project management methods, try Kanban for WordPress.
+Kanban for WordPress lets you run a complete project management suite on your WordPress site. If you want to get more done, if you want to see or show progress on your projects, if you want to use agile project management methods, try Kanban for WordPress.
 
 For more information, please visit [KanbanWP.com](http://kanbanwp.com?utm_medium=documentation&utm_source=wordpress.org&utc_campaign=documentation)
 

@@ -147,7 +147,13 @@ $.fn.board_sidebar_header = function()
 					// just in case
 					try
 					{
+						if ( Object.size(board.task_records) === 0 )
+						{
+							board.task_records = {};
+						}
+
 						board.task_records[response.data.task.id] = response.data.task;
+
 						$task = add_task_to_status_col(response.data.task);
 
 						$('.task-title', $task).trigger('click').focus();

@@ -109,7 +109,7 @@ class Kanban_Task extends Kanban_Db
 
 
 
-		$post_data = self::get_row( 'id', $task_id );
+		$post_data = self::get_one( $task_id );
 
 		if ( ! $post_data ) wp_send_json_error();
 
@@ -240,7 +240,7 @@ class Kanban_Task extends Kanban_Db
 		$record->title = Kanban_Utils::str_for_frontend( $record->title );
 		$record->description = Kanban_Utils::str_for_frontend( $record->description );
 
-		return $record;
+		return apply_filters( 'kanban_task_get_one_return', $record );
 	}
 
 

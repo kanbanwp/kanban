@@ -2,8 +2,8 @@
 /*
 Plugin Name:	Kanban for WordPress
 Plugin URI:		http://kanbanwp.com/
-Description:	A complete kanban board for WordPress. Use agile project management to get more done, right inside your WordPress site!
-Version:		1.2.10
+Description:	A complete project management suite for WordPress.
+Version:		1.2.11
 Author:			Gelform Inc
 Author URI:		http://gelwp.com
 License:		GPL2

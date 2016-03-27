@@ -38,6 +38,8 @@ class Kanban_Board extends Kanban_Db
 		'position' => 'int'
 	);
 
+	static $boards = array();
+
 
 
 	// add actions and filters
@@ -158,21 +160,48 @@ class Kanban_Board extends Kanban_Db
 
 	static function get_all( $sql = NULL )
 	{
-		$table_name = self::table_name();
+		if ( empty(self::$boards) )
+		{
+			$table_name = self::table_name();
 
-		$sql = "SELECT *
-				FROM `{$table_name}`
-				WHERE `{$table_name}`.`is_active` = 1
-		;";
+			$sql = "SELECT *
+					FROM `{$table_name}`
+					WHERE `{$table_name}`.`is_active` = 1
+			;";
 
-		$sql = apply_filters( 'kanban_board_get_all_sql', $sql );
+			$sql = apply_filters( 'kanban_board_get_all_sql', $sql );
 
-		$records = parent::get_all( $sql );
+			$records = parent::get_all( $sql );
+
+			self::$boards = Kanban_Utils::build_array_with_id_keys($records);
+		}
 
 		return apply_filters(
 			'kanban_board_get_all_return',
-			$records
+			self::$boards
 		);
+	}
+
+
+
+	static function get_current ($board_id = NULL)
+	{
+		// if one isn't passed, but is set elsewhere
+		if ( is_null($board_id) && isset($_REQUEST['board_id']) )
+		{
+			$board_id = $_REQUEST['board_id'];
+		}
+
+		$boards = self::get_all();
+
+		// if the one we want exists
+		if ( !is_null($board_id) && isset($boards[$board_id]) )
+		{
+			return $boards[$board_id];
+		}
+
+		// otherwise, pass the first one
+		return reset($boards);
 	}
 
 

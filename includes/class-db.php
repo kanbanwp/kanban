@@ -250,13 +250,11 @@ abstract class Kanban_Db
 
 
 	/**
-	 * [check_for_updates description]
 	 * @link http://mac-blog.org.ua/wordpress-custom-database-table-example-full/
-	 * @return   [type] [description]
 	 */
 	static function check_for_updates()
 	{
-		if ( self::installed_ver() == Kanban::get_instance()->settings->plugin_data['Version'] ) return FALSE;
+		if ( version_compare(self::installed_ver(), Kanban::get_instance()->settings->plugin_data['Version']) === 0 ) return FALSE;
 
 		global $charset_collate, $wpdb;
 
@@ -326,13 +324,7 @@ abstract class Kanban_Db
 
 
 		// save db version to avoid updates
-		update_option(
-			sprintf(
-				'%s_db_version',
-				Kanban::get_instance()->settings->basename
-			),
-			Kanban::get_instance()->settings->plugin_data['Version']
-		);
+		update_option('kanban_db_version', Kanban::get_instance()->settings->plugin_data['Version'] );
 	}
 
 
@@ -1144,7 +1136,7 @@ abstract class Kanban_Db
 		}
 
 		// return the stored db version
-		return (float) self::$installed_ver;
+		return self::$installed_ver;
 	}
 
 

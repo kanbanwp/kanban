@@ -69,7 +69,7 @@ class Kanban_Estimate extends Kanban_Db
 
 
 
-		$current_board = Kanban_Board::get_current_board(
+		$current_board = Kanban_Board::get_current(
 			isset($_POST['board_id']) ? $_POST['board_id'] : NULL
 		);
 

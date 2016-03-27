@@ -22,7 +22,8 @@ class Kanban_Option extends Kanban_Db
 	// define db table columns and their validation type
 	protected static $table_columns = array(
 		'name'  => 'text',
-		'value' => 'text'
+		'value' => 'text',
+		'board_id' => 'int'
 	);
 
 	// defaults for all options, so at least something is returned
@@ -102,21 +103,22 @@ class Kanban_Option extends Kanban_Db
 		// make sure there's always at least one user
 		self::$defaults['allowed_users'] = serialize( array( get_current_user_id() ) );
 
-
 		return apply_filters( 'kanban_option_get_defaults_return', self::$defaults );
 	}
 
 
 
-	static function get_all_raw()
+	static function get_all_raw($board_id = NULL)
 	{
 		if ( empty( self::$options_raw ) )
 		{
+			$current_board = Kanban_Board::get_current($board_id);
 
 			$table_name = self::table_name();
 
 			$sql = "SELECT *
 					FROM `{$table_name}`
+					WHERE `board_id` = {$current_board->id}
 			;";
 
 			$sql = apply_filters( 'kanban_option_get_all_raw_sql', $sql );
@@ -265,42 +267,28 @@ class Kanban_Option extends Kanban_Db
 
 
 
-		$current_board = Kanban_Board::get_current_board(
+		$current_board = Kanban_Board::get_current(
 			isset($_POST['board_id']) ? $_POST['board_id'] : NULL
 		);
 
 
 
 		// get current settings
-		$settings = Kanban_Option::get_all_raw();
-		$settings = Kanban_Utils::build_array_with_id_keys( $settings );
+		$settings = Kanban_Option::get_all($current_board->id);
 
 
 
 		// save all single settings
 		foreach ( $_POST['settings'] as $key => $value )
 		{
-			if ( is_array( $value ) )
-			{
-				$value = serialize( $value );
-			}
+			if ( !isset($settings[$key]) ) continue;
 
-			$data = array(
-				'name'  => $key,
-				'value' => $value,
-				'board_id' => $current_board->id
-			);
-
-			// see if it's already set
-			$id = Kanban_Utils::find_key_of_object_by_property ( 'name', $key, $settings );
-
-			if ( $id )
-			{
-				$data['id'] = $id;
-			}
-
-			Kanban_Option::_replace( $data );
+			Kanban_Option::update($key, $value);
 		}
+
+
+
+		do_action( 'kanban_option_save_settings_after', $_POST );
 
 
 

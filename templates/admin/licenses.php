@@ -22,7 +22,6 @@
 
 	<form action="" method="post">
 
-
 		<?php echo __( 'Add your purchased add-on licenses below.', 'kanban' ); ?>
 		<table class="form-table">
 			<tbody>
@@ -36,7 +35,7 @@
 				'submit'
 		); ?>
 
-		<?php wp_nonce_field( 'kanban-options', Kanban_Utils::get_nonce() ); ?>
+		<?php wp_nonce_field( 'kanban-licenses', Kanban_Utils::get_nonce() ); ?>
 
 	</form>
 

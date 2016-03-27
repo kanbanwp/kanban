@@ -16,8 +16,9 @@ class Kanban_License
 
 	static function init()
 	{
-		add_action( 'wp', array( __CLASS__, 'save_licenses' ), 10 );
+		add_action( 'init', array( __CLASS__, 'save_licenses' ), 10 );
 	}
+
 
 
 	static function save_licenses()
@@ -32,10 +33,7 @@ class Kanban_License
 
 		// get current settings
 		$settings = Kanban_Option::get_all();
-echo '<pre>';
-print_r($settings);
-echo "</pre><br>\n";
-exit;
+
 
 
 		// save all single settings

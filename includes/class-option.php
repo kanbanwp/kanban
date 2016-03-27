@@ -32,7 +32,8 @@ class Kanban_Option extends Kanban_Db
 		'allowed_users' => '',
 		'show_all_cols' => 0,
 		'default_to_compact_view' => 0,
-		'hide_progress_bar' => 0
+		'hide_progress_bar' => 0,
+		'use_default_login_page' => 0
 	);
 
 	// store the options on first load, to prevent mulitple db calls

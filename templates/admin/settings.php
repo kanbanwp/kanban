@@ -101,6 +101,19 @@
 							</div>
 						</td>
 					</tr>
+					<tr>
+						<th width="33%" scope="row">
+							<?php echo __( 'Use default login screen', 'kanban' ); ?>
+						</th>
+						<td>
+							<div class="switch-field">
+								<input type="radio" id="use_default_login_page_1" name="settings[use_default_login_page]" value="1" <?php echo (bool) $settings['use_default_login_page'] ? 'checked' : ''; ?>>
+								<label for="use_default_login_page_1">Yes</label>
+								<input type="radio" id="use_default_login_page_0" name="settings[use_default_login_page]" value="0" <?php echo ! (bool) $settings['use_default_login_page'] ? 'checked' : ''; ?>>
+								<label for="use_default_login_page_0">No</label>
+							</div>
+						</td>
+					</tr>
 				</tbody>
 			</table>
 

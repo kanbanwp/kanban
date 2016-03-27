@@ -117,7 +117,20 @@ class Kanban_Template
 
 
 		// otherwise redirect to login
-		wp_redirect( sprintf( '%s/%s/login', site_url(), Kanban::$slug ) );
+		$use_default_login_page = Kanban_Option::get_option('use_default_login_page');
+
+		if ( (bool) $use_default_login_page )
+		{
+			wp_redirect( 
+				wp_login_url(sprintf( '%s/%s/board', site_url(), Kanban::$slug ))
+			);
+		}
+		else
+		{
+			// otherwise redirect to login
+			wp_redirect( sprintf( '%s/%s/login', site_url(), Kanban::$slug ) );
+		}
+
 		exit;
 	}
 

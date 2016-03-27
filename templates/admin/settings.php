@@ -3,19 +3,26 @@
 
 
 <div class="wrap">
+	<?php echo apply_filters( 'kanban_settings_h1_before', '' ); ?>
+
 	<h1>
 		<?php echo __( sprintf( '%s Settings', Kanban::get_instance()->settings->pretty_name ), 'kanban' ); ?>
 		<a href="<?php echo sprintf( '%s/%s/board', home_url(), Kanban::$slug ); ?>" class="page-title-action" target="_blank" id="btn-go-to-board" onclick="window.open('<?php echo sprintf( '%s/%s/board', home_url(), Kanban::$slug ); ?>', 'kanbanboard'); return false;">
 			<?php echo __( 'Go to your board', 'kanban' ); ?>
 		</a>
-
 	</h1>
+
+	<?php echo apply_filters( 'kanban_settings_h1_after', '' ); ?>
+
+
 
 <?php if ( isset( $_GET['message'] ) ) : ?>
 	<div class="updated">
 		<p><?php echo $_GET['message']; ?></p>
 	</div>
 <?php endif // message ?>
+
+
 
 	<h2 class="nav-tab-wrapper">
 		<a href="#tab-settings" class="nav-tab nav-tab-active"><?php echo __( 'General', 'kanban' ); ?></a>
@@ -238,25 +245,6 @@
 
 
 		<?php echo apply_filters( 'kanban_settings_tabs_content', '' ); ?>
-
-
-
-		<div class="tab" id="tab-licenses" style="display: none;">
-			<p>
-				<?php echo __( 'Add your purchased add-on licenses below.', 'kanban' ); ?>
-			</p>
-			<table class="form-table">
-				<tbody>
-					<?php echo apply_filters( 'kanban_settings_licenses', '' ); ?>
-				</tbody>
-			</table>
-
-			<?php submit_button(
-				__( 'Save your Settings', 'kanban' ),
-					'primary',
-					'submit'
-			); ?>
-		</div><!-- tab-licenses -->
 
 
 

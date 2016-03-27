@@ -7,7 +7,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 
 
 
-// Kanban_Estimate::init();
+Kanban_Estimate::init();
 
 
 
@@ -31,6 +31,7 @@ class Kanban_Estimate extends Kanban_Db
 
 	static function init()
 	{
+		add_action( 'init', array( __CLASS__, 'save_settings' ), 1 );
 	}
 
 
@@ -52,6 +53,82 @@ class Kanban_Estimate extends Kanban_Db
 			'kanban_estimate_get_all_return',
 			Kanban_Utils::build_array_with_id_keys ( $records, 'id' )
 		);
+	}
+
+
+
+	static function save_settings()
+	{
+		if ( ! isset( $_POST[Kanban_Utils::get_nonce()] ) || ! wp_verify_nonce( $_POST[Kanban_Utils::get_nonce()], 'kanban-options' ) || ! is_user_logged_in() ) return;
+
+		if ( !isset($_POST['estimates']) ) return;
+
+
+
+		do_action( 'kanban_estimate_save_settings_before', $_POST );
+
+
+
+		$current_board = Kanban_Board::get_current_board(
+			isset($_POST['board_id']) ? $_POST['board_id'] : NULL
+		);
+
+
+
+		$estimates = Kanban_Estimate::get_all();
+		$estimate_ids = array_keys( $estimates );
+
+
+
+		// any estimates to delete?
+		if ( isset( $_POST['estimates']['saved'] ) )
+		{
+			$deleted_estimates = array_diff( $estimate_ids, array_keys( $_POST['estimates']['saved'] ) );
+
+			if ( ! empty( $deleted_estimates ) )
+			{
+				foreach ( $deleted_estimates as $key => $id )
+				{
+					Kanban_Estimate::delete( array( 'id' => $id ) );
+				}
+			}
+		}
+
+
+
+		// add new estimates first
+		if ( isset( $_POST['estimates']['new'] ) )
+		{
+			foreach ( $_POST['estimates']['new'] as $estimate )
+			{
+				$estimate['board_id'] = $current_board->id;
+
+				// save it
+				$success = Kanban_Estimate::replace( $estimate );
+
+				if ( $success )
+				{
+					$estimate_id = Kanban_Estimate::insert_id();
+
+					// add it to all the estimates to save
+					$_POST['estimates']['saved'][$estimate_id] = $estimate;
+				}
+			}
+		}
+
+
+
+		// now save all estimates with positions
+		if ( isset( $_POST['estimates']['saved'] ) )
+		{
+			foreach ( $_POST['estimates']['saved'] as $estimate_id => $estimate )
+			{
+				$estimate['id'] = $estimate_id;
+				$estimate['board_id'] = $current_board->id;
+
+				Kanban_Estimate::replace( $estimate );
+			}
+		}
 	}
 
 
@@ -88,7 +165,7 @@ class Kanban_Estimate extends Kanban_Db
 					title varchar(64) NOT NULL,
 					hours decimal(6, 4) NOT NULL,
 					position bigint(20) NOT NULL,
-					board_id bigint(20) NOT NULL,
+					board_id bigint(20) NOT NULL DEFAULT 1,
 					UNIQUE KEY  (id),
 					KEY board_id (board_id)
 				)';

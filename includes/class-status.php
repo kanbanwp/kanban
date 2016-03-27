@@ -7,7 +7,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 
 
 
-// Kanban_Status::init();
+Kanban_Status::init();
 
 
 
@@ -31,6 +31,7 @@ class Kanban_Status extends Kanban_Db
 
 	static function init()
 	{
+		add_action( 'init', array( __CLASS__, 'save_settings' ), 1 );
 	}
 
 
@@ -61,6 +62,83 @@ class Kanban_Status extends Kanban_Db
 
 
 
+
+
+	static function save_settings()
+	{
+		if ( ! isset( $_POST[Kanban_Utils::get_nonce()] ) || ! wp_verify_nonce( $_POST[Kanban_Utils::get_nonce()], 'kanban-options' ) || ! is_user_logged_in() ) return;
+
+		if ( !isset($_POST['statuses']) ) return;
+
+
+
+		do_action( 'kanban_status_save_settings_before', $_POST );
+
+
+
+		$current_board = Kanban_Board::get_current_board(
+			isset($_POST['board_id']) ? $_POST['board_id'] : NULL
+		);
+
+
+
+		$statuses = Kanban_Status::get_all();
+		$status_ids = array_keys( $statuses );
+
+
+
+		// any statuses to delete?
+		if ( isset( $_POST['statuses']['saved'] ) )
+		{
+			$deleted_statuses = array_diff( $status_ids, array_keys( $_POST['statuses']['saved'] ) );
+
+			if ( ! empty( $deleted_statuses ) )
+			{
+				foreach ( $deleted_statuses as $key => $id )
+				{
+					Kanban_Status::delete( array( 'id' => $id ) );
+				}
+			}
+		}
+
+
+
+		// add new statuses first
+		if ( isset( $_POST['statuses']['new'] ) )
+		{
+			foreach ( $_POST['statuses']['new'] as $status )
+			{
+				$status['board_id'] = $current_board->id;
+				// save it
+				$success = Kanban_Status::replace( $status );
+
+				if ( $success )
+				{
+					$status_id = Kanban_Status::insert_id();
+
+					// add it to all the statuses to save
+					$_POST['statuses']['saved'][$status_id] = $status;
+				}
+			}
+		}
+
+
+
+		// now save all statuses with positions
+		if ( isset( $_POST['statuses']['saved'] ) )
+		{
+			foreach ( $_POST['statuses']['saved'] as $status_id => $status )
+			{
+				$status['id'] = $status_id;
+				$status['board_id'] = $current_board->id;
+
+				Kanban_Status::replace( $status );
+			}
+		}
+	}
+
+
+
 	// define the db schema
 	static function db_table()
 	{
@@ -69,7 +147,7 @@ class Kanban_Status extends Kanban_Db
 					title varchar(64) NOT NULL,
 					color_hex varchar(7) NOT NULL,
 					position bigint(20) NOT NULL,
-					board_id bigint(20) NOT NULL,
+					board_id bigint(20) NOT NULL DEFAULT 1,
 					UNIQUE KEY  (id),
 					KEY board_id (board_id)
 				)';

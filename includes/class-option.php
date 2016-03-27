@@ -42,7 +42,7 @@ class Kanban_Option extends Kanban_Db
 
 	static function init()
 	{
-		add_action( 'init', array( __CLASS__, 'save_settings' ) );
+		add_action( 'init', array( __CLASS__, 'save_settings' ), 10 );
 
 		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'enqueue_js' ) );
 
@@ -90,6 +90,7 @@ class Kanban_Option extends Kanban_Db
 					id bigint(20) NOT NULL AUTO_INCREMENT,
 					name varchar(64) NOT NULL,
 					value longtext NOT NULL,
+					board_id bigint(20) NOT NULL DEFAULT 1,
 					UNIQUE KEY  (id)
 				)';
 	} // db_table
@@ -264,111 +265,9 @@ class Kanban_Option extends Kanban_Db
 
 
 
-		$statuses = Kanban_Status::get_all();
-		$status_ids = array_keys( $statuses );
-
-
-
-		// any statuses to delete?
-		if ( isset( $_POST['statuses']['saved'] ) )
-		{
-			$deleted_statuses = array_diff( $status_ids, array_keys( $_POST['statuses']['saved'] ) );
-
-			if ( ! empty( $deleted_statuses ) )
-			{
-				foreach ( $deleted_statuses as $key => $id )
-				{
-					Kanban_Status::delete( array( 'id' => $id ) );
-				}
-			}
-		}
-
-
-
-		// add new statuses first
-		if ( isset( $_POST['statuses']['new'] ) )
-		{
-			foreach ( $_POST['statuses']['new'] as $status )
-			{
-				// save it
-				$success = Kanban_Status::replace( $status );
-
-				if ( $success )
-				{
-					$status_id = Kanban_Status::insert_id();
-
-					// add it to all the statuses to save
-					$_POST['statuses']['saved'][$status_id] = $status;
-				}
-			}
-		}
-
-
-
-		// now save all statuses with positions
-		if ( isset( $_POST['statuses']['saved'] ) )
-		{
-			foreach ( $_POST['statuses']['saved'] as $status_id => $status )
-			{
-				$status['id'] = $status_id;
-
-				Kanban_Status::replace( $status );
-			}
-		}
-
-
-
-		$estimates = Kanban_Estimate::get_all();
-		$estimate_ids = array_keys( $estimates );
-
-
-
-		// any estimates to delete?
-		if ( isset( $_POST['estimates']['saved'] ) )
-		{
-			$deleted_estimates = array_diff( $estimate_ids, array_keys( $_POST['estimates']['saved'] ) );
-
-			if ( ! empty( $deleted_estimates ) )
-			{
-				foreach ( $deleted_estimates as $key => $id )
-				{
-					Kanban_Estimate::delete( array( 'id' => $id ) );
-				}
-			}
-		}
-
-
-
-		// add new estimates first
-		if ( isset( $_POST['estimates']['new'] ) )
-		{
-			foreach ( $_POST['estimates']['new'] as $estimate )
-			{
-				// save it
-				$success = Kanban_Estimate::replace( $estimate );
-
-				if ( $success )
-				{
-					$estimate_id = Kanban_Estimate::insert_id();
-
-					// add it to all the estimates to save
-					$_POST['estimates']['saved'][$estimate_id] = $estimate;
-				}
-			}
-		}
-
-
-
-		// now save all estimates with positions
-		if ( isset( $_POST['estimates']['saved'] ) )
-		{
-			foreach ( $_POST['estimates']['saved'] as $estimate_id => $estimate )
-			{
-				$estimate['id'] = $estimate_id;
-
-				Kanban_Estimate::replace( $estimate );
-			}
-		}
+		$current_board = Kanban_Board::get_current_board(
+			isset($_POST['board_id']) ? $_POST['board_id'] : NULL
+		);
 
 
 
@@ -388,7 +287,8 @@ class Kanban_Option extends Kanban_Db
 
 			$data = array(
 				'name'  => $key,
-				'value' => $value
+				'value' => $value,
+				'board_id' => $current_board->id
 			);
 
 			// see if it's already set

@@ -317,12 +317,18 @@ class Kanban_Admin
 
 
 
-	/**
-	 * render the welcome page
-	 */
 	static function contact_page()
 	{
 		$template = Kanban_Template::find_template( 'admin/contact' );
+
+		include_once $template;
+	}
+
+
+
+	static function licenses_page()
+	{
+		$template = Kanban_Template::find_template( 'admin/licenses' );
 
 		include_once $template;
 	}

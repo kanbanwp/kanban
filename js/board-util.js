@@ -255,6 +255,30 @@ function add_task_to_status_col (task)
 		task.user_id_assigned = 0;
 	}
 
+	if ( typeof task.status_id === 'undefined' )
+	{
+		task.status_id = 0;
+	}
+
+	if ( task.status_id == 0 )
+	{
+		if ( board.settings().show_all_cols == 0 )
+		{
+			var $col = $('#row-tasks .col-tasks:eq(1)');
+		}
+		else
+		{
+			var $col = $('#row-tasks .col-tasks:eq(0)');
+		}
+
+		var status_id = $col.attr('data-status-id');
+
+		if ( typeof status_id !== 'undefined' && status_id != '' )
+		{
+			task.status_id = status_id;
+		}
+	}
+
 	if ( typeof board.status_records()[task.status_id] !== 'undefined' )
 	{
 		task.status_color = board.status_records()[task.status_id].color_hex;

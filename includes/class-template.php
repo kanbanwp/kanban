@@ -23,25 +23,26 @@ class Kanban_Template
 		'board' => array(
 			'style'  => array(
 				'bootstrap' => '%sbootstrap/css/bootstrap.min.css', // "//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js",
-				'board'     => '%scss/board.css'
+				'board' => '%scss/board.css'
 			),
 			'script' => array(
-				'jquery'               => '%sjs/jquery-1.11.3.min.js', // "https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js",
-				'jquery-ui'            => '%sjs/jquery-ui.min.js', // "//code.jquery.com/ui/1.11.3/jquery-ui.min.js",
-				'bootstrap'            => '%sbootstrap/js/bootstrap.min.js', // "//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js,
-				'bootstrap-growl'      => '%sjs/jquery.bootstrap-growl.min.js', // "//cdnjs.cloudflare.com/ajax/libs/bootstrap-growl/1.0.0/jquery.bootstrap-growl.min.js",
+				'jquery' => '%sjs/jquery-1.11.3.min.js', // "https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js",
+				'jquery-ui' => '%sjs/jquery-ui.min.js', // "//code.jquery.com/ui/1.11.3/jquery-ui.min.js",
+				'bootstrap' => '%sbootstrap/js/bootstrap.min.js', // "//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js,
+				'bootstrap-growl' => '%sjs/jquery.bootstrap-growl.min.js', // "//cdnjs.cloudflare.com/ajax/libs/bootstrap-growl/1.0.0/jquery.bootstrap-growl.min.js",
 				// 'autoresize' => "%sjs/jquery.textarea.autoresize.min.js",
-				'matchHeight'          => '%sjs/jquery.matchHeight.min.js',
-				't'                    => '%sjs/t.min.js',
-				'board-util'           => '%sjs/board-util.min.js',
+				'matchHeight' => '%sjs/jquery.matchHeight.min.js',
+				'cookie' => '%sjs/js.cookie.min.js',
+				't' => '%sjs/t.min.js',
+				'board-util' => '%sjs/board-util.min.js',
 				'board-modal-projects' => '%sjs/board-modal-projects.min.js',
 				'board-sidebar-header' => '%sjs/board-sidebar-header.min.js',
 				// 'board-tour' => "%sjs/board-tour.min.js",
-				'board-search'         => '%sjs/board-search.min.js',
-				'board-filter'         => '%sjs/board-filter.min.js',
-				'board-view'           => '%sjs/board-view.min.js',
-				'board-task'           => '%sjs/board-task.min.js',
-				'board'                => '%sjs/board.min.js'
+				'board-search' => '%sjs/board-search.min.js',
+				'board-filter' => '%sjs/board-filter.min.js',
+				'board-view' => '%sjs/board-view.min.js',
+				'board-task' => '%sjs/board-task.min.js',
+				'board' => '%sjs/board.min.js'
 			)
 		),
 		'login' => array(
@@ -188,6 +189,11 @@ class Kanban_Template
 					{
 						foreach ( $data['script'] as $handle => $path )
 						{
+							if ( isset($_GET['debug']) && $_GET['debug'] == 'script' )
+							{
+								$path = str_replace('.min', '', $path);
+							}
+
 							if ( ! isset( self::get_instance()->script ) || ! is_array( self::get_instance()->script ) )
 							{
 								self::get_instance()->script = array();

@@ -953,6 +953,43 @@ abstract class Kanban_Db
 	{
 		global $wpdb;
 
+
+
+		$boards_table = Kanban_Board::table_name();
+
+		$sql = "SELECT count(`id`)
+				FROM `{$boards_table}`
+		;";
+
+		$boards_count = $wpdb->get_var( $sql );
+
+
+
+		if ( $boards_count == 0 )
+		{
+			$data = array(
+				'title'           => 'Your first kanban board',
+				'created_dt_gmt'  => Kanban_Utils::mysql_now_gmt(),
+				'modified_dt_gmt' => Kanban_Utils::mysql_now_gmt(),
+				'user_id_author'  => get_current_user_id(),
+				'is_active'       => 1
+			);
+
+			Kanban_Board::replace( $data );
+		}
+
+
+
+		$sql = "SELECT `id`
+				FROM `{$boards_table}`
+				ORDER BY id
+				LIMIT 1
+		;";
+
+		$board_id = $wpdb->get_var( $sql );
+
+
+
 		$status_table = Kanban_Status::table_name();
 
 		$sql = "SELECT count(`id`)
@@ -977,11 +1014,11 @@ abstract class Kanban_Db
 			$i = 0;
 			foreach ( $statuses as $status => $color )
 			{
-
 				$data = array(
 					'title'     => $status,
 					'color_hex' => $color,
-					'position'  => $i
+					'position'  => $i,
+					'board_id'  => $board_id
 				);
 
 				Kanban_Status::replace( $data );
@@ -1019,7 +1056,8 @@ abstract class Kanban_Db
 				$data = array(
 					'title'    => $title,
 					'hours'    => $hours,
-					'position' => $i
+					'position' => $i,
+					'board_id'  => $board_id,
 				);
 
 				Kanban_Estimate::replace( $data );
@@ -1030,32 +1068,7 @@ abstract class Kanban_Db
 
 
 
-		$boards_table = Kanban_Board::table_name();
-
-		$sql = "SELECT count(`id`)
-				FROM `{$boards_table}`
-		;";
-
-		$boards_count = $wpdb->get_var( $sql );
-
-
-
-		if ( $boards_count == 0 )
-		{
-			$data = array(
-				'title'           => 'Your first kanban board',
-				'created_dt_gmt'  => Kanban_Utils::mysql_now_gmt(),
-				'modified_dt_gmt' => Kanban_Utils::mysql_now_gmt(),
-				'user_id_author'  => get_current_user_id(),
-				'is_active'       => 1
-			);
-
-			Kanban_Board::replace( $data );
-		}
-
-
-
-		$tasks_table = Kanban_Board::table_name();
+		$tasks_table = Kanban_Task::table_name();
 
 		$sql = "SELECT count(`id`)
 				FROM `{$tasks_table}`
@@ -1067,13 +1080,6 @@ abstract class Kanban_Db
 
 		if ( $tasks_count == 0 )
 		{
-			$sql = "SELECT `id`
-					FROM `{$boards_table}`
-					LIMIT 1
-			;";
-
-			$board_id = $wpdb->get_var( $sql );
-
 			$data = array(
 				'title'           => 'Your first task',
 				'board_id'        => $board_id,
@@ -1083,7 +1089,7 @@ abstract class Kanban_Db
 				'is_active'       => 1
 			);
 
-			Kanban_Board::replace( $data );
+			Kanban_Task::replace( $data );
 		}
 
 

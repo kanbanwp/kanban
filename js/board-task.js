@@ -93,6 +93,8 @@ $.fn.board_task = function(task)
 
 					$task.slideUp('fast', function()
 					{
+						$(document).trigger('/task/deleted/', task);
+
 						$task.remove();
 						$('.col-tasks').matchHeight();
 
@@ -353,37 +355,36 @@ $.fn.board_task = function(task)
 
 
 
-	function save_contenteditable ($div)
+	function save_title ($div)
 	{
 		// prevent saving twice, if they blur instead of timeout
 		clearTimeout($div.data('save_timer'));
 
 		encode_urls_emails ($div);
 
+		// store prev title
+		var prev_title = task.title + '';
 
+		// get and set new title
+		var new_title = $div.html();
+		task.title = new_title;
 
-		var is_new_task = false;
-		if ( task.title === '' )
-		{
-			is_new_task = true;
-		}
-
-
-
-		var val = $div.html();
-		task.title = val;
-
-		var comment = '{0} updated the task {1} to {2}'.sprintf (
+		var comment = '{0} updated the task title to "{1}"'.sprintf (
 			board.current_user().short_name,
 			task.title,
-			val
+			prev_title
 		);
 
-		if ( is_new_task )
+		if ( prev_title !== '' )
 		{
-			comment = '{0} added the task'.sprintf (
-					board.current_user().short_name
-				);
+			comment += ' (previously "{0}" )'.sprintf (
+				prev_title
+			);
+		}
+
+		if ( task.title === '' || new_title === prev_title )
+		{
+			comment = null;
 		}
 
 		$task.trigger('save', {comment: comment});
@@ -467,7 +468,7 @@ $.fn.board_task = function(task)
 			// set new timer
 			var save_timer = setTimeout(function()
 			{
-				save_contenteditable ($div);	
+				save_title ($div);
 			}, 3000);
 			
 			$div.data('save_timer', save_timer);
@@ -485,7 +486,7 @@ $.fn.board_task = function(task)
 			}
 
 			var $div = $(this);
-			save_contenteditable ($div);
+			save_title ($div);
 			window.getSelection().removeAllRanges();
 		}
 	); // blur
@@ -519,7 +520,7 @@ $.fn.board_task = function(task)
 				{
 					comment = '{0} assigned the task to {1}'.sprintf (
 						board.current_user().short_name,
-						$('.task-assigned-to-short_name', $task).text()
+						board.allowed_users()[user_id].short_name
 					);
 				}
 

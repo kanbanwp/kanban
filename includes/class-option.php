@@ -282,7 +282,8 @@ class Kanban_Option extends Kanban_Db
 		// save all single settings
 		foreach ( $_POST['settings'] as $key => $value )
 		{
-			if ( !isset($settings[$key]) ) continue;
+			// save licenses, just in case
+			if ( !isset($settings[$key]) && substr($key, 0, 7) != 'license' ) continue;
 
 			Kanban_Option::update($key, $value);
 		}

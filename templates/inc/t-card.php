@@ -2,24 +2,27 @@
 
 
 	<div class="panel-body">
-		<div class="pull-right text-muted task-id">
-			<?php echo apply_filters( 'kanban_card_id_before', '' ); ?>
+		<div class="task-id">
+			<?php echo apply_filters( 'kanban_task_id_before', '' ); ?>
 
-			<div class="badge" data-toggle="dropdown">
-				{{=task.id}}
-			</div>
+			<div class="task-id-menu">
+				<div class="badge" data-toggle="dropdown">
+					{{=task.id}}
+				</div>
 {{current_user_can_write}}
-			<ul class="dropdown-menu">
-				<li>
-					<a href="#" class="delete-task text-danger">
-						<span class="glyphicon glyphicon-remove text-danger"></span>
-						<?php echo __( 'Delete this task', 'kanban' ); ?>
-					</a>
-				</li>
-				<?php echo apply_filters( 'kanban_card_id_dropdown', '' ); ?>
-			</ul>
+				<ul class="dropdown-menu">
+					<li>
+						<a href="#" class="delete-task text-danger">
+							<?php echo __( 'Delete this task', 'kanban' ); ?>
+						</a>
+					</li>
+					<?php echo apply_filters( 'kanban_card_id_dropdown', '' ); ?>
+				</ul>
 {{/current_user_can_write}}
-		</div>
+			</div>
+
+			<?php echo apply_filters( 'kanban_task_id_after', '' ); ?>
+		</div><!-- task-id -->
 
 		<div class="project">
 			<input type="text" class="editable-input project_title" data-id="" value="" placeholder="<?php echo __( 'Task project', 'kanban' ); ?>" readonly>

@@ -225,7 +225,9 @@ jQuery(function($)
 
 
 
-	if ( board.settings().default_to_compact_view == 1 )
+	var view = Cookies.get('kanban-board-view');
+
+	if ( board.settings().default_to_compact_view == 1 || view == 'compact' )
 	{
 		$('#btn-group-view-compact .btn:has([name="view-compact"])').trigger('click');
 	}

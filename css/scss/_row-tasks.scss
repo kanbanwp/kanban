@@ -80,13 +80,38 @@
 			position: absolute;
 			right: $margin/3;
 			top: $margin/3;
+			z-index: 1;
 
-			.badge {
+			.task-id-menu {
+				position: relative;
+			}
+
+			.badge,
+			> .glyphicon {
 				cursor: pointer;
+				display: block;
+				font-weight: normal;
 				opacity: .8;
+				text-align: center;
 
 				&:hover {
 					opacity: 1;
+				}
+			}
+
+			.badge {
+				background: #777;
+			}
+
+			.glyphicon {
+				border-radius: $margin/3; 
+				color: #777;
+				font-size: 1.618em;
+				// margin-top: $margin/3;
+				padding: $margin/3 0;
+				&:hover {
+					background: #777;
+					color: white;
 				}
 			}
 		}

@@ -15,6 +15,25 @@ $.fn.board_task = function(task)
 		var estimate_records_arr = records_by_position(board.estimate_records());
 
 
+		$task.on(
+			'mouseenter',
+			'.task-id',
+			function ()
+			{
+				$('.task').not($task).removeClass('active');
+				$task.addClass('active');
+			}
+		);
+
+		$task.on(
+			'mouseleave',
+			'.task-id',
+			function ()
+			{
+				$task.removeClass('active');
+			}
+		);
+
 
 		// save the task
 		$task.on(

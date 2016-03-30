@@ -19,10 +19,12 @@ $.fn.board_view = function(task)
 				if ( $radio.val() == 1)
 				{
 					$('body').addClass('view-compact');
+					Cookies.set('kanban-board-view', 'compact', { expires: 30 });
 				}
 				else
 				{
 					$('body').removeClass('view-compact');
+					Cookies.remove('kanban-board-view');
 				}
 			}
 		);

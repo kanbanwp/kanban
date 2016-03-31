@@ -28,14 +28,13 @@ body.view-compact {
 		display: none;
 	}
 	.task-id {
-		border: 1px solid transparent;
 		border-radius: $margin*.66;
 		background: white;
 		height: 1.618em;
 		overflow: hidden;
 
 		&:hover {
-			border-color: #CCC;
+			border-color: #DDD !important;
 			height: auto;
 			overflow: visible;
 			z-index: 1;

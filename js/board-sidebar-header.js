@@ -109,7 +109,9 @@ $.fn.board_sidebar_header = function()
 
 				var task_data = {
 					task: {'status_id': status_id},
-					comment: 'Task added by {0}'.sprintf(board.current_user().short_name)
+					comment: '{0} added the task'.sprintf(
+						board.current_user().short_name
+					)
 				};
 
 				// if default estimate is set

@@ -1,15 +1,15 @@
 <?php
 /*
-Plugin Name:	Kanban for WordPress
-Plugin URI:		http://kanbanwp.com/
-Description:	A complete project management suite for WordPress.
-Version:		1.2.13
-Release Date: 	March 30, 2016
-Author:			Gelform Inc
-Author URI:		http://gelwp.com
-License:		GPL2
-Text Domain:	kanban
-Domain Path: 	/languages/
+Plugin Name:		Kanban for WordPress
+Plugin URI:			http://kanbanwp.com/
+Description:		A complete project management suite for WordPress.
+Version:			1.2.14
+Release Date: 		March 31, 2016
+Author:				Gelform Inc
+Author URI:			http://gelwp.com
+License:			GPL2
+Text Domain:		kanban
+Domain Path: 		/languages/
 
 
 

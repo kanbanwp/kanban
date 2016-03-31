@@ -56,7 +56,10 @@ $.fn.board_task = function(task)
 
 				if ( typeof options.comment !== 'undefined' )
 				{
-					task_data.comment = options.comment;
+					if ( options.comment !== null && options.comment !== '' )
+					{
+						task_data.comment = options.comment;
+					}
 				}
 
 				if ( typeof options.status_id_old !== 'undefined' )
@@ -97,7 +100,7 @@ $.fn.board_task = function(task)
 				var task_data = {task: task};
 				task_data.action = 'delete_task';
 				task_data.kanban_nonce = $('#kanban_nonce').val();
-				task_data.comment = 'task deleted by {0}'.sprintf(
+				task_data.comment = '{0} deleted the task'.sprintf(
 					board.current_user().short_name
 				);
 
@@ -187,16 +190,33 @@ $.fn.board_task = function(task)
 						{
 							try
 							{
+								var comment = '{0} added the task to the project "{1}"'.sprintf(
+									board.current_user().short_name,
+									response.data.project.title
+								);
+
+								// get old project
+								if ( typeof board.project_records[task.project_id] !== 'undefined' )
+								{
+									var old_project = board.project_records[task.project_id];
+
+									comment += ' (previously "{0}")'.sprintf(
+										old_project.title
+									);
+								}
+							}
+							catch (err)
+							{
+								var comment = null;
+							}
+
+							try
+							{
 								// add project to available projects
 								board.project_records[response.data.project.id] = response.data.project;
 
 								// assign new project id to task
 								task.project_id = response.data.project.id;
-
-								var comment = '{0} added the task to the project "{1}"'.sprintf (
-									board.current_user().short_name,
-									response.data.project.title
-								);
 
 								// save task
 								$task
@@ -233,6 +253,15 @@ $.fn.board_task = function(task)
 									board.current_user().short_name,
 									board.status_records()[status_id_new].title
 								);
+
+				if ( typeof board.status_records()[status_id_old] !== 'undefined' )
+				{
+					var old_status = board.status_records[status_id_old];
+
+					comment += ' (previously "{0}")'.sprintf(
+						old_status.title
+					);
+				}
 
 				// update status and save
 				task.status_id = status_id_new;
@@ -384,27 +413,26 @@ $.fn.board_task = function(task)
 		// store prev title
 		var prev_title = task.title + '';
 
-		// get and set new title
 		var new_title = $div.html();
-		task.title = new_title;
 
-		var comment = '{0} updated the task title to "{1}"'.sprintf (
+		var comment = '{0} updated the task title to "{1}"'.sprintf(
 			board.current_user().short_name,
-			task.title,
-			prev_title
+			new_title
 		);
 
 		if ( prev_title !== '' )
 		{
-			comment += ' (previously "{0}" )'.sprintf (
+			comment += ' (previously "{0}")'.sprintf(
 				prev_title
 			);
 		}
 
-		if ( task.title === '' || new_title === prev_title )
+		if ( new_title === '' || new_title === prev_title )
 		{
 			comment = null;
 		}
+
+		task.title = new_title;
 
 		$task.trigger('save', {comment: comment});
 	}
@@ -534,12 +562,17 @@ $.fn.board_task = function(task)
 				var $btn = $(this);
 				var user_id = $btn.val();
 
-				var comment = '';
-				if ( $('.task-assigned-to-short_name', $task).not('.empty') )
+				var comment = '{0} assigned the task to {1}'.sprintf(
+					board.current_user().short_name,
+					board.allowed_users()[user_id].short_name
+				);
+
+				if ( typeof board.allowed_users()[task.user_id_assigned] !== 'undefined' )
 				{
-					comment = '{0} assigned the task to {1}'.sprintf (
-						board.current_user().short_name,
-						board.allowed_users()[user_id].short_name
+					var old_user = board.allowed_users()[task.user_id_assigned];
+
+					comment += ' (previously {0})'.sprintf(
+						old_user.short_name
 					);
 				}
 
@@ -561,12 +594,21 @@ $.fn.board_task = function(task)
 				var $btn = $(this);
 				var estimate_id = $btn.val();
 
-				task.estimate_id = estimate_id;
-
-				var comment = '{0} set the task estimate to {1}'.sprintf (
+				var comment = '{0} set the task estimate to "{1}"'.sprintf(
 					board.current_user().short_name,
 					board.estimate_records()[estimate_id].title
 				);
+
+				if ( typeof board.estimate_records()[task.estimate_id] !== 'undefined' )
+				{
+					var old_estimate = board.estimate_records()[task.estimate_id];
+
+					comment += ' (previously "{0}")'.sprintf(
+						old_estimate.title
+					);
+				}
+
+				task.estimate_id = estimate_id;
 
 				$task.trigger('save', {comment: comment});
 				$task.trigger('populate_estimate');
@@ -775,39 +817,42 @@ $.fn.board_task = function(task)
 			'.project .list-group-item',
 			function()
 			{
+				// UI
 				$task.trigger('projects_dropdown_hide');
 
+				// get new project
 				var project_id = $(this).attr('data-id');
 
-				task.project_id = project_id;
-				// $task.attr('data-project-id', project_id);
-				// $('.project_title', $task).attr('data-id', project_id);
-
-				$task
-				.trigger('save')
-				.trigger('populate_project');
-
-
-
-				var project = board.project_records[project_id];
-
-				if ( typeof project === 'undefined' )
+				if ( typeof board.project_records[project_id] === 'undefined' )
 				{
 					return false;
 				}
 
+				var project = board.project_records[project_id];
 
-
-				// add comment for log
-				$task.trigger(
-					'add_comment',
-					[
-						'{0} added the task to the project "{1}"'.sprintf (
-							board.current_user().short_name,
-							project.post_title
-						)
-					]
+				// build comment
+				var comment = '{0} added the task to the project "{1}"'.sprintf(
+					board.current_user().short_name,
+					project.title
 				);
+
+				// get old project
+				if ( typeof board.project_records[task.project_id] !== 'undefined' )
+				{
+					var old_project = board.project_records[task.project_id];
+
+					comment += ' (previously "{0}")'.sprintf(
+						old_project.title
+					);
+				}
+
+				// now populate new project
+				task.project_id = project_id;
+
+				// save it
+				$task
+				.trigger('save', {'comment': comment})
+				.trigger('populate_project');
 			}
 		);
 
@@ -860,49 +905,6 @@ $.fn.board_task = function(task)
 			.removeClass('progress-bar-success progress-bar-warning progress-bar-danger')
 			.addClass('progress-bar-' + progress_type);
 		};
-
-
-
-		// prevent enter in task title
-		// $('.task-title', $task)
-		// .on(
-		// 	'keydown',
-		// 	function(e)
-		// 	{
-		// 		// enter
-		// 		if (e.keyCode == 13 && !e.shiftKey)
-		// 		{
-		// 			return false;
-		// 		}
-		// 	}
-		// ) // keyup
-		// .on(
-		// 	'blur',
-		// 	function()
-		// 	{
-		// 		var is_new_task = false;
-		// 		if ( task.title === '' )
-		// 		{
-		// 			is_new_task = true;
-		// 		}
-
-		// 		var $input = $(this);
-		// 		task.title = $input.val();
-
-		// 		var comment = '{0} updated the task title'.sprintf (
-		// 			board.current_user().short_name
-		// 		);
-
-		// 		if ( is_new_task )
-		// 		{
-		// 			comment = '{0} added the task'.sprintf (
-		// 					board.current_user().short_name
-		// 				);
-		// 		}
-
-		// 		$task.trigger('save', {comment: comment});
-		// 	}
-		// ); // blur
 
 
 

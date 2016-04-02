@@ -114,37 +114,37 @@ function sanitizeString(string)
 }
 
 
-
-function encode_urls_emails ($div)
+function encode_emails (str)
 {
 	var rex = /(<a href(?:(?!<\/a\s*>).)*)?([\w.-]+@[\w.-]+\.[\w.-]+)/gi;
 
-	$div.html( 
-		$div
-		.html()
-		.replace(
-			rex, 
-			function ( $0, $1 )
-			{
-				return $1 ? $0 : '<a href="mailto:' + $0 + '"  contenteditable="false">' + $0 + '</a>';
-			}
-		)
+	return str.replace(
+		rex, 
+		function ( $0, $1 )
+		{
+			return $1 ? $0 : '<a href="mailto:' + $0 + '"  contenteditable="false">' + $0 + '</a>';
+		}
 	);
+}
 
-	var rex = /(<a href(?:(?!<\/a\s*>).)*)?(http\S+)/gi;
+function encode_urls (str)
+{
+	var rex = /(<a href(?:(?!<\/a\s*>).)*)?(http[^\s\<]+)/gi;
 
-	$div.html( 
-		$div
-		.html()
-		.replace(
-			rex, 
-			function ( $0, $1 )
-			{
-				$0 = $0.replace('&nbsp;', '');
-				return $1 ? $0 : '<a href="' + $.trim($0) + '"  contenteditable="false" target="_blank">' + $.trim($0) + '</a>';
-			}
-		)
+	return str.replace(
+		rex, 
+		function ( $0, $1 )
+		{
+			$0 = $0.replace('&nbsp;', '');
+			return $1 ? $0 : '<a href="' + $.trim($0) + '"  contenteditable="false" target="_blank">' + $.trim($0) + '</a>';
+		}
 	);
+}
+
+function encode_urls_emails ($div)
+{
+	$div.html( encode_emails($div.html()) );
+	$div.html( encode_urls($div.html()) );
 }
 
 

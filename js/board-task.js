@@ -256,7 +256,7 @@ $.fn.board_task = function(task)
 
 				if ( typeof board.status_records()[status_id_old] !== 'undefined' )
 				{
-					var old_status = board.status_records[status_id_old];
+					var old_status = board.status_records()[status_id_old];
 
 					comment += ' (previously "{0}")'.sprintf(
 						old_status.title
@@ -402,154 +402,140 @@ $.fn.board_task = function(task)
 
 
 
-
-	function save_title ($div)
-	{
-		// prevent saving twice, if they blur instead of timeout
-		clearTimeout($div.data('save_timer'));
-
-		encode_urls_emails ($div);
-
-		// store prev title
-		var prev_title = task.title + '';
-
-		var new_title = $div.html();
-
-		var comment = '{0} updated the task title to "{1}"'.sprintf(
-			board.current_user().short_name,
-			new_title
-		);
-
-		if ( prev_title !== '' )
+		function save_title ($div)
 		{
-			comment += ' (previously "{0}")'.sprintf(
-				prev_title
-			);
-		}
-
-		if ( new_title === '' || new_title === prev_title )
-		{
-			comment = null;
-		}
-
-		task.title = new_title;
-
-		$task.trigger('save', {comment: comment});
-	}
-
-
-
-	$('.task-title', $task)
-	.on(
-		'focus',
-		function(e)
-		{
-			if ( !current_user_has_cap('write') )
-			{
-				return false;
-			}
-
-			var $div = $(this);
-
-			if ( $(e.target).is('a') )
-			{
-				return false;
-			}
-
-			$div.data('orig', $div.html());			
-
-			$div.html( sanitizeString($div.html()) );
-		}
-	);
-
-	$('.task-title', $task)
-	.on(
-		'keydown',
-		function(e)
-		{
-			if ( !current_user_has_cap('write') )
-			{
-				return false;
-			}
-
-			var $div = $(this);
-
-			// escape
-			if(e.keyCode === 27)
-			{
-				// get prev value
-				var orig = $div.data('orig');
-
-				// restore prev value
-				$div.html(orig);
-
-				// trigger save
-				$div.blur();
-
-				return;
-			}
-
-			// enter
-			if (e.keyCode === 13 && !e.shiftKey)
-			{
-				$div.blur();
-			}
-		}
-	);
-
-	$('.task-title', $task)
-	.on(
-		'keyup',
-		function()
-		{
-			if ( !current_user_has_cap('write') )
-			{
-				return false;
-			}
-
-			var $div = $(this);
-
-			// delete prev timer
+			// prevent saving twice, if they blur instead of timeout
 			clearTimeout($div.data('save_timer'));
 
-			// set new timer
-			var save_timer = setTimeout(function()
-			{
-				save_title ($div);
-			}, 3000);
-			
-			$div.data('save_timer', save_timer);
-		}
-	);
+			encode_urls_emails ($div);
 
-	$('.task-title', $task)
-	.on(
-		'blur',
-		function()
-		{
-			if ( !current_user_has_cap('write') )
+			// store prev title
+			var prev_title = task.title + '';
+
+			var new_title = $div.html();
+
+			var comment = '{0} updated the task title to "{1}"'.sprintf(
+				board.current_user().short_name,
+				new_title
+			);
+
+			if ( prev_title !== '' )
 			{
-				return false;
+				comment += ' (previously "{0}")'.sprintf(
+					prev_title
+				);
 			}
 
-			var $div = $(this);
-			save_title ($div);
-			window.getSelection().removeAllRanges();
+			if ( new_title === '' || new_title === prev_title )
+			{
+				comment = null;
+			}
+
+			task.title = new_title;
+
+			$task.trigger('save', {comment: comment});
 		}
-	); // blur
 
 
 
+		$('.task-title', $task)
+		.on(
+			'focus',
+			function(e)
+			{
+				if ( !current_user_has_cap('write') )
+				{
+					return false;
+				}
 
+				var $div = $(this);
 
-		// https://github.com/AndrewDryga/jQuery.Textarea.Autoresize
-		// $('textarea.resize', $task).autoresize({
-		// 	onResize: function()
-		// 	{
-		// 		$(this).addClass('autoresize');
-		// 	}
-		// })
-		// .trigger('keydown');
+				if ( $(e.target).is('a') )
+				{
+					return false;
+				}
+
+				$div.data('orig', $div.html());			
+
+				$div.html( sanitizeString($div.html()) );
+			}
+		);
+
+		$('.task-title', $task)
+		.on(
+			'keydown',
+			function(e)
+			{
+				if ( !current_user_has_cap('write') )
+				{
+					return false;
+				}
+
+				var $div = $(this);
+
+				// escape
+				if(e.keyCode === 27)
+				{
+					// get prev value
+					var orig = $div.data('orig');
+
+					// restore prev value
+					$div.html(orig);
+
+					// trigger save
+					$div.blur();
+
+					return;
+				}
+
+				// enter
+				if (e.keyCode === 13 && !e.shiftKey)
+				{
+					$div.blur();
+				}
+			}
+		);
+
+		$('.task-title', $task)
+		.on(
+			'keyup',
+			function()
+			{
+				if ( !current_user_has_cap('write') )
+				{
+					return false;
+				}
+
+				var $div = $(this);
+
+				// delete prev timer
+				clearTimeout($div.data('save_timer'));
+
+				// set new timer
+				var save_timer = setTimeout(function()
+				{
+					save_title ($div);
+				}, 3000);
+				
+				$div.data('save_timer', save_timer);
+			}
+		);
+
+		$('.task-title', $task)
+		.on(
+			'blur',
+			function()
+			{
+				if ( !current_user_has_cap('write') )
+				{
+					return false;
+				}
+
+				var $div = $(this);
+				save_title ($div);
+				window.getSelection().removeAllRanges();
+			}
+		); // blur
 
 
 

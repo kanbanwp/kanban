@@ -184,16 +184,6 @@ class Kanban_User
 				$allowed_user_ids = array( 0 );
 			}
 
-			// load actual users
-			// $users = get_users(array(
-			// 	'include' => $allowed_user_ids,
-			// 	'fields' => array(
-			// 		'ID',
-			// 		'user_email',
-
-			// 	)
-			// ));
-
 			$allowed_user_ids_str = implode( ',', $allowed_user_ids );
 
 			$users = $wpdb->get_results( "SELECT {$wpdb->users}.ID,
@@ -231,6 +221,17 @@ class Kanban_User
 		}
 
 		return apply_filters( 'kanban_user_get_allowed_users_return', Kanban_User::get_instance()->allowed_users );
+	}
+
+
+
+	static function get_current_user ()
+	{
+		$allowed_users = self::get_allowed_users();
+
+		// get the current user from the allowed users
+		$current_user_id = get_current_user_id();
+		return $allowed_users[$current_user_id];
 	}
 
 

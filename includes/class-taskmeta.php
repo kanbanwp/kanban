@@ -33,13 +33,7 @@ class Kanban_Taskmeta extends Kanban_Db
 
 
 		// delete existing record
-		$wpdb->delete(
-			self::table_name(),
-			array(
-				'task_id'  => $task_id,
-				'meta_key' => $meta_key
-			)
-		);
+		self::delete($task_id, $meta_key);
 
 
 
@@ -57,6 +51,28 @@ class Kanban_Taskmeta extends Kanban_Db
 				'%s',
 				'%s',
 				'%d'
+			)
+		);
+
+
+
+		return $success;
+	}
+
+
+
+	static function delete( $task_id, $meta_key )
+	{
+		global $wpdb;
+
+
+
+		// delete existing record
+		$success = $wpdb->delete(
+			self::table_name(),
+			array(
+				'task_id'  => $task_id,
+				'meta_key' => $meta_key
 			)
 		);
 

@@ -68,6 +68,10 @@
 			}
 		}
 
+		[contenteditable=false] {
+			word-wrap: break-word;
+		}
+
 
 		.panel-body {
 			padding: $margin/3 $margin/2;

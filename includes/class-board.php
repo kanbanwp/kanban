@@ -119,8 +119,7 @@ class Kanban_Board extends Kanban_Db
 		$wp_query->query_vars['kanban']->board->tasks = Kanban_Task::get_all();
 
 		// get the current user from the allowed users
-		$current_user_id = get_current_user_id();
-		$wp_query->query_vars['kanban']->board->current_user = $wp_query->query_vars['kanban']->board->allowed_users[$current_user_id];
+		$wp_query->query_vars['kanban']->board->current_user = Kanban_User::get_current_user();
 
 		// figure out percentages here (easier, quicker than in js)
 		$wp_query->query_vars['kanban']->board->col_percent_w = count( $wp_query->query_vars['kanban']->board->statuses ) > 0 ? 100/(count( $wp_query->query_vars['kanban']->board->statuses )) : 100;

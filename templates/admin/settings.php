@@ -132,7 +132,7 @@
 				<tbody>
 					<tr>
 						<th width="33%" scope="row">
-							<label for="default_estimate">
+							<label for="allowed_users">
 								<?php echo __( 'Allowed users', 'kanban' ); ?><br>
 								<small>
 									<?php echo __( '(Users who can make changes to the board)', 'kanban' ); ?>

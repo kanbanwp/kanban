@@ -345,7 +345,7 @@ class Kanban_Admin
 				'support@kanbanwp.com',
 				sprintf( '[kbwp] %s', $_POST['request'] ),
 				sprintf(
-					'%s\n\n%s\n%s',
+					"%s\n\n%s\n%s",
 					stripcslashes( $_POST['message'] ),
 					get_option( 'siteurl' ),
 					$_SERVER['HTTP_USER_AGENT']

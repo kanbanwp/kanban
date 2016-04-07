@@ -34,7 +34,7 @@ class Kanban_Utils
 
 	static function make_word_plural( $word )
 	{
-		return substr( $word, -1 ) == 's' ? sprintf( __( '%ses', 'kanban' ), $word ) : sprintf( __( '%ss', 'kanban' ), $word );
+		return mb_substr( $word, -1 ) == 's' ? sprintf( __( '%ses', 'kanban' ), $word ) : sprintf( __( '%ss', 'kanban' ), $word );
 	}
 
 

@@ -264,7 +264,7 @@ class Kanban_User
 	{
 		if ( ! empty( $user->first_name ) )
 		{
-			return sprintf( '%s %s', $user->first_name, substr( $user->last_name, 0, 1 ) );
+			return sprintf( '%s %s', $user->first_name, mb_substr( $user->last_name, 0, 1 ) );
 		}
 		else
 		{
@@ -287,13 +287,13 @@ class Kanban_User
 		{
 			$initials = sprintf(
 				'%s%s',
-				substr( $user->first_name, 0, 1 ),
-				substr( $user->last_name, 0, 1 )
+				mb_substr( $user->first_name, 0, 1 ),
+				mb_substr( $user->last_name, 0, 1 )
 			);
 		}
 		else
 		{
-			$initials = substr( $user->user_email, 0, 2 );
+			$initials = mb_substr( $user->user_email, 0, 2 );
 		}
 
 		return strtoupper( $initials );

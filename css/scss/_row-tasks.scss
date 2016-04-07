@@ -55,7 +55,11 @@
 		}
 
 		[contenteditable] {
-			min-height: 1.82em;
+			// firefox hack
+			@-moz-document url-prefix() { 
+				min-height: 1.618em;
+			}
+
 			padding: $margin/5;
 
 			[contenteditable] {

@@ -110,6 +110,11 @@ class Kanban_Board extends Kanban_Db
 		// get all data for the javascript
 		$wp_query->query_vars['kanban']->board->settings = Kanban_Option::get_all();
 
+		$wp_query->query_vars['kanban']->board->text = apply_filters(
+			'kanban_board_text',
+			include(__DIR__ . '/inc-board-text.php')
+		);
+
 		$wp_query->query_vars['kanban']->board->allowed_users = Kanban_User::get_allowed_users();
 
 		$wp_query->query_vars['kanban']->board->estimates = Kanban_Estimate::get_all();

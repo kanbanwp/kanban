@@ -25,8 +25,8 @@ jQuery(function($)
 {
 	function toggle_tabs (tab_id)
 	{
-		$('.nav-tab[href=' + tab_id + ']').addClass('nav-tab-active');
-		$('.nav-tab').not('[href=' + tab_id + ']').removeClass('nav-tab-active');
+		$('.nav-tab[href="' + tab_id + '"]').addClass('nav-tab-active');
+		$('.nav-tab').not('[href="' + tab_id + '"]').removeClass('nav-tab-active');
 		$('.tab').not(tab_id).hide();
 		$(tab_id).show();
 	}

@@ -55,13 +55,17 @@ var board = {
 	{
 		return <?php echo json_encode( $wp_query->query_vars['kanban']->board->allowed_users ); ?>;
 	},
+	current_user: function ()
+	{
+		return <?php echo json_encode( $wp_query->query_vars['kanban']->board->current_user ); ?>;
+	},
 	estimate_records: function ()
 	{
 		return <?php echo json_encode( $wp_query->query_vars['kanban']->board->estimates ); ?>;
 	},
-	current_user: function ()
+	text: function ()
 	{
-		return <?php echo json_encode( $wp_query->query_vars['kanban']->board->current_user ); ?>;
+		return <?php echo json_encode( $wp_query->query_vars['kanban']->board->text ); ?>;
 	}
 	<?php echo apply_filters( 'kanban_board_js_onpage', '' ); ?>
 };

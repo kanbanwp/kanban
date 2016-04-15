@@ -221,7 +221,7 @@ class Kanban_Option extends Kanban_Db
 
 		wp_enqueue_script(
 			sprintf( '%s_settings', Kanban::get_instance()->settings->basename ),
-			sprintf( '%s/js/admin-settings.js', Kanban::get_instance()->settings->uri ),
+			sprintf( '%s/js/admin-settings.min.js', Kanban::get_instance()->settings->uri ),
 			array( 'wp-color-picker' ),
 			false,
 			true

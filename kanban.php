@@ -3,7 +3,7 @@
 Plugin Name:		Kanban for WordPress
 Plugin URI:			http://kanbanwp.com/
 Description:		A complete project management suite for WordPress.
-Version:			1.2.16
+Version:			1.2.17
 Release Date: 		April 7, 2016
 Author:				Gelform Inc
 Author URI:			http://gelwp.com

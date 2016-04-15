@@ -100,7 +100,7 @@ $.fn.board_task = function(task)
 				var task_data = {task: task};
 				task_data.action = 'delete_task';
 				task_data.kanban_nonce = $('#kanban_nonce').val();
-				task_data.comment = '{0} deleted the task'.sprintf(
+				task_data.comment = board.text()['task_deleted'].sprintf(
 					board.current_user().short_name
 				);
 
@@ -190,7 +190,7 @@ $.fn.board_task = function(task)
 						{
 							try
 							{
-								var comment = '{0} added the task to the project "{1}"'.sprintf(
+								var comment = board.text()['task_added_to_project'].sprintf(
 									board.current_user().short_name,
 									response.data.project.title
 								);
@@ -200,7 +200,7 @@ $.fn.board_task = function(task)
 								{
 									var old_project = board.project_records[task.project_id];
 
-									comment += ' (previously "{0}")'.sprintf(
+									comment += board.text()['task_added_to_project_previous'].sprintf(
 										old_project.title
 									);
 								}
@@ -249,7 +249,7 @@ $.fn.board_task = function(task)
 
 				var status_id_old = task.status_id + '';
 
-				var comment = '{0} moved the task to "{1}"'.sprintf(
+				var comment = board.text()['task_moved_to_status'].sprintf(
 									board.current_user().short_name,
 									board.status_records()[status_id_new].title
 								);
@@ -258,7 +258,7 @@ $.fn.board_task = function(task)
 				{
 					var old_status = board.status_records()[status_id_old];
 
-					comment += ' (previously "{0}")'.sprintf(
+					comment += board.text()['task_moved_to_status_previous'].sprintf(
 						old_status.title
 					);
 				}
@@ -414,14 +414,14 @@ $.fn.board_task = function(task)
 
 			var new_title = $div.html();
 
-			var comment = '{0} updated the task title to "{1}"'.sprintf(
+			var comment = board.text()['task_title_updated'].sprintf(
 				board.current_user().short_name,
 				new_title
 			);
 
 			if ( prev_title !== '' )
 			{
-				comment += ' (previously "{0}")'.sprintf(
+				comment += board.text()['task_title_updated_previous'].sprintf(
 					prev_title
 				);
 			}
@@ -548,7 +548,7 @@ $.fn.board_task = function(task)
 				var $btn = $(this);
 				var user_id = $btn.val();
 
-				var comment = '{0} assigned the task to {1}'.sprintf(
+				var comment = board.text()['task_assigned_to'].sprintf(
 					board.current_user().short_name,
 					board.allowed_users()[user_id].short_name
 				);
@@ -557,7 +557,7 @@ $.fn.board_task = function(task)
 				{
 					var old_user = board.allowed_users()[task.user_id_assigned];
 
-					comment += ' (previously {0})'.sprintf(
+					comment += board.text()['task_assigned_to_previous'].sprintf(
 						old_user.short_name
 					);
 				}
@@ -580,7 +580,7 @@ $.fn.board_task = function(task)
 				var $btn = $(this);
 				var estimate_id = $btn.val();
 
-				var comment = '{0} set the task estimate to "{1}"'.sprintf(
+				var comment = board.text()['task_estimate_updated'].sprintf(
 					board.current_user().short_name,
 					board.estimate_records()[estimate_id].title
 				);
@@ -589,7 +589,7 @@ $.fn.board_task = function(task)
 				{
 					var old_estimate = board.estimate_records()[task.estimate_id];
 
-					comment += ' (previously "{0}")'.sprintf(
+					comment += board.text()['task_estimate_updated_previous'].sprintf(
 						old_estimate.title
 					);
 				}
@@ -817,7 +817,7 @@ $.fn.board_task = function(task)
 				var project = board.project_records[project_id];
 
 				// build comment
-				var comment = '{0} added the task to the project "{1}"'.sprintf(
+				var comment = board.text()['task_added_to_project'].sprintf(
 					board.current_user().short_name,
 					project.title
 				);
@@ -827,7 +827,7 @@ $.fn.board_task = function(task)
 				{
 					var old_project = board.project_records[task.project_id];
 
-					comment += ' (previously "{0}")'.sprintf(
+					comment += board.text()['task_added_to_project_previous'].sprintf(
 						old_project.title
 					);
 				}

@@ -128,59 +128,105 @@
 
 		<div class="tab" id="tab-users" style="display: none;">
 
-			<table class="form-table">
-				<tbody>
-					<tr>
-						<th width="33%" scope="row">
-							<label for="allowed_users">
-								<?php echo __( 'Allowed users', 'kanban' ); ?><br>
-								<small>
-									<?php echo __( '(Users who can make changes to the board)', 'kanban' ); ?>
-								</small>
-							</label>
-						</th>
-						<td>
-							<fieldset>
-<?php foreach ( $all_users_arr as $user_id => $user_name ) : ?>
-								<label>
-									<input name="settings[allowed_users][]" type="checkbox" value="<?php echo $user_id; ?>" <?php echo isset( $settings['allowed_users'] ) ? in_array( $user_id, $settings['allowed_users'] ) ? 'checked' : '' : ''; ?>>
-									<?php echo $user_name; ?>
-								</label><br>
-<?php endforeach // $all_users_arr; ?>
-							</fieldset>
-						</td>
-					</tr>
+			<div id="poststuff">
+				<div id="post-body" class="metabox-holder columns-2">
 
-					<tr>
-						<th width="33%" scope="row">
-							<label for="default_assigned_to">
-								<?php echo __( 'Assign all tasks to', 'kanban' ); ?>
-							</label>
-						</th>
-						<td>
-							<select  name="settings[default_assigned_to]" style="min-width: 10em;">
-<?php foreach ( $all_users_arr as $user_id => $user_name ) : ?>
-								<option value="<?php echo $user_id; ?>" <?php echo isset( $settings['default_assigned_to'] ) ? $user_id == $settings['default_assigned_to'] ? 'selected' : '' : ''; ?>>
-									<?php echo $user_name; ?>
-								</option>
-<?php endforeach // $all_users_arr; ?>
-								<option value="" <?php echo ! isset( $settings['default_assigned_to'] ) || empty( $settings['default_assigned_to'] ) ? 'selected' : ''; ?>>
-									No one
-								</option>
-							</select>
-						</td>
-					</tr>
+					<div id="post-body-content">
+						<div class="meta-box-sortables ui-sortable">
+							<div class="x-postbox">
 
-					<?php echo apply_filters( 'kanban_settings_tab_users_content', '' ); ?>
+								<table class="form-table">
+									<tbody>
+										<tr>
+											<th width="33%" scope="row">
+												<label for="allowed_users">
+													<?php echo __( 'Allowed users', 'kanban' ); ?><br>
+													<small>
+														<?php echo __( '(Users who can make changes to the board)', 'kanban' ); ?>
+													</small>
+												</label>
+											</th>
+											<td>
+												<fieldset>
+					<?php if ( count($all_users_arr) > 10 ) : ?>
+													<p>
+														Filter: <input type="text" class="users-filter">
+													</p>
+					<?php endif // count $all_users_arr ?>
+					<?php foreach ( $all_users_arr as $user_id => $user_name ) : ?>
+													<label style="display: block;">
+														<input name="settings[allowed_users][]" type="checkbox" value="<?php echo $user_id; ?>" <?php echo isset( $settings['allowed_users'] ) ? in_array( $user_id, $settings['allowed_users'] ) ? 'checked' : '' : ''; ?>>
+														<?php echo $user_name; ?>
+													</label>
+					<?php endforeach // $all_users_arr; ?>
+												</fieldset>
+											</td>
+										</tr>
 
-				</tbody>
-			</table>
+										<tr>
+											<th width="33%" scope="row">
+												<label for="default_assigned_to">
+													<?php echo __( 'Assign all tasks to', 'kanban' ); ?>
+												</label>
+											</th>
+											<td>
+												<select  name="settings[default_assigned_to]" style="min-width: 10em;">
+					<?php foreach ( $all_users_arr as $user_id => $user_name ) : ?>
+													<option value="<?php echo $user_id; ?>" <?php echo isset( $settings['default_assigned_to'] ) ? $user_id == $settings['default_assigned_to'] ? 'selected' : '' : ''; ?>>
+														<?php echo $user_name; ?>
+													</option>
+					<?php endforeach // $all_users_arr; ?>
+													<option value="" <?php echo ! isset( $settings['default_assigned_to'] ) || empty( $settings['default_assigned_to'] ) ? 'selected' : ''; ?>>
+														No one
+													</option>
+												</select>
+											</td>
+										</tr>
 
-			<?php submit_button(
-				__( 'Save your Settings', 'kanban' ),
-					'primary',
-					'submit'
-			); ?>
+										<?php echo apply_filters( 'kanban_settings_tab_users_content', '' ); ?>
+
+									</tbody>
+								</table>
+
+								<?php submit_button(
+									__( 'Save your Settings', 'kanban' ),
+										'primary',
+										'submit'
+								); ?>
+
+							</div><!-- postbox -->
+						</div>
+					</div>
+
+
+
+					<div id="postbox-container-1" class="postbox-container">
+						<div class="meta-box-sortables">
+							<div class="postbox">
+
+								<h2>
+									<span>
+									<?php echo __( 'Add a user', 'kanban' ); ?>
+									</span>
+								</h2>
+
+								<div class="inside">
+									<p>
+										<i>
+											<?php echo __( 'Note: user will immediately be added to the Kanban board.', 'kanban' ); ?>
+										</i>
+									</p>
+									<?php echo Kanban_Template::render_template( 'admin/users-form-registration'); ?>
+								</div>
+
+							</div>
+						</div>
+					</div>
+
+				</div>
+				<br class="clear">
+			</div>
+
 		</div><!-- tab-users -->
 
 

@@ -184,6 +184,112 @@ jQuery(function($)
 	// .disableSelection();
 
 
+
+	$('.users-filter').on(
+		'keyup',
+		function()
+		{
+			var $input = $(this);
+
+			var value = $input.val();
+			var valueLower = $.trim( value.toLowerCase() );
+
+			var $fieldset = $input.closest('fieldset');
+
+			if ( valueLower == '' )
+			{
+				$('label:hidden', $fieldset).slideDown('fast');
+				return false;
+			}
+
+			$('label', $fieldset).each(function()
+			{
+				var $label = $(this);
+				var text = $label.text();
+				var textLower = $.trim(text.toLowerCase() );
+
+				if ( textLower.search(valueLower) > -1 ) //  && $label.is(':hidden')
+				{
+					$label.slideDown('fast');
+				}
+				else if ( $label.is(':visible') )
+				{
+					$label.slideUp('fast');
+				}
+			});
+		}
+	);
+
+
+
+	$('.button-add-user').on(
+		'click',
+		function ()
+		{
+			var $form = $('#form-new-user');
+
+
+
+			$('.error', $form).remove();
+
+			var data = {
+				'action': 'kanban_register_user',
+			};
+
+			$('input', $form).each(function()
+			{
+				var $input = $(this);
+				data[$input.attr('id')] = $input.val();
+			});
+
+
+
+			$.post(
+				ajaxurl,
+				data
+			)
+			.done(function(response)
+			{
+				var form_class = 'error';
+				var form_message = '';
+
+				try
+				{
+					if ( response.success )
+					{
+						form_class = 'updated';
+						form_message = 'User created and emailed.';
+					}
+					else
+					{
+						form_message = response.data.error;
+					}
+				}
+				catch (err)
+				{
+					form_message = 'There was an error creating the user.';
+				}
+
+				if ( form_message != '' )
+				{
+					$('<div class="' + form_class + '"><p>' + form_message + '</p></div>').prependTo($form);
+				}
+
+			})
+			.fail(function(jqXHR)
+			{
+				var form_class = 'error';
+				var form_message = 'There was an error creating the user.';
+
+				$('<div class="' + form_class + '"><p>' + form_message + '</p></div>').prependTo($form);
+			});
+
+
+
+			return false;
+		}
+	);
+
 	// $('.group-order').each(function()
 	// {
 	// 	$('tr', this).each(function(i)

@@ -49,6 +49,8 @@ class Kanban_Admin
 		add_action( 'admin_bar_menu', array( __CLASS__, 'add_admin_bar_link_to_board' ), 999 );
 
 		add_action( 'init', array( __CLASS__, 'contact_support' ) );
+
+		add_action( 'wp_ajax_kanban_register_user', array( __CLASS__, 'ajax_register_user' ) );
 	}
 
 
@@ -359,6 +361,89 @@ class Kanban_Admin
 		{
 			$_GET['alert'] = "Email could not be sent. Please contact us through <a href=\"http://kanbanwp.com\" target=\"_blank\">https://kanbanwp.com</a>.";
 		}
+	}
+
+
+
+	static function ajax_register_user ()
+	{
+		if ( !wp_verify_nonce( $_POST[Kanban_Utils::get_nonce()], 'kanban-new-user') ) return;
+
+		$user_login		= $_POST["new-user-login"];	
+		$user_email		= $_POST["new-user-email"];
+		$user_first 	= $_POST["new-user-first"];
+		$user_last	 	= $_POST["new-user-last"];
+
+		$errors = array();
+
+		if(username_exists($user_login))
+		{
+			$errors[] = __('Username already taken');
+		}
+
+		if(!validate_username($user_login))
+		{
+			$errors[] = __('Invalid username');
+		}
+
+		if($user_login == '')
+		{
+			$errors[] = __('Please enter a username');
+		}
+
+		if(!is_email($user_email))
+		{
+
+			$errors[] = __('Invalid email');
+		}
+
+		if(email_exists($user_email))
+		{
+			$errors[] = __('Email already registered');
+		}
+
+		if ( !empty($errors) ) 
+		{
+			wp_send_json_error(array('error' => implode('<br>', $errors)));
+			return;
+		}
+
+
+
+		$userdata = array(
+			'user_login'  =>  $user_login,
+			'user_email'  =>  $user_email,
+			'first_name'  =>  $user_first,
+			'last_name'  =>  $user_last,
+			'user_pass'   =>  NULL  // When creating an user, `user_pass` is expected.
+		);
+
+		$user_id = wp_insert_user( $userdata ) ;
+
+
+
+		if ( is_wp_error($user_id) )
+		{
+			wp_send_json_error(array('error' => 'User could not be created. Please use the User > Add New page'));
+			return;
+		}
+
+
+
+		// add new user to allowed users
+		$allowed_users = Kanban_Option::get_option( 'allowed_users' );
+		$allowed_users[] = $user_id;
+
+		Kanban_Option::update( 'allowed_users', $allowed_users );
+
+
+
+		// send an email to the admin alerting them of the registration
+		wp_new_user_notification($user_id, NULL, 'both');
+
+
+
+		wp_send_json_success(array('new_user_id' => $user_id));
 	}
 
 

@@ -62,21 +62,10 @@ class Kanban_Task_Hour extends Kanban_Db
 
 
 
-		try
-		{
-			$operator = substr( $_POST['operator'], 0, 1 ) == '-' ? '-' : '+';
-			$val = sprintf( '%s%s', $operator, abs( floatval( $_POST['operator'] ) ) );
-		}
-		catch ( Exception $e )
-		{
-			wp_send_json_error( array(
-				'message' => sprintf( 'Error saving %s', str_replace( '_', ' ', self::$slug ) )
-			) );
-		}
+		$hour_interval = get_option ( 'hour_interval', $_POST['task']['board_id']);
+		$operator = $_POST['operator'];
 
-
-
-		eval( sprintf( '$hours = 0%s;', $val ) );
+		$hours = $operator . $hour_interval;
 
 
 
@@ -84,7 +73,7 @@ class Kanban_Task_Hour extends Kanban_Db
 			'task_id'        => $_POST['task']['id'],
 			'created_dt_gmt' => Kanban_Utils::mysql_now_gmt(),
 			'hours'          => $hours,
-			'status_is'      => $_POST['task']['status_id'],
+			'status_id'      => $_POST['task']['status_id'],
 			'user_id_author' => $user_id_author,
 			'user_id_worked' => $_POST['user_id_worked']
 		);

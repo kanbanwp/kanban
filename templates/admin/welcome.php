@@ -55,7 +55,7 @@
 								<p>Get started with the plugin in 60 seconds.</p>
 
 								<div class="video-wrapper" style="max-width: 1000px;">
-									<iframe src="https://player.vimeo.com/video/145274368" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+									<iframe src="https://player.vimeo.com/video/145274368?title=0&amp;byline=0&amp;portrait=0" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
 								</div><!-- video-wrapper -->
 
 							</div>

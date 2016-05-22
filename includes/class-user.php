@@ -14,7 +14,10 @@ Kanban_User::init();
 class Kanban_User
 {
 	// the instance of this object
-	private static $instance;
+	// private static $instance;
+
+	protected static $records = array();
+	protected static $records_by_board = array();
 
 
 
@@ -150,7 +153,7 @@ class Kanban_User
 
 
 
-		wp_redirect( sprintf( '%s/%s/board', site_url(), Kanban::$slug ) );
+		wp_redirect( site_url( isset($_POST['redirect']) ? $_POST['redirect'] : '/kanban/board' ) );
 		exit;
 
 
@@ -162,29 +165,48 @@ class Kanban_User
 	 * get the users that are allowed to access the board
 	 * @return array allowed user objects
 	 */
-	static function get_allowed_users()
+	static function get_allowed_users($board_id = NULL)
 	{
-		if ( ! isset( Kanban_User::get_instance()->allowed_users ) )
+		if ( empty(self::$records) )
 		{
 			global $wpdb;
 
-			// get all settings
-			$allowed_users = Kanban_Option::get_option( 'allowed_users' );
 
-			// pull out allowed user id's
-			$allowed_user_ids = array();
+			$boards = Kanban_Board::get_all();
+			self::$records_by_board = array_fill_keys(array_keys($boards), array());
 
-			if ( is_array( $allowed_users ) )
+
+			$query_in = array();
+			foreach (array_keys($boards) as $board_record_id)
 			{
-				$allowed_user_ids = $allowed_users;
+				// get all settings
+				$allowed_users = Kanban_Option::get_option( 'allowed_users', $board_record_id );
+
+				// pull out allowed user id's
+				$allowed_user_ids = array();
+
+				if ( is_array( $allowed_users ) )
+				{
+					$allowed_user_ids = $allowed_users;
+				}
+
+				if ( empty( $allowed_user_ids ) )
+				{
+					$allowed_user_ids = array();
+				}
+
+				// build array for querying
+				$query_in = array_merge($query_in, $allowed_user_ids );
+
+				self::$records_by_board[$board_record_id] = array_fill_keys($allowed_user_ids, (object) array());
+
 			}
 
-			if ( empty( $allowed_user_ids ) )
-			{
-				$allowed_user_ids = array( 0 );
-			}
 
-			$allowed_user_ids_str = implode( ',', $allowed_user_ids );
+
+			$query_in = array_unique($query_in);
+
+			$allowed_user_ids_str = implode( ',', $query_in );
 
 			$users = $wpdb->get_results( "SELECT {$wpdb->users}.ID,
 			{$wpdb->users}.user_email,
@@ -200,27 +222,49 @@ class Kanban_User
 			WHERE {$wpdb->users}.ID IN ( $allowed_user_ids_str );" );
 
 			// add users to object
-			Kanban_User::get_instance()->allowed_users = Kanban_Utils::build_array_with_id_keys( $users, 'ID' );
+			self::$records = Kanban_Utils::build_array_with_id_keys( $users, 'ID' );
 
 			// load extra data
-			foreach ( Kanban_User::get_instance()->allowed_users as $user_id => $user )
+			foreach ( self::$records as $user_id => $user )
 			{
-				Kanban_User::get_instance()->allowed_users[$user_id]->caps = array( 'write' );
+				self::$records[$user_id]->caps = array( 'write' );
 
 				// get gravatar
 				if ( self::validate_gravatar( $user->user_email ) )
 				{
-					Kanban_User::get_instance()->allowed_users[$user_id]->avatar = get_avatar( $user->user_email );
+					self::$records[$user_id]->avatar = get_avatar( $user->user_email );
 				}
 
 				// fancy name formating
-				Kanban_User::get_instance()->allowed_users[$user_id]->long_name_email = Kanban_User::get_username_long ( $user );
-				Kanban_User::get_instance()->allowed_users[$user_id]->short_name = Kanban_User::get_username_short ( $user, TRUE );
-				Kanban_User::get_instance()->allowed_users[$user_id]->initials = Kanban_User::get_initials ( $user );
+				self::$records[$user_id]->long_name_email = Kanban_User::get_username_long ( $user );
+				self::$records[$user_id]->short_name = Kanban_User::get_username_short ( $user, TRUE );
+				self::$records[$user_id]->initials = Kanban_User::get_initials ( $user );
+			}
+
+			//populate boards
+			foreach (self::$records_by_board as $board_record_id => $allowed_users)
+			{
+				foreach ($allowed_users as $user_id => $user)
+				{
+					self::$records_by_board[$board_record_id][$user_id] = self::$records[$user_id];
+				}
 			}
 		}
 
-		return apply_filters( 'kanban_user_get_allowed_users_return', Kanban_User::get_instance()->allowed_users );
+
+
+		if ( is_null($board_id) )
+		{
+			return apply_filters(
+				'kanban_user_get_all_return',
+				self::$records
+			);
+		}
+
+		return apply_filters(
+			'kanban_user_get_all_return',
+			isset(self::$records_by_board[$board_id]) ? self::$records_by_board[$board_id] : array()
+		);
 	}
 
 
@@ -369,14 +413,14 @@ class Kanban_User
 	 * get the instance of this class
 	 * @return object the instance
 	 */
-	public static function get_instance()
-	{
-		if ( ! self::$instance )
-		{
-			self::$instance = new self();
-		}
-		return self::$instance;
-	}
+	// public static function get_instance()
+	// {
+	// 	if ( ! self::$instance )
+	// 	{
+	// 		self::$instance = new self();
+	// 	}
+	// 	return self::$instance;
+	// }
 
 
 

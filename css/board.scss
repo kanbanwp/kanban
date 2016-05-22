@@ -12,39 +12,45 @@ $color-orange-wp:  #d54e21;
 $color-grey-wp:  #464646;
 $color-yellow: #ffff99;
 
+// $color-#AAB1BA
+
 $margin: 15px;
 
 
 
 * {
 	color: $color-grey-wp;
+	font-family: 'Open Sans', sans-serif;
 }
 
-*:focus {outline:0;}
+*:focus,
+*:active {outline: 0 !important;}
 
-body.view-compact {
-	.project_title,
-	.row-worked {
-		display: none;
-	}
-	.task-id {
-		border-radius: $margin*.66;
-		background: white;
-		height: 1.618em;
-		overflow: hidden;
+html, body {
+	height: 100%;
+	-ms-overflow-style: -ms-autohiding-scrollbar;
+	overflow: hidden;
+}
 
-		&:hover {
-			border-color: #DDD !important;
-			height: auto;
-			overflow: visible;
-			z-index: 1;
-		}
+@media screen and (max-width: $screen-sm-max) {
+	body {
+		font-size: 1.618em;
 	}
 }
 
-.btn {
-	.glyphicon {
-		color: inherit;
+sub {
+	bottom: auto;
+	color: lighten($color-grey-wp, 10);
+	margin-left: -.382em;
+}
+
+.btn-default, .open>.dropdown-toggle.btn-default {
+	background-color: white !important;
+
+	&:hover,
+	&:active,
+	&:active {
+		background-color: lighten($color-grey-wp, 70) !important;
 	}
 }
 
@@ -63,45 +69,590 @@ body.view-compact {
     to { transform: scale(1) rotate(360deg);}
 }
 
-@import './scss/header';
-@import './scss/footer';
-@import './scss/row-statuses';
-@import './scss/row-tasks';
-@import './scss/board';
-
-
-
-.modal {
-	.panel-heading {
-		display: block;
-	}
-	.btn-close {
+.modal-body {
+	.close {
+		height: $margin*3.82;
+		opacity: 1;
 		position: absolute;
 		right: 0;
 		top: 0;
+		width: $margin*3.82;
+		&:hover {
+			background: lighten($color-grey-wp, 69);
+		}
+	}
+
+	a.panel-title {
+		display: block;
 	}
 }
 
-.bootstrap-growl {
-	position: fixed !important;
+.tab-content {
+	height: 100%;
 }
 
+.board {
+	height: 100%;
+	margin: 0 $margin*1.5;
+	overflow: hidden;
 
-.editable-input {
-	cursor: pointer;
-	border: 1px solid lighten($color-grey-wp, 45);
-	box-shadow: none;
-	font-size: inherit;
-	height: auto;
-	padding: $margin/5 $margin/5 0;
-	width: 100%;
+	&:before {
+	    content: attr(data-board-title);
+	    display: block;
+	}
 
-	&[readonly] {
-		background: transparent;
-		border: 1px solid transparent;
-		&:hover {
-			background: lighten($color-grey-wp, 65);
+	.row-statuses,
+	.row-tasks {
+		margin: 0;
+	}
+
+	@media screen and (max-width: $screen-sm-max) {
+		height: auto;
+		margin: 0;
+		// overflow: auto;
+
+		.row-statuses,
+		.row-tasks {
+			margin-left: 0 !important;
+			width: 100% !important;
+		}
+
+		.col_percent_w {
+			width: 100% !important;
+		}
+	}
+}
+
+.row-statuses-wrapper {
+	overflow: hidden;
+}
+
+.row-statuses {
+	position: relative;
+	z-index: 1;
+
+	.col-status {
+		-webkit-box-shadow: 0px $margin $margin (-$margin)/3 white;
+		-moz-box-shadow: 0px $margin $margin (-$margin)/3 white;
+		box-shadow: 0px $margin $margin (-$margin)/3 white;
+
+		padding: 0px $margin*.66;
+		position: relative;
+
+		&:nth-child(even) {
+			-webkit-box-shadow: 0px $margin $margin (-$margin)/3 lighten($color-grey-wp, 69);
+			-moz-box-shadow: 0px $margin $margin (-$margin)/3 lighten($color-grey-wp, 69);
+			box-shadow: 0px $margin $margin (-$margin)/3 lighten($color-grey-wp, 69);
+			background: lighten($color-grey-wp, 69);
+
+			@media screen and (max-width: $screen-sm-max) {
+				background: white;
+				-webkit-box-shadow: none;
+				-moz-box-shadow: none;
+				box-shadow: none;
+			}
+		}
+
+		h3 {
+			border-top: $margin/3 solid orange;
+			padding: $margin/2 0 0;
+			text-align: center;
+
+			.status-task-count {
+				color: lighten($color-grey-wp, 50);
+			}
+		}
+
+		.btn-group-status-actions {
+			bottom: 0;
+			position: absolute;
+			right: $margin/3;
+
+			.glyphicon,
+			span {
+				color: white;
+			}
+		}
+
+		@media screen and (min-width: $screen-sm-min) {
+			// width: 16.66%;
+		}
+
+		@media screen and (max-width: $screen-sm-max) {
+			display: none;
+			text-align: center;
+			&:first-child {
+				display: block;
+			}
+
+			.btn-group-status-actions {
+				display: inline-block !important;
+				position: relative;
+			}
 		}
 	}
 
 }
+
+.row-tasks-wrapper {
+	height: 100%;
+	overflow-x: hidden;
+	overflow-y: scroll;
+	position: relative;
+	width: 100%;
+	z-index: 0;
+
+	.col-tasks {
+		padding: $margin $margin*.66 $margin*15;
+		position: relative;
+		z-index: 0;
+
+		&:nth-child(even) {
+			background: lighten($color-grey-wp, 69);
+
+			@media screen and (max-width: $screen-sm-max) {
+				background: white;
+			}
+		}
+
+		&:hover,
+		&.hover {
+			// background: lighten($color-grey-wp, 60);;
+
+			.task {
+				border-color: #BBB;
+			}
+
+			@media screen and (max-width: $screen-sm-max) {
+				background: transparent;
+			}
+		}
+
+		&.active {
+			z-index: 1;
+		}
+
+		@media screen and (min-width: $screen-sm-min) {
+			// width: 16.66%;
+		}
+
+		@media screen and (max-width: $screen-sm-max) {
+			display: none;
+			&:first-child {
+				display: block;
+			}
+		}
+	}
+
+	@media screen and (max-width: $screen-sm-max) {
+		// height: auto;
+		// overflow: auto;
+	}
+} // row-tasks-wrapper
+
+// must be "global" for dragging styles
+.task {
+	background: white;
+	border: 1px solid #DDD;
+	border-radius: $margin/3;
+	margin-bottom: $margin;
+	padding: 0 $margin/2 $margin/3 $margin;
+	position: relative;
+	z-index: 0;
+
+	&:hover,
+	&.active {
+		z-index: 1;
+	}
+
+	[contenteditable] {
+		margin: 0 (-$margin/5) 0 (-$margin/5);
+		padding: $margin/5;
+
+		&:hover,
+		&:focus,
+		&:active {
+			background: lighten($color-grey-wp, 69);
+		}
+
+		&:empty:before {
+			color: lighten($color-grey-wp, 60);;
+  			content: attr(placeholder);
+  			display: block; /* For Firefox */
+		}
+	}
+
+	.task-menu {
+		position: absolute;
+		right: $margin*.66;
+		top: $margin*.66;
+	}
+
+	.task-project {
+		max-width: 80%;
+
+		[contenteditable] {
+			color: #888;
+		}
+	}
+
+	.task-title {
+		font-size: 1.382em;
+		line-height: 1.142;
+		margin-bottom: $margin/5;
+	}
+
+	.row-task-actions {
+		$task-action-size: 1.8em;
+
+		margin: 0 0 $margin/3;
+		.col {
+			padding: 0;
+			text-align: center;
+
+			small {
+				color: #999;
+			}
+
+			&.col-task-hours,
+			&.col-task-estimate {
+				line-height: 1.236;
+			}
+
+			&.col-task-estimate:before {
+				content: '/';
+				font-size: 2em;
+				left: -.236em;
+				position: absolute;
+				bottom: $margin/5;
+				z-index: 1;
+			}
+
+			&.col-task-assigned {
+				padding-top: $margin/3;
+				small {
+					line-height: 1.618;
+				}
+
+				.avatar {
+					border-radius: 50%;
+					height: ceil($task-action-size);
+					width: ceil($task-action-size);
+				}
+			}
+
+			small {
+				display: block;
+				font-size: .8em;
+				font-weight: normal;
+			}
+
+			.btn-task-action {
+				border: 0;
+				line-height: 1.236;
+			}
+
+			.task-hours,
+			.task-estimate {
+				color: lighten($color-grey-wp, 10);
+				display: block;
+				font-size: $task-action-size;
+				// font-weight: bold;
+				// letter-spacing: -3px;
+			}
+
+			.task-assigned-initials {
+				background: lighten($color-grey-wp, 10);
+				border-radius: 50%;
+				color: white;
+				display: inline-block;
+				height: $task-action-size;
+				line-height: $task-action-size;
+				// margin-bottom: $margin/5;
+				width: $task-action-size;
+
+				&.empty {
+					background: lighten($color-grey-wp, 50);
+				}
+			}
+			
+			&.col-task-hours {
+				.dropdown-menu {
+					background: transparent;
+					box-shadow: none;
+					border: 0;
+					padding: 0;
+				}
+				.btn-group {
+					width: 100%;
+					.btn {
+						width: 50%;
+					}
+				}
+			}
+		}
+	}
+
+	.task-progress {
+		height: $margin/3;
+		margin: 0;
+		opacity: .382;
+	}
+
+	&:hover .task-progress {
+		opacity: .618;
+	}
+
+	.task-handle {
+		cursor: pointer;
+		left: 0;
+		position: absolute;
+		height: 100%;
+		top: 0;
+		width: $margin/2;
+
+		@media screen and (max-width: $screen-sm-max) {
+			cursor: default;
+		}
+	}
+}
+
+body.board-view-compact {
+	.task {
+		.row-task-actions,
+		.task-progress {
+			display: none;
+		}
+
+		&:hover {
+			.row-task-actions,
+			.task-progress {
+				display: block;
+			}
+		}
+
+	}
+}
+
+body.board-view-all-cols {
+	.col-tasks-sidebar {
+		display: none;
+	}
+	.board,
+	.row-statuses,
+	.row-tasks {
+		margin: 0 !important;
+		width: 100% !important;
+	}
+
+}
+
+
+.col-tasks-sidebar {
+	// background: red;
+	cursor: pointer;
+	height: 100%;
+	position: fixed;
+	top: 0;
+	width: $margin*1.5;
+	z-index: 0;
+
+	$sidebar-offset: 5px;
+
+	&.col-tasks-sidebar-left {
+		left: 0; // ceil((-$margin*1.5)+$sidebar-offset);
+
+		.col-tasks-sidebar-label {
+			transform: rotate(270deg);
+			-webkit-transform: rotate(270deg);
+			-moz-transform: rotate(270deg);
+			-o-transform: rotate(270deg);
+			-ms-transform: rotate(270deg);
+		}
+
+		.col-tasks-sidebar-arrow {
+			border-width: $margin*3.82 0px $margin*3.82 $margin;
+			border-color: transparent;
+			left: 100%;
+		}
+	}
+
+	&.col-tasks-sidebar-right {
+		right: 0; // ceil((-$margin*1.5)+$sidebar-offset);
+
+		.col-tasks-sidebar-label {
+			transform: rotate(90deg);
+			-webkit-transform: rotate(90deg);
+			-moz-transform: rotate(90deg);
+			-o-transform: rotate(90deg);
+			-ms-transform: rotate(90deg);
+		}
+
+		.col-tasks-sidebar-arrow {
+			border-width: $margin*3.82 $margin*1 $margin*3.82 0px;
+			border-color: transparent;
+			right: 100%;
+		}
+	}
+
+	.col-tasks-sidebar-label {
+		height: $margin*1.5;
+		line-height: 0;
+		margin-top: $margin*.75;
+		padding: $margin*1.5/2;
+		position: absolute;
+		text-align: center;
+	    top: 50%;
+		width: $margin*1.5;
+		white-space: nowrap;
+		z-index: 1;
+
+		.col-tasks-sidebar-label-inner {
+			color: white;
+			height: 0px;
+			left: (-$margin*10/2)+($margin*1.5/2);
+			position: absolute;
+			top: 45%;
+			width: $margin*10;
+		}
+	}
+
+	.col-tasks-sidebar-arrow {
+		width: 0;
+		height: 0;
+		border-style: solid;
+		margin-top: -($margin*3.82/2);
+		position: absolute;
+		top: 50%;
+	}
+
+	@media screen and (max-width: $screen-sm-max) {
+		display: none;
+	}
+}
+
+
+.modal-task-move {
+	.list-group-item {
+		position: relative;
+
+		.task-handle {
+			cursor: pointer;
+			left: 0;
+			position: absolute;
+			height: 100%;
+			top: 0;
+			width: 8px;
+
+			@media screen and (max-width: $screen-sm-max) {
+				cursor: default;
+			}
+		}
+	}
+}
+
+
+#page-footer {
+	background: #AAB1BA;
+	border: 0;
+	border-radius: 0;
+	bottom: 0;
+	left: 0;
+	margin: 0;
+	padding: 0 $margin/3; 
+	position: fixed;
+	text-align: center;
+	width: 100%;
+
+	.navbar-toggle {
+		background: white;
+		border-color: $color-grey-wp;
+		.icon-bar {
+			background: $color-grey-wp
+		}
+	}
+
+	.dropdown-toggle {
+		color: black;
+	}
+
+	#page-search {
+		margin: $margin/2 (-$margin);
+		padding: 0;
+
+		#board-search-clear {
+			color: #999;
+			cursor: pointer;
+			pointer-events: all;
+
+			&:hover {
+				color: $color-grey-wp;
+			}
+		}
+	}
+
+	@media screen and (max-width: $screen-sm-max) {
+		background: transparent;
+
+		&.in {
+			background: lighten($color-grey-wp, 60);
+		}
+
+		#page-search {
+			margin: $margin/2 (-$margin);
+			padding: 0;
+
+			.btn {
+				background: lighten($color-grey-wp, 70) !important;
+				border: 0;
+				display: block;
+				text-align: left;
+
+				&:hover,
+				&:focus {
+					background: white !important;
+				}
+			}
+		}
+
+		.navbar-nav {
+			a {
+				color: black;
+				display: block;
+				font-size: 1.618rem;
+				text-align: left;
+
+				&:hover,
+				&:focus {
+					background: white;
+				}
+			}
+		}
+	}
+}
+
+
+.btn-view-toggle {
+	.glyphicon {
+		display: none;
+		text-indent: -1em;
+	}
+}
+
+
+body.board-view-compact {
+	#btn-view-compact {
+		.glyphicon {
+			display: inline-block;
+		}
+	}
+}
+
+body.board-view-all-cols {
+	#btn-view-all-cols {
+		.glyphicon {
+			display: inline-block;
+		}
+	}
+}
+

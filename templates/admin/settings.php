@@ -56,6 +56,7 @@
 							</p>
 						</td>
 					</tr>
+<?php /*
 					<tr>
 						<th width="33%" scope="row">
 							<?php echo __( 'Show all columns all the time', 'kanban' ); ?>
@@ -75,6 +76,8 @@
 							</p>
 						</td>
 					</tr>
+*/ ?>
+<?php /*
 					<tr>
 						<th width="33%" scope="row">
 							<?php echo __( 'Default the view to "compact"', 'kanban' ); ?>
@@ -88,6 +91,7 @@
 							</div>
 						</td>
 					</tr>
+*/ ?>
 					<tr>
 						<th width="33%" scope="row">
 							<?php echo __( 'Hide progress bars', 'kanban' ); ?>
@@ -239,7 +243,7 @@
 <?php endforeach // statuses ?>
 			</ol><!-- sortable -->
 			<p>
-				<button type="button" class="button" id="add-status">
+				<button type="button" class="button button-sortable-add" data-t="t-status">
 					<?php echo __( 'Add another status', 'kanban' ); ?>
 				</button>
 			</p>
@@ -261,7 +265,7 @@
 <?php endforeach // statuses ?>
 			</ol><!-- sortable -->
 			<p>
-				<button type="button" class="button" id="add-estimate">
+				<button type="button" class="button button-sortable-add" data-t="t-estimate">
 					<?php echo __( 'Add another estimate', 'kanban' ); ?>
 				</button>
 			</p>

@@ -44,7 +44,7 @@ class Kanban_Admin
 		add_action( 'admin_menu', array( __CLASS__, 'admin_menu' ) );
 
 		// if migrating from older version, show upgrade notice with progress bar
-		add_action( 'admin_notices', array( __CLASS__, 'render_upgrade_notice' ) );
+		// add_action( 'admin_notices', array( __CLASS__, 'render_upgrade_notice' ) );
 
 		add_action( 'admin_bar_menu', array( __CLASS__, 'add_admin_bar_link_to_board' ), 999 );
 
@@ -58,6 +58,7 @@ class Kanban_Admin
 	/**
 	 * show upgrade notice with progress bar
 	 */
+	/*
 	static function render_upgrade_notice()
 	{
 		// make sure something needs to be upgraded
@@ -245,7 +246,7 @@ class Kanban_Admin
 		</script>
 		<?php
 	} // render_upgrade_notice
-
+	*/
 
 
 	/**

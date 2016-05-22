@@ -65,75 +65,72 @@ class Kanban_Board extends Kanban_Db
 
 
 
-		// make sure they don't need to upgrade
-		if ( Kanban::get_instance()->settings->records_to_move > 0 )
-		{
-			?>
-			<p>
-			<?php echo sprintf( __( 'We\'ve found %s kanban records that need to be migrated for the latest version of Kanban for WordPress! ', 'kanban' ), Kanban::get_instance()->settings->records_to_move ); ?>
-			</p>
-			<p>
-			<?php echo sprintf(
-					__(
-						'Please visit the <a href="%s">Kanban welcome page</a> to migrate your data.',
-						'kanban'
-					),
-					add_query_arg(
-						'page',
-						'kanban_welcome',
-						admin_url( 'admin.php' )
-					)
-				);
-			?>
-			<?php
-			exit;
-		}
-
-
-
 		// get the template data
 		global $wp_query;
 
 		// attach our object to the template data
 		$wp_query->query_vars['kanban'] = (object) array();
-		$wp_query->query_vars['kanban']->board = (object) array();
 
-		// add default filters
-		$wp_query->query_vars['kanban']->board->filters = array(
-			'user_id_assigned' => (object) array(),
-			'project_id'       => (object) array()
-		);
+			// add passed alert
+		$wp_query->query_vars['kanban']->alert = ! empty( $_GET['alert'] ) ? stripcslashes( $_GET['alert'] ) : '';
 
-		// add passed alert
-		$wp_query->query_vars['kanban']->board->alert = ! empty( $_GET['alert'] ) ? stripcslashes( $_GET['alert'] ) : '';
+		$wp_query->query_vars['kanban']->text = apply_filters(
+				'kanban_board_text',
+				include(__DIR__ . '/inc-board-text.php')
+			);
 
-		// get all data for the javascript
-		$wp_query->query_vars['kanban']->board->settings = Kanban_Option::get_all();
-
-		$wp_query->query_vars['kanban']->board->text = apply_filters(
-			'kanban_board_text',
-			include(__DIR__ . '/inc-board-text.php')
-		);
-
-		$wp_query->query_vars['kanban']->board->allowed_users = Kanban_User::get_allowed_users();
-
-		$wp_query->query_vars['kanban']->board->estimates = Kanban_Estimate::get_all();
-		$wp_query->query_vars['kanban']->board->statuses = Kanban_Status::get_all();
-
-		$wp_query->query_vars['kanban']->board->projects = Kanban_Project::get_all();
-		$wp_query->query_vars['kanban']->board->tasks = Kanban_Task::get_all();
+		$wp_query->query_vars['kanban']->current_board = Kanban_Board::get_current();
 
 		// get the current user from the allowed users
-		$wp_query->query_vars['kanban']->board->current_user = Kanban_User::get_current_user();
+		$wp_query->query_vars['kanban']->current_user = Kanban_User::get_current_user();
 
-		// figure out percentages here (easier, quicker than in js)
-		$wp_query->query_vars['kanban']->board->col_percent_w = count( $wp_query->query_vars['kanban']->board->statuses ) > 0 ? 100/(count( $wp_query->query_vars['kanban']->board->statuses )) : 100;
-		$wp_query->query_vars['kanban']->board->sidebar_w = count( $wp_query->query_vars['kanban']->board->statuses ) > 0 ? 100/(count( $wp_query->query_vars['kanban']->board->statuses )-2) : 0;
+		$wp_query->query_vars['kanban']->boards = array();
+
+
+
+		$boards = Kanban_Board::get_all();
+
+		foreach ($boards as $board_id => $board)
+		{
+			$board_to_add = (object) array(
+				'title' => $board->title
+			);
+
+			// add default filters
+			$board_to_add->filters = array(
+				'user_id_assigned' => NULL,
+				'project_id'       => NULL
+			);
+
+			$board_to_add->search = array(
+				'$(".task-title", $task).text()',
+				'$task.attr("data-id")'
+			);
+
+			// get all data for the javascript
+			$board_to_add->settings = Kanban_Option::get_all($board_id);
+
+			$board_to_add->allowed_users = Kanban_User::get_allowed_users($board_id);
+
+			$board_to_add->estimates = Kanban_Estimate::get_all($board_id);
+			$board_to_add->statuses = Kanban_Status::get_all($board_id);
+
+			$board_to_add->projects = Kanban_Project::get_all($board_id);
+			$board_to_add->tasks = Kanban_Task::get_all($board_id);
+
+			// figure out percentages here (easier, quicker than in js)
+			$board_to_add->col_percent_w = count( $board_to_add->statuses ) > 0 ? 100/(count( $board_to_add->statuses )) : 100;
+			$board_to_add->status_w = count( $board_to_add->statuses ) > 0 ? 100/(count( $board_to_add->statuses )-2) : 0;
+
+
+			$wp_query->query_vars['kanban']->boards[$board_id] = $board_to_add;
+		}
+
 
 
 		apply_filters(
 			'kanban_board_query_vars',
-			$wp_query->query_vars['kanban']->board
+			$wp_query->query_vars['kanban']
 		);
 
 		return $template;
@@ -144,7 +141,7 @@ class Kanban_Board extends Kanban_Db
 	static function render_js_templates()
 	{
 		// Automatically load router files
-		$js_templates = glob( Kanban::$instance->settings->path . '/templates/inc/t-*.php' );
+		$js_templates = glob( Kanban::$instance->settings->path . '/templates/board/t-*.php' );
 
 		$js_templates = apply_filters(
 			'kanban_board_render_js_templates_before',
@@ -152,7 +149,7 @@ class Kanban_Board extends Kanban_Db
 		);
 
 		foreach ( $js_templates as $js_template ) : ?>
-		<script type="text/html" id="<?php echo basename($js_template, '.php'); ?>">
+		<script type="text/html" class="template" id="<?php echo basename($js_template, '.php'); ?>">
 
 		<?php include $js_template; ?>
 
@@ -162,22 +159,26 @@ class Kanban_Board extends Kanban_Db
 
 
 
-	static function get_all( $sql = NULL )
+
+	static function get_all()
 	{
-		if ( empty(self::$boards) )
+		if ( empty( self::$boards ) )
 		{
-			$table_name = self::table_name();
+			$sql = apply_filters(
+				'kanban_board_get_all_sql',
+				"SELECT * FROM `%s` WHERE `is_active` = 1;"
+			);
 
-			$sql = "SELECT *
-					FROM `{$table_name}`
-					WHERE `{$table_name}`.`is_active` = 1
-			;";
+			global $wpdb;
+			self::$boards = $wpdb->get_results(
+				sprintf( 
+					$sql,
+					self::table_name()
+				)
+			);
 
-			$sql = apply_filters( 'kanban_board_get_all_sql', $sql );
+			self::$boards = Kanban_Utils::build_array_with_id_keys( self::$boards, 'id' );
 
-			$records = parent::get_all( $sql );
-
-			self::$boards = Kanban_Utils::build_array_with_id_keys($records);
 		}
 
 		return apply_filters(
@@ -206,6 +207,25 @@ class Kanban_Board extends Kanban_Db
 
 		// otherwise, pass the first one
 		return reset($boards);
+	}
+
+
+
+	static function get_current_by ($method = 'GET')
+	{
+		$board_id = NULL;
+
+		if ( $method == 'GET' && isset($_GET['board_id']) )
+		{
+			$board_id = $_GET['board_id'];
+		}
+
+		if ( $method == 'POST' && isset($_POST['board_id']) )
+		{
+			$board_id = $_POST['board_id'];
+		}
+
+		return self::get_current($board_id);
 	}
 
 

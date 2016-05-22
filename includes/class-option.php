@@ -29,16 +29,18 @@ class Kanban_Option extends Kanban_Db
 	// defaults for all options, so at least something is returned
 	protected static $defaults = array (
 		'hour_interval' => '1',
-		'allowed_users' => '',
-		'show_all_cols' => 0,
-		'default_to_compact_view' => 0,
+		'allowed_users' => array(),
+		// 'show_all_cols' => 0,
+		// 'default_to_compact_view' => 0,
 		'hide_progress_bar' => 0,
 		'use_default_login_page' => 0
 	);
 
 	// store the options on first load, to prevent mulitple db calls
-	protected static $options = array();
-	protected static $options_raw = array();
+	// protected static $options = array();
+	protected static $options_by_board = array();
+	protected static $records = array();
+	protected static $records_by_board = array();
 
 
 
@@ -47,41 +49,16 @@ class Kanban_Option extends Kanban_Db
 		add_action( 'init', array( __CLASS__, 'save_settings' ), 10 );
 
 		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'enqueue_js' ) );
-
 	}
 
 
 
 	// extend parent, so it's accessible from other classes
-	static function replace( $data )
-	{
-		return self::_replace( $data );
-	}
+	// static function replace( $data )
+	// {
+	// 	return self::_replace( $data );
+	// }
 
-
-
-	static function update( $key, $value )
-	{
-		if ( is_array( $value ) || is_object( $value ) )
-		{
-			$value = serialize( $value );
-		}
-
-
-		$data = (object) array(
-			'name'  => $key,
-			'value' => $value
-		);
-
-		$option = self::get_option_raw( $key );
-
-		if ( $option )
-		{
-			$data->id = $option->id;
-		}
-
-		return self::_replace( $data );
-	}
 
 
 
@@ -102,81 +79,132 @@ class Kanban_Option extends Kanban_Db
 	static function get_defaults()
 	{
 		// make sure there's always at least one user
-		self::$defaults['allowed_users'] = serialize( array( get_current_user_id() ) );
+		// self::$defaults['allowed_users'] = serialize( array( get_current_user_id() ) );
 
 		return apply_filters( 'kanban_option_get_defaults_return', self::$defaults );
 	}
 
 
 
-	static function get_all_raw($board_id = NULL)
+	static function get_results ($board_id = NULL)
 	{
-		if ( empty( self::$options_raw ) )
+		if ( empty( self::$records ) )
 		{
-			$current_board = Kanban_Board::get_current($board_id);
+			$sql = apply_filters( 'kanban_option_get_results_sql', "SELECT * FROM `%s`;" );
 
-			$table_name = self::table_name();
+			global $wpdb;
+			self::$records = $wpdb->get_results(
+				sprintf( 
+					$sql,
+					self::table_name()
+				)
+			);
 
-			$sql = "SELECT *
-					FROM `{$table_name}`
-					WHERE `board_id` = {$current_board->id}
-			;";
-
-			$sql = apply_filters( 'kanban_option_get_all_raw_sql', $sql );
-
-			self::$options_raw = parent::get_all( $sql );
-
-			self::$options_raw = Kanban_Utils::build_array_with_id_keys( self::$options_raw, 'id' );
+			self::$records = Kanban_Utils::build_array_with_id_keys( self::$records, 'id' );
 
 			// unserialize arrays
-			foreach ( self::$options_raw as $key => $record )
+			foreach ( self::$records as $key => $record )
 			{
-				if ( ! is_serialized( $record->value ) ) continue;
+				self::$records[$key]->value = maybe_unserialize( $record->value );
+			}
 
-				self::$options_raw[$key]->value = unserialize( $record->value );
+			$boards = Kanban_Board::get_all();
+			self::$records_by_board = array_fill_keys(array_keys($boards), array());
+
+			foreach ( self::$records as $key => $record )
+			{
+				self::$records_by_board[$record->board_id][$key] = $record;
 			}
 		}
 
+		if ( is_null($board_id) )
+		{
+			return apply_filters(
+				'kanban_option_get_results_return',
+				self::$records
+			);
+		}
+
 		return apply_filters(
-			'kanban_option_get_all_raw_return',
-			self::$options_raw
+			'kanban_option_get_results_by_board_return',
+			self::$records_by_board[$board_id]
 		);
 	}
 
 
 
-	static function get_all( $sql = NULL )
+	static function get_results_by_board ($board_id = NULL)
 	{
-		if ( empty( self::$options ) )
+		if ( is_null($board_id) )
 		{
-			$records = self::get_all_raw();
-
-			$output = array();
-			foreach ( $records as $record )
-			{
-				if ( is_serialized( $record->value ) )
-				{
-					$record->value = unserialize( $record->value );
-				}
-
-				$output[$record->name] = $record->value;
-			}
-
-			self::$options = array_merge( self::get_defaults(), $output );
+			self::get_results();
+			return self::$records_by_board;
 		}
-
-		return self::$options;
+		else
+		{
+			return self::get_results ($board_id);
+		}
 	}
 
 
 
-	static function get_option( $name )
+	static function get_all ($board_id = NULL)
 	{
-		$options = self::get_all();
-
-		if ( ! isset( $options[$name] ) )
+		if ( empty( self::$options_by_board ) )
 		{
-			return null;
+			foreach ( self::get_results_by_board() as $record_board_id => $records )
+			{
+				self::$options_by_board[$record_board_id] = array();
+
+				foreach ( $records as $record )
+				{
+					self::$options_by_board[$record_board_id][$record->name] = $record->value;
+				}
+			}
+
+			$boards = Kanban_Board::get_all();
+
+			foreach ($boards as $id => $board)
+			{
+				if ( !isset(self::$options_by_board[$id]) )
+				{
+					self::$options_by_board[$id] = array();
+				}
+
+				self::$options_by_board[$id] = array_merge( self::get_defaults(), self::$options_by_board[$id] );
+			}
+		}
+
+		if ( is_null($board_id) )
+		{
+			return apply_filters(
+				'kanban_option_get_all_return',
+				self::$options_by_board
+			);
+		}
+
+		return apply_filters(
+				'kanban_option_get_all_by_board_return',
+				self::$options_by_board[$board_id]
+			);
+	}
+
+
+
+	static function get_option ( $name, $board_id = NULL )
+	{
+		if ( is_null($board_id) )
+		{
+			$board = Kanban_Board::get_current();
+
+			$board_id = $board->id;
+		}
+
+		$options = self::get_all($board_id);
+
+		if ( !isset( $options[$name] ) )
+		{
+			return NULL;
 		}
 
 		return $options[$name];
@@ -184,25 +212,64 @@ class Kanban_Option extends Kanban_Db
 
 
 
-	static function get_option_raw( $option_name )
+	static function update_option ( $key, $value, $board_id = NULL )
 	{
-		foreach ( self::get_all_raw() as $option )
+		if ( is_null($board_id) )
 		{
-			if ( $option->name == $option_name )
+			$board = Kanban_Board::get_current();
+			$board_id = $board->id;
+		}
+
+		$data = (object) array(
+			'name'  => $key,
+			'value' => maybe_serialize($value),
+			'board_id' => $board_id
+		);
+
+		$option = self::get_row_by( 'name', $key );
+
+		if ( $option )
+		{
+			$data->id = $option->id;
+		}
+
+		$good_data = self::sanitize_data( $data );
+
+		global $wpdb;
+		return $wpdb->replace(
+			self::table_name(),
+			$good_data->data,
+			$good_data->format
+		);
+	}
+
+
+
+	static function get_row_by ( $key, $value, $board_id = NULL )
+	{
+		if ( is_null($board_id) )
+		{
+			$board = Kanban_Board::get_current();
+			$board_id = $board->id;
+		}
+
+		foreach ( self::get_results_by_board($board_id) as $option )
+		{
+			if ( $option->$key == $value )
 			{
 				return $option;
 				break;
 			}
 		}
 
-		return FALSE;
+		return NULL;
 	}
 
 
 
 	static function enqueue_js( $hook )
 	{
-		if ( ! is_admin() || (isset( $_GET['page'] ) && $_GET['page'] != sprintf( '%s_settings', Kanban::get_instance()->settings->basename )) ) return;
+		if ( !is_admin() || !isset($_GET['page']) || $_GET['page'] != 'kanban_settings' ) return;
 
 		wp_enqueue_style( 'wp-color-picker' );
 
@@ -214,14 +281,14 @@ class Kanban_Option extends Kanban_Db
 
 		wp_enqueue_script(
 			't',
-			sprintf( '%s/js/t.min.js', Kanban::get_instance()->settings->uri ),
+			sprintf( '%s/js/min/t-min.js', Kanban::get_instance()->settings->uri ),
 			array()
 		);
 
 
 		wp_enqueue_script(
-			sprintf( '%s_settings', Kanban::get_instance()->settings->basename ),
-			sprintf( '%s/js/admin-settings.min.js', Kanban::get_instance()->settings->uri ),
+			'kanban-settings',
+			sprintf( '%s/js/min/admin-settings-min.js', Kanban::get_instance()->settings->uri ),
 			array( 'wp-color-picker' ),
 			false,
 			true
@@ -232,11 +299,11 @@ class Kanban_Option extends Kanban_Db
 
 	static function settings_page()
 	{
-		$settings = Kanban_Option::get_all();
-		if ( is_serialized( $settings['allowed_users'] ) )
-		{
-			$settings['allowed_users'] = unserialize( $settings['allowed_users'] );
-		}
+		$current_board = Kanban_Board::get_current_by('GET');
+
+		$settings = Kanban_Option::get_all($current_board->id);
+
+		// $settings['allowed_users'] = maybe_unserialize( $settings['allowed_users'] );
 
 		$all_users = get_users();
 		$all_users_arr = array();
@@ -245,10 +312,10 @@ class Kanban_Option extends Kanban_Db
 			$all_users_arr[$user->ID] = Kanban_User::get_username_long( $user );
 		}
 
-		$statuses = Kanban_Status::get_all();
+		$statuses = Kanban_Status::get_all($current_board->id);
 		$statuses = Kanban_Utils::order_array_of_objects_by_property ( $statuses, 'position', 'int' );
 
-		$estimates = Kanban_Estimate::get_all();
+		$estimates = Kanban_Estimate::get_all($current_board->id);
 		$estimates = Kanban_Utils::order_array_of_objects_by_property ( $estimates, 'position', 'int' );
 
 		$template = Kanban_Template::find_template( 'admin/settings' );
@@ -268,9 +335,7 @@ class Kanban_Option extends Kanban_Db
 
 
 
-		$current_board = Kanban_Board::get_current(
-			isset($_POST['board_id']) ? $_POST['board_id'] : NULL
-		);
+		$current_board = Kanban_Board::get_current_by('POST');
 
 
 
@@ -285,7 +350,7 @@ class Kanban_Option extends Kanban_Db
 			// save licenses, just in case
 			if ( !isset($settings[$key]) && substr($key, 0, 7) != 'license' ) continue;
 
-			Kanban_Option::update($key, $value);
+			Kanban_Option::update_option($key, $value);
 		}
 
 
@@ -311,14 +376,14 @@ class Kanban_Option extends Kanban_Db
 	 * get the instance of this class
 	 * @return object the instance
 	 */
-	public static function get_instance()
-	{
-		if ( ! self::$instance )
-		{
-			self::$instance = new self();
-		}
-		return self::$instance;
-	}
+	// public static function get_instance()
+	// {
+	// 	if ( ! self::$instance )
+	// 	{
+	// 		self::$instance = new self();
+	// 	}
+	// 	return self::$instance;
+	// }
 
 
 

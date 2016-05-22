@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+	<link href='https://fonts.googleapis.com/css?family=Open+Sans:700,400,400italic' rel='stylesheet' type='text/css'>
+
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"/>
 
 	<title><?php echo __( 'Kanban for WordPress', 'kanban' ); ?></title>
 
@@ -14,9 +16,8 @@
 
 	<?php Kanban_Template::add_style(); ?>
 </head>
-<body>
+<body class="">
 
-<div id="page-header">
-<?php echo apply_filters( 'kanban_page_header_before', '' ); ?>
+
+
 <?php echo apply_filters( 'kanban_page_header_after', '' ); ?>
-</div><!-- page-header -->

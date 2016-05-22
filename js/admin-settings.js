@@ -70,73 +70,29 @@ jQuery(function($)
 
 
 
-	var t_status = new t($('#t-status').html());
-
-	$('#add-status').on(
+	$('.button-sortable-add').on(
 		'click',
 		function()
 		{
-			// get count of new statuses
-			var new_count = $('#list-statuses li.new').length;
+			var $button = $(this);
+			var template = $button.attr('data-t');
 
-			// render the new status
-			var html = t_status.render();
+			var t_template = new t($('#' + template).html());
 
-			// add the status count
-			html = html.replace(/\[count\]/g, '[' + new_count + ']');
+			var $tab = $button.closest('.tab');
+			var $list = $('.sortable', $tab);
 
-			// append it
-			var $html = $(html).addClass('new').appendTo('#list-statuses');
-
-			// replace the names
-			$('[data-name]', $html).each(function()
-			{
-				$(this).attr('name', $(this).attr('data-name') );
-			});
-
-			// activate color pickers
-			$('.color-picker', $html).wpColorPicker();
-
-			set_positions();
-		}
-	);
-
-	$('#list-statuses').on(
-		'click',
-		'.delete',
-		function()
-		{
-			$(this)
-			.closest('li')
-			.slideUp(
-				'fast',
-				function()
-				{
-					$(this).remove();
-				}
-			);
-		}
-	);
-
-
-
-	var t_estimate = new t($('#t-estimate').html());
-
-	$('#add-estimate').on(
-		'click',
-		function()
-		{
 			// get count of new estimates
-			var new_count = $('#list-estimates li.new').length;
+			var new_count = $('li.new', $list).length;
 
 			// render the new estimate
-			var html = t_estimate.render();
+			var html = t_template.render();
 
 			// add the estimate count
 			html = html.replace(/\[count\]/g, '[' + new_count + ']');
 
 			// append it
-			var $html = $(html).addClass('new').appendTo('#list-estimates');
+			var $html = $(html).addClass('new').appendTo($list);
 
 			// replace the names
 			$('[data-name]', $html).each(function()
@@ -151,7 +107,7 @@ jQuery(function($)
 		}
 	);
 
-	$('#list-estimates').on(
+	$('.sortable').on(
 		'click',
 		'.delete',
 		function()
@@ -290,25 +246,8 @@ jQuery(function($)
 		}
 	);
 
-	// $('.group-order').each(function()
-	// {
-	// 	$('tr', this).each(function(i)
-	// 	{
-	// 		var $tr = $(this);
-	// 		var $th = $('th', $tr);
-	// 		var $input = $('input', $tr);
-	// 		var val;
-	// 		if ( $input.val() !== '' )
-	// 		{
-	// 			val = parseInt($('input', $tr).val());
-	// 		}
-	// 		else
-	// 		{
-	// 			val = i;
-	// 			$input.val(i);
-	// 		}
 
-	// 		$('<span class="count"/>').text(val+1).appendTo($th);
-	// 	}); // tr
-	// }); // group-order
+
 });
+
+

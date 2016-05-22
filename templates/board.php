@@ -1,99 +1,115 @@
-<?php
-
-do_action( 'kanban_board_template_before', $wp_query->query_vars['kanban']->board );
-
-include Kanban_Template::find_template( 'inc/header' ); ?>
+<?php do_action( 'kanban_board_template_before', $wp_query->query_vars['kanban']->boards ); ?>
 
 
 
-<?php include Kanban_Template::find_template( 'inc/board-header' ); ?>
+<?php include Kanban_Template::find_template( 'board/header' ); ?>
 
+<?php echo apply_filters( 'kanban_page_boards_before', '' ); ?>
 
+<div class="tab-content">
+<?php foreach ( $wp_query->query_vars['kanban']->boards as $board_id => $board ) : ?>
+<?php include Kanban_Template::find_template( 'board/board' ); ?>
+<?php endforeach ?>
+</div><!-- tab-content -->
 
-<div id="wrapper-board" class="<?php echo $wp_query->query_vars['kanban']->board->settings['show_all_cols'] ? 'show_all_cols' : ''; ?> <?php echo $wp_query->query_vars['kanban']->board->settings['hide_progress_bar'] ? 'hide_progress_bar' : ''; ?>">
+<?php echo apply_filters( 'kanban_page_boards_after', '' ); ?>
 
-	<div class="row" id="row-statuses">
-	</div><!-- row -->
-
-	<div class="row" id="row-tasks">
-	</div><!-- row -->
-</div><!-- wrapper-board -->
-
-
-
-<?php include Kanban_Template::find_template( 'inc/board-footer' ); ?>
-
-
-
-<?php include Kanban_Template::find_template( 'inc/board-modal-projects' ); ?>
-<?php include Kanban_Template::find_template( 'inc/board-modal-archive' ); ?>
-
-
-
-<?php wp_nonce_field( 'kanban-save', Kanban_Utils::get_nonce() ); ?>
-
+<?php include Kanban_Template::find_template( 'board/modal-projects' ); ?>
+<?php include Kanban_Template::find_template( 'board/modal-keyboard-shortcuts' ); ?>
 
 
 <script type="text/javascript">
 var ajaxurl = '<?php echo admin_url('admin-ajax.php'); ?>';
 
-var alert = "<?php echo addslashes($wp_query->query_vars['kanban']->board->alert); ?>";
+var alert = "<?php echo addslashes($wp_query->query_vars['kanban']->alert); ?>";
+var text = <?php echo json_encode( $wp_query->query_vars['kanban']->text ); ?>;
 
-var board = {
+var templates = {};
+var window_w, window_h, screen_size, scrollbar_w;
+var is_dragging = false;
+var current_user;
+
+var get_current_user = function ()
+{
+	return <?php echo json_encode( $wp_query->query_vars['kanban']->current_user ); ?>;
+};
+
+var url_params = {
+	board_id: <?php echo $wp_query->query_vars['kanban']->current_board->id ?>
+};
+
+<?php if ( !empty($_GET) ) : foreach ($_GET as $key => $value) : ?>
+<?php if ( is_array($value) ) : ?>
+url_params['<?php echo str_replace(array('\'', '"'), '', $key) ?>'] = <?php echo json_encode( $value ) ?>;
+<?php else : ?>
+url_params['<?php echo str_replace(array('\'', '"'), '', $key) ?>'] = '<?php echo $value ?>';
+<?php endif ?>
+<?php endforeach; endif ?>
+
+var boards = [];
+<?php foreach ( $wp_query->query_vars['kanban']->boards as $board_id => $board ) : ?>
+boards[<?php echo $board_id ?>] = {
+	id: function ()
+	{
+		return <?php echo $board_id ?>;
+	},
+	title: function ()
+	{
+		return '<?php echo $board->title ?>';
+	},
+	col_percent_w: function ()
+	{
+		return <?php echo $board->col_percent_w ?>;
+	},
+	status_w: function ()
+	{
+		return <?php echo $board->status_w ?>;
+	},
 	settings: function ()
 	{
-		return <?php echo json_encode( $wp_query->query_vars['kanban']->board->settings ); ?>;
+		return <?php echo json_encode( $board->settings ); ?>;
 	},
-	filters: <?php echo json_encode( $wp_query->query_vars['kanban']->board->filters ); ?>,
+	filters: <?php echo json_encode( $board->filters ); ?>,
+	search: <?php echo json_encode( $board->search ); ?>,
 	status_records: function ()
 	{
-		return <?php echo json_encode( $wp_query->query_vars['kanban']->board->statuses ); ?>;
+		return <?php echo json_encode( $board->statuses ); ?>;
 	},
-	task_records: <?php echo json_encode( $wp_query->query_vars['kanban']->board->tasks ); ?>,
-	project_records: <?php echo json_encode( $wp_query->query_vars['kanban']->board->projects ); ?>,
+	tasks: <?php echo json_encode( $board->tasks ); ?>,
+	project_records: <?php echo json_encode( $board->projects ); ?>,
 	allowed_users: function ()
 	{
-		return <?php echo json_encode( $wp_query->query_vars['kanban']->board->allowed_users ); ?>;
-	},
-	current_user: function ()
-	{
-		return <?php echo json_encode( $wp_query->query_vars['kanban']->board->current_user ); ?>;
+		return <?php echo json_encode( $board->allowed_users ); ?>;
 	},
 	estimate_records: function ()
 	{
-		return <?php echo json_encode( $wp_query->query_vars['kanban']->board->estimates ); ?>;
-	},
-	text: function ()
-	{
-		return <?php echo json_encode( $wp_query->query_vars['kanban']->board->text ); ?>;
+		return <?php echo json_encode( $board->estimates ); ?>;
 	}
 	<?php echo apply_filters( 'kanban_board_js_onpage', '' ); ?>
 };
+<?php endforeach // boards ?>
 
-var col_percent_w = <?php echo $wp_query->query_vars['kanban']->board->col_percent_w ?>;
-var sidebar_w = <?php echo $wp_query->query_vars['kanban']->board->sidebar_w ?>;
+var current_board_id = <?php echo $wp_query->query_vars['kanban']->current_board->id ?>;
+
 </script>
 
 
 
-<style>
-.col_percent_w {width: <?php echo $wp_query->query_vars['kanban']->board->col_percent_w ?>%}
-.sidebar_w {width: <?php echo $wp_query->query_vars['kanban']->board->sidebar_w ?>%}
 
-#row-tasks, #row-statuses {
-	left: -<?php echo $wp_query->query_vars['kanban']->board->sidebar_w ?>%;
-	width: <?php echo 100+($wp_query->query_vars['kanban']->board->sidebar_w*2) ?>%;
+<style>
+
+<?php foreach ( $wp_query->query_vars['kanban']->boards as $board_id => $board ) : ?>
+#board-<?php echo $board_id ?> .col_percent_w {width: <?php echo $board->col_percent_w ?>%}
+#board-<?php echo $board_id ?> .status_w {width: <?php echo $board->status_w ?>%}
+
+#board-<?php echo $board_id ?> .row-tasks,
+#board-<?php echo $board_id ?> .row-statuses {
+	margin-left: -<?php echo $board->status_w ?>%;
+	width: <?php echo 100+($board->status_w*2) ?>%;
 }
+<?php endforeach // boards ?>
 </style>
 
 
 
-<?php do_action( 'kanban_board_render_js_templates' ); ?>
-
-
-
-<?php
-
-include Kanban_Template::find_template( 'inc/footer' );
-
-do_action( 'kanban_board_template_after', $wp_query->query_vars['kanban']->board );
+<?php include Kanban_Template::find_template( 'board/footer' ); ?>

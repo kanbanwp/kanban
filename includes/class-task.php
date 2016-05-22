@@ -14,7 +14,7 @@ Kanban_Task::init();
 class Kanban_Task extends Kanban_Db
 {
 	// the instance of this object
-	private static $instance;
+	// private static $instance;
 
 	// the common name for this class
 	static $slug = 'task';
@@ -36,6 +36,9 @@ class Kanban_Task extends Kanban_Db
 		'board_id'         => 'int',
 		'is_active'        => 'bool'
 	);
+
+	protected static $records = array();
+	protected static $records_by_board = array();
 
 
 
@@ -101,6 +104,22 @@ class Kanban_Task extends Kanban_Db
 
 
 
+		// store status change
+		if ( isset($_POST['task']['id']) && !empty($_POST['task']['id']) && $_POST['task']['status_id'] != self::get_one($_POST['task']['id'])->status_id )
+		{
+			do_action( 'kanban_task_ajax_save_before_status_change' );
+
+			Kanban_Status_Change::add(
+				$_POST['task']['id'],
+				$_POST['task']['status_id'],
+				self::get_one($_POST['task']['id'])->status_id
+			);
+
+			do_action( 'kanban_task_ajax_save_after_status_change' );
+		}
+
+
+
 		$is_successful = self::_replace( $_POST['task'] );
 
 
@@ -130,21 +149,6 @@ class Kanban_Task extends Kanban_Db
 			);
 
 			do_action( 'kanban_task_ajax_save_after_comment' );
-		}
-
-
-
-		if ( isset( $_POST['status_id_old'] ) )
-		{
-			do_action( 'kanban_task_ajax_save_before_status_change' );
-
-			Kanban_Status_Change::add(
-				$task_id,
-				$post_data->status_id,
-				$_POST['status_id_old']
-			);
-
-			do_action( 'kanban_task_ajax_save_after_status_change' );
 		}
 
 
@@ -236,7 +240,7 @@ class Kanban_Task extends Kanban_Db
 
 	static function get_one( $task_id )
 	{
-		$record = parent::get_row( 'ID', $task_id );
+		$record = self::_get_row( 'ID', $task_id );
 		$record->title = Kanban_Utils::str_for_frontend( $record->title );
 		$record->description = Kanban_Utils::str_for_frontend( $record->description );
 
@@ -245,41 +249,61 @@ class Kanban_Task extends Kanban_Db
 
 
 
-	static function get_all( $sql = NULL )
+	static function get_all($board_id = NULL)
 	{
-		$table_name = self::table_name();
-
-		$worked_table_name = Kanban_Task_Hour::table_name();
-
-
-
-
-		$sql = "SELECT tasks.*,
+		if ( empty( self::$records ) )
+		{
+			$sql = "SELECT tasks.*,
 				COALESCE(SUM(worked.hours), 0) 'hour_count'
-				FROM {$table_name} tasks
-				LEFT JOIN {$worked_table_name} worked
+				FROM `%s` tasks
+				LEFT JOIN `%s` worked
 				ON tasks.id = worked.task_id
 				WHERE tasks.is_active = 1
 				GROUP BY tasks.id
-		;";
+			;";
 
-		$sql = apply_filters( 'kanban_task_get_all_sql', $sql );
+			$sql = apply_filters( 'kanban_task_get_all_sql', $sql );
 
-		$records = parent::get_all( $sql );
+			global $wpdb;
+			self::$records = $wpdb->get_results(
+				sprintf( 
+					$sql,
+					self::table_name(),
+					Kanban_Task_Hour::table_name()
+				)
+			);
+
+			// not needed with contenteditable
+			// foreach ( self::$records as $key => $record )
+			// {
+			// 	self::$records[$key]->title = Kanban_Utils::str_for_frontend( self::$records[$key]->title );
+			// 	self::$records[$key]->description = Kanban_Utils::str_for_frontend( self::$records[$key]->description );
+			// }
 
 
+			self::$records = Kanban_Utils::build_array_with_id_keys( self::$records, 'id' );
 
-		foreach ( $records as $key => $record )
-		{
-			$records[$key]->title = Kanban_Utils::str_for_frontend( $records[$key]->title );
-			$records[$key]->description = Kanban_Utils::str_for_frontend( $records[$key]->description );
+			$boards = Kanban_Board::get_all();
+			self::$records_by_board = array_fill_keys(array_keys($boards), array());
+
+			foreach ( self::$records as $key => $record )
+			{
+				self::$records_by_board[$record->board_id][$key] = $record;
+			}
+
 		}
 
-
+		if ( is_null($board_id) )
+		{
+			return apply_filters(
+				'kanban_task_get_all_return',
+				self::$records
+			);
+		}
 
 		return apply_filters(
 			'kanban_task_get_all_return',
-			Kanban_Utils::build_array_with_id_keys ( $records, 'id' )
+			isset(self::$records_by_board[$board_id]) ? self::$records_by_board[$board_id] : array()
 		);
 	}
 

@@ -1,12 +1,12 @@
 <div class="col col-xs-12 col-status col_percent_w" id="status-{{=status.id}}" data-id="{{=status.id}}" data-color="{{=status.color_hex}}" data-close="{{=status.left_close}}%" data-open="{{=status.left_open}}%">
 
 {{status.left_close}}
-	<button type="button" class="btn btn-primary toggle-sidebar toggle-sidebar-close">
+	<button type="button" class="btn btn-primary toggle-status toggle-status-close">
 		{{=status.title}}
 		<span class="glyphicon glyphicon-chevron-right"></span>
 	</button>
 
-	<button type="button" class="btn btn-primary toggle-sidebar toggle-sidebar-open">
+	<button type="button" class="btn btn-primary toggle-status toggle-status-open">
 		<span class="glyphicon glyphicon-chevron-left"></span>
 		{{=status.title}}
 	</button>

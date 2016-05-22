@@ -110,7 +110,7 @@ class Kanban
 
 
 		// check for old records
-		Kanban::get_instance()->settings->records_to_move = Kanban_Db::migrate_records_remaining();
+		// Kanban::get_instance()->settings->records_to_move = Kanban_Db::migrate_records_remaining();
 
 
 

@@ -22,32 +22,34 @@ class Kanban_Template
 	static $page_slugs = array(
 		'board' => array(
 			'style'  => array(
-				'bootstrap' => '%sbootstrap/css/bootstrap.min.css', // "//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js",
+				'bootstrap' => '%sbootstrap/css/bootstrap.min.css',
 				'board' => '%scss/board.css'
 			),
 			'script' => array(
-				'jquery' => '%sjs/jquery-1.11.3.min.js', // "https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js",
-				'jquery-ui' => '%sjs/jquery-ui.min.js', // "//code.jquery.com/ui/1.11.3/jquery-ui.min.js",
-				'bootstrap' => '%sbootstrap/js/bootstrap.min.js', // "//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js,
-				'bootstrap-growl' => '%sjs/jquery.bootstrap-growl.min.js', // "//cdnjs.cloudflare.com/ajax/libs/bootstrap-growl/1.0.0/jquery.bootstrap-growl.min.js",
-				// 'autoresize' => "%sjs/jquery.textarea.autoresize.min.js",
-				'matchHeight' => '%sjs/jquery.matchHeight.min.js',
-				'cookie' => '%sjs/js.cookie.min.js',
-				't' => '%sjs/t.min.js',
-				'board-util' => '%sjs/board-util.min.js',
-				'board-modal-projects' => '%sjs/board-modal-projects.min.js',
-				'board-sidebar-header' => '%sjs/board-sidebar-header.min.js',
-				// 'board-tour' => "%sjs/board-tour.min.js",
-				'board-search' => '%sjs/board-search.min.js',
-				'board-filter' => '%sjs/board-filter.min.js',
-				'board-view' => '%sjs/board-view.min.js',
-				'board-task' => '%sjs/board-task.min.js',
-				'board' => '%sjs/board.min.js'
+				'jquery' => '%sjs/min/jquery-1.11.3-min.js', // "https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery-min.js",
+				'jquery-ui' => '%sjs/min/jquery-ui-min.js', // "//code.jquery.com/ui/1.11.3/jquery-ui-min.js",
+				'bootstrap' => '%sbootstrap/js/bootstrap.min.js', // "//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/min/bootstrap-min.js,
+				'bootstrap-growl' => '%sjs/min/jquery.bootstrap-growl-min.js', // "//cdnjs.cloudflare.com/ajax/libs/bootstrap-growl/1.0.0/jquery.bootstrap-growl-min.js",
+				// 'autoresize' => "%sjs/min/jquery.textarea.autoresize-min.js",
+				'matchHeight' => '%sjs/min/jquery.matchHeight-min.js',
+				'cookie' => '%sjs/min/js.cookie-min.js',
+				't' => '%sjs/min/t-min.js',
+				// 'board-util' => '%sjs/min/board-util-min.js',
+				'modal-projects' => '%sjs/min/modal-projects-min.js',
+				// 'board-status-header' => '%sjs/min/board-status-header-min.js',
+				// // 'board-tour' => "%sjs/min/board-tour-min.js",
+				// 'board-search' => '%sjs/min/board-search-min.js',
+				// 'board-filter' => '%sjs/min/board-filter-min.js',
+				'user' => '%sjs/min/user-min.js',
+				'board' => '%sjs/min/board-min.js',
+				'task' => '%sjs/min/task-min.js',
+				'functions' => '%sjs/min/functions-min.js',
+				'init' => '%sjs/min/init-min.js'
 			)
 		),
 		'login' => array(
 			'style' => array(
-				'bootstrap' => '%sbootstrap/css/bootstrap.min.css', // "//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js",
+				'bootstrap' => '%sbootstrap/css/bootstrap.min.css', // "//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/min/bootstrap-min.js",
 			)
 		)
 	);
@@ -74,19 +76,16 @@ class Kanban_Template
 
 
 
-		// admins can see anything
-		// if ( current_user_can('manage_options') ) return;
-
-
-
 		// get my id, and allowed id's
 		$current_user_id = get_current_user_id();
 
 		$users_field_name = sprintf( '%s_user', Kanban::get_instance()->settings->basename );
-		$allowed_user_ids = Kanban_User::get_allowed_users();
+		$allowed_user_ids = array_keys(Kanban_User::get_allowed_users());
+
+
 
 		// return if I'm allowed
-		if ( in_array( $current_user_id, array_keys( $allowed_user_ids ) ) )
+		if ( in_array( $current_user_id, $allowed_user_ids ) )
 		{
 			// redirect away from login
 			if ( strpos( $_SERVER['REQUEST_URI'], sprintf( '/%s/login', Kanban::$slug ) ) !== FALSE )
@@ -129,7 +128,14 @@ class Kanban_Template
 		else
 		{
 			// otherwise redirect to login
-			wp_redirect( sprintf( '%s/%s/login', site_url(), Kanban::$slug ) );
+			wp_redirect(
+				sprintf(
+					'%s/%s/login?redirect=%s',
+					site_url(),
+					Kanban::$slug,
+					urlencode($_SERVER['REQUEST_URI'])
+				)
+			);
 		}
 
 		exit;
@@ -191,7 +197,8 @@ class Kanban_Template
 						{
 							if ( isset($_GET['debug']) && $_GET['debug'] == 'script' )
 							{
-								$path = str_replace('.min', '', $path);
+								$path = str_replace('min/', '', $path);
+								$path = str_replace('-min', '', $path);
 							}
 
 							if ( ! isset( self::get_instance()->script ) || ! is_array( self::get_instance()->script ) )

@@ -17,7 +17,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 class Kanban_Comment extends Kanban_Db
 {
 	// the instance of this object
-	private static $instance;
+	// private static $instance;
 
 	// the common name for this class
 	static $slug = 'comment';
@@ -34,6 +34,8 @@ class Kanban_Comment extends Kanban_Db
 		'description'     => 'text',
 		'user_id_author'  => 'int'
 	);
+
+	protected static $records = array();
 
 
 
@@ -90,21 +92,26 @@ class Kanban_Comment extends Kanban_Db
 
 
 
-	static function get_all( $sql = NULL )
+	static function get_all()
 	{
-		$table_name = self::table_name();
+		if ( empty( self::$records ) )
+		{
+			$sql = apply_filters( 'kanban_comment_get_all_sql', "SELECT * FROM `%s`;" );
 
-		$sql = "SELECT *
-				FROM `{$table_name}`
-		;";
+			global $wpdb;
+			self::$records = $wpdb->get_results(
+				sprintf( 
+					$sql,
+					self::table_name()
+				)
+			);
 
-		$sql = apply_filters( 'kanban_comment_get_all_sql', $sql );
-
-		$records = parent::get_all( $sql );
+			self::$records = Kanban_Utils::build_array_with_id_keys( self::$records, 'id' );
+		}
 
 		return apply_filters(
 			'kanban_comment_get_all_return',
-			Kanban_Utils::build_array_with_id_keys ( $records, 'id' )
+			self::$records
 		);
 	}
 
@@ -132,14 +139,14 @@ class Kanban_Comment extends Kanban_Db
 	 * get the instance of this class
 	 * @return object the instance
 	 */
-	public static function get_instance()
-	{
-		if ( ! self::$instance )
-		{
-			self::$instance = new self();
-		}
-		return self::$instance;
-	}
+	// public static function get_instance()
+	// {
+	// 	if ( ! self::$instance )
+	// 	{
+	// 		self::$instance = new self();
+	// 	}
+	// 	return self::$instance;
+	// }
 
 
 

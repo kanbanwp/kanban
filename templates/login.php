@@ -1,4 +1,23 @@
-<?php include Kanban_Template::find_template( 'inc/header' ); ?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<link href='https://fonts.googleapis.com/css?family=Open+Sans:700,400,400italic' rel='stylesheet' type='text/css'>
+
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"/>
+
+	<title><?php echo __( 'Kanban for WordPress', 'kanban' ); ?></title>
+
+	<!--[if lt IE 9]>
+		<script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+		<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+	<![endif]-->
+
+	<?php Kanban_Template::add_style(); ?>
+</head>
+<body>
+
 
 
 
@@ -7,7 +26,7 @@
 
 
 	<form action="" method="post" class="col-sm-4 col-sm-offset-4">
-		<img src="<?php echo Kanban::get_instance()->settings->uri ?>/img/kanbanwp-logo.png" class="img-responsive" style="margin: 0 auto 30px;">
+		<img src="<?php echo Kanban::get_instance()->settings->uri ?>img/kanbanwp-logo.png" class="img-responsive" style="margin: 0 auto 30px;">
 
 
 
@@ -35,6 +54,7 @@
 					<button type="submit" class="btn btn-lg btn-primary btn-block">
 						<?php echo __( 'Log in', 'kanban' ); ?>
 					</button>
+					<input type="hidden" name="redirect" value="<?php echo isset($_GET['redirect']) ? urldecode($_GET['redirect']) : '' ?>">
 					<?php wp_nonce_field( 'login', Kanban_Utils::get_nonce() ); ?>
 				</div>
 <?php else : // is_user_logged_in ?>
@@ -58,4 +78,7 @@
 
 
 
-<?php include Kanban_Template::find_template( 'inc/footer' ); ?>
+
+</body>
+</html>
+

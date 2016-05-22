@@ -1,342 +1,625 @@
-jQuery(function($)
+function Board (board)
 {
-	$('#filter-wrapper').board_filter();
-	$('#search-wrapper').board_search();
-	$('#btn-group-view-compact').board_view();
-	$('#modal-projects').modal_projects();
+	$(document).trigger('/board/init/', board);
+
+	this.record = board;
+	this.$el = $('#board-{0}'.sprintf(board.id()));
+
+	this.dom();
+
+	var self = this;
+	setTimeout(function()
+	{
+		for ( var task_id in self.record.tasks )
+		{
+			self.record.tasks[task_id] = new Task(self.record.tasks[task_id]);
+		}
+
+		self.project_update_counts();
+
+		$(document).trigger('/board/tasks/done/', self.$el);
+
+	}, 50);
+}
 
 
 
-	$('#btn-empty-status-tasks').on(
-		'click',
+Board.prototype.dom = function()
+{
+
+	var self = this;
+
+
+
+	$(document).trigger('/board/dom/', self.$el);
+
+
+
+	$('.col-tasks', self.$el)
+	.sortable({
+		connectWith: '.col-tasks',
+		handle: ".task-handle",
+		forcePlaceholderSize: true,
+		forceHelperSize: true,
+		placeholder: "task-placeholder",
+		containment: $('.row-tasks-wrapper'),
+		appendTo: "body",
+		scroll: false,
+		helper: "clone",
+		start: function (e, ui)
+		{
+			$('.col-tasks-sidebar').css({
+				'left': '',
+				'right': ''
+			});
+			is_dragging = true;
+		},
+		over: function (e, ui)
+		{
+			ui.placeholder.closest('.col-tasks').addClass('hover');
+		},
+		out: function (e, ui)
+		{
+			ui.placeholder.closest('.col-tasks').removeClass('hover');
+		},
+		stop: function (e, ui)
+		{
+			is_dragging = false;
+		},
+		receive: function(e, ui)
+		{
+			var $col = ui.item.closest('.col-tasks');
+
+			var task_id = ui.item.attr('data-id');
+			var task = self.record.tasks[task_id];
+
+			var status_id_old = task.record.status_id;
+			var status_old = self.record.status_records()[status_id_old];
+
+			var status_id_new = $col.attr('data-status-id');
+			var status_new = self.record.status_records()[status_id_new];
+
+
+
+			var comment = text['task_moved_to_status'].sprintf(
+								current_user.record().short_name,
+								status_new.title
+							);
+
+			comment += text['task_moved_to_status_previous'].sprintf(
+				status_old.title
+			);
+
+			task.record.status_id = status_id_new;
+			task.save(comment);
+
+			self.record.tasks[task_id].update_status(status_id_new);
+
+			self.updates_status_counts();
+			self.match_col_h();
+		} // receive
+	});
+
+
+
+
+
+	self.$el
+	.on(
+		'mouseenter',
+		'.col-tasks',
 		function ()
 		{
-			// set text
-			$('#empty-archive-confirmation-label').text('Deleting...');
+			var $col = $(this);
+			var status_id = $col.attr('data-status-id');
+			$('#status-' + status_id).trigger('mouseenter');
 
-			var $btn = $(this).prop('disabled', true);
+			return false;
+		}
+	)
+	.on(
+		'mouseleave',
+		'.col-tasks',
+		function ()
+		{
+			var $col = $(this);
+			var status_id = $col.attr('data-status-id');
+			$('#status-' + status_id).trigger('mouseleave');
 
-			// get passed status col id
-			var status_id = $btn.attr('data-status-col-id');
-
-			// start an interval
-			timers.delete_task_interval = setInterval(function()
-			{
-				// see if there's a task to delete
-				var $first_task = $('#{0} .task:first .delete-task'.sprintf(status_id));
-
-				// if no first task
-				if ( $first_task.length == 0 )
-				{
-					// stop the interval
-					clearInterval(timers.delete_task_interval);
-
-					// reset, hide modal
-					$('#btn-empty-status-tasks').prop('disabled', false);
-					$('#modal-empty-archive').modal('hide');
-				}
-				else
-				{
-					// otherwise trigger the delete
-					$first_task.click();
-				}
-			}, 3000);
-			// click()
+			return false;
+		}
+	)
+	.on(
+		'shown.bs.dropdown',
+		'.col-tasks .dropdown',
+		function ()
+		{
+			var $dropdown = $(this);
+			var $col = $dropdown.closest('.col-tasks');
+			$col.addClass('active');
+			return false;
+		}
+	).on(
+		'hidden.bs.dropdown',
+		'.col-tasks .dropdown',
+		function ()
+		{
+			var $dropdown = $(this);
+			var $col = $dropdown.closest('.col-tasks');
+			$col.removeClass('active');
+			return false;
 		}
 	);
 
 
 
-	$('#btn-empty-status-tasks-cancel').on(
+	self.$el
+	.on(
+		'mouseenter',
+		'.col-status',
+		function ()
+		{
+			var $col = $(this);
+			var status_id = $col.attr('data-id');
+			$('#status-' + status_id + '-tasks').addClass('hover');
+
+			$col.addClass('hover');
+			$('.btn-group-status-actions', $col).show();
+			return false;
+		}
+	)
+	.on(
+		'mouseleave',
+		'.col-status',
+		function ()
+		{
+
+			var $col = $(this);
+			var status_id = $col.attr('data-id');
+			$('#status-' + status_id + '-tasks').removeClass('hover');
+
+			$col.removeClass('hover');
+			$('.btn-group-status-actions', $col).hide();
+			return false;
+		}
+	);
+
+
+
+	self.$el.on(
 		'click',
-		function()
+		'.btn-task-new',
+		function ()
 		{
-			clearInterval(timers.delete_task_interval);
+			var $btn = $(this);
+
+			// show spinner
+			$('.glyphicon', $btn).toggle();
+
+			// get status we're going to add it to
+			var status_id = $btn.attr('data-status-id');
+
+
+
+			// start building placeholder task
+			var task_data = {
+				task: {
+					status_id: status_id,
+					board_id: self.record.id()
+				},
+				comment: '{0} added the task'.sprintf(
+					current_user.record().short_name
+				)
+			};
+
+
+
+			// if default estimate is set
+			if ( typeof self.record.settings().default_estimate !== 'undefined' )
+			{
+				// and default estimate exists 
+				if ( typeof self.record.estimate_records()[self.record.settings().default_estimate] !== 'undefined' )
+				{
+					task_data.task.estimate_id = self.record.settings().default_estimate;
+				}
+			}
+
+			// if default assigned to is set
+			if ( typeof self.record.settings().default_assigned_to !== 'undefined' )
+			{
+				// and default assigned to exists
+				if ( typeof self.record.allowed_users()[self.record.settings().default_assigned_to] !== 'undefined' )
+				{
+					task_data.task.user_id_assigned = self.record.settings().default_assigned_to;
+				}
+			}
+
+
+
+			task_data.action = 'save_task';
+			task_data.kanban_nonce = $('#kanban_nonce').val();
+
+
+
+			$.ajax({
+				method: "POST",
+				url: ajaxurl,
+				data: task_data
+			})
+			.done(function(response )
+			{
+				$('.glyphicon', $btn).toggle();
+
+
+				// just in case
+				try
+				{
+					if ( !response.success )
+					{
+						growl (text.task_added_error);
+						return false;
+					}
+
+
+					if ( Object.keys(self.record.tasks).length === 0 )
+					{
+						self.record.tasks = {};
+					}
+
+					// add the task
+					self.record.tasks[response.data.task.id] = new Task(response.data.task);
+
+					$('.task-title', self.record.tasks[response.data.task.id].$el).focus();
+				}
+				catch (err) {}
+
+
+			}); // done
+
+
+
+			return false;
 		}
 	);
 
 
 
-	$(document).mousedown(function(e)
-	{
-		// The latest element clicked
-		$last_clicked = $(e.target);
-	});
 
-
-
-	var status_records_arr = records_by_position(board.status_records());
-
-
-
-	var i = 0;
-	for ( var id in status_records_arr )
-	{
-		var status = status_records_arr[id];
-
-		if ( i == 0 )
-		{
-			status.left_open = 0;
-			status.left_close = '-{0}'.sprintf(sidebar_w);
-		}
-
-		if ( i == Object.size(status_records_arr)-1 )
-		{
-			status.left_open = '-{0}'.sprintf(sidebar_w*2);
-			status.left_close = '-{0}'.sprintf(sidebar_w);
-		}
-
-		var $status = $(t_col_status.render({
-			status: status,
-			current_user_can_write: current_user_has_cap('write')
-		}));
-		$status.appendTo('#row-statuses').board_sidebar_header();
-
-		var $status = $(t_col_tasks.render({
-			status: status,
-			current_user_can_write: current_user_has_cap('write')
-		}));
-		$status.appendTo('#row-tasks');
-
-		i++;
-	}
-
-
-
-	for ( var id in board.task_records )
-	{
-		var task = board.task_records[id];
-		add_task_to_status_col(task);
-	}
-
-	$(document).trigger('/tasks/added/', task);
-
-
-
-	if ( current_user_has_cap('write') )
-	{
-
-		$('.col-tasks').sortable({
-			connectWith: '.col-tasks',
-			handle: ".task-handle",
-			forcePlaceholderSize: true,
-			forceHelperSize: true,
-			// tolerance: "pointer",
-			placeholder: "task-placeholder",
-			over: function (e, ui)
-			{
-				ui.placeholder.closest('.col-tasks').addClass('hover');
-			},
-			out: function (e, ui)
-			{
-				ui.placeholder.closest('.col-tasks').removeClass('hover');
-			},
-			stop: function (e, ui)
-			{
-				$('.col-tasks.hover').removeClass('hover');
-			},
-			receive: function(e, ui)
-			{
-				var task_id = ui.item.attr('data-id');
-				var $col = ui.item.closest('.col-tasks');
-				var status_id_new = $col.attr('data-status-id');
-
-				ui.item.trigger('status_change', [status_id_new]);
-
-				$('.col-tasks').matchHeight();
-			} // receive
-		});
-		// .disableSelection();
-	}
-
-
-
-
-	$("body").on(
-		'keydown',
+	self.$el.on(
+		'click',
+		'.col-tasks-sidebar',
 		function(e)
 		{
-			var $any_input = $('input:focus, textarea:focus, [contenteditable]:focus');
-
-
-
-			// left
-			if( e.keyCode === 37 && $any_input.length === 0 )
+			if ( e.type == 'click' && is_dragging )
 			{
-				if ( e.shiftKey )
-				{
-					if ( $('.col-status:last').hasClass('is-open') )
-					{
-						$('.col-status:last').trigger('close');
-					}
-					else if ( !$('.col-status:first').hasClass('is-open') )
-					{
-						$('.col-status:first').trigger('open');
-					}
-				}
-			}
-
-			// right
-			if( e.keyCode === 39 && $any_input.length === 0 )
-			{
-				if ( e.shiftKey )
-				{
-					if ( $('.col-status:first').hasClass('is-open') )
-					{
-						$('.col-status:first').trigger('close');
-					}
-					else if ( !$('.col-status:last').hasClass('is-open') )
-					{
-						$('.col-status:last').trigger('open');
-					}
-				}
-			}
-
-
-
-			// toggle compact view
-			if( e.keyCode === 9 && $any_input.length === 0 )
-			{
-				$('#btn-group-view-compact .btn:has(input:not(:checked))').trigger('click');
 				return false;
 			}
 
+			var $sidebar = $(this);
+			var $rows = $('.row-statuses, .row-tasks', self.$el);
 
-
-			// jump to search
-			if( e.keyCode === 83 && $any_input.length === 0 )
+			if ( $rows.is(':animated') )
 			{
-				$('#board-search').focus();
 				return false;
 			}
 
+			var left = $sidebar.attr('data-left');
+			var right = $sidebar.attr('data-right');
+
+			if ( $sidebar.hasClass('opened') )
+			{
+				$sidebar.removeClass('opened');
+				left = right;
+			}
+			else
+			{
+				$sidebar.addClass('opened');
+			}
+
+			// clear other sidebars
+			$('.col-tasks-sidebar', self.$el).not($sidebar).removeClass('opened');
+
+			$rows.animate(
+				{marginLeft: left},
+				300
+			);
 
 
-			// launch tour
-			// if( e.keyCode === 84 && $any_input.length === 0 )
-			// {
-			// 	if ( e.shiftKey )
-			// 	{
-			// 		board_tour.show();
-			// 	}
-			// }
+			return false;
 		}
 	);
 
 
 
-	var view = Cookies.get('kanban-board-view');
+	self.$el.on(
+		'change',
+		'.modal-filter select',
+		function ()
+		{
+			var $select = $(this);
+			var $modal = $select.closest('.modal-filter');
+			var $tasks = $('.task', self.$el);
+			var $btn_reset = $('.btn-filter-reset', $modal).show();
 
-	if ( board.settings().default_to_compact_view == 1 || view == 'compact' )
+
+			var field = $select.attr('data-field');
+			var val = $select.val();
+
+			self.record.filters[field] = val;
+
+			self.apply_filters();
+
+			return false;
+		}
+	);
+
+
+
+	self.$el.on(
+		'click',
+		'.btn-filter-reset',
+		function ()
+		{
+			$(this).hide();
+
+			// reset selects
+			$('.modal-filter option', self.$el).prop('selected', function() {
+				return this.defaultSelected;
+			});
+
+			for ( var field in self.record.filters )
+			{
+				self.record.filters[field] = null;
+			}
+
+			delete url_params.filters;
+			update_url();
+
+			$('.task', self.$el).slideDown();
+
+			return false;
+		}
+	);
+
+	self.$el.on(
+		'show.bs.modal',
+		'.modal-filter',
+		function ()
+		{
+			// populate projects
+			var $modal = $(this);
+			var $select = $('.select-projects', $modal).empty();
+
+			// add blank
+			var project_html = templates['t-option-project'].render({title: '-- Projects --'});
+			$(project_html).prependTo($select);
+
+			for ( var project_id in self.record.project_records )
+			{
+				var project = self.record.project_records[project_id];
+
+				var project_html = templates['t-option-project'].render(project);
+
+				$(project_html).appendTo($select);
+
+				// make sure project is selected
+				self.apply_filters();
+			}
+		}
+	);
+
+
+
+	// mobile buttons
+	self.$el.on(
+		'click',
+		'.btn-status-toggle',
+		function()
+		{
+			var $btn = $(this);
+			var $col = $btn.closest('.col');
+			var $cols = $col.siblings().andSelf();
+
+			var operator = parseInt($btn.attr('data-operator'));
+			var col_index = $col.index() + operator;
+
+			if ( col_index < 0 )
+			{
+				col_index = $cols.length - 1;
+			}
+
+			if ( col_index >= $cols.length )
+			{
+				col_index = 0;
+			}
+
+			self.status_cols_toggle(col_index);
+		}
+	);
+
+
+
+
+	self.$el.on(
+		'click',
+		'.modal-task-move .list-group-item',
+		function ()
+		{
+			var $a = $(this);
+			var $modal = $a.closest('.modal');
+			var $task_id = $('input.task-id', $modal);
+			var task_id = $task_id.val();
+			var task = self.record.tasks[task_id];
+
+			var status_id = $a.attr('data-status-id');
+			task.record.status_id = status_id;
+			task.save();
+
+			var $task = $('#task-' + task_id);
+			setTimeout(function()
+			{
+				$task.slideUp(
+					'fast',
+					function()
+					{
+						task.update_status(status_id);
+						$(this).prependTo('#status-' + status_id + '-tasks').slideDown('fast');
+					}
+				);
+			}, 300);
+
+			self.match_col_h();
+			self.updates_status_counts();
+
+			// return false;
+		}
+	);
+
+
+
+	// prevent sortable on mobile
+	$( window ).resize(function()
 	{
-		$('#btn-group-view-compact .btn:has([name="view-compact"])').trigger('click');
+		$('.col-tasks', self.$el).sortable( ( screen_size == 'xs' ? "disable" : "enable" ) );
+	});
+
+	$('.col-tasks', self.$el).sortable( ( screen_size == 'xs' ? "disable" : "enable" ) );
+
+
+
+}; // dom
+
+
+
+Board.prototype.updates_status_counts = function()
+{
+	$('.col-tasks', self.$el).each(function()
+	{
+		var $col = $(this);
+		var count = $('.task', $col).length;
+
+		var status_id = $col.attr('data-status-id');
+
+		$('#status-' + status_id + ' .status-task-count').text(count);
+	});
+}
+
+
+
+Board.prototype.match_col_h = function()
+{
+	$('.col-tasks', self.$el).matchHeight({
+		minHeight: window_h
+	});
+}
+
+
+
+Board.prototype.apply_filters = function()
+{
+	var self = this;
+
+	var selector = [];
+
+	var show_reset = false;
+
+	// build selector and hash for TASKS TO HIDE, to support multiple filtesr
+	for ( var field in this.record.filters )
+	{
+		var filter_id = this.record.filters[field];
+
+		if ( filter_id === null || filter_id === '' )
+		{
+			continue;
+		}
+
+		show_reset = true;
+
+		for ( var task_id in this.record.tasks )
+		{
+			var task = this.record.tasks[task_id];
+			if ( task.record[field] != filter_id ) // NOT, so we're hiding tasks
+			{
+				selector.push('#task-' + task_id);
+			}
+		}
+
+		// make sure select is selected
+		$('.modal-filter select[data-field="{0}"]'.sprintf(field), this.$el).val(filter_id);
 	}
 
-
-
-	var hash = [];
-	if (location.hash)
+	if ( show_reset )
 	{
-		var params = (location.hash.substr(1)).split("&");
-		for ( var i in params )
+		$('.modal-filter .btn-filter-reset', this.$el).show();
+	}
+
+	var $tasks_to_hide = $(selector.join(','));
+
+	// show/hide tasks
+	$tasks_to_hide.slideUp('fast');
+	$('.task').not($tasks_to_hide).slideDown('fast');
+
+	$('.task', this.$el).promise().done(function()
+	{
+		self.match_col_h ();
+	});
+
+	url_params = $.extend(url_params, {filters: this.record.filters} );
+	update_url();
+}
+
+
+
+Board.prototype.project_update_counts = function()
+{
+	// build counts of projects
+	var counts = [];
+	for (var task_id in this.record.tasks)
+	{
+		var task = this.record.tasks[task_id];
+
+		if ( typeof task.record.project_id === 'undefined' )
 		{
-			var param = params[i].split("=");
-			if ( typeof param[1] === 'undefined' )
-			{
-				continue;
-			}
-			hash[param[0]] = param[1];
+			continue;
+		}
+
+		if ( typeof counts[task.record.project_id] === 'undefined' )
+		{
+			counts[task.record.project_id] = 0;
+		}
+
+		counts[task.record.project_id]++;
+	}
+
+	// populate projects
+	for (var project_id in this.record.project_records)
+	{
+		if ( typeof counts[project_id] !== 'undefined' )
+		{
+			this.record.project_records[project_id].task_count = counts[project_id];
+		}
+		else
+		{
+			this.record.project_records[project_id].task_count = 0;
 		}
 	}
+};
 
 
 
-	var is_filtered = false;
+Board.prototype.status_cols_toggle = function (col_index)
+{
+	url_params['col_index'] = col_index;
+	update_url();
 
-	for ( var filter_type in hash )
+	$('.row-statuses, .row-tasks', this.$el).each(function()
 	{
-		if ( filter_type.indexOf('filter_') !== 0 ) continue;
-
-		var id = hash[filter_type];
-		var type = filter_type.substring( 'filter_'.length );
-
-		// store filters
-		board_filter_store(type, id);
-
-		// get filter
-		var $filter = $('#filter-{0}'.sprintf(type) );
-
-		// populate dropdown
-		$filter.trigger('show.bs.dropdown');
-
-		// get option
-		var $a = $('[data-id={1}]'.sprintf(type, id), $filter );
-
-		// propulate button label
-		$a.trigger('populate_dropdown', [$a.text()]);
-
-		is_filtered = true;
-	}
-
-
-
-	if ( is_filtered )
-	{
-		$('#btn-filter-apply').trigger('click');
-	}
-
-
-
-	if ( current_user_has_cap('write') )
-	{
-
-		$('.col-tasks')
-		.on(
-			'mouseenter',
-			function()
-			{
-				var status_id = $(this).attr('data-status-id');
-				$('#status-{0}'.sprintf(status_id)).addClass('hover');
-			}
-		)
-		.on(
-			'mouseleave',
-			function()
-			{
-				var status_id = $(this).attr('data-status-id');
-				$('#status-{0}'.sprintf(status_id)).removeClass('hover');
-			}
-		);
-	}
-
-
-
-	$(window).load(function() {
-		
-		$('.col-tasks').matchHeight();
+		var $row = $(this);
+		var $cols = $('> .col', $row);
+		var $col_to_show = $cols.eq(col_index).show();
+		$cols.not($col_to_show).hide();
 	});
+}; // status_cols_toggle
 
-
-
-	$(window).resize(function(){
-		$('.col-tasks').matchHeight();
-	});
-
-
-
-	// if an alert is passed, show it
-	if ( alert !== '' )
-	{
-		$.bootstrapGrowl(
-			alert,
-			{
-				type: 'info',
-  				allow_dismiss: true
-			}
-		);
-	}
-
-
-}); // jquery
 
 

@@ -14,7 +14,7 @@ Kanban_Project::init();
 class Kanban_Project extends Kanban_Db
 {
 	// the instance of this object
-	private static $instance;
+	// private static $instance;
 
 	// the common name for this class
 	static $slug = 'project';
@@ -31,6 +31,9 @@ class Kanban_Project extends Kanban_Db
 		'modified_dt_gmt' => 'datetime',
 		'is_active'       => 'bool'
 	);
+
+	protected static $records = array();
+	protected static $records_by_board = array();
 
 
 
@@ -73,7 +76,7 @@ class Kanban_Project extends Kanban_Db
 
 
 
-		$post_data = self::get_row( 'id', $project_id );
+		$post_data = self::_get_row( 'id', $project_id );
 
 		if ( ! $post_data ) wp_send_json_error();
 
@@ -106,15 +109,15 @@ class Kanban_Project extends Kanban_Db
 
 
 
-		do_action( 'kanban_project_ajax_delete_before', $_POST['id'] );
+		do_action( 'kanban_project_ajax_delete_before', $_POST['project']['id'] );
 
 
 
-		$is_successful = self::delete( $_POST['id'] );
+		$is_successful = self::delete( $_POST['project']['id'] );
 
 
 
-		do_action( 'kanban_project_ajax_delete_after', $_POST['id'] );
+		do_action( 'kanban_project_ajax_delete_after', $_POST['project']['id'] );
 
 
 
@@ -152,35 +155,64 @@ class Kanban_Project extends Kanban_Db
 
 
 
-	static function get_all( $sql = NULL )
+	static function get_all($board_id = NULL)
 	{
-		$table_name = self::table_name();
-		$tasks_table_name = Kanban_Task::table_name();
-
-		$sql = "SELECT `projects`.*,
-				(
-					SELECT COUNT(`id`)
-					FROM `{$tasks_table_name}` tasks
-					WHERE `tasks`.`project_id` = `projects`.`id`
-					AND `tasks`.`is_active` = 1
-				)
-				AS 'task_count'
-				FROM `{$table_name}` projects
-				WHERE `projects`.`is_active` = 1
-		;";
-
-		$sql = apply_filters( 'kanban_project_get_all_sql', $sql );
-
-		$records = parent::get_all( $sql );
-
-		foreach ( $records as $key => $record )
+		if ( empty( self::$records ) )
 		{
-			$records[$key]->title = Kanban_Utils::str_for_frontend( $records[$key]->title );
+			$sql = "SELECT `projects`.*,
+					(
+						SELECT COUNT(`id`)
+						FROM `%s` tasks
+						WHERE `tasks`.`project_id` = `projects`.`id`
+						AND `tasks`.`is_active` = 1
+					)
+					AS 'task_count'
+					FROM `%s` projects
+					WHERE `projects`.`is_active` = 1
+			;";
+
+			$sql = apply_filters( 'kanban_project_get_all_sql', $sql );
+
+			global $wpdb;
+			self::$records = $wpdb->get_results(
+				sprintf( 
+					$sql,
+					Kanban_Task::table_name(),
+					self::table_name()
+				)
+			);
+
+
+
+			self::$records = Kanban_Utils::build_array_with_id_keys( self::$records, 'id' );
+
+			foreach ( self::$records as $key => $record )
+			{
+				self::$records[$key]->title = Kanban_Utils::str_for_frontend( self::$records[$key]->title );
+			}
+
+
+			$boards = Kanban_Board::get_all();
+			self::$records_by_board = array_fill_keys(array_keys($boards), array());
+
+			foreach ( self::$records as $key => $record )
+			{
+				self::$records_by_board[$record->board_id][$key] = $record;
+			}
+
+		}
+
+		if ( is_null($board_id) )
+		{
+			return apply_filters(
+				'kanban_project_get_all_return',
+				self::$records
+			);
 		}
 
 		return apply_filters(
 			'kanban_project_get_all_return',
-			Kanban_Utils::build_array_with_id_keys ( $records, 'id' )
+			isset(self::$records_by_board[$board_id]) ? self::$records_by_board[$board_id] : array()
 		);
 	}
 
@@ -210,14 +242,14 @@ class Kanban_Project extends Kanban_Db
 	 * get the instance of this class
 	 * @return object the instance
 	 */
-	public static function get_instance()
-	{
-		if ( ! self::$instance )
-		{
-			self::$instance = new self();
-		}
-		return self::$instance;
-	}
+	// public static function get_instance()
+	// {
+	// 	if ( ! self::$instance )
+	// 	{
+	// 		self::$instance = new self();
+	// 	}
+	// 	return self::$instance;
+	// }
 
 
 

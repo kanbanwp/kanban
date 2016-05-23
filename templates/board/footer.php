@@ -54,7 +54,7 @@
 							</a>
 						</li>
 						<li>
-							<a href="<?php echo admin_url() ?>">
+							<a href="<?php echo admin_url('admin.php?page=kanban_settings') ?>">
 								<?php echo __( 'Admin', 'kanban' ); ?>
 							</a>
 						</li>

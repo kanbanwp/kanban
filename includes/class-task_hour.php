@@ -47,6 +47,13 @@ class Kanban_Task_Hour extends Kanban_Db
 
 
 
+		if ( !Kanban_User::current_user_has_cap ('write') )
+		{
+			wp_send_json_error();
+		}
+
+
+
 		do_action( 'kanban_task_hour_ajax_save_before', $_POST['task']['id'] );
 
 

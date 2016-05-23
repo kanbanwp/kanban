@@ -283,7 +283,7 @@ class Kanban_Admin
 
 		if ( time() - $lastRun >= 60*60*24 ) // 1 day
 		{
-			Kanban_Option::update( 'admin-addons-check', time() );
+			Kanban_Option::update_option( 'admin-addons-check', time() );
 
 			$response = wp_remote_get( 'https://kanbanwp.com?feed=addons' );
 
@@ -296,7 +296,7 @@ class Kanban_Admin
 				$addons = array();
 			}
 
-			Kanban_Option::update( 'admin-addons', $addons );
+			Kanban_Option::update_option( 'admin-addons', $addons );
 		}
 		else
 		{
@@ -435,7 +435,7 @@ class Kanban_Admin
 		$allowed_users = Kanban_Option::get_option( 'allowed_users' );
 		$allowed_users[] = $user_id;
 
-		Kanban_Option::update( 'allowed_users', $allowed_users );
+		Kanban_Option::update_option( 'allowed_users', $allowed_users );
 
 
 

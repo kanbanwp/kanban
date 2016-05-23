@@ -81,6 +81,13 @@ class Kanban_Task extends Kanban_Db
 
 
 
+		if ( !Kanban_User::current_user_has_cap ('write') )
+		{
+			wp_send_json_error();
+		}
+
+
+
 		if ( ! isset( $_POST['task']['id'] ) )
 		{
 			$_POST['task']['id'] = '';
@@ -173,6 +180,13 @@ class Kanban_Task extends Kanban_Db
 	static function ajax_delete()
 	{
 		if ( ! isset( $_POST[Kanban_Utils::get_nonce()] ) || ! wp_verify_nonce( $_POST[Kanban_Utils::get_nonce()], 'kanban-save' ) || ! is_user_logged_in() ) wp_send_json_error();
+
+
+
+		if ( !Kanban_User::current_user_has_cap ('write') )
+		{
+			wp_send_json_error();
+		}
 
 
 

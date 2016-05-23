@@ -1,1 +1,0 @@
-function Current_user(){this.record=get_current_user}Current_user.prototype.has_cap=function(r){try{return!(this.record().caps.indexOf(r)<0)}catch(t){return!1}};

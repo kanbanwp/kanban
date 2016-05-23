@@ -51,6 +51,15 @@ Task.prototype.dom = function()
 
 	self.update_progress();
 
+
+
+	if ( !self.board().current_user().has_cap('write') )
+	{
+		return false;
+	}
+
+
+
 	self.$el.on(
 		'click',
 		'.btn-task-delete',
@@ -126,11 +135,6 @@ Task.prototype.dom = function()
 		'.task-project [contenteditable]',
 		function (e)
 		{
-			if ( !current_user.has_cap('write') )
-			{
-				return false;
-			}
-
 			var $div = $(this);
 			var $dropdown = $div.closest('.dropdown');
 
@@ -179,7 +183,7 @@ Task.prototype.dom = function()
 		{
 			window.getSelection().removeAllRanges();
 
-			if ( !current_user.has_cap('write') )
+			if ( !self.board().current_user().has_cap('write') )
 			{
 				return false;
 			}
@@ -197,7 +201,7 @@ Task.prototype.dom = function()
 		'.task-project [contenteditable]',
 		function()
 		{
-			if ( !current_user.has_cap('write') )
+			if ( !self.board().current_user().has_cap('write') )
 			{
 				return false;
 			}
@@ -207,9 +211,6 @@ Task.prototype.dom = function()
 			$div.data('orig', $div.text());
 		}
 	); // task-project;
-
-
-
 
 
 
@@ -232,15 +233,13 @@ Task.prototype.dom = function()
 
 
 
-
-
 	self.$el
 	.on(
 		'focus',
 		'.task-title',
 		function(e)
 		{
-			if ( !current_user.has_cap('write') )
+			if ( !self.board().current_user().has_cap('write') )
 			{
 				return false;
 			}
@@ -262,7 +261,7 @@ Task.prototype.dom = function()
 		'.task-title',
 		function(e)
 		{
-			if ( !current_user.has_cap('write') )
+			if ( !self.board().current_user().has_cap('write') )
 			{
 				return false;
 			}
@@ -297,7 +296,7 @@ Task.prototype.dom = function()
 		'.task-title',
 		function()
 		{
-			if ( !current_user.has_cap('write') )
+			if ( !self.board().current_user().has_cap('write') )
 			{
 				return false;
 			}
@@ -323,7 +322,7 @@ Task.prototype.dom = function()
 		{
 			window.getSelection().removeAllRanges();
 
-			if ( !current_user.has_cap('write') )
+			if ( !self.board().current_user().has_cap('write') )
 			{
 				return false;
 			}
@@ -394,9 +393,6 @@ Task.prototype.dom = function()
 
 
 
-
-
-
 	self.$el.on(
 		'click',
 		'.btn-task-move',
@@ -412,8 +408,6 @@ Task.prototype.dom = function()
 
 		}
 	);
-
-
 
 
 
@@ -452,7 +446,7 @@ Task.prototype.dom = function()
 
 			// build comment
 			var comment = text['task_assigned_to'].sprintf(
-				current_user.record().short_name,
+				self.board().current_user().record().short_name,
 				user.short_name
 			);
 
@@ -582,7 +576,7 @@ Task.prototype.update_progress = function()
 
 Task.prototype.save = function(comment, status_id_old)
 {
-	if ( !current_user.has_cap('write') )
+	if ( !this.board().current_user().has_cap('write') )
 	{
 		return false;
 	}
@@ -636,7 +630,7 @@ Task.prototype.save = function(comment, status_id_old)
 
 Task.prototype.delete = function(comment)
 {
-	if ( !current_user.has_cap('write') )
+	if ( !this.board().current_user().has_cap('write') )
 	{
 		return false;
 	}
@@ -648,7 +642,7 @@ Task.prototype.delete = function(comment)
 		action: 'delete_task',
 		kanban_nonce: $('#kanban_nonce').val(),
 		comment: text['task_deleted'].sprintf(
-			current_user.record().short_name
+			self.board().current_user().record().short_name
 		)
 	};
 
@@ -689,7 +683,7 @@ Task.prototype.update_board = function()
 
 Task.prototype.update_status = function(status_id)
 {
-	if ( !current_user.has_cap('write') )
+	if ( !this.board().current_user().has_cap('write') )
 	{
 		return false;
 	}
@@ -718,7 +712,7 @@ Task.prototype.save_title = function()
 	var new_title = $div.html();
 
 	var comment = text['task_title_updated'].sprintf(
-		current_user.record().short_name,
+		this.board().current_user().record().short_name,
 		new_title
 	);
 
@@ -784,14 +778,14 @@ Task.prototype.project_save = function(project_id)
 	{
 		// build comment
 		var comment = text['task_removed_from_project'].sprintf(
-			current_user.record().short_name
+			this.board().current_user().record().short_name
 		);
 	}
 	else
 	{
 		// build comment
 		var comment = text['task_added_to_project'].sprintf(
-			current_user.record().short_name,
+			this.board().current_user().record().short_name,
 			project.title
 		);
 	}
@@ -858,7 +852,7 @@ Task.prototype.parse_project = function()
 
 
 	var comment = text['project_added'].sprintf(
-		current_user.record().short_name,
+		this.board().current_user().record().short_name,
 		project_title
 	);
 
@@ -897,11 +891,9 @@ Task.prototype.parse_project = function()
 
 
 
-
-
 Task.prototype.log_work_hour = function(operator)
 {
-	if ( !current_user.has_cap('write') )
+	if ( !this.board().current_user().has_cap('write') )
 	{
 		return false;
 	}
@@ -919,4 +911,5 @@ Task.prototype.log_work_hour = function(operator)
 		data: task_data
 	});
 }; // add_work_hour
+
 

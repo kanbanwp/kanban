@@ -1,6 +1,9 @@
 function User (user)
 {
-	this.record = user;
+	this.record = function()
+	{
+		return user;
+	}
 }
 
 

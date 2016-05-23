@@ -79,12 +79,12 @@ class Kanban_Template
 		// get my id, and allowed id's
 		$current_user_id = get_current_user_id();
 
-		$users_field_name = sprintf( '%s_user', Kanban::get_instance()->settings->basename );
+		// $users_field_name = sprintf( '%s_user', Kanban::get_instance()->settings->basename );
 		$allowed_user_ids = array_keys(Kanban_User::get_allowed_users());
 
 
 
-		// return if I'm allowed
+		// return if I'm allowed on *any* board
 		if ( in_array( $current_user_id, $allowed_user_ids ) )
 		{
 			// redirect away from login

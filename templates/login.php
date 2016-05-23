@@ -36,7 +36,7 @@
 
 		<div class="panel panel-default">
 			<div class="panel-heading">
-<?php if ( ! is_user_logged_in() ) : ?>
+<?php // if ( ! is_user_logged_in() ) : ?>
 				<h2><?php echo __( 'Please Login', Kanban::$instance->settings->file ); ?></h2>
 				<div class="form-group">
 					<label for="email" class="sr-only">
@@ -57,7 +57,7 @@
 					<input type="hidden" name="redirect" value="<?php echo isset($_GET['redirect']) ? urldecode($_GET['redirect']) : '' ?>">
 					<?php wp_nonce_field( 'login', Kanban_Utils::get_nonce() ); ?>
 				</div>
-<?php else : // is_user_logged_in ?>
+<?php /* else : // is_user_logged_in ?>
 				<p>
 					<?php echo __( 'Whoops, looks like you haven\'t been granted access yet. Click below to request access.', 'kanban' ); ?>
 				</p>
@@ -67,7 +67,7 @@
 					</button>
 					<?php wp_nonce_field( 'request_access', Kanban_Utils::get_nonce() ); ?>
 				</p>
-<?php endif // is_user_logged_in ?>
+<?php endif */ // is_user_logged_in ?>
 			</div><!-- panel-body -->
 		</div><!-- panel -->
 	</form>

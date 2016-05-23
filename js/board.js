@@ -5,6 +5,15 @@ function Board (board)
 	this.record = board;
 	this.$el = $('#board-{0}'.sprintf(board.id()));
 
+	// build current user
+	var board_current_user = new User(this.record.allowed_users()[this.record.current_user_id()]);
+
+	this.current_user = function()
+	{
+		return board_current_user;
+	};
+
+
 	this.dom();
 
 	var self = this;
@@ -32,6 +41,164 @@ Board.prototype.dom = function()
 
 
 	$(document).trigger('/board/dom/', self.$el);
+
+
+
+	self.$el.on(
+		'click',
+		'.col-tasks-sidebar',
+		function(e)
+		{
+			if ( e.type == 'click' && is_dragging )
+			{
+				return false;
+			}
+
+			var $sidebar = $(this);
+			var $rows = $('.row-statuses, .row-tasks', self.$el);
+
+			if ( $rows.is(':animated') )
+			{
+				return false;
+			}
+
+			var left = $sidebar.attr('data-left');
+			var right = $sidebar.attr('data-right');
+
+			if ( $sidebar.hasClass('opened') )
+			{
+				$sidebar.removeClass('opened');
+				left = right;
+			}
+			else
+			{
+				$sidebar.addClass('opened');
+			}
+
+			// clear other sidebars
+			$('.col-tasks-sidebar', self.$el).not($sidebar).removeClass('opened');
+
+			$rows.animate(
+				{marginLeft: left},
+				300
+			);
+
+
+			return false;
+		}
+	);
+
+
+
+	// filter
+	self.$el.on(
+		'change',
+		'.modal-filter select',
+		function ()
+		{
+			var $select = $(this);
+			var $modal = $select.closest('.modal-filter');
+			// var $tasks = $('.task', self.$el);
+			var $btn_reset = $('.btn-filter-reset', $modal).show();
+
+
+			var field = $select.attr('data-field');
+			var val = $select.val();
+
+			self.record.filters[field] = val;
+
+			self.apply_filters();
+
+			return false;
+		}
+	)
+	.on(
+		'click',
+		'.btn-filter-reset',
+		function ()
+		{
+			$(this).hide();
+
+			// reset selects
+			$('.modal-filter option', self.$el).prop('selected', function() {
+				return this.defaultSelected;
+			});
+
+			for ( var field in self.record.filters )
+			{
+				self.record.filters[field] = null;
+			}
+
+			delete url_params.filters;
+			update_url();
+
+			$('.task', self.$el).slideDown();
+
+			return false;
+		}
+	)
+	.on(
+		'show.bs.modal',
+		'.modal-filter',
+		function ()
+		{
+			// populate projects
+			var $modal = $(this);
+			var $select = $('.select-projects', $modal).empty();
+
+			// add blank
+			var project_html = templates['t-option-project'].render({title: '-- Projects --'});
+			$(project_html).prependTo($select);
+
+			for ( var project_id in self.record.project_records )
+			{
+				var project = self.record.project_records[project_id];
+
+				project_html = templates['t-option-project'].render(project);
+
+				$(project_html).prependTo($select);
+
+				// make sure project is selected
+				self.apply_filters();
+			}
+		}
+	); // filter
+
+
+
+	// mobile buttons
+	self.$el.on(
+		'click',
+		'.btn-status-toggle',
+		function()
+		{
+			var $btn = $(this);
+			var $col = $btn.closest('.col');
+			var $cols = $col.siblings().andSelf();
+
+			var operator = parseInt($btn.attr('data-operator'));
+			var col_index = $col.index() + operator;
+
+			if ( col_index < 0 )
+			{
+				col_index = $cols.length - 1;
+			}
+
+			if ( col_index >= $cols.length )
+			{
+				col_index = 0;
+			}
+
+			self.status_cols_toggle(col_index);
+		}
+	);
+
+
+
+	if ( !self.current_user().has_cap('write') )
+	{
+		return false;
+	}
 
 
 
@@ -81,12 +248,12 @@ Board.prototype.dom = function()
 
 
 
-			var comment = text['task_moved_to_status'].sprintf(
-								current_user.record().short_name,
+			var comment = text.task_moved_to_status.sprintf(
+								self.current_user().record().short_name,
 								status_new.title
 							);
 
-			comment += text['task_moved_to_status_previous'].sprintf(
+			comment += text.task_moved_to_status_previous.sprintf(
 				status_old.title
 			);
 
@@ -99,8 +266,6 @@ Board.prototype.dom = function()
 			self.match_col_h();
 		} // receive
 	});
-
-
 
 
 
@@ -208,7 +373,7 @@ Board.prototype.dom = function()
 					board_id: self.record.id()
 				},
 				comment: '{0} added the task'.sprintf(
-					current_user.record().short_name
+					self.current_user.record().short_name
 				)
 			};
 
@@ -280,163 +445,7 @@ Board.prototype.dom = function()
 
 			return false;
 		}
-	);
-
-
-
-
-	self.$el.on(
-		'click',
-		'.col-tasks-sidebar',
-		function(e)
-		{
-			if ( e.type == 'click' && is_dragging )
-			{
-				return false;
-			}
-
-			var $sidebar = $(this);
-			var $rows = $('.row-statuses, .row-tasks', self.$el);
-
-			if ( $rows.is(':animated') )
-			{
-				return false;
-			}
-
-			var left = $sidebar.attr('data-left');
-			var right = $sidebar.attr('data-right');
-
-			if ( $sidebar.hasClass('opened') )
-			{
-				$sidebar.removeClass('opened');
-				left = right;
-			}
-			else
-			{
-				$sidebar.addClass('opened');
-			}
-
-			// clear other sidebars
-			$('.col-tasks-sidebar', self.$el).not($sidebar).removeClass('opened');
-
-			$rows.animate(
-				{marginLeft: left},
-				300
-			);
-
-
-			return false;
-		}
-	);
-
-
-
-	self.$el.on(
-		'change',
-		'.modal-filter select',
-		function ()
-		{
-			var $select = $(this);
-			var $modal = $select.closest('.modal-filter');
-			var $tasks = $('.task', self.$el);
-			var $btn_reset = $('.btn-filter-reset', $modal).show();
-
-
-			var field = $select.attr('data-field');
-			var val = $select.val();
-
-			self.record.filters[field] = val;
-
-			self.apply_filters();
-
-			return false;
-		}
-	);
-
-
-
-	self.$el.on(
-		'click',
-		'.btn-filter-reset',
-		function ()
-		{
-			$(this).hide();
-
-			// reset selects
-			$('.modal-filter option', self.$el).prop('selected', function() {
-				return this.defaultSelected;
-			});
-
-			for ( var field in self.record.filters )
-			{
-				self.record.filters[field] = null;
-			}
-
-			delete url_params.filters;
-			update_url();
-
-			$('.task', self.$el).slideDown();
-
-			return false;
-		}
-	);
-
-	self.$el.on(
-		'show.bs.modal',
-		'.modal-filter',
-		function ()
-		{
-			// populate projects
-			var $modal = $(this);
-			var $select = $('.select-projects', $modal).empty();
-
-			// add blank
-			var project_html = templates['t-option-project'].render({title: '-- Projects --'});
-			$(project_html).prependTo($select);
-
-			for ( var project_id in self.record.project_records )
-			{
-				var project = self.record.project_records[project_id];
-
-				var project_html = templates['t-option-project'].render(project);
-
-				$(project_html).appendTo($select);
-
-				// make sure project is selected
-				self.apply_filters();
-			}
-		}
-	);
-
-
-
-	// mobile buttons
-	self.$el.on(
-		'click',
-		'.btn-status-toggle',
-		function()
-		{
-			var $btn = $(this);
-			var $col = $btn.closest('.col');
-			var $cols = $col.siblings().andSelf();
-
-			var operator = parseInt($btn.attr('data-operator'));
-			var col_index = $col.index() + operator;
-
-			if ( col_index < 0 )
-			{
-				col_index = $cols.length - 1;
-			}
-
-			if ( col_index >= $cols.length )
-			{
-				col_index = 0;
-			}
-
-			self.status_cols_toggle(col_index);
-		}
-	);
-
+	); // task_new
 
 
 
@@ -493,7 +502,7 @@ Board.prototype.dom = function()
 
 Board.prototype.updates_status_counts = function()
 {
-	$('.col-tasks', self.$el).each(function()
+	$('.col-tasks', this.$el).each(function()
 	{
 		var $col = $(this);
 		var count = $('.task', $col).length;
@@ -502,16 +511,16 @@ Board.prototype.updates_status_counts = function()
 
 		$('#status-' + status_id + ' .status-task-count').text(count);
 	});
-}
+}; // updates_status_counts
 
 
 
 Board.prototype.match_col_h = function()
 {
-	$('.col-tasks', self.$el).matchHeight({
+	$('.col-tasks', this.$el).matchHeight({
 		minHeight: window_h
 	});
-}
+}; // match_col_h
 
 
 
@@ -566,7 +575,7 @@ Board.prototype.apply_filters = function()
 
 	url_params = $.extend(url_params, {filters: this.record.filters} );
 	update_url();
-}
+}; // apply_filters
 
 
 
@@ -609,7 +618,7 @@ Board.prototype.project_update_counts = function()
 
 Board.prototype.status_cols_toggle = function (col_index)
 {
-	url_params['col_index'] = col_index;
+	url_params.col_index = col_index;
 	update_url();
 
 	$('.row-statuses, .row-tasks', this.$el).each(function()

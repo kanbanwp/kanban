@@ -37,11 +37,9 @@ class Kanban_License
 
 
 		// save all single settings
-		foreach ( $_POST['settings'] as $key => $value )
+		foreach ( $_POST['licenses'] as $key => $value )
 		{
-			if ( !isset($settings[$key]) ) continue;
-
-			Kanban_Option::update($key, $value);
+			Kanban_Option::update_option($key, $value, 1); // hardcode board id
 		}
 
 

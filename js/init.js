@@ -83,11 +83,6 @@ $(function()
 
 
 
-	// build current user
-	current_user = new User(get_current_user);
-
-
-
 	// populate boards
 	for ( var board_id in boards )
 	{

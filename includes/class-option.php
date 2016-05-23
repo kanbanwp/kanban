@@ -78,10 +78,14 @@ class Kanban_Option extends Kanban_Db
 
 	static function get_defaults()
 	{
-		// make sure there's always at least one user
-		// self::$defaults['allowed_users'] = serialize( array( get_current_user_id() ) );
-
 		return apply_filters( 'kanban_option_get_defaults_return', self::$defaults );
+	}
+
+
+
+	static function get_default($key)
+	{
+		return isset(self::$defaults[$key]) ? self::$defaults[$key] : FALSE;
 	}
 
 
@@ -345,12 +349,15 @@ class Kanban_Option extends Kanban_Db
 
 
 		// save all single settings
-		foreach ( $_POST['settings'] as $key => $value )
+		foreach ( $settings as $key => $value )
 		{
 			// save licenses, just in case
-			if ( !isset($settings[$key]) && substr($key, 0, 7) != 'license' ) continue;
+			// if ( !isset($settings[$key]) && substr($key, 0, 7) != 'license' ) continue;
 
-			Kanban_Option::update_option($key, $value);
+			// if empty, use default
+			if ( !isset($_POST['settings'][$key]) ) $_POST['settings'][$key] = self::get_default($key);
+
+			Kanban_Option::update_option($key, $_POST['settings'][$key]);
 		}
 
 

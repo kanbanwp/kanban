@@ -79,10 +79,11 @@ class Kanban_Board extends Kanban_Db
 				include(__DIR__ . '/inc-board-text.php')
 			);
 
-		$wp_query->query_vars['kanban']->current_board = Kanban_Board::get_current();
 
 		// get the current user from the allowed users
-		$wp_query->query_vars['kanban']->current_user = Kanban_User::get_current_user();
+		// $wp_query->query_vars['kanban']->current_user = Kanban_User::get_current_user();
+
+		$wp_query->query_vars['kanban']->current_user_id = get_current_user_id();
 
 		$wp_query->query_vars['kanban']->boards = array();
 
@@ -92,8 +93,15 @@ class Kanban_Board extends Kanban_Db
 
 		foreach ($boards as $board_id => $board)
 		{
+			$allowed_users = Kanban_User::get_allowed_users($board_id);
+
+			if ( !isset($allowed_users[$wp_query->query_vars['kanban']->current_user_id]) ) continue;
+
+
+
 			$board_to_add = (object) array(
-				'title' => $board->title
+				'title' => $board->title,
+				'id' => $board_id
 			);
 
 			// add default filters
@@ -125,6 +133,21 @@ class Kanban_Board extends Kanban_Db
 
 			$wp_query->query_vars['kanban']->boards[$board_id] = $board_to_add;
 		}
+
+
+
+		$current_board = Kanban_Board::get_current_by('GET');
+
+		// make sure current board is available to user
+		if ( !isset($wp_query->query_vars['kanban']->boards[$current_board->id]) )
+		{
+			$current_board = reset($wp_query->query_vars['kanban']->boards);
+		}
+
+		$wp_query->query_vars['kanban']->current_board_id = $current_board->id;
+
+		// in case of discrepency in url
+		$_GET['board_id'] = $wp_query->query_vars['kanban']->current_board_id;
 
 
 

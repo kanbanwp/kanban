@@ -404,7 +404,8 @@ sub {
 	}
 
 	.task-handle {
-		cursor: pointer;
+		cursor: move;
+		cursor: -webkit-grab;
 		left: 0;
 		position: absolute;
 		height: 100%;

@@ -27,15 +27,15 @@ var text = <?php echo json_encode( $wp_query->query_vars['kanban']->text ); ?>;
 var templates = {};
 var window_w, window_h, screen_size, scrollbar_w;
 var is_dragging = false;
-var current_user;
-
-var get_current_user = function ()
-{
-	return <?php echo json_encode( $wp_query->query_vars['kanban']->current_user ); ?>;
+var current_user = {
+	has_cap: function()
+	{
+		return false;
+	}
 };
 
 var url_params = {
-	board_id: <?php echo $wp_query->query_vars['kanban']->current_board->id ?>
+	board_id: <?php echo $wp_query->query_vars['kanban']->current_board_id ?>
 };
 
 <?php if ( !empty($_GET) ) : foreach ($_GET as $key => $value) : ?>
@@ -81,6 +81,10 @@ boards[<?php echo $board_id ?>] = {
 	{
 		return <?php echo json_encode( $board->allowed_users ); ?>;
 	},
+	current_user_id: function ()
+	{
+		return <?php echo $wp_query->query_vars['kanban']->current_user_id ?>;
+	},
 	estimate_records: function ()
 	{
 		return <?php echo json_encode( $board->estimates ); ?>;
@@ -89,7 +93,7 @@ boards[<?php echo $board_id ?>] = {
 };
 <?php endforeach // boards ?>
 
-var current_board_id = <?php echo $wp_query->query_vars['kanban']->current_board->id ?>;
+var current_board_id = <?php echo $wp_query->query_vars['kanban']->current_board_id ?>;
 
 </script>
 

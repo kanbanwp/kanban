@@ -79,6 +79,12 @@ function update_page_title ()
 	if ( typeof url_params['board_id'] !== 'undefined' )
 	{
 		var board = boards[url_params['board_id']];
+
+		if ( typeof board === 'undefined' )
+		{
+			return false;
+		}
+
 		document.title = '{0} | {1}'.sprintf(board.record.title(), text.kanban);
 	}
 

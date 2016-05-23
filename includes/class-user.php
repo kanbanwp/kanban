@@ -24,7 +24,7 @@ class Kanban_User
 	static function init()
 	{
 		add_action( 'wp', array( __CLASS__, 'login' ) );
-		// add_action( 'wp', array( __CLASS__, 'request_access' ) );
+		add_action( 'wp', array( __CLASS__, 'request_access' ) );
 	}
 
 
@@ -33,54 +33,54 @@ class Kanban_User
 	 * if a logged in user sees the log in page, and requets access to the kanban board
 	 * sends an email to the site admin
 	 */
-	// static function request_access()
-	// {
-	// 	if ( ! isset( $_POST[Kanban_Utils::get_nonce()] ) || ! wp_verify_nonce( $_POST[Kanban_Utils::get_nonce()], 'request_access' ) ) return;
+	static function request_access()
+	{
+		if ( ! isset( $_POST[Kanban_Utils::get_nonce()] ) || ! wp_verify_nonce( $_POST[Kanban_Utils::get_nonce()], 'request_access' ) ) return;
 
-	// 	$admin_email = get_option( 'admin_email' );
-	// 	$blogname = get_option( 'blogname' );
+		$admin_email = get_option( 'admin_email' );
+		$blogname = get_option( 'blogname' );
 
-	// 	$headers = 'From: ' . $admin_email . '\r\n';
+		$headers = 'From: ' . $admin_email . '\r\n';
 
-	// 	$current_user_id = get_current_user_id();
-	// 	$current_user = get_user_by( 'id', $current_user_id );
+		$current_user_id = get_current_user_id();
+		$current_user = get_user_by( 'id', $current_user_id );
 
-	// 	wp_mail(
-	// 		$admin_email,
-	// 			sprintf(
-	// 			__(
-	// 				'%s: %s has requested access',
-	// 				'kanban'
-	// 				),
-	// 			Kanban::get_instance()->settings->pretty_name,
-	// 			Kanban_User::get_username_long ( $current_user )
-	// 		),
-	// 		sprintf(
-	// 			__(
-	// 				'The following user has requested access. ' . '\n'
-	// 				. '%s' . '\n\n'
-	// 				. 'To grant them access, please visit this link:' . '\n'
-	// 				. '%s' . '\n'
-	// 				. 'And select them as an allowed user.', 'kanban'
-	// 			),
-	// 			Kanban_User::get_username_long ( $current_user ),
-	// 			admin_url( 'admin.php?page=' . Kanban::get_instance()->settings->basename )
-	// 		),
-	// 		$headers
-	// 	);
-
-
-
-	// 	Kanban_Flash::flash (
-	// 		__( 'Your request has been sent.', 'kanban' ),
-	// 		'success'
-	// 	);
+		wp_mail(
+			$admin_email,
+				sprintf(
+				__(
+					'%s: %s has requested access',
+					'kanban'
+					),
+				Kanban::get_instance()->settings->pretty_name,
+				Kanban_User::get_username_long ( $current_user )
+			),
+			sprintf(
+				__(
+					'The following user has requested access. ' . '\n'
+					. '%s' . '\n\n'
+					. 'To grant them access, please visit this link:' . '\n'
+					. '%s' . '\n'
+					. 'And select them as an allowed user.', 'kanban'
+				),
+				Kanban_User::get_username_long ( $current_user ),
+				admin_url( 'admin.php?page=' . Kanban::get_instance()->settings->basename )
+			),
+			$headers
+		);
 
 
 
-	// 	wp_redirect( $_POST['_wp_http_referer'] );
-	// 	exit;
-	// }
+		Kanban_Flash::flash (
+			__( 'Your request has been sent.', 'kanban' ),
+			'success'
+		);
+
+
+
+		wp_redirect( $_POST['_wp_http_referer'] );
+		exit;
+	}
 
 
 
@@ -186,7 +186,7 @@ class Kanban_User
 
 
 
-			$query_in = array();
+			$query_in = array(0);
 			foreach (array_keys($boards) as $board_record_id)
 			{
 				// get all settings

@@ -348,7 +348,7 @@ Board.prototype.dom = function()
 					board_id: self.record.id()
 				},
 				comment: '{0} added the task'.sprintf(
-					self.current_user.record().short_name
+					self.current_user().record().short_name
 				)
 			};
 

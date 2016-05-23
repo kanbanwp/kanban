@@ -25,10 +25,10 @@
 
 
 	<h2 class="nav-tab-wrapper">
-		<a href="#tab-settings" class="nav-tab nav-tab-active"><?php echo __( 'General', 'kanban' ); ?></a>
-		<a href="#tab-users" class="nav-tab"><?php echo __( 'Users', 'kanban' ); ?></a>
-		<a href="#tab-statuses" class="nav-tab"><?php echo __( 'Statuses', 'kanban' ); ?></a>
-		<a href="#tab-estimates" class="nav-tab"><?php echo __( 'Estimates', 'kanban' ); ?></a>
+		<a href="#tab-settings" id="tab-settings-tab" class="nav-tab nav-tab-active"><?php echo __( 'General', 'kanban' ); ?></a>
+		<a href="#tab-users" id="tab-users-tab" class="nav-tab"><?php echo __( 'Users', 'kanban' ); ?></a>
+		<a href="#tab-statuses" id="tab-statuses-tab" class="nav-tab"><?php echo __( 'Statuses', 'kanban' ); ?></a>
+		<a href="#tab-estimates" id="tab-estimates-tab" class="nav-tab"><?php echo __( 'Estimates', 'kanban' ); ?></a>
 		<?php
 		echo apply_filters( 'kanban_settings_tabs', '' );
 		?>
@@ -124,7 +124,7 @@
 			<?php submit_button(
 				__( 'Save your Settings', 'kanban' ),
 					'primary',
-					'submit'
+					'submit-settings'
 			); ?>
 		</div><!-- tab-settings -->
 
@@ -159,7 +159,7 @@
 					<?php endif // count $all_users_arr ?>
 					<?php foreach ( $all_users_arr as $user_id => $user_name ) : ?>
 													<label style="display: block;">
-														<input name="settings[allowed_users][]" type="checkbox" value="<?php echo $user_id; ?>" <?php echo isset( $settings['allowed_users'] ) ? in_array( $user_id, $settings['allowed_users'] ) ? 'checked' : '' : ''; ?>>
+														<input name="settings[allowed_users][]" type="checkbox" value="<?php echo $user_id; ?>" class="tab-users-user" id="tab-users-user-<?php echo $user_id; ?>" <?php echo isset( $settings['allowed_users'] ) ? in_array( $user_id, $settings['allowed_users'] ) ? 'checked' : '' : ''; ?>>
 														<?php echo $user_name; ?>
 													</label>
 					<?php endforeach // $all_users_arr; ?>
@@ -195,7 +195,7 @@
 								<?php submit_button(
 									__( 'Save your Settings', 'kanban' ),
 										'primary',
-										'submit'
+										'submit-users'
 								); ?>
 
 							</div><!-- postbox -->
@@ -251,7 +251,7 @@
 			<?php submit_button(
 				__( 'Save your Settings', 'kanban' ),
 					'primary',
-					'submit'
+					'submit-statuses'
 			); ?>
 		</div><!-- tab-statuses -->
 
@@ -301,7 +301,7 @@
 			<?php submit_button(
 				__( 'Save your Settings', 'kanban' ),
 					'primary',
-					'submit'
+					'submit-estimates'
 			); ?>
 		</div><!-- tab-estimates -->
 
@@ -324,7 +324,7 @@
 			<?php submit_button(
 				__( 'Save your Settings', 'kanban' ),
 					'primary',
-					'submit'
+					'submit-licenses'
 			); ?>
 		</div><!-- tab-licenses -->
 

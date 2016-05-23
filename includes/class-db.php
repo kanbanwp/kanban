@@ -357,7 +357,7 @@ abstract class Kanban_Db
 		}
 
 
-
+		// get first board for task
 		$sql = "SELECT `id`
 				FROM `{$boards_table}`
 				ORDER BY id
@@ -405,6 +405,15 @@ abstract class Kanban_Db
 			}
 
 		}
+
+		// get second status for task
+		$sql = "SELECT `id`
+				FROM `{$status_table}`
+				ORDER BY id
+				LIMIT 1, 1
+		;";
+
+		$status_id = $wpdb->get_var( $sql );
 
 
 
@@ -461,6 +470,7 @@ abstract class Kanban_Db
 			$data = array(
 				'title'           => 'Your first task',
 				'board_id'        => $board_id,
+				'status_id'		  => $status_id,
 				'created_dt_gmt'  => Kanban_Utils::mysql_now_gmt(),
 				'modified_dt_gmt' => Kanban_Utils::mysql_now_gmt(),
 				'user_id_author'  => get_current_user_id(),

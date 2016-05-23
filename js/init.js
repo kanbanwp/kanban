@@ -191,6 +191,34 @@ $(function()
 	);
 
 
+	$('.btn-filter-reset')
+	.on(
+		'click',
+		function ()
+		{
+			$('.btn-filter-reset').hide();
+
+			var board = boards[current_board_id];
+
+			// reset selects
+			$('.modal-filter option', board.$el).prop('selected', function() {
+				return this.defaultSelected;
+			});
+
+			for ( var field in board.record.filters )
+			{
+				board.record.filters[field] = null;
+			}
+
+			delete url_params.filters;
+			update_url();
+
+			$('.task', board.$el).slideDown();
+
+			return false;
+		}
+	);
+
 
 	$('#btn-view-compact').on(
 		'click',

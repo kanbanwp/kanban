@@ -99,7 +99,7 @@ Board.prototype.dom = function()
 			var $select = $(this);
 			var $modal = $select.closest('.modal-filter');
 			// var $tasks = $('.task', self.$el);
-			var $btn_reset = $('.btn-filter-reset', $modal).show();
+			var $btn_reset = $('.btn-filter-reset').show();
 
 
 			var field = $select.attr('data-field');
@@ -108,31 +108,6 @@ Board.prototype.dom = function()
 			self.record.filters[field] = val;
 
 			self.apply_filters();
-
-			return false;
-		}
-	)
-	.on(
-		'click',
-		'.btn-filter-reset',
-		function ()
-		{
-			$(this).hide();
-
-			// reset selects
-			$('.modal-filter option', self.$el).prop('selected', function() {
-				return this.defaultSelected;
-			});
-
-			for ( var field in self.record.filters )
-			{
-				self.record.filters[field] = null;
-			}
-
-			delete url_params.filters;
-			update_url();
-
-			$('.task', self.$el).slideDown();
 
 			return false;
 		}
@@ -148,7 +123,7 @@ Board.prototype.dom = function()
 
 			// add blank
 			var project_html = templates['t-option-project'].render({title: '-- Projects --'});
-			$(project_html).prependTo($select);
+			$(project_html).appendTo($select);
 
 			for ( var project_id in self.record.project_records )
 			{
@@ -156,7 +131,7 @@ Board.prototype.dom = function()
 
 				project_html = templates['t-option-project'].render(project);
 
-				$(project_html).prependTo($select);
+				$(project_html).appendTo($select);
 
 				// make sure project is selected
 				self.apply_filters();
@@ -559,7 +534,11 @@ Board.prototype.apply_filters = function()
 
 	if ( show_reset )
 	{
-		$('.modal-filter .btn-filter-reset', this.$el).show();
+		$('.btn-filter-reset').show();
+	}
+	else
+	{
+		$('.btn-filter-reset').hide();
 	}
 
 	var $tasks_to_hide = $(selector.join(','));

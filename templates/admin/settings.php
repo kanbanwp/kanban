@@ -170,7 +170,7 @@
 										<tr>
 											<th width="33%" scope="row">
 												<label for="default_assigned_to">
-													<?php echo __( 'Assign all tasks to', 'kanban' ); ?>
+													<?php echo __( 'Default all tasks to', 'kanban' ); ?>
 												</label>
 											</th>
 											<td>

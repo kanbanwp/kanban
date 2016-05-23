@@ -13,13 +13,18 @@
 			<form class="navbar-form navbar-nav" id="page-search">
 				<div class="form-group has-feedback">
 					<input type="search" placeholder="Search" class="form-control" id="board-search">
-					<span class="glyphicon glyphicon-remove form-control-feedback" id="board-search-clear"></span>
+					<span class="glyphicon glyphicon-remove form-control-feedback" id="board-search-clear" style="display: none;"></span>
 				</div>
-				<div class="form-group">
+
+
+				<div class="btn-group">
 					<a href="#" class="btn btn-default" id="btn-filter-modal-toggle" data-toggle="modal">
 						Filter
 					</a>
-				</div>
+					<a href="#" class="btn btn-default btn-filter-reset" style="display: none;">
+						<span class="glyphicon glyphicon-remove" id="board-filter-clear"></span>
+					</a>
+				</div><!-- btn-group -->
 
 			</form>
 

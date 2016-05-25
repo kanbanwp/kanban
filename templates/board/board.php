@@ -1,4 +1,4 @@
-<div class="board tab-pane <?php echo $wp_query->query_vars['kanban']->current_board_id == $board_id ? 'active' : '' ?>" id="board-<?php echo $board_id ?>" data-id="<?php echo $board_id ?>" data-title="<?php echo $board->title ?>">
+<div class="board tab-pane" id="board-<?php echo $board_id ?>" data-id="<?php echo $board_id ?>" data-title="<?php echo $board->title ?>">
 <?php /*
 	<div class="row row-title text-center">
 		<?php echo $board->title ?>

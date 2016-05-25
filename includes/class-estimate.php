@@ -60,6 +60,7 @@ class Kanban_Estimate extends Kanban_Db
 
 			foreach ( self::$records as $key => $record )
 			{
+				if ( !isset(self::$records_by_board[$record->board_id]) ) continue;
 				self::$records_by_board[$record->board_id][$key] = $record;
 			}
 

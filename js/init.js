@@ -56,6 +56,12 @@ $(function()
 				// add board to url
 				update_url();
 
+				// hide loader
+				$('#page-loading').remove();
+
+				// show first board
+				boards[current_board_id].$el.addClass('active');
+
 				if ( typeof url_params['search'] !== 'undefined' )
 				{
 					$('#board-search').val(url_params['search']).trigger('keyup');

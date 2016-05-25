@@ -46,12 +46,19 @@ sub {
   top: 0;
   width: 57.3px; }
   .modal-body .close:hover {
-    background: #f6f6f6; }
+    background: #f9f9fa; }
 .modal-body a.panel-title {
   display: block; }
 
 .tab-content {
   height: 100%; }
+
+#page-loading {
+  left: 25%;
+  position: fixed;
+  top: 33%;
+  text-align: center;
+  width: 50%; }
 
 .board {
   height: 100%;
@@ -87,10 +94,10 @@ sub {
     padding: 0px 9.9px;
     position: relative; }
     .row-statuses .col-status:nth-child(even) {
-      -webkit-box-shadow: 0px 15px 15px -5px #f6f6f6;
-      -moz-box-shadow: 0px 15px 15px -5px #f6f6f6;
-      box-shadow: 0px 15px 15px -5px #f6f6f6;
-      background: #f6f6f6; }
+      -webkit-box-shadow: 0px 15px 15px -5px #f9f9fa;
+      -moz-box-shadow: 0px 15px 15px -5px #f9f9fa;
+      box-shadow: 0px 15px 15px -5px #f9f9fa;
+      background: #f9f9fa; }
       @media screen and (max-width: 767px) {
         .row-statuses .col-status:nth-child(even) {
           background: white;
@@ -132,15 +139,10 @@ sub {
     position: relative;
     z-index: 0; }
     .row-tasks-wrapper .col-tasks:nth-child(even) {
-      background: #f6f6f6; }
+      background: #f9f9fa; }
       @media screen and (max-width: 767px) {
         .row-tasks-wrapper .col-tasks:nth-child(even) {
           background: white; } }
-    .row-tasks-wrapper .col-tasks:hover .task, .row-tasks-wrapper .col-tasks.hover .task {
-      border-color: #BBB; }
-    @media screen and (max-width: 767px) {
-      .row-tasks-wrapper .col-tasks:hover, .row-tasks-wrapper .col-tasks.hover {
-        background: transparent; } }
     .row-tasks-wrapper .col-tasks.active {
       z-index: 1; }
     @media screen and (max-width: 767px) {
@@ -163,7 +165,7 @@ sub {
     margin: 0 -3px 0 -3px;
     padding: 3px; }
     .task [contenteditable]:hover, .task [contenteditable]:focus, .task [contenteditable]:active {
-      background: #f6f6f6; }
+      background: #f9f9fa; }
     .task [contenteditable]:empty:before {
       color: #dfdfdf;
       content: attr(placeholder);
@@ -197,14 +199,12 @@ sub {
         position: absolute;
         bottom: 3px;
         z-index: 1; }
-      .task .row-task-actions .col.col-task-assigned {
-        padding-top: 5px; }
-        .task .row-task-actions .col.col-task-assigned small {
-          line-height: 1.618; }
-        .task .row-task-actions .col.col-task-assigned .avatar {
-          border-radius: 50%;
-          height: 2em;
-          width: 2em; }
+      .task .row-task-actions .col.col-task-assigned small {
+        line-height: 1.618; }
+      .task .row-task-actions .col.col-task-assigned .avatar {
+        border-radius: 50%;
+        height: 2em;
+        width: 2em; }
       .task .row-task-actions .col small {
         display: block;
         font-size: .8em;

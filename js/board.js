@@ -198,11 +198,11 @@ Board.prototype.dom = function()
 		},
 		over: function (e, ui)
 		{
-			ui.placeholder.closest('.col-tasks').addClass('hover');
+			// ui.placeholder.closest('.col-tasks').addClass('hover');
 		},
 		out: function (e, ui)
 		{
-			ui.placeholder.closest('.col-tasks').removeClass('hover');
+			// ui.placeholder.closest('.col-tasks').removeClass('hover');
 		},
 		stop: function (e, ui)
 		{
@@ -301,9 +301,9 @@ Board.prototype.dom = function()
 		{
 			var $col = $(this);
 			var status_id = $col.attr('data-id');
-			$('#status-' + status_id + '-tasks').addClass('hover');
+			// $('#status-' + status_id + '-tasks').addClass('hover');
 
-			$col.addClass('hover');
+			// $col.addClass('hover');
 			$('.btn-group-status-actions', $col).show();
 			return false;
 		}
@@ -316,9 +316,9 @@ Board.prototype.dom = function()
 
 			var $col = $(this);
 			var status_id = $col.attr('data-id');
-			$('#status-' + status_id + '-tasks').removeClass('hover');
+			// $('#status-' + status_id + '-tasks').removeClass('hover');
 
-			$col.removeClass('hover');
+			// $col.removeClass('hover');
 			$('.btn-group-status-actions', $col).hide();
 			return false;
 		}

@@ -130,6 +130,10 @@ class Kanban_Board extends Kanban_Db
 			$board_to_add->col_percent_w = count( $board_to_add->statuses ) > 0 ? 100/(count( $board_to_add->statuses )) : 100;
 			$board_to_add->status_w = count( $board_to_add->statuses ) > 0 ? 100/(count( $board_to_add->statuses )-2) : 0;
 
+			apply_filters(
+				'kanban_board_send_page_data_to_template_each_board',
+				$board_to_add
+			);
 
 			$wp_query->query_vars['kanban']->boards[$board_id] = $board_to_add;
 		}

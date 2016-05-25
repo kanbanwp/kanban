@@ -8,11 +8,11 @@ $screen-lg-min: 1200px;
 $screen-lg-max: 1199px;
 
 $color-blue-wp:  #21759b;
-$color-orange-wp:  #d54e21;
+$color-bluegrey: #AAB1BA;
 $color-grey-wp:  #464646;
+$color-orange-wp:  #d54e21;
 $color-yellow: #ffff99;
 
-// $color-#AAB1BA
 
 $margin: 15px;
 
@@ -78,7 +78,7 @@ sub {
 		top: 0;
 		width: $margin*3.82;
 		&:hover {
-			background: lighten($color-grey-wp, 69);
+			background: lighten($color-bluegrey, 28);
 		}
 	}
 
@@ -89,6 +89,14 @@ sub {
 
 .tab-content {
 	height: 100%;
+}
+
+#page-loading {
+	left: 25%;
+	position: fixed;
+	top: 33%;
+	text-align: center;
+	width: 50%;
 }
 
 .board {
@@ -140,10 +148,10 @@ sub {
 		position: relative;
 
 		&:nth-child(even) {
-			-webkit-box-shadow: 0px $margin $margin (-$margin)/3 lighten($color-grey-wp, 69);
-			-moz-box-shadow: 0px $margin $margin (-$margin)/3 lighten($color-grey-wp, 69);
-			box-shadow: 0px $margin $margin (-$margin)/3 lighten($color-grey-wp, 69);
-			background: lighten($color-grey-wp, 69);
+			-webkit-box-shadow: 0px $margin $margin (-$margin)/3 lighten($color-bluegrey, 28);
+			-moz-box-shadow: 0px $margin $margin (-$margin)/3 lighten($color-bluegrey, 28);
+			box-shadow: 0px $margin $margin (-$margin)/3 lighten($color-bluegrey, 28);
+			background: lighten($color-bluegrey, 28);
 
 			@media screen and (max-width: $screen-sm-max) {
 				background: white;
@@ -208,25 +216,25 @@ sub {
 		z-index: 0;
 
 		&:nth-child(even) {
-			background: lighten($color-grey-wp, 69);
+			background: lighten($color-bluegrey, 28);
 
 			@media screen and (max-width: $screen-sm-max) {
 				background: white;
 			}
 		}
 
-		&:hover,
-		&.hover {
-			// background: lighten($color-grey-wp, 60);;
+		// &:hover,
+		// &.hover {
+		// 	// background: lighten($color-grey-wp, 60);;
 
-			.task {
-				border-color: #BBB;
-			}
+		// 	.task {
+		// 		border-color: #BBB;
+		// 	}
 
-			@media screen and (max-width: $screen-sm-max) {
-				background: transparent;
-			}
-		}
+		// 	@media screen and (max-width: $screen-sm-max) {
+		// 		background: transparent;
+		// 	}
+		// }
 
 		&.active {
 			z-index: 1;
@@ -272,7 +280,7 @@ sub {
 		&:hover,
 		&:focus,
 		&:active {
-			background: lighten($color-grey-wp, 69);
+			background: lighten($color-bluegrey, 28);
 		}
 
 		&:empty:before {
@@ -329,7 +337,7 @@ sub {
 			}
 
 			&.col-task-assigned {
-				padding-top: $margin/3;
+				// padding-top: $margin/3;
 				small {
 					line-height: 1.618;
 				}
@@ -554,7 +562,7 @@ body.board-view-all-cols {
 
 
 #page-footer {
-	background: #AAB1BA;
+	background: $color-bluegrey;
 	border: 0;
 	border-radius: 0;
 	bottom: 0;

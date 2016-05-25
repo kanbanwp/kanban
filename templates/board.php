@@ -7,6 +7,9 @@
 <?php echo apply_filters( 'kanban_page_boards_before', '' ); ?>
 
 <div class="tab-content">
+<div id="page-loading">
+	<span class="hidden-xs glyphicon glyphicon-refresh glyphicon-refresh-animate"></span>
+</div>
 <?php foreach ( $wp_query->query_vars['kanban']->boards as $board_id => $board ) : ?>
 <?php include Kanban_Template::find_template( 'board/board' ); ?>
 <?php endforeach ?>

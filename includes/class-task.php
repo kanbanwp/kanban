@@ -287,24 +287,17 @@ class Kanban_Task extends Kanban_Db
 				)
 			);
 
-			// not needed with contenteditable
-			// foreach ( self::$records as $key => $record )
-			// {
-			// 	self::$records[$key]->title = Kanban_Utils::str_for_frontend( self::$records[$key]->title );
-			// 	self::$records[$key]->description = Kanban_Utils::str_for_frontend( self::$records[$key]->description );
-			// }
-
-
 			self::$records = Kanban_Utils::build_array_with_id_keys( self::$records, 'id' );
 
 			$boards = Kanban_Board::get_all();
 			self::$records_by_board = array_fill_keys(array_keys($boards), array());
 
-			foreach ( self::$records as $key => $record )
+			foreach ( self::$records as $task_id => $record )
 			{
-				self::$records_by_board[$record->board_id][$key] = $record;
-			}
+				if ( !isset(self::$records_by_board[$record->board_id]) ) continue;
 
+				self::$records_by_board[$record->board_id][$task_id] = $record;
+			}
 		}
 
 		if ( is_null($board_id) )

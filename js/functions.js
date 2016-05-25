@@ -18,6 +18,39 @@ String.prototype.sprintf = function()
 // };
 
 
+// @link http://phpjs.org/functions/stripslashes/
+String.prototype.stripslashes = function()
+{
+	return (this + '')
+    .replace(/\\(.?)/g, function(s, n1)
+    {
+      switch (n1) {
+        case '\\':
+          return '\\';
+        case '0':
+          return '\u0000';
+        case '':
+          return '';
+        default:
+          return n1;
+      }
+    });
+};
+
+// @link http://stackoverflow.com/a/3605602/38241
+Number.prototype.padZero = function(len)
+{
+ var s= String(this), c= '0';
+ len= len || 2;
+ while(s.length < len) s= c + s;
+ return s;
+}
+
+function mysql_dt_to_js_date (dt)
+{
+	var t = dt.split(/[- :]/);
+	return new Date(t[0], t[1]-1, t[2], t[3], t[4], t[5]);
+}
 
 function get_screen_size ()
 {
@@ -200,6 +233,16 @@ function growl_response_message (response)
 
 function growl (message)
 {
+	if ( typeof message === 'undefined' )
+	{
+		return;
+	}
+
+	if ( message == '' )
+	{
+		return;
+	}
+
 	// https://github.com/ifightcrime/bootstrap-growl/
 	$.bootstrapGrowl(
 		message,
@@ -260,3 +303,33 @@ function format_hours (h)
 }
 
 
+function obj_order_by_key(obj, reverse)
+{
+	if ( typeof reverse === 'undefined')
+	{
+		reverse = false;
+	}
+
+	var arr = Object.keys(obj);
+	arr.sort(function(a, b)
+	{
+		a = parseInt(a);
+		b = parseInt(b);
+	    if(a < b) return -1;
+	    if(a > b) return 1;
+	    return 0;
+	});
+
+	var re = [];
+	for ( var i in  arr )
+	{
+		re[arr[i]] = obj[arr[i]];
+	}
+
+	if ( reverse )
+	{
+		re.reverse();
+	}
+
+	return re;
+}

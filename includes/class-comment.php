@@ -36,6 +36,7 @@ class Kanban_Comment extends Kanban_Db
 	);
 
 	protected static $records = array();
+	protected static $records_by_task = array();
 
 
 
@@ -92,11 +93,11 @@ class Kanban_Comment extends Kanban_Db
 
 
 
-	static function get_all()
+	static function get_all($task_id = NULL)
 	{
 		if ( empty( self::$records ) )
 		{
-			$sql = apply_filters( 'kanban_comment_get_all_sql', "SELECT * FROM `%s`;" );
+			$sql = apply_filters( 'kanban_comment_get_all_sql', "SELECT * FROM `%s` ORDER BY `id` DESC;" );
 
 			global $wpdb;
 			self::$records = $wpdb->get_results(
@@ -107,14 +108,30 @@ class Kanban_Comment extends Kanban_Db
 			);
 
 			self::$records = Kanban_Utils::build_array_with_id_keys( self::$records, 'id' );
+
+			foreach (self::$records as $comment_id => $comment)
+			{
+				if ( !isset(self::$records_by_task[$comment->task_id]) )
+				{
+					self::$records_by_task[$comment->task_id] = array();
+				}
+				self::$records_by_task[$comment->task_id][$comment_id] = $comment;
+			}
+		}
+
+		if ( is_null($task_id) )
+		{
+			return apply_filters(
+				'kanban_comment_get_all_return',
+				self::$records
+			);
 		}
 
 		return apply_filters(
 			'kanban_comment_get_all_return',
-			self::$records
+			isset(self::$records_by_task[$task_id]) ? self::$records_by_task[$task_id] : array()
 		);
 	}
-
 
 
 

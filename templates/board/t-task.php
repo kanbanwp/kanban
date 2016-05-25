@@ -1,10 +1,14 @@
 <div class="task" id="task-{{=task.id}}" data-id="{{=task.id}}" data-project-id="{{=task.project_id}}" data-user_id-assigned="{{=task.user_id_assigned}}">
 	<div class="task-menu">
+		<?php echo apply_filters( 'kanban_task_id_before', '' ); ?>
+
 		<div class="dropdown">
-			<a href="#" class="task-id btn btn-xs btn-default" data-toggle="dropdown">
+			<a href="#" class="task-id btn btn-xs btn-default btn-block" data-toggle="dropdown">
 				{{=task.id}}
 			</a>
 			<ul class="dropdown-menu dropdown-menu-right">
+				<?php echo apply_filters( 'kanban_task_id_dropdown_after', '' ); ?>
+
 				<li>
 					<a href="#" class="btn-task-move" data-toggle="modal" data-target="#modal-task-move-{{=task.board_id}}" data-task-id="{{=task.id}}">
 						Move this task
@@ -17,8 +21,12 @@
 						<span class="hidden-xs glyphicon glyphicon-refresh glyphicon-refresh-animate" style="display: none;"></span>
 					</a>
 				</li>
+
+				<?php echo apply_filters( 'kanban_task_id_dropdown_after', '' ); ?>
 			</ul>
 		</div><!-- task-id-menu -->
+
+		<?php echo apply_filters( 'kanban_task_id_after', '' ); ?>
 	</div><!-- task-menu -->
 
 	<div class="task-project dropdown">
@@ -112,4 +120,6 @@
 	</div>
 
 	<div class="task-handle" style="background-color: {{=task.status.color_hex}}"></div>
+
+	<?php echo apply_filters( 'kanban_task_after', '' ); ?>
 </div>

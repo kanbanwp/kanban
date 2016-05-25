@@ -39,7 +39,7 @@ Task.prototype.add = function()
 
 	this.update_board();
 
-	$(document).trigger('/task/added/', this.record);
+	$(document).trigger('/task/added/', this);
 }; // add
 
 
@@ -659,7 +659,7 @@ Task.prototype.delete = function(comment)
 			return false;
 		}
 
-		$(document).trigger('/task/deleted/', self.record);
+		$(document).trigger('/task/deleted/', self);
 
 		self.$el.slideUp('fast', function()
 		{

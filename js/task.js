@@ -127,7 +127,6 @@ Task.prototype.dom = function()
 			{
 				return false;
 			}
-
 		}
 	)
 	.on(
@@ -174,6 +173,14 @@ Task.prototype.dom = function()
 				return;
 			}
 
+
+			// allow space (undermine bootstrap behavior)
+			if (e.keyCode === 32)
+			{
+				$div.html( $div.html() + '&nbsp;' );
+				placeCaretAtEnd($div.get(0));
+				return false;
+			}
 		}
 	)	
 	.on(
@@ -419,12 +426,41 @@ Task.prototype.dom = function()
 			var $a = $(this);
 
 			var estimate_id = $a.attr('data-id');
-			self.record.estimate_id = estimate_id;
-			self.save();
-
 			var estimate = self.board().record.estimate_records()[estimate_id];
-			$('.task-estimate', self.$el).html(estimate.title);
 
+
+
+			// build comment
+			var comment = text['task_estimate_updated'].sprintf(
+				self.board().current_user().record().short_name,
+				estimate.title
+			);
+
+			if ( typeof self.board().record.estimate_records()[self.record.estimate_id] !== 'undefined' )
+			{
+				var old_estimate = self.board().record.estimate_records()[self.record.estimate_id];
+
+				// don't save if same as it was
+				if ( estimate_id == self.record.estimate_id )
+				{
+					return true;
+				}
+
+				comment += text['task_estimate_updated_previous'].sprintf(
+					old_estimate.title
+				);
+			}
+
+
+
+			// update and  save with comment
+			self.record.estimate_id = estimate_id;
+			self.save(comment);
+
+
+
+			// update UI
+			$('.task-estimate', self.$el).html(estimate.title);
 			self.update_progress();
 		}
 	);
@@ -439,7 +475,6 @@ Task.prototype.dom = function()
 			var $a = $(this);
 
 			var user_id = $a.attr('data-id');
-
 			var user = self.board().record.allowed_users()[user_id];
 
 
@@ -454,6 +489,12 @@ Task.prototype.dom = function()
 			{
 				var old_user = self.board().record.allowed_users()[self.record.user_id_assigned];
 
+				// don't save if assigned to the same person
+				if ( user_id == self.record.user_id_assigned )
+				{
+					return true;
+				}
+
 				comment += text['task_assigned_to_previous'].sprintf(
 					old_user.short_name
 				);
@@ -461,11 +502,13 @@ Task.prototype.dom = function()
 
 
 
+			// update and  save with comment
 			self.record.user_id_assigned = user_id;
 			self.save(comment);
 
 
 
+			// update UI
 			self.$el.attr('data-user_id-assigned', user_id);
 
 			var $initials = $('.task-assigned-initials', self.$el).removeClass('empty');
@@ -818,7 +861,7 @@ Task.prototype.parse_project = function()
 
 	var $div = $('.task-project [contenteditable]', this.$el);
 
-	var project_title = $div.text();
+	var project_title = $.trim($div.text());
 
 	if ( typeof project_title === 'undefined' || project_title === '' || project_title === null )
 	{
@@ -834,7 +877,7 @@ Task.prototype.parse_project = function()
 		var project = this.board().record.project_records[i];
 
 		// it is NOT a new project
-		if ( project_title === project.title )
+		if ( project_title === $.trim(project.title) )
 		{
 			project_id = project.id;
 			break;

@@ -62,6 +62,8 @@ function on_window_resize ()
 	window_w = $('body').width();
 	window_h = $('body').height();
 	screen_size = get_screen_size();
+
+	all_match_col_h ();
 }
 
 
@@ -217,6 +219,26 @@ function encode_urls_emails ($div)
 	$div.html( encode_urls($div.html()) );
 }
 
+
+
+// http://stackoverflow.com/a/4238971
+function placeCaretAtEnd(el) {
+	el.focus();
+	if (typeof window.getSelection != "undefined"
+		&& typeof document.createRange != "undefined") {
+		var range = document.createRange();
+		range.selectNodeContents(el);
+		range.collapse(false);
+		var sel = window.getSelection();
+		sel.removeAllRanges();
+		sel.addRange(range);
+	} else if (typeof document.body.createTextRange != "undefined") {
+		var textRange = document.body.createTextRange();
+		textRange.moveToElementText(el);
+		textRange.collapse(false);
+		textRange.select();
+	}
+}
 
 
 

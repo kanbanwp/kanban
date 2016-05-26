@@ -374,6 +374,8 @@ $(function()
 
 			var board = boards[current_board_id];
 
+			// console.log(e.keyCode );
+
 
 
 			// shift + <-: left

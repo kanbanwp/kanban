@@ -31,7 +31,7 @@
 			<ul class="nav navbar-nav navbar-right">
 				<?php echo apply_filters( 'kanban_page_footer_menu_before', '' ); ?>
 				<li class="dropup">
-					<a href="#" class="dropdown-toggle" data-toggle="dropdown">Settings <span class="caret"></span></a>
+					<a href="#" class="dropdown-toggle" id="footer-settings-toggle" data-toggle="dropdown">Settings <span class="caret"></span></a>
 					<ul class="dropdown-menu">
 						<li class="hidden-xs">
 							<a href="#" class="btn-view-toggle" id="btn-view-all-cols" title="shift + A">

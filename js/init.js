@@ -1,7 +1,4 @@
-
-
-
-$(function() 
+$(function()
 {
 	// make sure all ajax requests growl
 	$(document).ajaxComplete(function(event, XMLHttpRequest, ajaxOptions)
@@ -265,7 +262,7 @@ $(function()
 			var value = $input.val();
 			var valueLower = $.trim( value.toLowerCase() );
 
-			// var $reset = $('#board-search-reset');
+			var $reset = $('#board-search-clear');
 
 			// reset if search field is empty
 			if ( valueLower.length === 0 )
@@ -275,13 +272,13 @@ $(function()
 				$list.slideDown('fast', function ()
 				{
 					all_match_col_h ();
-
+					$reset.hide();
 				});
 
 				return false;
 			}
 
-
+			$reset.show();
 
 			// update url
 			url_params['search'] = valueLower;

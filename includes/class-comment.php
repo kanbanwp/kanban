@@ -83,7 +83,7 @@ class Kanban_Comment extends Kanban_Db
 		return $success;
 	}
 
-
+	
 
 	// extend parent, so it's accessible from other classes
 	static function insert( $data )

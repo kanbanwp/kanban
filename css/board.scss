@@ -573,6 +573,30 @@ body.board-view-all-cols {
 	text-align: center;
 	width: 100%;
 
+	#footer-settings-toggle {
+		color: white;
+
+		.caret {
+			color: white;
+		}
+
+		&:hover {
+			color: black;
+
+			.caret {
+				color: black;
+			}
+		}
+
+		@media screen and (max-width: $screen-sm-max) {
+			color: black;
+
+			.caret {
+				color: black;
+			}
+		}
+	}
+
 	.navbar-toggle {
 		background: white;
 		border-color: $color-grey-wp;

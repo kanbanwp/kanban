@@ -353,6 +353,19 @@ body.board-view-all-cols .row-tasks {
   position: fixed;
   text-align: center;
   width: 100%; }
+  #page-footer #footer-settings-toggle {
+    color: white; }
+    #page-footer #footer-settings-toggle .caret {
+      color: white; }
+    #page-footer #footer-settings-toggle:hover {
+      color: black; }
+      #page-footer #footer-settings-toggle:hover .caret {
+        color: black; }
+    @media screen and (max-width: 767px) {
+      #page-footer #footer-settings-toggle {
+        color: black; }
+        #page-footer #footer-settings-toggle .caret {
+          color: black; } }
   #page-footer .navbar-toggle {
     background: white;
     border-color: #464646; }

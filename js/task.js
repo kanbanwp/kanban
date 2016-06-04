@@ -22,11 +22,12 @@ Task.prototype.add = function()
 	this.record.user_assigned = this.board().record.allowed_users()[this.record.user_id_assigned] ? this.board().record.allowed_users()[this.record.user_id_assigned] : {};
 	this.record.hour_count_formatted = format_hours(this.record.hour_count);
 
-	var task_html = templates['t-task'].render({
+	var task_html = templates[this.board().record.id()]['t-task'].render({
 		task: this.record,
 		estimate_records: this.board().record.estimate_records(),
 		project_records: this.board().record.project_records,
-		allowed_users:  this.board().record.allowed_users()
+		allowed_users: this.board().record.allowed_users(),
+		current_user_can_write: this.board().current_user().has_cap('write')
 	});
 
 	var $col = $('#status-{0}-tasks'.sprintf(this.record.status_id) );
@@ -110,7 +111,7 @@ Task.prototype.dom = function()
 			{
 				var project = self.board().record.project_records[project_id];
 
-				var project_html = templates['t-task-project-dropdown'].render(project);
+				var project_html = templates[self.board().record.id()]['t-task-project-dropdown'].render(project);
 
 				$(project_html).prependTo($dropdown);
 			}
@@ -906,7 +907,8 @@ Task.prototype.parse_project = function()
 		post_type: 'kanban_project',
 		kanban_nonce: $('#kanban_nonce').val(),
 		project: {
-			title: project_title
+			title: project_title,
+			board_id: self.board().record.id()
 		},
 		comment: comment
 	};

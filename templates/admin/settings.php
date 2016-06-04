@@ -187,7 +187,7 @@
 											</td>
 										</tr>
 
-										<?php echo apply_filters( 'kanban_settings_tab_users_content', '' ); ?>
+										<?php echo apply_filters( 'kanban_settings_tab_users_content', '', $board ); ?>
 
 									</tbody>
 								</table>
@@ -307,7 +307,7 @@
 
 
 
-		<?php echo apply_filters( 'kanban_settings_tabs_content', '' ); ?>
+		<?php echo apply_filters( 'kanban_settings_tabs_content', '', $board ); ?>
 
 
 

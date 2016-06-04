@@ -122,14 +122,14 @@ Board.prototype.dom = function()
 			var $select = $('.select-projects', $modal).empty();
 
 			// add blank
-			var project_html = templates['t-option-project'].render({title: '-- Projects --'});
+			var project_html = templates[self.record.id()]['t-option-project'].render({title: '-- Projects --'});
 			$(project_html).appendTo($select);
 
 			for ( var project_id in self.record.project_records )
 			{
 				var project = self.record.project_records[project_id];
 
-				project_html = templates['t-option-project'].render(project);
+				project_html = templates[self.record.id()]['t-option-project'].render(project);
 
 				$(project_html).appendTo($select);
 

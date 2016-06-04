@@ -48,11 +48,13 @@
 						</li>
 						<li class="divider"></li>
 						<?php echo apply_filters( 'kanban_page_footer_menu_dropup', '' ); ?>
+
 						<li>
 							<a href="#" data-toggle="modal" data-target="#modal-projects" title="shift + P">
 								<?php echo __( 'Edit projects', 'kanban' ); ?>
 							</a>
 						</li>
+
 						<li class="hidden-xs">
 							<a href="#" data-toggle="modal" data-target="#modal-keyboard-shortcuts" title="shift + K">
 								<?php echo __( 'Keyboard shortcuts', 'kanban' ); ?>
@@ -83,7 +85,7 @@
 
 <?php Kanban_Template::add_script(); ?>
 
-<?php do_action( 'kanban_board_render_js_templates' ); ?>
+
 
 </body>
 </html>

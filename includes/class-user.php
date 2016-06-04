@@ -259,22 +259,26 @@ class Kanban_User
 					self::$records_by_board[$board_record_id][$user_id] = self::$records[$user_id];
 				}
 			}
+
+			self::$records = apply_filters(
+				'kanban_user_get_allowed_users_records',
+				self::$records
+			);
+
+			self::$records_by_board = apply_filters(
+				'kanban_user_get_allowed_users_records_by_board',
+				self::$records_by_board
+			);
 		}
 
 
 
 		if ( is_null($board_id) )
 		{
-			return apply_filters(
-				'kanban_user_get_all_return',
-				self::$records
-			);
+			return self::$records;
 		}
 
-		return apply_filters(
-			'kanban_user_get_all_return',
-			isset(self::$records_by_board[$board_id]) ? self::$records_by_board[$board_id] : array()
-		);
+		return isset(self::$records_by_board[$board_id]) ? self::$records_by_board[$board_id] : array();
 	}
 
 
@@ -285,7 +289,8 @@ class Kanban_User
 
 		// get the current user from the allowed users
 		$current_user_id = get_current_user_id();
-		return $allowed_users[$current_user_id];
+
+		return isset($allowed_users[$current_user_id]) ? $allowed_users[$current_user_id] : (object) array();
 	}
 
 

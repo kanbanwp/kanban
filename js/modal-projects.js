@@ -27,14 +27,19 @@ Modal_Projects.prototype.dom = function()
 		'show.bs.modal',
 		function ()
 		{
-			var $list = $('#accordion-projects').empty();
-
 			var board = boards[current_board_id];
+
+			if ( !board.current_user().has_cap('write') )
+			{
+				return false;
+			}
+
+			var $list = $('#accordion-projects').empty();
 
 			for ( var project_id in board.record.project_records )
 			{
 				var project = board.record.project_records[project_id];
-				var project_html = templates['t-modal-project'].render(project);
+				var project_html = templates[current_board_id]['t-modal-project'].render(project);
 				$(project_html).appendTo($list);
 			}
 		}

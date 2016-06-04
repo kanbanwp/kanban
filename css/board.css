@@ -63,13 +63,20 @@ sub {
 .board {
   height: 100%;
   margin: 0 22.5px;
-  overflow: hidden; }
+  overflow: hidden;
+  position: relative; }
   .board:before {
     content: attr(data-board-title);
     display: block; }
   .board .row-statuses,
   .board .row-tasks {
     margin: 0; }
+  .board .board-no-statuses {
+    left: 0;
+    position: absolute;
+    text-align: center;
+    top: 30px;
+    width: 100%; }
   @media screen and (max-width: 767px) {
     .board {
       height: auto;
@@ -162,6 +169,7 @@ sub {
   .task:hover, .task.active {
     z-index: 1; }
   .task [contenteditable] {
+    cursor: pointer;
     margin: 0 -3px 0 -3px;
     padding: 3px; }
     .task [contenteditable]:hover, .task [contenteditable]:focus, .task [contenteditable]:active {
@@ -174,15 +182,24 @@ sub {
   .task .task-menu {
     position: absolute;
     right: 9.9px;
-    top: 9.9px; }
+    top: 9.9px;
+    z-index: 1; }
+    .task .task-menu .dropdown {
+      opacity: .618; }
+      .task .task-menu .dropdown:hover, .task .task-menu .dropdown.open {
+        opacity: 1; }
   .task .task-project {
-    max-width: 80%; }
+    max-width: 80%;
+    z-index: 1; }
+    .task .task-project.open {
+      z-index: 2; }
     .task .task-project [contenteditable] {
       color: #888; }
   .task .task-title {
     font-size: 1.382em;
     line-height: 1.142;
-    margin-bottom: 3px; }
+    margin-bottom: 3px;
+    z-index: 1; }
   .task .row-task-actions {
     margin: 0 0 5px; }
     .task .row-task-actions .col {

@@ -85,7 +85,8 @@ class Kanban_Option extends Kanban_Db
 
 	static function get_default($key)
 	{
-		return isset(self::$defaults[$key]) ? self::$defaults[$key] : FALSE;
+		$defaults = self::get_defaults();
+		return isset($defaults[$key]) ? $defaults[$key] : FALSE;
 	}
 
 
@@ -231,7 +232,7 @@ class Kanban_Option extends Kanban_Db
 			'board_id' => $board_id
 		);
 
-		$option = self::get_row_by( 'name', $key );
+		$option = self::get_row_by( 'name', $key, $board_id );
 
 		if ( $option )
 		{
@@ -241,7 +242,7 @@ class Kanban_Option extends Kanban_Db
 		$good_data = self::sanitize_data( $data );
 
 		global $wpdb;
-		return $wpdb->replace(
+		$success = $wpdb->replace(
 			self::table_name(),
 			$good_data->data,
 			$good_data->format
@@ -304,9 +305,9 @@ class Kanban_Option extends Kanban_Db
 
 	static function settings_page()
 	{
-		$current_board = Kanban_Board::get_current_by('GET');
+		$board = Kanban_Board::get_current_by('GET');
 
-		$settings = Kanban_Option::get_all($current_board->id);
+		$settings = Kanban_Option::get_all($board->id);
 
 		// $settings['allowed_users'] = maybe_unserialize( $settings['allowed_users'] );
 
@@ -317,10 +318,10 @@ class Kanban_Option extends Kanban_Db
 			$all_users_arr[$user->ID] = Kanban_User::get_username_long( $user );
 		}
 
-		$statuses = Kanban_Status::get_all($current_board->id);
+		$statuses = Kanban_Status::get_all($board->id);
 		$statuses = Kanban_Utils::order_array_of_objects_by_property ( $statuses, 'position', 'int' );
 
-		$estimates = Kanban_Estimate::get_all($current_board->id);
+		$estimates = Kanban_Estimate::get_all($board->id);
 		$estimates = Kanban_Utils::order_array_of_objects_by_property ( $estimates, 'position', 'int' );
 
 		$template = Kanban_Template::find_template( 'admin/settings' );
@@ -340,12 +341,12 @@ class Kanban_Option extends Kanban_Db
 
 
 
-		$current_board = Kanban_Board::get_current_by('POST');
+		$board = Kanban_Board::get_current_by('POST');
 
 
 
 		// get current settings
-		$settings = Kanban_Option::get_all($current_board->id);
+		$settings = Kanban_Option::get_all($board->id);
 
 
 

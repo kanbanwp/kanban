@@ -25,7 +25,7 @@
 var ajaxurl = '<?php echo admin_url('admin-ajax.php'); ?>';
 
 var alert = "<?php echo addslashes($wp_query->query_vars['kanban']->alert); ?>";
-var text = <?php echo json_encode( $wp_query->query_vars['kanban']->text ); ?>;
+var text = <?php echo json_encode( apply_filters( 'kanban_board_text', $wp_query->query_vars['kanban']->text) ); ?>;
 
 var templates = {};
 var window_w, window_h, screen_size, scrollbar_w;
@@ -78,8 +78,8 @@ boards[<?php echo $board_id ?>] = {
 	{
 		return <?php echo json_encode( $board->statuses ); ?>;
 	},
-	tasks: <?php echo json_encode( $board->tasks ); ?>,
-	project_records: <?php echo json_encode( $board->projects ); ?>,
+	tasks: <?php echo stripcslashes(json_encode( $board->tasks )); ?>,
+	project_records: <?php echo stripcslashes(json_encode( $board->projects )); ?>,
 	allowed_users: function ()
 	{
 		return <?php echo json_encode( $board->allowed_users ); ?>;
@@ -90,7 +90,7 @@ boards[<?php echo $board_id ?>] = {
 	},
 	estimate_records: function ()
 	{
-		return <?php echo json_encode( $board->estimates ); ?>;
+		return <?php echo stripcslashes(json_encode( $board->estimates )); ?>;
 	}
 	<?php echo apply_filters( 'kanban_board_js_onpage', '' ); ?>
 };
@@ -104,7 +104,6 @@ var current_board_id = <?php echo $wp_query->query_vars['kanban']->current_board
 
 
 <style>
-
 <?php foreach ( $wp_query->query_vars['kanban']->boards as $board_id => $board ) : ?>
 #board-<?php echo $board_id ?> .col_percent_w {width: <?php echo $board->col_percent_w ?>%}
 #board-<?php echo $board_id ?> .status_w {width: <?php echo $board->status_w ?>%}
@@ -116,6 +115,12 @@ var current_board_id = <?php echo $wp_query->query_vars['kanban']->current_board
 }
 <?php endforeach // boards ?>
 </style>
+
+
+
+<?php foreach ( $wp_query->query_vars['kanban']->boards as $board_id => $board ) : ?>
+<?php do_action( 'kanban_board_render_js_templates', $board ); ?>
+<?php endforeach // boards ?>
 
 
 

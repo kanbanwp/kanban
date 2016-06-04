@@ -5,6 +5,7 @@
 	</div>
 */ ?>
 
+<?php if ( count($board->statuses) > 0 ) : ?>
 
 
 	<div class="row-statuses-wrapper">
@@ -77,6 +78,8 @@
 						</select>
 					</div>
 
+					<?php echo apply_filters( 'kanban_filter_modal_select_after', '', $board ); ?>
+					
 					<button type="button" class="btn btn-warning btn-block btn-filter-reset" style="display: none;">
 						Reset
 					</button>
@@ -87,7 +90,7 @@
 
 
 
-	<?php $status = reset($board->statuses) ?>
+	<?php $status = reset($board->statuses); ?>
 	<div class="col-tasks-sidebar col-tasks-sidebar-left" data-left="0" data-right="-<?php echo $board->status_w ?>%" style="background-color: <?php echo $status->color_hex ?>">
 		<div class="col-tasks-sidebar-label">
 			<div class="col-tasks-sidebar-label-inner">
@@ -108,6 +111,22 @@
 		</div>
 		<div class="col-tasks-sidebar-arrow" style="border-right-color: <?php echo $status->color_hex ?>"></div>
 	</div>
+
+
+
+<?php else: // count statuses ?>
+
+
+
+	<div class="board-no-statuses">
+		<a href="<?php echo admin_url('admin.php?page=kanban_settings&board_id=' . $board->id) ?>" class="btn btn-primary">
+			<?php echo __( 'Please visit the Kanban settings page to setup this board.', 'kanban' ); ?>
+		</a>
+	</div>
+
+
+
+<?php endif // count statuses ?>
 
 
 

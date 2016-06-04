@@ -9,6 +9,8 @@
 				</p>
 
 				<dl>
+					<?php echo apply_filters( 'kanban_page_modal_keyboard_shortcuts_before', '' ); ?>
+
 					<dt>
 						shift + K
 					</dt>
@@ -57,6 +59,9 @@
 					<dd>
 						Toggle filter modal.
 					</dd>
+
+					<?php echo apply_filters( 'kanban_page_modal_keyboard_shortcuts_after', '' ); ?>
+
 				</dl>
 			</div><!-- body -->
 		</div>

@@ -80,8 +80,15 @@ $(function()
 	$('.template').each(function ()
 	{
 		var $t = $(this);
-		var template_id = $t.attr('id');
-		templates[template_id] = new t( $('#' + template_id).html() );
+		var board_id = $t.attr('data-board-id');
+		var basename = $t.attr('data-basename');
+
+		if ( typeof templates[board_id] === 'undefined' )
+		{
+			templates[board_id] = {};
+		}
+
+		templates[board_id][basename] = new t( $t.html() );
 	});
 
 
@@ -482,8 +489,23 @@ $(function()
 				}
 			}
 		}
-	);
+	); // body keydown
 
+
+
+
+
+	// if an alert is passed, show it
+	if ( alert !== '' )
+	{
+		$.bootstrapGrowl(
+			alert,
+			{
+				type: 'info',
+				allow_dismiss: true
+			}
+		);
+	}
 
 
 

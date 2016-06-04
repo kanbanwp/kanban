@@ -1,20 +1,19 @@
 <div class="task" id="task-{{=task.id}}" data-id="{{=task.id}}" data-project-id="{{=task.project_id}}" data-user_id-assigned="{{=task.user_id_assigned}}">
 	<div class="task-menu">
-		<?php echo apply_filters( 'kanban_task_id_before', '' ); ?>
+		<?php echo apply_filters( 'kanban_task_id_before', '', $board ); ?>
 
 		<div class="dropdown">
 			<a href="#" class="task-id btn btn-xs btn-default btn-block" data-toggle="dropdown">
 				{{=task.id}}
 			</a>
+{{current_user_can_write}}
 			<ul class="dropdown-menu dropdown-menu-right">
-				<?php echo apply_filters( 'kanban_task_id_dropdown_after', '' ); ?>
-
+				<?php echo apply_filters( 'kanban_task_id_dropdown_before', '', $board ); ?>
 				<li>
 					<a href="#" class="btn-task-move" data-toggle="modal" data-target="#modal-task-move-{{=task.board_id}}" data-task-id="{{=task.id}}">
 						Move this task
 					</a>
 				</li>
-
 				<li>
 					<a href="#" class="btn-task-delete" data-task-id="{{=task.id}}">
 						Delete this task
@@ -22,21 +21,26 @@
 					</a>
 				</li>
 
-				<?php echo apply_filters( 'kanban_task_id_dropdown_after', '' ); ?>
+				<?php echo apply_filters( 'kanban_task_id_dropdown_after', '', $board ); ?>
 			</ul>
+{{/current_user_can_write}}
 		</div><!-- task-id-menu -->
 
-		<?php echo apply_filters( 'kanban_task_id_after', '' ); ?>
+		<?php echo apply_filters( 'kanban_task_id_after', '', $board ); ?>
 	</div><!-- task-menu -->
 
 	<div class="task-project dropdown">
-		<div contenteditable="true" data-toggle="dropdown" placeholder="Add a project">{{=task.project.title}}</div>
+		<div contenteditable="{{current_user_can_write}}true{{:current_user_can_write}}false{{/current_user_can_write}}" data-toggle="dropdown" placeholder="Add a project">{{=task.project.title}}</div>
+		{{current_user_can_write}}
 		<ul class="dropdown-menu">
 		</ul>
+		{{/current_user_can_write}}
 	</div><!-- task-id-menu -->
 
-	<div class="task-title" contenteditable="true" placeholder="Add a title">{{=task.title}}</div>
+	<div class="task-title" contenteditable="{{current_user_can_write}}true{{:current_user_can_write}}false{{/current_user_can_write}}" placeholder="Add a title">{{=task.title}}</div>
 
+	<?php echo apply_filters( 'kanban_task_title_after', '', $board ); ?>
+	
 	<div class="row row-task-actions">
 		<div class="col col-xs-4 col-task-hours">
 			<div class="dropdown">
@@ -46,16 +50,18 @@
 						{{=task.hour_count_formatted}}
 					</span>
 				</button>
+				{{current_user_can_write}}
 				<ul class="dropdown-menu">
-						<li class="btn-group">
-							<button type="button" class="btn btn-default btn-task-hour" data-operator="+">
-								<span class=" glyphicon glyphicon-plus"></span>
-							</button>
-							<button type="button" class="btn btn-default btn-task-hour" data-operator="-">
-								<span class=" glyphicon glyphicon-minus"></span>
-							</button>
-						</li>
+					<li class="btn-group">
+						<button type="button" class="btn btn-default btn-task-hour" data-operator="+">
+							<span class=" glyphicon glyphicon-plus"></span>
+						</button>
+						<button type="button" class="btn btn-default btn-task-hour" data-operator="-">
+							<span class=" glyphicon glyphicon-minus"></span>
+						</button>
+					</li>
 				</ul>
+				{{/current_user_can_write}}
 			</div><!-- dropdown -->
 		</div><!-- col -->
 
@@ -71,6 +77,7 @@
 {{/task.estimate.title}}
 					</span>
 				</button>
+				{{current_user_can_write}}
 				<ul class="dropdown-menu">
 {{@estimate_records}}
 					<li>
@@ -80,6 +87,7 @@
 					</li>
 {{/@estimate_records}}
 				</ul>
+				{{/current_user_can_write}}
 			</div><!-- dropdown -->
 		</div><!-- col -->
 
@@ -102,6 +110,7 @@
 {{/task.user_assigned.short_name}}
 					</small>
 				</button>
+				{{current_user_can_write}}
 				<ul class="dropdown-menu dropdown-menu-right">
 {{@allowed_users}}
 					<li>
@@ -111,15 +120,16 @@
 					</li>
 {{/@allowed_users}}
 				</ul>
+				{{/current_user_can_write}}
 			</div><!-- dropdown -->
 		</div><!-- col -->
 	</div><!-- row -->
 
 	<div class="progress task-progress">
-		<div class="progress-bar progress-bar-success" style="width: 50%;"></div>
+		<div class="progress-bar progress-bar-success" style="width: 0%;"></div>
 	</div>
 
 	<div class="task-handle" style="background-color: {{=task.status.color_hex}}"></div>
 
-	<?php echo apply_filters( 'kanban_task_after', '' ); ?>
+	<?php echo apply_filters( 'kanban_task_after', '', $board ); ?>
 </div>

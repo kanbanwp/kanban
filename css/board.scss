@@ -103,6 +103,7 @@ sub {
 	height: 100%;
 	margin: 0 $margin*1.5;
 	overflow: hidden;
+	position: relative;
 
 	&:before {
 	    content: attr(data-board-title);
@@ -112,6 +113,14 @@ sub {
 	.row-statuses,
 	.row-tasks {
 		margin: 0;
+	}
+
+	.board-no-statuses {
+		left: 0;
+		position: absolute;
+		text-align: center;
+		top: $margin*2;
+		width: 100%;
 	}
 
 	@media screen and (max-width: $screen-sm-max) {
@@ -274,6 +283,7 @@ sub {
 	}
 
 	[contenteditable] {
+		cursor: pointer;
 		margin: 0 (-$margin/5) 0 (-$margin/5);
 		padding: $margin/5;
 
@@ -294,10 +304,25 @@ sub {
 		position: absolute;
 		right: $margin*.66;
 		top: $margin*.66;
+		z-index: 1;
+
+		.dropdown {
+			opacity: .618;
+
+			&:hover,
+			&.open {
+				opacity: 1;
+			}
+		}
 	}
 
 	.task-project {
 		max-width: 80%;
+		z-index: 1;
+
+		&.open {
+			z-index: 2;
+		}
 
 		[contenteditable] {
 			color: #888;
@@ -308,6 +333,7 @@ sub {
 		font-size: 1.382em;
 		line-height: 1.142;
 		margin-bottom: $margin/5;
+		z-index: 1;
 	}
 
 	.row-task-actions {

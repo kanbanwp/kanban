@@ -355,3 +355,37 @@ function obj_order_by_key(obj, reverse)
 
 	return re;
 }
+
+
+
+/**
+ * sort objects that have a position property by their position
+ * @param  {object} obj the objects we want to sort
+ * @return {array}     an array of the objects, sorted by position
+ */
+function obj_order_by_prop (obj, prop, reverse)
+{
+	if ( typeof reverse === 'undefined')
+	{
+		reverse = false;
+	}
+
+	var obj_arr = $.map(obj, function(value, index) {
+		return [value];
+	});
+
+	obj_arr.sort(function(a, b)
+	{
+		return a[prop] - b[prop];
+	});
+
+	if ( reverse )
+	{
+		re.reverse();
+	}
+
+	return obj_arr;
+}
+
+
+

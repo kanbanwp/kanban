@@ -24,10 +24,11 @@ Task.prototype.add = function()
 
 	var task_html = templates[this.board().record.id()]['t-task'].render({
 		task: this.record,
-		estimate_records: this.board().record.estimate_records(),
+		estimate_records: obj_order_by_prop(this.board().record.estimate_records(), 'position'),
 		project_records: this.board().record.project_records,
 		allowed_users: this.board().record.allowed_users(),
 		current_user_can_write: this.board().current_user().has_cap('write')
+		// hide_progress_bar: this.board().record.settings().hide_progress_bar
 	});
 
 	var $col = $('#status-{0}-tasks'.sprintf(this.record.status_id) );
@@ -107,6 +108,7 @@ Task.prototype.dom = function()
 			var $project = $(this);
 			var $dropdown = $('.dropdown-menu', $project).empty();
 
+			var project_count = 0;
 			for ( var project_id in self.board().record.project_records )
 			{
 				var project = self.board().record.project_records[project_id];
@@ -114,6 +116,13 @@ Task.prototype.dom = function()
 				var project_html = templates[self.board().record.id()]['t-task-project-dropdown'].render(project);
 
 				$(project_html).prependTo($dropdown);
+
+				project_count++;
+			}
+
+			if ( project_count == 0 )
+			{
+				return false;
 			}
 		}
 	)
@@ -662,10 +671,6 @@ Task.prototype.save = function(comment, status_id_old)
 			growl (text.task_save_error);
 			return false;
 		}
-	})
-	.always(function(response)
-	{
-		// growl_response_message(response);
 	});
 
 }; // save

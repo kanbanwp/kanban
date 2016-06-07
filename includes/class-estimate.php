@@ -98,7 +98,7 @@ class Kanban_Estimate extends Kanban_Db
 
 
 
-		$estimates = Kanban_Estimate::get_all();
+		$estimates = Kanban_Estimate::get_all($current_board->id);
 		$estimate_ids = array_keys( $estimates );
 
 

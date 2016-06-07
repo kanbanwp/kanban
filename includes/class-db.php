@@ -368,6 +368,16 @@ abstract class Kanban_Db
 
 
 
+		$allowed_users = kanban_Option::get_option( 'allowed_users', $board_id );
+
+		if ( empty($allowed_users ) )
+		{
+			Kanban_Option::update_option('allowed_users', array(get_current_user_id()), $board_id);
+		}
+
+
+
+
 		$status_table = Kanban_Status::table_name();
 
 		$sql = "SELECT count(`id`)
@@ -553,14 +563,14 @@ abstract class Kanban_Db
 	 * get the instance of this class
 	 * @return object the instance
 	 */
-	public static function get_instance()
-	{
-		if ( ! self::$instance )
-		{
-			self::$instance = new self();
-		}
-		return self::$instance;
-	}
+//	public static function get_instance()
+//	{
+//		if ( ! self::$instance )
+//		{
+//			self::$instance = new self();
+//		}
+//		return self::$instance;
+//	}
 
 
 

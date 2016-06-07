@@ -33,7 +33,9 @@ class Kanban_Option extends Kanban_Db
 		// 'show_all_cols' => 0,
 		// 'default_to_compact_view' => 0,
 		'hide_progress_bar' => 0,
-		'use_default_login_page' => 0
+		'use_default_login_page' => 0,
+		'default_estimate' => '',
+		'default_assigned_to' => ''
 	);
 
 	// store the options on first load, to prevent mulitple db calls
@@ -133,7 +135,8 @@ class Kanban_Option extends Kanban_Db
 
 		return apply_filters(
 			'kanban_option_get_results_by_board_return',
-			self::$records_by_board[$board_id]
+			isset(self::$records_by_board[$board_id]) ? self::$records_by_board[$board_id] : array(),
+			$board_id
 		);
 	}
 
@@ -257,6 +260,25 @@ class Kanban_Option extends Kanban_Db
 		{
 			$board = Kanban_Board::get_current();
 			$board_id = $board->id;
+		}
+
+		// make sure it's there
+		$results = self::get_results_by_board($board_id);
+
+		// if it's not, maybe it's a new board. reset and try again.
+		if ( !isset($results) )
+		{
+			self::$options_by_board = array();
+			self::$records = array();
+			self::$records_by_board = array();
+		}
+
+		$results = self::get_results_by_board($board_id);
+
+		// if it's not there, DENIED
+		if ( !isset($results) )
+		{
+			return NULL;
 		}
 
 		foreach ( self::get_results_by_board($board_id) as $option )

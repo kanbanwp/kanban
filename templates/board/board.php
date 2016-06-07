@@ -66,15 +66,17 @@
 
 					<div class="form-group">
 						<select class="form-control input-lg select-projects" data-field="project_id">
-							<option value="">-- Project --</option>
+							<option value="">-- <?php echo __( 'Project', 'kanban' ); ?> --</option>
+							<option value="0"><?php echo __( '(No project assigned)', 'kanban') ?></option>
 						</select>
 					</div>
 					<div class="form-group">
 						<select class="form-control input-lg" data-field="user_id_assigned">
-							<option value="">-- User --</option>
+							<option value="">-- <?php echo __( 'User', 'kanban' ); ?> --</option>
 	<?php foreach ($board->allowed_users as $user_id => $user) : $user = (object) $user; ?>
 							<option value="<?php echo $user_id ?>"><?php echo $user->long_name_email ?></option>
 	<?php endforeach // users ?>
+							<option value="0"><?php echo __( '(No user assigned)', 'kanban' ); ?></option>
 						</select>
 					</div>
 

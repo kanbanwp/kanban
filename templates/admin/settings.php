@@ -92,6 +92,7 @@
 						</td>
 					</tr>
 */ ?>
+<?php /*
 					<tr>
 						<th width="33%" scope="row">
 							<?php echo __( 'Hide progress bars', 'kanban' ); ?>
@@ -105,6 +106,7 @@
 							</div>
 						</td>
 					</tr>
+*/ ?>
 					<tr>
 						<th width="33%" scope="row">
 							<?php echo __( 'Use default login screen', 'kanban' ); ?>

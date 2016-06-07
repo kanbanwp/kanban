@@ -193,7 +193,7 @@ class Kanban_Board extends Kanban_Db
 		{
 			$sql = apply_filters(
 				'kanban_board_get_all_sql',
-				"SELECT * FROM `%s` WHERE `is_active` = 1;"
+				"SELECT * FROM `%s` WHERE `is_active` = 1 ORDER BY `position` ASC;"
 			);
 
 			global $wpdb;

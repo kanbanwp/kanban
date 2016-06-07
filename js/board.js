@@ -119,11 +119,12 @@ Board.prototype.dom = function()
 		{
 			// populate projects
 			var $modal = $(this);
-			var $select = $('.select-projects', $modal).empty();
+			var $select = $('.select-projects', $modal);
+			var $first_option = $('option:first', $select);
+			var $last_option = $('option:last', $select);
 
-			// add blank
-			var project_html = templates[self.record.id()]['t-option-project'].render({title: '-- Projects --'});
-			$(project_html).appendTo($select);
+			// empty
+			$('option', $select).not($first_option).not($last_option).remove();
 
 			for ( var project_id in self.record.project_records )
 			{
@@ -131,7 +132,7 @@ Board.prototype.dom = function()
 
 				project_html = templates[self.record.id()]['t-option-project'].render(project);
 
-				$(project_html).appendTo($select);
+				$(project_html).insertAfter($first_option);
 
 				// make sure project is selected
 				self.apply_filters();

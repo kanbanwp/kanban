@@ -60,11 +60,13 @@
 								<?php echo __( 'Keyboard shortcuts', 'kanban' ); ?>
 							</a>
 						</li>
+						<?php if ( current_user_can('manage_options') ) : ?>
 						<li>
 							<a href="<?php echo admin_url('admin.php?page=kanban_settings') ?>">
 								<?php echo __( 'Admin', 'kanban' ); ?>
 							</a>
 						</li>
+						<?php endif ?>
 					</ul>
 				</li>
 			</ul>

@@ -28,11 +28,7 @@
 				<div id="post-body-content">
 					<div class="meta-box-sortables ui-sortable">
 						<div class="postbox">
-
-							<h2><span>
-								<?php echo __( 'Become a Kanban master', 'kanban' ); ?>
-							</span></h2>
-
+							
 							<div class="inside">
 								<p>
 									<a href="<?php echo sprintf( '%s/%s/board', home_url(), Kanban::$slug ); ?>" class="button-primary" target="_blank" id="btn-go-to-board" onclick="window.open('<?php echo sprintf( '%s/%s/board', home_url(), Kanban::$slug ); ?>', 'kanbanboard'); return false;">

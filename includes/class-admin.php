@@ -51,202 +51,73 @@ class Kanban_Admin
 		add_action( 'init', array( __CLASS__, 'contact_support' ) );
 
 		add_action( 'wp_ajax_kanban_register_user', array( __CLASS__, 'ajax_register_user' ) );
+
+		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'add_deactivate_thickbox') );
 	}
 
 
-
-	/**
-	 * show upgrade notice with progress bar
-	 */
-	/*
-	static function render_upgrade_notice()
+	static function add_deactivate_thickbox ($hook)
 	{
-		// make sure something needs to be upgraded
-		if ( Kanban::get_instance()->settings->records_to_move <= 0 ) return;
+		if ( $hook != 'plugins.php' ) return;
 
+		wp_register_script(
+			'kanban-deactivate',
+			sprintf( '%s/js/min/admin-deactivate-min.js', Kanban::get_instance()->settings->uri ),
+			array( 'jquery' )
+		);
 
+		ob_start();
 		?>
-		<div class="updated error">
-			<p style="font-size: 1.236em;">
-				<b><?php echo __( 'Warning!', 'kanban' ); ?></b>
-				<?php echo sprintf( __( 'We\'ve found %s kanban records that need to be migrated for the latest version of Kanban for WordPress! ', 'kanban' ), Kanban::get_instance()->settings->records_to_move ); ?>
-			</p>
-			<p>
-				<?php echo __( 'Please click "migrate" below and we\'ll move them for you.', 'kanban' ); ?>
-			</p>
-			<p>
-				<button type="button" class="button-primary" id="kanban-migrate-start">
-					<?php echo __( 'Migrate', 'kanban' ); ?>
-				</button>
-			</p>
-
-			<div id="kanban-migrate-progress">
-				<?php echo __( 'Migration Progress', 'kanban' ); ?>
-				<?php echo __( '(Please do not browse away from the page until migration is complete)', 'kanban' ); ?>:
-				<div id="kanban-migrate-progress-outer">
-					<div id="kanban-migrate-progress-inner">
-						&nbsp;
-					</div><!-- inner -->
-				</div><!-- outer -->
-				<div id="kanban-migrate-message"></div>
-			</div><!-- progress -->
+		<div id="kanban-deactivate-modal">
+			<form id="kanban-deactivate-form" style="background: white;">
+				<p style="font-size: 1.618em; margin-bottom: 0;">Please let us know why you are deactivating:</p>
+				<p style="line-height: 2;">
+					<label><input type="radio" name="request" value="deactivated: not what I was looking for">The plugin is not what I was looking for</label><br>
+					<label><input type="radio" name="request" value="deactivated: didn't have the features I wanted">The plugin didn't have the features I wanted</label><br>
+					<label><input type="radio" name="request" value="deactivated: didn't work as expected">The plugin didn't work as expected</label><br>
+					<label><input type="radio" name="request" value="deactivated: is not working">The plugin is not working</label>
+				</p>
+				<p>
+					<label>
+						<?php echo __( 'Any comments? Complaints?', 'kanban' ) ?>
+					</label><br>
+					<textarea name="message" rows="2" class="large-text"></textarea>
+				</p>
+				<p align="right">
+					<button type="button" class="button button-primary kanban-deactivate-submit">
+						<?php echo __( 'Deactivate', 'kanban' ) ?>
+					</button>
+					<button type="button" class="button kanban-deactivate-remove">
+						<?php echo __( 'Cancel', 'kanban' ) ?>
+					</button>
+				</p>
+				<?php wp_nonce_field( 'kanban-admin-comment', Kanban_Utils::get_nonce() ); ?>
+			</form>
 		</div>
+
+
 		<style>
-		#kanban-migrate-progress {
-			display: none;
-			margin-bottom: 20px;
-		}
-		#kanban-migrate-progress-outer {
-			background: #0073aa;
-			padding: 3px;
-			width: 100%;
-
-		}
-		#kanban-migrate-progress-inner {
-			background: #00b9eb;
-			font-size: 20px;
-			overflow: hidden;
-			position: relative;
-			width: 1%;
-
-			-webkit-transition: width 1s ease-in-out;
-			-moz-transition: width 1s ease-in-out;
-			-o-transition: width 1s ease-in-out;
-			transition: width 1s ease-in-out;
-		}
-		#kanban-migrate-progress-inner:after {
-			content: "";
-			position: absolute;
-			top: 0; left: 0; bottom: 0; right: 0;
-			background-image: linear-gradient(
-			-45deg,
-			rgba( 255, 255, 255, .2 ) 25%,
-			transparent 25%,
-			transparent 50%,
-			rgba( 255, 255, 255, .2 ) 50%,
-			rgba( 255, 255, 255, .2 ) 75%,
-			transparent 75%,
-			transparent
-			);
-			z-index: 1;
-			background-size: 50px 50px;
-			animation: move 2s linear infinite;
-			border-top-right-radius: 8px;
-			border-bottom-right-radius: 8px;
-			border-top-left-radius: 20px;
-			border-bottom-left-radius: 20px;
-			overflow: hidden;
-		}
-
-		@keyframes move {
-			0% {
-			background-position: 0 0;
+			#TB_window {
+				overflow: auto;
 			}
-			100% {
-			background-position: 50px 50px;
+			#TB_ajaxContent {
+				height: auto !important;
+				width: 96% !important;
 			}
-		}
 		</style>
-		<script>
-		jQuery( function( $ )
-		{
-			// start with how many records need to be migrated
-			var records_to_move = <?php echo Kanban::get_instance()->settings->records_to_move ?>;
-
-			// if migration fails, show alert
-			function migration_failed()
-			{
-				alert( 'Migration failed. Please refresh the page and try again.' );
-			}
-
-			// the loop to continually do migration, and update progress bar
-			function do_migrate()
-			{
-				$.post(
-					ajaxurl,
-					{
-						action: 'kanban_migrate_db'
-					}
-				)
-				.done( function( data )
-				{
-					try
-					{
-						var percentage = 100-( ( 100 * parseInt(data.data.posts_remaining))/records_to_move);
-
-						if ( percentage > 100 )
-						{
-							percentage = 100;
-						}
-
-						if ( percentage < 1 )
-						{
-							percentage = 1;
-						}
-
-						$( '#kanban-migrate-progress-inner' ).css( 'width', percentage + '%' );
-					}
-					catch ( err )
-					{
-						migration_failed();
-					}
-
-					// update the returned message
-					try
-					{
-						$( '#kanban-migrate-message' ).text( data.data.message );
-					}
-					catch ( err ) {}
-
-					// wait 2 seconds and do it again
-					try
-					{
-						if ( data.data.continue )
-						{
-							setTimeout( function()
-							{
-								do_migrate();
-							}, 2000 );
-						}
-						else
-						{
-							if ( data.data.done )
-							{
-								$( '#kanban-migrate-progress' ).html( '<b style="font-size: 1.618em;">Migration has completed! <a href="<?php echo site_url(); ?>/kanban/board" class="button button-primary" target="_blank">Go to your board</a>.</b>' );
-							}
-							else
-							{
-								migration_failed();
-							}
-						}
-					}
-					catch ( err )
-					{
-						migration_failed();
-					}
-				} )
-				.fail( function( data )
-				{
-					migration_failed();
-					return false;
-				} );
-			}; // do_migrate
-
-			$( '#kanban-migrate-start' ).on(
-				'click',
-				function()
-				{
-					$( this ).hide();
-					$( '#kanban-migrate-progress' ).show();
-
-					do_migrate();
-				}
-			)
-		} );
-		</script>
 		<?php
-	} // render_upgrade_notice
-	*/
+		$html_output = ob_get_contents();
+		ob_end_clean();
+
+		// Localize the script with new data
+		$translation_array = array(
+			'form_deactivate' => $html_output,
+			'url_contact' => admin_url()
+		);
+		wp_localize_script( 'kanban-deactivate', 'kanban', $translation_array );
+
+		wp_enqueue_script( 'kanban-deactivate' );
+	}
 
 
 	/**
@@ -341,6 +212,12 @@ class Kanban_Admin
 	static function contact_support()
 	{
 		if ( ! isset( $_POST[Kanban_Utils::get_nonce()] ) || ! wp_verify_nonce( $_POST[Kanban_Utils::get_nonce()], 'kanban-admin-comment' ) || ! is_user_logged_in() ) return false;
+
+		if ( empty($_POST['request']) && empty($_POST['message']) ) return;
+
+		if ( empty($_POST['request']) ) $_POST['request'] = '';
+
+		if ( empty($_POST['from']) ) $_POST['from'] =  get_option( 'admin_email' );
 
 		try
 		{

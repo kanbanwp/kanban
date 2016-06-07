@@ -289,6 +289,11 @@ class Kanban_Task extends Kanban_Db
 
 			self::$records = Kanban_Utils::build_array_with_id_keys( self::$records, 'id' );
 
+			self::$records = apply_filters(
+				'kanban_task_get_all_records',
+				self::$records
+			);
+
 			$boards = Kanban_Board::get_all();
 			self::$records_by_board = array_fill_keys(array_keys($boards), array());
 
@@ -298,6 +303,12 @@ class Kanban_Task extends Kanban_Db
 
 				self::$records_by_board[$record->board_id][$task_id] = $record;
 			}
+
+
+			self::$records_by_board = apply_filters(
+				'kanban_task_get_all_records_by_board',
+				self::$records_by_board
+			);
 		}
 
 		if ( is_null($board_id) )

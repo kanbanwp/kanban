@@ -485,6 +485,13 @@ Task.prototype.dom = function()
 			var $a = $(this);
 
 			var user_id = $a.attr('data-id');
+
+			// don't save if same user
+			if ( user_id == self.record.user_id_assigned )
+			{
+				return true;
+			}
+
 			var user = self.board().record.allowed_users()[user_id];
 
 

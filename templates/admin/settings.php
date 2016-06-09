@@ -171,6 +171,20 @@
 
 										<tr>
 											<th width="33%" scope="row">
+												<?php echo __('Assign new tasks to the user who created it', 'kanban' ) ?>
+											</th>
+											<td>
+												<div class="switch-field">
+													<input type="radio" class="default_assigned_to_creator" id="default_assigned_to_creator_1" name="settings[default_assigned_to_creator]" value="1" <?php echo isset($settings['default_assigned_to_creator']) && (bool) $settings['default_assigned_to_creator'] ? 'checked' : '' ?>>
+													<label for="default_assigned_to_creator_1">Yes</label>
+													<input type="radio" class="default_assigned_to_creator" id="default_assigned_to_creator_0" name="settings[default_assigned_to_creator]" value="0" <?php echo (!isset($settings['default_assigned_to_creator']) || !(bool) $settings['default_assigned_to_creator']) ? 'checked' : '' ?>>
+													<label for="default_assigned_to_creator_0">No</label>
+												</div>
+											</td>
+										</tr>
+
+										<tr id="tr-default_assigned_to" style="<?php echo (bool) $settings['default_assigned_to_creator'] ? 'display: none;' : '' ?>">
+											<th width="33%" scope="row">
 												<label for="default_assigned_to">
 													<?php echo __( 'Default all tasks to', 'kanban' ); ?>
 												</label>

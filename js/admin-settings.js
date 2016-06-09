@@ -248,6 +248,21 @@ jQuery(function($)
 
 
 
+	$('.default_assigned_to_creator').on(
+		'change',
+		function()
+		{
+			if ( $('#default_assigned_to_creator_1').is(':checked') && $('#tr-default_assigned_to').is(':visible') )
+			{
+				$('#tr-default_assigned_to').hide();
+			}
+			else if ( $('#tr-default_assigned_to').not(':visible') )
+			{
+				$('#tr-default_assigned_to').show();
+			}
+		}
+	);
+
 });
 
 

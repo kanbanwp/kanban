@@ -69,7 +69,7 @@ class Kanban_Task_Hour extends Kanban_Db
 
 
 
-		$hour_interval = get_option ( 'hour_interval', $_POST['task']['board_id']);
+		$hour_interval = Kanban_Option::get_option ( 'hour_interval', $_POST['task']['board_id']);
 		$operator = $_POST['operator'];
 
 		$hours = $operator . $hour_interval;

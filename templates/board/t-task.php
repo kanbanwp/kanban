@@ -113,11 +113,13 @@
 				{{current_user_can_write}}
 				<ul class="dropdown-menu dropdown-menu-right">
 {{@allowed_users}}
+{{_val.long_name_email}}
 					<li>
 						<a href="#" class="btn-task-assigned" data-id="{{=_key}}">
 							{{=_val.long_name_email}}
 						</a>
 					</li>
+{{/_val.long_name_email}}
 {{/@allowed_users}}
 				</ul>
 				{{/current_user_can_write}}

@@ -35,7 +35,8 @@ class Kanban_Option extends Kanban_Db
 		'hide_progress_bar' => 0,
 		'use_default_login_page' => 0,
 		'default_estimate' => '',
-		'default_assigned_to' => ''
+		'default_assigned_to' => '',
+		'default_assigned_to_creator' => FALSE
 	);
 
 	// store the options on first load, to prevent mulitple db calls

@@ -376,6 +376,17 @@ Board.prototype.dom = function()
 			}
 
 
+			
+			// if assigned to creator is set
+			if ( typeof self.record.settings().default_assigned_to_creator !== 'undefined' )
+			{
+				if ( self.record.settings().default_assigned_to_creator === true || self.record.settings().default_assigned_to_creator == 1 )
+				{
+					task_data.task.user_id_assigned = self.current_user().record().ID;
+				}
+			}
+
+
 
 			task_data.action = 'save_task';
 			task_data.kanban_nonce = $('#kanban_nonce').val();

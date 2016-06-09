@@ -68,9 +68,14 @@ class Kanban_Admin
 
 		ob_start();
 		?>
-		<div id="kanban-deactivate-modal">
+		<div id="kanban-deactivate-modal" style="display: none;">
 			<form id="kanban-deactivate-form" style="background: white;">
-				<p style="font-size: 1.618em; margin-bottom: 0;">Please let us know why you are deactivating:</p>
+				<p style="font-size: 1.618em; margin-bottom: 0;">
+					<?php echo __( 'OPTIONAL: Please help us make our plugin better!', 'kanban' ) ?>
+				</p>
+				<p>
+					<?php echo __( 'Please Let us know why you are deactivating Kanban for WordPress. To skip this, simply click the "Deactivate" button below. Thank you!', 'kanban' ) ?>
+				</p>
 				<p style="line-height: 2;">
 					<label><input type="radio" name="request" value="deactivated: not what I was looking for">The plugin is not what I was looking for</label><br>
 					<label><input type="radio" name="request" value="deactivated: didn't have the features I wanted">The plugin didn't have the features I wanted</label><br>
@@ -79,7 +84,7 @@ class Kanban_Admin
 				</p>
 				<p>
 					<label>
-						<?php echo __( 'Any comments? Complaints?', 'kanban' ) ?>
+						<?php echo __( 'Suggestion? Comment? Complaint?', 'kanban' ) ?>
 					</label><br>
 					<textarea name="message" rows="2" class="large-text"></textarea>
 				</p>

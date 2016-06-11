@@ -14,7 +14,6 @@ jQuery(function($)
 		'.kanban-deactivate-remove',
 		function ()
 		{
-			console.log('test');
 			tb_remove();
 		}
 	);

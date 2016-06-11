@@ -81,7 +81,7 @@
 				<ul class="dropdown-menu">
 {{@estimate_records}}
 					<li>
-						<a href="#" class="btn-task-estimate" data-id="{{=_key}}">
+						<a href="#" class="btn-task-estimate" data-id="{{=_val.id}}">
 							{{=_val.title}}
 						</a>
 					</li>

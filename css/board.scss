@@ -450,6 +450,12 @@ sub {
 			cursor: default;
 		}
 	}
+} // task
+
+.task-placeholder {
+  border: 1px dashed #999;
+  margin-bottom: $margin;
+  min-height: 9em;
 }
 
 body.board-view-compact {

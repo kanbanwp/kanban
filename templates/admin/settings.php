@@ -7,7 +7,7 @@
 
 	<h1>
 		<?php echo __( sprintf( '%s Settings', Kanban::get_instance()->settings->pretty_name ), 'kanban' ); ?>
-		<a href="<?php echo sprintf( '%s/%s/board', home_url(), Kanban::$slug ); ?>" class="page-title-action" target="_blank" id="btn-go-to-board" onclick="window.open('<?php echo sprintf( '%s/%s/board', home_url(), Kanban::$slug ); ?>', 'kanbanboard'); return false;">
+		<a href="<?php echo sprintf( '%s/%s/board', home_url(), Kanban::$slug ); ?><?php echo isset($_GET['board_id']) ? '?board_id=' . $_GET['board_id'] : '' ?>" class="page-title-action" target="_blank" id="btn-go-to-board" onclick="window.open('<?php echo sprintf( '%s/%s/board', home_url(), Kanban::$slug ); ?><?php echo isset($_GET['board_id']) ? '?board_id=' . $_GET['board_id'] : '' ?>', 'kanbanboard'); return false;">
 			<?php echo __( 'Go to your board', 'kanban' ); ?>
 		</a>
 	</h1>
@@ -186,7 +186,7 @@
 										<tr id="tr-default_assigned_to" style="<?php echo (bool) $settings['default_assigned_to_creator'] ? 'display: none;' : '' ?>">
 											<th width="33%" scope="row">
 												<label for="default_assigned_to">
-													<?php echo __( 'Default all tasks to', 'kanban' ); ?>
+													<?php echo __( 'Assign new tasks to', 'kanban' ); ?>
 												</label>
 											</th>
 											<td>

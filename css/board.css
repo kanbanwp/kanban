@@ -271,6 +271,11 @@ sub {
       .task .task-handle {
         cursor: default; } }
 
+.task-placeholder {
+  border: 1px dashed #999;
+  margin-bottom: 15px;
+  min-height: 9em; }
+
 body.board-view-compact .task .row-task-actions,
 body.board-view-compact .task .task-progress {
   display: none; }

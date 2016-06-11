@@ -559,7 +559,7 @@ Task.prototype.dom = function()
 				return false;
 			}
 
-			var current = parseFloat(self.record.hour_count);
+			var current = typeof self.record.hour_count !== 'undefined' ? parseFloat(self.record.hour_count) : 0;
 			var interval = self.board().record.settings().hour_interval;
 
 			// increase/decrease hours
@@ -939,6 +939,7 @@ Task.prototype.parse_project = function()
 			// add project to available projects
 			self.board().record.project_records[response.data.project.id] = response.data.project;
 			self.project_save(response.data.project.id);
+			self.board().project_update_counts();
 		// }
 		// catch (err) {}
 	});

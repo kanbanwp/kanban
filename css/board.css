@@ -228,7 +228,8 @@ sub {
         font-weight: normal; }
       .task .row-task-actions .col .btn-task-action {
         border: 0;
-        line-height: 1.236; }
+        line-height: 1.236;
+        padding: 5px 0; }
       .task .row-task-actions .col .task-hours,
       .task .row-task-actions .col .task-estimate {
         color: #606060;

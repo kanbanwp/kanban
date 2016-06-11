@@ -46,7 +46,6 @@ Task.prototype.add = function()
 
 
 
-
 Task.prototype.dom = function()
 {
 	var self = this;

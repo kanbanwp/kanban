@@ -77,7 +77,8 @@
 {{/task.estimate.title}}
 					</span>
 				</button>
-				{{current_user_can_write}}
+{{current_user_can_write}}
+{{estimate_records.0}}
 				<ul class="dropdown-menu">
 {{@estimate_records}}
 					<li>
@@ -87,7 +88,8 @@
 					</li>
 {{/@estimate_records}}
 				</ul>
-				{{/current_user_can_write}}
+{{/estimate_records.0}}
+{{/current_user_can_write}}
 			</div><!-- dropdown -->
 		</div><!-- col -->
 

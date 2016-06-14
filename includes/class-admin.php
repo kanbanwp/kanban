@@ -228,13 +228,13 @@ class Kanban_Admin
 		{
 			wp_mail(
 				'support@kanbanwp.com',
-				sprintf( '[kbwp] %s', $_POST['request'] ),
-				sprintf(
+				stripcslashes(sprintf( '[kbwp] %s', $_POST['request'] )),
+				stripcslashes(sprintf(
 					"%s\n\n%s\n%s",
 					stripcslashes( $_POST['message'] ),
 					get_option( 'siteurl' ),
 					$_SERVER['HTTP_USER_AGENT']
-				),
+				)),
 				sprintf( 'From: "%s" <%s>', get_option( 'blogname' ), $_POST['from'] )
 			);
 

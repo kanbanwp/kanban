@@ -27,24 +27,31 @@ class Kanban_License
 
 
 
-		do_action( 'kanban_option_save_licenses_before', $_POST );
+		do_action( 'kanban_license_save_settings_before', $_POST );
+
+
+
+		$board = Kanban_Board::get_current_by('POST');
 
 
 
 		// get current settings
-		$settings = Kanban_Option::get_all();
+		$settings = Kanban_Option::get_all($board->id);
 
 
 
 		// save all single settings
-		foreach ( $_POST['licenses'] as $key => $value )
+		foreach ( $settings as $key => $value )
 		{
-			Kanban_Option::update_option($key, $value, 1); // hardcode board id
+			// if empty, skip it
+			if ( !isset($_POST['settings'][$key]) ) continue;
+
+			Kanban_Option::update_option($key, $_POST['settings'][$key]);
 		}
 
 
 
-		do_action( 'kanban_option_save_licenses_after', $_POST );
+		do_action( 'kanban_license_save_settings_after', $_POST );
 
 
 
@@ -58,7 +65,6 @@ class Kanban_License
 		wp_redirect( $url );
 		exit;
 	}
-
 
 
 }

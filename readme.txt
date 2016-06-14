@@ -15,40 +15,35 @@ A complete project management suite, right inside your WordPress site! Customize
 
 == Description ==
 
-Kanban for WordPress lets you run a complete project management suite on your WordPress site. If you want to get more done, if you want to see or show progress on your projects, if you want to use agile project management, try Kanban for WordPress.
+Run a complete project management suite on your WordPress site with Kanban for WordPress. If you want to get more done, if you want to see and show progress on your projects, if you want to use agile project management, try Kanban for WordPress.
 
 For more information, please visit [KanbanWP.com](http://kanbanwp.com?utm_medium=documentation&utm_source=wordpress.org&utc_campaign=documentation)
 
 Here's a 60-second intro to how to use the board, once you have it installed:
 [vimeo https://vimeo.com/145274368]
 
-
-
 = Features =
 
 * Easy installation
-* Customize the board to work for your team, including custom swim lanes
-* Create tasks and projects quickly, right from the board. Most editing is "edit in place" for quick updating.
-* Assign tasks to team members as you complete tasks
-* Set estimates on how long you think tasks will take
-* Track hours, and see the progress of tasks as they get done
-* Create custom views by filtering and searching for tasks
-* Manage the users who have access to the board
-* Data is stored separately from your WordPress data, for better privacy and security
+* Customize the board to work for your team, including custom swim lanes.
+* Most editing is "edit in place" for quick updating. Create tasks and projects quickly, right from the board.
+* Assign tasks to team members to make sure they'll get done.
+* Estimate how long you think tasks will take, then track your hours to see the progress of tasks as they get done.
+* Create custom views by filtering and searching for tasks. Bookmark them for easy access.
+* Manage the users who have access to the board, for privacy and integrated project management.
+* Data is stored separately from your WordPress data, for better privacy and security.
 * Works on mobile!
+* Lots of extra features available through paid add-ons - multiple boards, to-do lists, task flagging, notifications, and more.
 
-
+= Add-ons available at KanbanWP.com =
+* [Multiple boards](https://kanbanwp.com/addons/multiple-boards/?utm_medium=documentation&utm_source=wordpress.org&utc_campaign=documentation)
+* [Advanced User Management](https://kanbanwp.com/addons/advanced-user-management/?utm_medium=documentation&utm_source=wordpress.org&utc_campaign=documentation)
+* [Task Comments](https://kanbanwp.com/addons/task-comments/?utm_medium=documentation&utm_source=wordpress.org&utc_campaign=documentation)
+* [Task colors](https://kanbanwp.com/addons/task-colors/?utm_medium=documentation&utm_source=wordpress.org&utc_campaign=documentation)
+* [Task Details and Attachments](https://kanbanwp.com/addons/task-details/?utm_medium=documentation&utm_source=wordpress.org&utc_campaign=documentation)
+* [Notifications](https://kanbanwp.com/addons/notifications/?utm_medium=documentation&utm_source=wordpress.org&utc_campaign=documentation)
 
 While using this plugin if you find any bugs, please submit an issue at [Github](https://github.com/gelform/kanban/) or use the "Contact us" form included in the plugin.
-
-
-
-= Add-ons available at [KanbanWP.com](https://KanbanWP.com) =
-* Advanced User Management
-* Task Comments
-* Task colors
-* Task Details and Attachments
-* Notifications
 
 
 
@@ -66,9 +61,10 @@ While using this plugin if you find any bugs, please submit an issue at [Github]
 == Screenshots ==
 
 1. An example of the kanban board
-2. The kanban board on a mobile tablet
+2. The kanban board on a mobile phone
 3. The projects edit screen on the kanban board
 4. The settings page, where you set the color of each status column (or swimlane)
+5. The general settings page
 
 
 

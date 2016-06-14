@@ -15,49 +15,55 @@
 						shift + K
 					</dt>
 					<dd>
-						Toggle keyboard shortcuts modal.
+						<?php echo __( 'Toggle keyboard shortcuts modal.', 'kanban' ); ?>
 					</dd>
 					<dt>
 						shift + C
 					</dt>
 					<dd>
-						Toggle compact view mode.
+						<?php echo __( 'Toggle compact view mode.', 'kanban' ); ?>
 					</dd>
 					<dt>
 						shift + &larr;
 					</dt>
 					<dd>
-						Slide the current board columns to the <i>left</i> (if all columns are not shown).
+						<?php echo __( 'Slide the current board columns to the left (if all columns are not shown).', 'kanban' ); ?>
 					</dd>
 					<dt>
 						shift + &rarr;
 					</dt>
 					<dd>
-						Slide the current board columns to the <i>right</i> (if all columns are not shown).
+						<?php echo __( 'Slide the current board columns to the right (if all columns are not shown).', 'kanban' ); ?>
 					</dd>
 					<dt>
 						shift + P
 					</dt>
 					<dd>
-						Toggle projects modal.
+						<?php echo __( 'Toggle projects modal.', 'kanban' ); ?>
 					</dd>
 					<dt>
 						shift + A
 					</dt>
 					<dd>
-						Toggle showing all columns.
+						<?php echo __( 'Toggle showing all columns.', 'kanban' ); ?>
 					</dd>
 					<dt>
 						shift + S
 					</dt>
 					<dd>
-						Jump to the search bar.
+						<?php echo __( 'Jump to the search bar.', 'kanban' ); ?>
 					</dd>
 					<dt>
 						shift + F
 					</dt>
 					<dd>
-						Toggle filter modal.
+						<?php echo __( 'Toggle filter modal.', 'kanban' ); ?>
+					</dd>
+					<dt>
+						shift + enter
+					</dt>
+					<dd>
+						<?php echo __( 'Add a new line in the task title field (enter without shift will save your changes).', 'kanban' ); ?>
 					</dd>
 
 					<?php echo apply_filters( 'kanban_page_modal_keyboard_shortcuts_after', '' ); ?>

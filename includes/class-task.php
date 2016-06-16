@@ -46,6 +46,8 @@ class Kanban_Task extends Kanban_Db
 	{
 		add_action( sprintf( 'wp_ajax_save_%s', self::$slug ), array( __CLASS__, 'ajax_save' ) );
 		add_action( sprintf( 'wp_ajax_delete_%s', self::$slug ), array( __CLASS__, 'ajax_delete' ) );
+
+		add_action( 'kanban_task_auto_archive', array( __CLASS__, 'auto_archive'), 10, 1 );
 	}
 
 
@@ -323,6 +325,14 @@ class Kanban_Task extends Kanban_Db
 			'kanban_task_get_all_return',
 			isset(self::$records_by_board[$board_id]) ? self::$records_by_board[$board_id] : array()
 		);
+	}
+
+
+
+	function auto_archive ( $id )
+	{
+		// no idea why i can't link to delete directly
+		self::delete( $id );
 	}
 
 

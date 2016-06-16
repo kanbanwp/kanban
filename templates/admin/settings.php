@@ -254,10 +254,16 @@
 		<div class="tab" id="tab-statuses" style="display: none;">
 
 			<ol id="list-statuses" class="sortable">
-<?php foreach ( $statuses as $status_id => $status ) : ?>
-				<?php echo Kanban_Template::render_template( 'admin/t-status', (array) $status ); ?>
+<?php foreach ( $statuses as $status_id => $status ) :  ?>
+				<?php echo Kanban_Template::render_template(
+					'admin/t-status',
+					array('status' => $status, 'settings' => $settings )
+				); ?>
 <?php endforeach // statuses ?>
 			</ol><!-- sortable -->
+			<span style="float: right">
+				<?php echo __( 'Auto-archive', 'kanban' ); ?>: <?php echo __( 'Tasks will be automatically deleted after 30 days', 'kanban' ); ?>
+			</span>
 			<p>
 				<button type="button" class="button button-sortable-add" data-t="t-status">
 					<?php echo __( 'Add another status', 'kanban' ); ?>

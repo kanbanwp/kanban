@@ -346,7 +346,7 @@ abstract class Kanban_Db
 		if ( $boards_count == 0 )
 		{
 			$data = array(
-				'title'           => 'Your first kanban board',
+				'title'           => 'Kanban board',
 				'created_dt_gmt'  => Kanban_Utils::mysql_now_gmt(),
 				'modified_dt_gmt' => Kanban_Utils::mysql_now_gmt(),
 				'user_id_author'  => get_current_user_id(),

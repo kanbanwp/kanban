@@ -97,6 +97,27 @@ class Kanban_Status_Change extends Kanban_Db
 
 
 
+		$task = Kanban_Task::get_one($task_id);
+
+
+
+		$status_auto_archive = Kanban_Option::get_option('status_auto_archive', $task->board_id);
+
+		// schedule auto-archive cron
+		if ( in_array($status_id_new, $status_auto_archive) )
+		{
+			Kanban_Comment::add(
+				'Task ' . $task_id . ' scheduled to be archived in 30 days.',
+				'system',
+				$task_id
+			);
+
+
+			wp_schedule_single_event(time() + (60*60*24*30), 'kanban_task_auto_archive', array($task_id)); // 30 days
+		}
+
+
+
 		$data = array(
 			'task_id'        => $task_id,
 			'created_dt_gmt' => Kanban_Utils::mysql_now_gmt(),

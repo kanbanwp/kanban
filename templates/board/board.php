@@ -8,6 +8,7 @@
 <?php if ( count($board->statuses) > 0 ) : ?>
 
 
+	
 	<div class="row-statuses-wrapper">
 		<div class="row row-statuses">
 <?php foreach ( $board->statuses as $status_id => $status ) : ?>

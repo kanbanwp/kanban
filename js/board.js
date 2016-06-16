@@ -438,6 +438,44 @@ Board.prototype.dom = function()
 
 	self.$el.on(
 		'click',
+		'.btn-status-empty',
+		function ()
+		{
+			var r = confirm(text.status_empty_confirm);
+			if ( r )
+			{
+				var $btn = $(this);
+				var status_id = $btn.attr('data-status-id');
+
+				// show spinner
+				$('.glyphicon', $btn).toggle();
+
+				for ( var task_id in self.record.tasks )
+				{
+					var task = self.record.tasks[task_id];
+
+					if ( task.record.status_id != status_id )
+					{
+						continue;
+					}
+
+					task.delete();
+				}
+
+				// fake it
+				setTimeout(function()
+				{
+					$('.glyphicon', $btn).toggle();
+				}, 2000);
+			}
+			return false;
+		}
+	);
+
+
+
+	self.$el.on(
+		'click',
 		'.modal-task-move .list-group-item',
 		function ()
 		{

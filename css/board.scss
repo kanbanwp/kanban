@@ -109,6 +109,21 @@ sub {
 	    content: attr(data-board-title);
 	    display: block;
 	}
+  
+  &.hide_time_tracking {
+    .col-task-hours,
+    .col-task-estimate,
+    .task-progress {
+      display: none;
+    }
+
+    .col.col-task-assigned {
+      //float: right;
+      small {
+        display: inline;
+      }
+    }
+  }
 
 	.row-statuses,
 	.row-tasks {
@@ -363,7 +378,8 @@ sub {
 			}
 
 			&.col-task-assigned {
-				// padding-top: $margin/3;
+                overflow: hidden;
+
 				small {
 					line-height: 1.618;
 				}

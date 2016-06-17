@@ -68,6 +68,12 @@ sub {
   .board:before {
     content: attr(data-board-title);
     display: block; }
+  .board.hide_time_tracking .col-task-hours,
+  .board.hide_time_tracking .col-task-estimate,
+  .board.hide_time_tracking .task-progress {
+    display: none; }
+  .board.hide_time_tracking .col.col-task-assigned small {
+    display: inline; }
   .board .row-statuses,
   .board .row-tasks {
     margin: 0; }
@@ -216,12 +222,14 @@ sub {
         position: absolute;
         bottom: 3px;
         z-index: 1; }
-      .task .row-task-actions .col.col-task-assigned small {
-        line-height: 1.618; }
-      .task .row-task-actions .col.col-task-assigned .avatar {
-        border-radius: 50%;
-        height: 2em;
-        width: 2em; }
+      .task .row-task-actions .col.col-task-assigned {
+        overflow: hidden; }
+        .task .row-task-actions .col.col-task-assigned small {
+          line-height: 1.618; }
+        .task .row-task-actions .col.col-task-assigned .avatar {
+          border-radius: 50%;
+          height: 2em;
+          width: 2em; }
       .task .row-task-actions .col small {
         display: block;
         font-size: .8em;

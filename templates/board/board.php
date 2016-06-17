@@ -1,4 +1,4 @@
-<div class="board tab-pane" id="board-<?php echo $board_id ?>" data-id="<?php echo $board_id ?>" data-title="<?php echo $board->title ?>">
+<div class="board tab-pane <?php echo $board->settings['hide_time_tracking'] == 1 ? 'hide_time_tracking' : '' ?>" id="board-<?php echo $board_id ?>" data-id="<?php echo $board_id ?>" data-title="<?php echo $board->title ?>">
 <?php /*
 	<div class="row row-title text-center">
 		<?php echo $board->title ?>

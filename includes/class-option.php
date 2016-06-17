@@ -36,8 +36,10 @@ class Kanban_Option extends Kanban_Db
 		'use_default_login_page' => 0,
 		'default_estimate' => '',
 		'default_assigned_to' => '',
-		'default_assigned_to_creator' => FALSE,
-		'status_auto_archive' => array()
+		'default_assigned_to_creator' => 0,
+		'default_assigned_to_first' => 0,
+		'status_auto_archive' => array(),
+		'hide_time_tracking' => 0,
 	);
 
 	// store the options on first load, to prevent mulitple db calls

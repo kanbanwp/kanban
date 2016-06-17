@@ -76,13 +76,13 @@ boards[<?php echo $board_id ?>] = {
 	search: <?php echo json_encode( $board->search ); ?>,
 	status_records: function ()
 	{
-		return <?php echo stripslashes(json_encode( $board->statuses )); ?>;
+		return <?php echo (json_encode( $board->statuses )); ?>;
 	},
-	tasks: <?php echo stripslashes(json_encode( $board->tasks )); ?>,
-	project_records: <?php echo stripslashes(json_encode( $board->projects )); ?>,
+	tasks: <?php echo Kanban_Utils::slashes(json_encode( $board->tasks )); ?>,
+	project_records: <?php echo Kanban_Utils::slashes(json_encode( $board->projects )); ?>,
 	allowed_users: function ()
 	{
-		return <?php echo stripslashes(json_encode( $board->allowed_users )); ?>;
+		return <?php echo Kanban_Utils::slashes(json_encode( $board->allowed_users )); ?>;
 	},
 	current_user_id: function ()
 	{

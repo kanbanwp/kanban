@@ -102,4 +102,17 @@ class Kanban_Utils
 	{
 			return htmlentities( stripcslashes( stripcslashes( stripcslashes( $str ) ) ), ENT_QUOTES );
 	}
+
+
+
+	static function slashes ($str)
+	{
+		preg_match('/\\\\"/', $str, $matches);
+
+		if ( !empty($matches) )
+		{
+			return stripslashes($str);
+		}
+		return $str;
+	}
 }

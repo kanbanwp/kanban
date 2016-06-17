@@ -248,18 +248,24 @@ jQuery(function($)
 
 
 
-	$('.default_assigned_to_creator').on(
+	$('#default_assigned_switch').on(
 		'change',
-		function()
+		'[type="checkbox"]',
+		function(e)
 		{
-			if ( $('#default_assigned_to_creator_1').is(':checked') && $('#tr-default_assigned_to').is(':visible') )
-			{
-				$('#tr-default_assigned_to').hide();
-			}
-			else if ( $('#tr-default_assigned_to').not(':visible') )
+			var $switch = $(e.delegateTarget);
+			$(':checked', $switch).not(this).prop('checked', false);
+
+			if ( $('#default_assigned_to').is(':checked') && $('#tr-default_assigned_to').not(':visible') )
 			{
 				$('#tr-default_assigned_to').show();
 			}
+			else if ( $('#tr-default_assigned_to').is(':visible') )
+			{
+				$('#tr-default_assigned_to').hide();
+				$('#default_assigned_to_select').val($("#default_assigned_to_select option:last").val());
+			}
+
 		}
 	);
 

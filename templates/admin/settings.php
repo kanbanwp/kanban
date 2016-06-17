@@ -56,27 +56,24 @@
 							</p>
 						</td>
 					</tr>
-<?php /*
+
 					<tr>
 						<th width="33%" scope="row">
-							<?php echo __( 'Show all columns all the time', 'kanban' ); ?>
+							<?php echo __( 'Hide time tracking', 'kanban' ); ?><br>
+							<small>(<?php echo __( 'Estimates, hours', 'kanban' ); ?>)</small>
 						</th>
 						<td>
 
-
 							<div class="switch-field">
-								<input type="radio" id="show_all_cols_1" name="settings[show_all_cols]" value="1" <?php echo (bool) $settings['show_all_cols'] ? 'checked' : ''; ?>>
-								<label for="show_all_cols_1">Yes</label>
-								<input type="radio" id="show_all_cols_0" name="settings[show_all_cols]" value="0" <?php echo ! (bool) $settings['show_all_cols'] ? 'checked' : ''; ?>>
-								<label for="show_all_cols_0">No</label>
+								<input type="radio" id="hide_time_tracking_1" name="settings[hide_time_tracking]" value="1" <?php echo (bool) $settings['hide_time_tracking'] ? 'checked' : ''; ?>>
+								<label for="hide_time_tracking_1">Yes</label>
+								<input type="radio" id="hide_time_tracking_0" name="settings[hide_time_tracking]" value="0" <?php echo ! (bool) $settings['hide_time_tracking'] ? 'checked' : ''; ?>>
+								<label for="hide_time_tracking_0">No</label>
 							</div>
 
-							<p class="clear description">
-								<?php echo __( 'This disables hiding the first and last status columns.', 'kanban' ); ?>
-							</p>
 						</td>
 					</tr>
-*/ ?>
+
 <?php /*
 					<tr>
 						<th width="33%" scope="row">
@@ -171,26 +168,35 @@
 
 										<tr>
 											<th width="33%" scope="row">
-												<?php echo __('Assign new tasks to the user who created it', 'kanban' ) ?>
+												<?php echo __('Assign new tasks to', 'kanban' ) ?>
 											</th>
 											<td>
-												<div class="switch-field">
-													<input type="radio" class="default_assigned_to_creator" id="default_assigned_to_creator_1" name="settings[default_assigned_to_creator]" value="1" <?php echo isset($settings['default_assigned_to_creator']) && (bool) $settings['default_assigned_to_creator'] ? 'checked' : '' ?>>
-													<label for="default_assigned_to_creator_1">Yes</label>
-													<input type="radio" class="default_assigned_to_creator" id="default_assigned_to_creator_0" name="settings[default_assigned_to_creator]" value="0" <?php echo (!isset($settings['default_assigned_to_creator']) || !(bool) $settings['default_assigned_to_creator']) ? 'checked' : '' ?>>
-													<label for="default_assigned_to_creator_0">No</label>
+												<div class="switch-field vertical radio" id="default_assigned_switch">
+													<input type="checkbox" id="default_assigned_to_creator" name="settings[default_assigned_to_creator]" value="1" <?php echo isset($settings['default_assigned_to_creator']) && (bool) $settings['default_assigned_to_creator'] ? 'checked' : '' ?>>
+													<label for="default_assigned_to_creator">
+														<?php echo __('The user who created it', 'kanban' ) ?>
+													</label>
+
+													<input type="checkbox" id="default_assigned_to_first" name="settings[default_assigned_to_first]" value="1" <?php echo isset($settings['default_assigned_to_first']) && (bool) $settings['default_assigned_to_first'] ? 'checked' : '' ?>>
+													<label for="default_assigned_to_first">
+														<?php echo __('The first user to move it', 'kanban' ) ?>
+													</label>
+													<input type="checkbox" id="default_assigned_to" <?php echo ! (bool) $settings['default_assigned_to_creator'] && ! (bool) $settings['default_assigned_to_first'] ? 'checked' : '' ?>>
+													<label for="default_assigned_to">
+														<?php echo __('A single user', 'kanban' ) ?>
+													</label>
 												</div>
 											</td>
 										</tr>
 
-										<tr id="tr-default_assigned_to" style="<?php echo (bool) $settings['default_assigned_to_creator'] ? 'display: none;' : '' ?>">
+										<tr id="tr-default_assigned_to" style="<?php echo (bool) $settings['default_assigned_to_creator'] || (bool) $settings['default_assigned_to_first'] ? 'display: none;' : '' ?>">
 											<th width="33%" scope="row">
-												<label for="default_assigned_to">
+												<label for="default_assigned_to_select">
 													<?php echo __( 'Assign new tasks to', 'kanban' ); ?>
 												</label>
 											</th>
 											<td>
-												<select  name="settings[default_assigned_to]" style="min-width: 10em;">
+												<select id="default_assigned_to_select" name="settings[default_assigned_to]" style="min-width: 10em;">
 					<?php foreach ( $all_users_arr as $user_id => $user_name ) : ?>
 													<option value="<?php echo $user_id; ?>" <?php echo isset( $settings['default_assigned_to'] ) ? $user_id == $settings['default_assigned_to'] ? 'selected' : '' : ''; ?>>
 														<?php echo $user_name; ?>

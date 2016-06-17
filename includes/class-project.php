@@ -29,7 +29,8 @@ class Kanban_Project extends Kanban_Db
 		'user_id_author'  => 'int',
 		'created_dt_gmt'  => 'datetime',
 		'modified_dt_gmt' => 'datetime',
-		'is_active'       => 'bool'
+		'is_active'       => 'bool',
+		'board_id'  	  => 'int'
 	);
 
 	protected static $records = array();

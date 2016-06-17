@@ -233,6 +233,21 @@ Board.prototype.dom = function()
 				status_old.title
 			);
 
+
+
+			// if assigned to first is set
+			if ( typeof self.record.settings().default_assigned_to_first !== 'undefined' )
+			{
+				if ( self.record.settings().default_assigned_to_first == 1 )
+				{
+					task.record.user_id_assigned = self.current_user().record().ID;
+
+					task.update_assigned_to(self.current_user().record().ID);
+				}
+			}
+
+			
+
 			task.record.status_id = status_id_new;
 			task.save(comment);
 
@@ -365,24 +380,42 @@ Board.prototype.dom = function()
 				}
 			}
 
+
+
+			// if assigned to creator is set
+			try
+			{
+				if ( self.record.settings().default_assigned_to_creator == 1 )
+				{
+					task_data.task.user_id_assigned = self.current_user().record().ID;
+				}
+			}
+			catch (err) {}
+
+
+
 			// if default assigned to is set
 			if ( typeof self.record.settings().default_assigned_to !== 'undefined' )
 			{
 				// and default assigned to exists
 				if ( typeof self.record.allowed_users()[self.record.settings().default_assigned_to] !== 'undefined' )
 				{
-					task_data.task.user_id_assigned = self.record.settings().default_assigned_to;
-				}
-			}
+					var set = true;
 
+					// don't set it if any of the other settings are set
+					try
+					{
+						if ( self.record.settings().default_assigned_to_creator == 1 || self.record.settings().default_assigned_to_first == 1 )
+						{
+							set = false;
+						}
+					}
+					catch (err) {}
 
-			
-			// if assigned to creator is set
-			if ( typeof self.record.settings().default_assigned_to_creator !== 'undefined' )
-			{
-				if ( self.record.settings().default_assigned_to_creator === true || self.record.settings().default_assigned_to_creator == 1 )
-				{
-					task_data.task.user_id_assigned = self.current_user().record().ID;
+					if ( set )
+					{
+						task_data.task.user_id_assigned = self.record.settings().default_assigned_to;
+					}
 				}
 			}
 

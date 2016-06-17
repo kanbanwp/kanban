@@ -524,21 +524,7 @@ Task.prototype.dom = function()
 
 
 
-			// update UI
-			self.$el.attr('data-user_id-assigned', user_id);
-
-			var $initials = $('.task-assigned-initials', self.$el).removeClass('empty');
-			
-			if ( typeof user.avatar !== 'undefined' )
-			{
-				$initials.html(user.avatar);
-			}
-			else
-			{
-				$initials.text(user.initials);
-			}
-
-			$('.task-assigned-name', self.$el).text(user.short_name);
+			self.update_assigned_to(user_id);
 		}
 	);
 
@@ -748,6 +734,41 @@ Task.prototype.update_status = function(status_id)
 	$('.task-handle', this.$el).css({
 		background:status.color_hex
 	});
+}
+
+
+
+Task.prototype.update_assigned_to = function(user_id)
+{
+	if ( !this.board().current_user().has_cap('write') )
+	{
+		return false;
+	}
+
+
+	
+	var self = this;
+
+
+	var user = self.board().record.allowed_users()[user_id];
+
+
+
+	// update UI
+	self.$el.attr('data-user_id-assigned', user_id);
+
+	var $initials = $('.task-assigned-initials', self.$el).removeClass('empty');
+
+	if ( typeof user.avatar !== 'undefined' )
+	{
+		$initials.html(user.avatar);
+	}
+	else
+	{
+		$initials.text(user.initials);
+	}
+
+	$('.task-assigned-name', self.$el).text(user.short_name);
 }
 
 

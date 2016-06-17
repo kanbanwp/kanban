@@ -242,7 +242,8 @@ class Kanban_User
 				// get gravatar
 				if ( self::validate_gravatar( $user->user_email ) )
 				{
-					self::$records[$user_id]->avatar = get_avatar( $user->user_email );
+					// make sure it uses double quotes
+					self::$records[$user_id]->avatar = addslashes(str_replace("'", '"', get_avatar( $user->user_email )));
 				}
 
 				// fancy name formating

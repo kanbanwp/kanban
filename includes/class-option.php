@@ -39,6 +39,7 @@ class Kanban_Option extends Kanban_Db
 		'default_assigned_to_creator' => 0,
 		'default_assigned_to_first' => 0,
 		'status_auto_archive' => array(),
+		'status_auto_archive_days' => 30, // days
 		'hide_time_tracking' => 0,
 	);
 

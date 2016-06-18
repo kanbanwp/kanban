@@ -186,7 +186,7 @@ Board.prototype.dom = function()
 		forceHelperSize: true,
 		placeholder: "task-placeholder",
 		containment: $('.row-tasks-wrapper'),
-		appendTo: "body",
+		// appendTo: "body",
 		scroll: false,
 		helper: "clone",
 		start: function (e, ui)
@@ -238,7 +238,7 @@ Board.prototype.dom = function()
 			// if assigned to first is set
 			if ( typeof self.record.settings().default_assigned_to_first !== 'undefined' )
 			{
-				if ( self.record.settings().default_assigned_to_first == 1 )
+				if ( self.record.settings().default_assigned_to_first == 1 && ( typeof task.record.user_id_assigned === 'undefined' || task.record.user_id_assigned == 0 ) )
 				{
 					task.record.user_id_assigned = self.current_user().record().ID;
 

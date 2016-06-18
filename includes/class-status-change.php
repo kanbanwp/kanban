@@ -106,14 +106,18 @@ class Kanban_Status_Change extends Kanban_Db
 		// schedule auto-archive cron
 		if ( in_array($status_id_new, $status_auto_archive) )
 		{
+			$status_auto_archive_days = Kanban_Option::get_option('status_auto_archive_days', $task->board_id);
+
 			Kanban_Comment::add(
-				'Task ' . $task_id . ' scheduled to be archived in 30 days.',
+				sprintf( __( 'Task %s scheduled to be archived in %s days.', 'kanban' ),
+					$task_id,
+					$status_auto_archive_days
+				),
 				'system',
 				$task_id
 			);
 
-
-			wp_schedule_single_event(time() + (60*60*24*30), 'kanban_task_auto_archive', array($task_id)); // 30 days
+			wp_schedule_single_event(time() + 60*60*24*$status_auto_archive_days, 'kanban_task_auto_archive', array($task_id));
 		}
 
 

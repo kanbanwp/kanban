@@ -236,6 +236,9 @@ $(function()
 		{
 			$('body').toggleClass('board-view-compact');
 			cookie_views();
+
+			// make sure we redraw
+			on_window_resize();
 			return false;
 		}
 	);

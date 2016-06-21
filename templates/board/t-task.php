@@ -135,5 +135,7 @@
 
 	<div class="task-handle" style="background-color: {{=task.status.color_hex}}"></div>
 
+<!--	<input type="text" class="position" value="{{=task.position}}">-->
+
 	<?php echo apply_filters( 'kanban_task_after', '', $board ); ?>
 </div>

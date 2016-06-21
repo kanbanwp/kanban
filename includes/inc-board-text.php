@@ -12,6 +12,8 @@ return array(
 	'task_added_to_project_previous' => __(' (previously "{0}")'),
 	'task_moved_to_status' => __('{0} moved the task to "{1}"'),
 	'task_moved_to_status_previous' => __(' (previously "{0}")'),
+	'task_moved_to_position' => __('{0} reordered the task to "{1}"'),
+	'task_moved_to_position_previous' => __(' (previously "{0}")'),
 	'task_title_updated' => __('{0} updated the task title to "{1}"'),
 	'task_title_updated_previous' => __(' (previously "{0}")'),
 	'task_assigned_to' => __('{0} assigned the task to {1}'),

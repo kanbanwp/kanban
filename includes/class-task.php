@@ -28,6 +28,7 @@ class Kanban_Task extends Kanban_Db
 		'description'      => 'text',
 		'created_dt_gmt'   => 'datetime',
 		'modified_dt_gmt'  => 'datetime',
+		'position'	       => 'int',
 		'user_id_author'   => 'int',
 		'user_id_assigned' => 'int',
 		'status_id'        => 'int',
@@ -162,10 +163,14 @@ class Kanban_Task extends Kanban_Db
 
 
 
+		$do_message = $_POST['message'] == 'true' ? TRUE : FALSE;
+
+
+
 		if ( $is_successful )
 		{
 			wp_send_json_success( array(
-				'message' => sprintf( '%s saved', self::$slug ),
+				'message' => $do_message ? sprintf( '%s saved', self::$slug ) : '',
 				self::$slug => $post_data
 			) );
 		}
@@ -270,12 +275,14 @@ class Kanban_Task extends Kanban_Db
 		if ( empty( self::$records ) )
 		{
 			$sql = "SELECT tasks.*,
+			  	LPAD(position, 5, '0') as position,
 				COALESCE(SUM(worked.hours), 0) 'hour_count'
 				FROM `%s` tasks
 				LEFT JOIN `%s` worked
 				ON tasks.id = worked.task_id
 				WHERE tasks.is_active = 1
 				GROUP BY tasks.id
+				ORDER BY position
 			;";
 
 			$sql = apply_filters( 'kanban_task_get_all_sql', $sql );

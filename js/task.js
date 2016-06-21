@@ -619,7 +619,7 @@ Task.prototype.update_progress = function()
 
 
 
-Task.prototype.save = function(comment, status_id_old)
+Task.prototype.save = function(comment, do_growl)
 {
 	if ( !this.board().current_user().has_cap('write') )
 	{
@@ -644,10 +644,14 @@ Task.prototype.save = function(comment, status_id_old)
 		}
 	}
 
-	if ( typeof status_id_old !== 'undefined' )
+
+
+	if ( typeof do_growl === 'undefined' )
 	{
-		task_data.status_id_old = status_id_old;
+		do_growl = true;
 	}
+
+	task_data.message = do_growl;
 
 
 
@@ -706,6 +710,7 @@ Task.prototype.delete = function(comment)
 		{
 			self.$el.remove();
 			self.update_board();
+			self.board().update_task_positions();
 			delete self.record;
 		});
 	});
@@ -734,6 +739,48 @@ Task.prototype.update_status = function(status_id)
 	$('.task-handle', this.$el).css({
 		background:status.color_hex
 	});
+}
+
+
+
+
+Task.prototype.update_position = function(position)
+{
+	if ( !this.board().current_user().has_cap('write') )
+	{
+		return false;
+	}
+
+	if ( position == this.record.position )
+	{
+		return false;
+	}
+
+
+
+	position = parseInt(position);
+
+
+
+	// store prev pos
+	var prev_pos = this.record.position + '';
+
+	var comment = text['task_moved_to_position'].sprintf(
+		this.board().current_user().record().short_name,
+		position
+	);
+
+	if ( prev_pos !== '' )
+	{
+		comment += text['task_moved_to_position_previous'].sprintf(
+			parseInt(prev_pos)
+		);
+	}
+
+
+
+	this.record.position = position;
+	this.save(comment, false);
 }
 
 

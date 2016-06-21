@@ -381,7 +381,7 @@ function obj_order_by_prop (obj, prop, reverse)
 
 	if ( reverse )
 	{
-		re.reverse();
+		obj_arr.reverse();
 	}
 
 	return obj_arr;

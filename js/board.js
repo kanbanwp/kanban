@@ -19,15 +19,18 @@ function Board (board)
 	var self = this;
 	setTimeout(function()
 	{
-		for ( var task_id in self.record.tasks )
+		// put in order by vertical position
+		var tasks_by_position = obj_order_by_prop (self.record.tasks, 'position', true);
+
+		for ( var i in tasks_by_position )
 		{
-			self.record.tasks[task_id] = new Task(self.record.tasks[task_id]);
+			var task = tasks_by_position[i];
+			self.record.tasks[task.id] = new Task(self.record.tasks[task.id]);
 		}
 
 		self.project_update_counts();
 
 		$(document).trigger('/board/tasks/done/', self.$el);
-
 	}, 50);
 }
 
@@ -191,24 +194,30 @@ Board.prototype.dom = function()
 		helper: "clone",
 		start: function (e, ui)
 		{
+			$('.dropdown.open', self.$el).removeClass('open').closest('.col-tasks.active').removeClass('active');
+
 			$('.col-tasks-sidebar').css({
 				'left': '',
 				'right': ''
 			});
 			is_dragging = true;
 		},
-		over: function (e, ui)
-		{
-			// ui.placeholder.closest('.col-tasks').addClass('hover');
-		},
-		out: function (e, ui)
-		{
-			// ui.placeholder.closest('.col-tasks').removeClass('hover');
-		},
+		// over: function (e, ui)
+		// {
+		// 	ui.placeholder.closest('.col-tasks').addClass('hover');
+		// },
+		// out: function (e, ui)
+		// {
+		// 	ui.placeholder.closest('.col-tasks').removeClass('hover');
+		// },
 		stop: function (e, ui)
 		{
+			self.update_task_positions();
 			is_dragging = false;
 		},
+		// update: function (e, ui)
+		// {
+		// },
 		receive: function(e, ui)
 		{
 			var $col = ui.item.closest('.col-tasks');
@@ -569,6 +578,28 @@ Board.prototype.updates_status_counts = function()
 
 		$('#status-' + status_id + ' .status-task-count').text(count);
 	});
+}; // updates_status_counts
+
+
+
+Board.prototype.update_task_positions = function()
+{
+	var self = this;
+
+	$('.col-tasks', this.$el).each(function()
+	{
+		var $col = $(this);
+		$('.task', $col).each(function(i)
+		{
+			var $task = $(this);
+			// $('.position', $task ).val( ("00000" + i).slice (-5) );
+			var task_id = $task.attr('data-id');
+			var task = self.record.tasks[task_id];
+			task.update_position( ("00000" + i).slice (-5) );
+		});
+	});
+
+	growl('Order updated');
 }; // updates_status_counts
 
 

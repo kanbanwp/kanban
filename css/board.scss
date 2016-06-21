@@ -260,7 +260,8 @@ sub {
 		// 	}
 		// }
 
-		&.active {
+		&.active,
+        &.hover {
 			z-index: 1;
 		}
 
@@ -354,14 +355,19 @@ sub {
 	.row-task-actions {
 		$task-action-size: 1.8em;
 
-		margin: 0 0 $margin/3;
-		.col {
+        margin: 0 0 $margin/3;
+
+        .col {
 			padding: 0;
 			text-align: center;
 
 			small {
 				color: #999;
 			}
+
+            .dropdown-menu {
+              overflow-x: hidden;
+            }
 
 			&.col-task-hours,
 			&.col-task-estimate {
@@ -659,6 +665,14 @@ body.board-view-all-cols {
 	.dropdown-toggle {
 		color: black;
 	}
+
+    .open #footer-settings-toggle {
+      color: black;
+
+      .caret {
+        color: black;
+      }
+    }
 
 	#page-search {
 		margin: $margin/2 (-$margin);

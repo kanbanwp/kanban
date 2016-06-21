@@ -158,7 +158,7 @@ sub {
       @media screen and (max-width: 767px) {
         .row-tasks-wrapper .col-tasks:nth-child(even) {
           background: white; } }
-    .row-tasks-wrapper .col-tasks.active {
+    .row-tasks-wrapper .col-tasks.active, .row-tasks-wrapper .col-tasks.hover {
       z-index: 1; }
     @media screen and (max-width: 767px) {
       .row-tasks-wrapper .col-tasks {
@@ -215,6 +215,8 @@ sub {
       text-align: center; }
       .task .row-task-actions .col small {
         color: #999; }
+      .task .row-task-actions .col .dropdown-menu {
+        overflow-x: hidden; }
       .task .row-task-actions .col.col-task-hours, .task .row-task-actions .col.col-task-estimate {
         line-height: 1.236; }
       .task .row-task-actions .col.col-task-estimate:before {
@@ -406,6 +408,10 @@ body.board-view-all-cols .row-tasks {
       background: #464646; }
   #page-footer .dropdown-toggle {
     color: black; }
+  #page-footer .open #footer-settings-toggle {
+    color: black; }
+    #page-footer .open #footer-settings-toggle .caret {
+      color: black; }
   #page-footer #page-search {
     margin: 7.5px -15px;
     padding: 0; }

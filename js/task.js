@@ -169,6 +169,8 @@ Task.prototype.dom = function()
 				return;
 			}
 
+
+
 			// enter
 			if (e.keyCode === 13)
 			{
@@ -183,6 +185,7 @@ Task.prototype.dom = function()
 			}
 
 
+
 			// allow space (undermine bootstrap behavior)
 			if (e.keyCode === 32)
 			{
@@ -190,8 +193,55 @@ Task.prototype.dom = function()
 				placeCaretAtEnd($div.get(0));
 				return false;
 			}
+
+
+
+			// allow arrow keys to select project
+			// if (e.keyCode === 40 || e.keyCode === 38)
+			// {
+			// 	placeCaretAtEnd($div.get(0));
+			// 	e.preventDefault();
+			// }
+
+
+
 		}
-	)	
+	)
+	// .on(
+	// 	'keyup',
+	// 	'.task-project [contenteditable]',
+	// 	function (e)
+	// 	{
+	// 		var $div = $(this);
+	//
+	// 		var $task_project = $div.closest('.task-project');
+	// 		var $list = $('.dropdown-menu li', $task_project);
+	// 		var valueLower = $.trim($div.text().toLowerCase());
+	//
+	//
+	//
+	// 		$list.each(function()
+	// 		{
+	// 			var $li = $(this);
+	//
+	// 			var textLower = $.trim($li.text().toLowerCase());
+	//
+	// 			if ( textLower.search(valueLower) > -1 ) //  && $li.is(':visible')
+	// 			{
+	// 				console.log(valueLower, textLower, 'found');
+	// 				$li.slideDown('fast');
+	// 			}
+	// 			else // if ( !$li.is(':visible') )
+	// 			{
+	// 				console.log(valueLower, textLower, 'not found');
+	// 				$li.slideUp('fast');
+	// 			}
+	// 		});
+	//
+	//
+	// 		placeCaretAtEnd($div.get(0));
+	// 	}
+	// )
 	.on(
 		'blur',
 		'.task-project [contenteditable]',
@@ -404,6 +454,22 @@ Task.prototype.dom = function()
 			var $menu = $(this);
 			var $dropdown = $menu.closest('.dropdown');
 			clearTimeout($dropdown.data('timer-close'));
+		}
+	);
+
+
+
+	self.$el
+	.on(
+		'show.bs.dropdown',
+		'.row-task-actions .dropdown',
+		function(e)
+		{
+			var $relatedTarget = $(e.relatedTarget);
+			var $dropdown = $relatedTarget.closest('.dropdown');
+			var $menu = $('.dropdown-menu', $dropdown);
+
+			$menu.css('maxWidth', self.$el.outerWidth());
 		}
 	);
 

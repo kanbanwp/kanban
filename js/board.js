@@ -189,7 +189,7 @@ Board.prototype.dom = function()
 		forceHelperSize: true,
 		placeholder: "task-placeholder",
 		containment: $('.row-tasks-wrapper'),
-		// appendTo: "body",
+		appendTo: "body",
 		scroll: false,
 		helper: "clone",
 		start: function (e, ui)
@@ -599,7 +599,7 @@ Board.prototype.update_task_positions = function()
 		});
 	});
 
-	growl('Order updated');
+	// growl('Order updated');
 }; // updates_status_counts
 
 

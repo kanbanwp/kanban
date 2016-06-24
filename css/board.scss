@@ -637,7 +637,8 @@ body.board-view-all-cols {
 			color: white;
 		}
 
-		&:hover {
+		&:hover,
+        &:focus {
 			color: black;
 
 			.caret {

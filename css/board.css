@@ -392,9 +392,9 @@ body.board-view-all-cols .row-tasks {
     color: white; }
     #page-footer #footer-settings-toggle .caret {
       color: white; }
-    #page-footer #footer-settings-toggle:hover {
+    #page-footer #footer-settings-toggle:hover, #page-footer #footer-settings-toggle:focus {
       color: black; }
-      #page-footer #footer-settings-toggle:hover .caret {
+      #page-footer #footer-settings-toggle:hover .caret, #page-footer #footer-settings-toggle:focus .caret {
         color: black; }
     @media screen and (max-width: 767px) {
       #page-footer #footer-settings-toggle {

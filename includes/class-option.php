@@ -14,7 +14,7 @@ Kanban_Option::init();
 class Kanban_Option extends Kanban_Db
 {
 	// the instance of this object
-	private static $instance;
+//	private static $instance;
 
 	// the table name of this class
 	protected static $table_name = 'options';

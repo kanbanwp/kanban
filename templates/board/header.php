@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
 	<link href='https://fonts.googleapis.com/css?family=Open+Sans:700,400,400italic' rel='stylesheet' type='text/css'>
 

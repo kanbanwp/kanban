@@ -28,7 +28,7 @@ function Board (board)
 			self.record.tasks[task.id] = new Task(self.record.tasks[task.id]);
 		}
 
-		self.project_update_counts();
+		self.update_UI();
 
 		$(document).trigger('/board/tasks/done/', self.$el);
 	}, 50);
@@ -262,8 +262,8 @@ Board.prototype.dom = function()
 
 			self.record.tasks[task_id].update_status(status_id_new);
 
-			self.updates_status_counts();
-			self.match_col_h();
+			self.update_UI();
+
 		} // receive
 	});
 
@@ -462,6 +462,8 @@ Board.prototype.dom = function()
 
 					// add the task
 					self.record.tasks[response.data.task.id] = new Task(response.data.task);
+
+					self.update_UI();
 
 					$('.task-title', self.record.tasks[response.data.task.id].$el).focus();
 				}
@@ -706,6 +708,15 @@ Board.prototype.project_update_counts = function()
 		}
 	}
 };
+
+
+
+Board.prototype.update_UI = function ()
+{
+	this.project_update_counts();
+	this.updates_status_counts();
+	this.match_col_h ();
+}
 
 
 

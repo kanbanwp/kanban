@@ -39,8 +39,6 @@ Task.prototype.add = function()
 
 	this.dom();
 
-	this.update_board();
-
 	$(document).trigger('/task/added/', this);
 }; // add
 

@@ -238,11 +238,11 @@ class Kanban_Admin
 				sprintf( 'From: "%s" <%s>', get_option( 'blogname' ), $_POST['from'] )
 			);
 
-			$_GET['alert'] = "Email sent! We'll get back to you as soon as we can.";
+			$_GET['alert'] = __("Email sent! We'll get back to you as soon as we can.", 'kanban');
 		}
 		catch ( Exception $e )
 		{
-			$_GET['alert'] = "Email could not be sent. Please contact us through <a href=\"http://kanbanwp.com\" target=\"_blank\">https://kanbanwp.com</a>.";
+			$_GET['alert'] = __("Email could not be sent. Please contact us through <a href=\"http://kanbanwp.com\" target=\"_blank\">https://kanbanwp.com</a>.", 'kanban');
 		}
 	}
 
@@ -307,7 +307,7 @@ class Kanban_Admin
 
 		if ( is_wp_error($user_id) )
 		{
-			wp_send_json_error(array('error' => 'User could not be created. Please use the User > Add New page'));
+			wp_send_json_error(array('error' => __('User could not be created. Please use the User > Add New page', 'kanban')));
 			return;
 		}
 
@@ -422,7 +422,11 @@ class Kanban_Admin
 		);
 
 		$mylinks = array(
-			sprintf( '<a href="%s">Settings</a>', $url )
+			sprintf(
+				'<a href="%s">%s</a>',
+				$url,
+				__('Settings', 'kanban')
+			)
 		);
 
 		return array_merge( $links, $mylinks );

@@ -100,7 +100,7 @@ class Kanban_Task_Hour extends Kanban_Db
 			Kanban_Comment::add(
 				$_POST['comment'],
 				'system',
-				$task_id
+				$_POST['task']['id']
 			);
 
 			do_action( 'kanban_task_hour_ajax_save_after_comment' );
@@ -111,13 +111,13 @@ class Kanban_Task_Hour extends Kanban_Db
 		if ( $is_successful )
 		{
 			wp_send_json_success( array(
-				'message' => sprintf( '%s saved', str_replace( '_', ' ', self::$slug ) )
+				'message' => sprintf( __('%s saved', 'kanban'), str_replace( '_', ' ', self::$slug ) )
 			) );
 		}
 		else
 		{
 			wp_send_json_error( array(
-				'message' => sprintf( 'Error saving %s', str_replace( '_', ' ', self::$slug ) )
+				'message' => sprintf( __('Error saving %s', 'kanban'), str_replace( '_', ' ', self::$slug ) )
 			) );
 		}
 	}

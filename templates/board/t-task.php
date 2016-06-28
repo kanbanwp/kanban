@@ -30,14 +30,14 @@
 	</div><!-- task-menu -->
 
 	<div class="task-project dropdown">
-		<div contenteditable="{{current_user_can_write}}true{{:current_user_can_write}}false{{/current_user_can_write}}" data-toggle="dropdown" placeholder="Add a project">{{=task.project.title}}</div>
+		<div contenteditable="{{current_user_can_write}}true{{:current_user_can_write}}false{{/current_user_can_write}}" data-toggle="dropdown" placeholder="<?php echo __('Add a project', 'kanban') ?>">{{=task.project.title}}</div>
 		{{current_user_can_write}}
 		<ul class="dropdown-menu">
 		</ul>
 		{{/current_user_can_write}}
 	</div><!-- task-id-menu -->
 
-	<div class="task-title" contenteditable="{{current_user_can_write}}true{{:current_user_can_write}}false{{/current_user_can_write}}" placeholder="Add a title">{{=task.title}}</div>
+	<div class="task-title" contenteditable="{{current_user_can_write}}true{{:current_user_can_write}}false{{/current_user_can_write}}" placeholder="<?php echo __('Add a title', 'kanban') ?>">{{=task.title}}</div>
 
 	<?php echo apply_filters( 'kanban_task_title_after', '', $board ); ?>
 	
@@ -45,7 +45,7 @@
 		<div class="col col-xs-4 col-task-hours">
 			<div class="dropdown">
 				<button class="btn btn-default btn-block btn-task-action dropdown-toggle" type="button" data-toggle="dropdown">
-					<small>Hours</small>
+					<small><?php echo __('Hours', 'kanban') ?></small>
 					<span class="task-hours">
 						{{=task.hour_count_formatted}}
 					</span>
@@ -68,7 +68,7 @@
 		<div class="col col-xs-4 col-task-estimate">
 			<div class="dropdown">
 				<button class="btn btn-default btn-block btn-task-action dropdown-toggle" type="button" data-toggle="dropdown">
-					<small>Estimate</small>
+					<small><?php echo __('Estimate', 'kanban') ?></small>
 					<span class="task-estimate">
 {{task.estimate.title}}
 						{{=task.estimate.title}}

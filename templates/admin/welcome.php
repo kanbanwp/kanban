@@ -38,8 +38,8 @@
 										<?php echo __( 'Documentation', 'kanban' ); ?>
 										<?php echo __( '(On kanbanwp.com)', 'kanban' ); ?>
 									</a>
-									<a href="<?php echo admin_url('admin.php?page=kanban_settings'); ?>" class="button">Settings</a>
-									<a href="<?php echo admin_url('admin.php?page=kanban_contact'); ?>" class="button">Contact us</a>
+									<a href="<?php echo admin_url('admin.php?page=kanban_settings'); ?>" class="button"><?php echo __('Settings', 'kanban') ?></a>
+									<a href="<?php echo admin_url('admin.php?page=kanban_contact'); ?>" class="button"><?php echo __('Contact us', 'kanban') ?></a>
 								</p>
 							</div>
 
@@ -48,7 +48,7 @@
 							</span></h2>
 
 							<div class="inside">
-								<p>Get started with the plugin in 60 seconds.</p>
+								<p><?php echo __('Get started with the plugin in 60 seconds.', 'kanban') ?></p>
 
 								<div class="video-wrapper" style="max-width: 1000px;">
 									<iframe src="https://player.vimeo.com/video/145274368?title=0&amp;byline=0&amp;portrait=0" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
@@ -72,7 +72,7 @@
 							<div class="inside">
 
 								<p>
-									Sign up to receive our guide to "Project Management in WordPress" delivered to your inbox over the next week.
+									<?php echo __('Sign up to receive our guide to "Project Management in WordPress" delivered to your inbox over the next week.', 'kanban') ?>
 								</p>
 
 								<form method="POST" action="https://kanbanforwordpress.activehosted.com/proc.php" id="_form_8_" class="_form _form_8 _inline-form  _dark" novalidate>
@@ -85,12 +85,12 @@
 									<input type="hidden" name="v" value="2" />
 
 									<p>
-										<input type="text" id="email"  class="large-text" name="email" placeholder="Your email" required/>
+										<input type="text" id="email"  class="large-text" name="email" placeholder="<?php echo __('Your email', 'kanban') ?>" required/>
 									</p>
 
 
 									<p>
-										<button class="button-secondary" type="submit">Sign me up!</button>
+										<button class="button-secondary" type="submit"><?php echo __('Sign me up!', 'kanban') ?></button>
 									</p>
 
 									<div class="_form-thank-you" style="display:none;">

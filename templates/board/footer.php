@@ -2,7 +2,7 @@
 	<div class="container">
 		<div class="navbar-header">
 			<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#page-footer-navbar">
-				<span class="sr-only">Toggle navigation</span>
+				<span class="sr-only"><?php echo __('Toggle navigation', 'kanban') ?></span>
 				<span class="icon-bar"></span>
 				<span class="icon-bar"></span>
 				<span class="icon-bar"></span>
@@ -12,14 +12,14 @@
 		<div id="page-footer-navbar" class="navbar-collapse collapse">
 			<form class="navbar-form navbar-nav" id="page-search">
 				<div class="form-group has-feedback">
-					<input type="search" placeholder="Search" class="form-control" id="board-search">
+					<input type="search" placeholder="<?php echo __('Search', 'kanban') ?>" class="form-control" id="board-search">
 					<span class="glyphicon glyphicon-remove form-control-feedback" id="board-search-clear" style="display: none;"></span>
 				</div>
 
 
 				<div class="btn-group">
 					<a href="#" class="btn btn-default" id="btn-filter-modal-toggle" data-toggle="modal">
-						Filter
+						<?php echo __('Filter', 'kanban') ?>
 					</a>
 					<a href="#" class="btn btn-default btn-filter-reset" style="display: none;">
 						<span class="glyphicon glyphicon-remove" id="board-filter-clear"></span>
@@ -36,14 +36,14 @@
 						<li class="hidden-xs">
 							<a href="#" class="btn-view-toggle" id="btn-view-all-cols" title="shift + A">
 								<span class="glyphicon glyphicon-ok"></span>
-								Show all columns
+								<?php echo __('Show all columns', 'kanban') ?>
 							</a>
 						</li>
 
 						<li>
 							<a href="#" class="btn-view-toggle" id="btn-view-compact" title="shift + C">
 								<span class="glyphicon glyphicon-ok"></span>
-								Compact View
+								<?php echo __('Compact View', 'kanban') ?>
 							</a>
 						</li>
 						<li class="divider"></li>

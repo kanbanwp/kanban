@@ -10,14 +10,14 @@
 	<div id="collapse-{{=id}}" class="panel-collapse collapse">
 		<div class="panel-body">
 			<p>
-				There are {{=task_count}} tasks assigned to this project.
+				<?php echo sprintf(__('There are %s tasks assigned to this project.', 'kanban'), '{{=task_count}}') ?>
 			</p>
 			<p class="form-group">
 				<input type="text" class="form-control input-lg project-title" value="{{=title}}" data-id="{{=id}}">
 			</p>
 			<p class="text-right">
 				<a href="#" class="text-danger btn-delete" data-id="{{=id}}">
-					Delete this project
+					<?php echo __('Delete this project', 'kanban') ?>
 				</a>
 			</p>
 		</div><!-- panel body -->

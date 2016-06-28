@@ -37,7 +37,7 @@
 
 					<button type="button" class="close" data-dismiss="modal">&times;</button>
 
-					<p class="h3">Move "<span class="task-title"></span>" to:</p>
+					<p class="h3"><?php echo sprintf(__('Move "%s" to:', 'kanban'), '<span class="task-title"></span>') ?></p>
 
 					<input type="hidden" class="task-id" value="">
 
@@ -63,7 +63,7 @@
 
 					<button type="button" class="close" data-dismiss="modal">&times;</button>
 
-					<p class="h3">Filters:</p>
+					<p class="h3"><?php echo __('Filters:', 'kanban') ?></p>
 
 					<div class="form-group">
 						<select class="form-control input-lg select-projects" data-field="project_id">
@@ -84,7 +84,7 @@
 					<?php echo apply_filters( 'kanban_filter_modal_select_after', '', $board ); ?>
 					
 					<button type="button" class="btn btn-warning btn-block btn-filter-reset" style="display: none;">
-						Reset
+						<?php echo __('Reset', 'kanban') ?>
 					</button>
 				</div><!-- body -->
 			</div><!-- content -->

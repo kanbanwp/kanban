@@ -97,14 +97,14 @@ class Kanban_Project extends Kanban_Db
 		if ( $is_successful )
 		{
 			wp_send_json_success( array(
-				'message' => sprintf( '%s saved', self::$slug ),
+				'message' => sprintf( __('%s saved', 'kanban'), self::$slug ),
 				self::$slug => $post_data
 			) );
 		}
 		else
 		{
 			wp_send_json_error( array(
-				'message' => sprintf( 'Error saving %s', self::$slug )
+				'message' => sprintf( __('Error saving %s', 'kanban'), self::$slug )
 			) );
 		}
 	}
@@ -139,13 +139,13 @@ class Kanban_Project extends Kanban_Db
 		if ( $is_successful )
 		{
 			wp_send_json_success( array(
-				'message' => sprintf( '%s deleted', self::$slug )
+				'message' => sprintf( __('%s deleted', 'kanban'), self::$slug )
 			) );
 		}
 		else
 		{
 			wp_send_json_error( array(
-				'message' => sprintf( 'Error deleting %s', self::$slug )
+				'message' => sprintf( __('Error deleting %s', 'kanban'), self::$slug )
 			) );
 		}
 	}

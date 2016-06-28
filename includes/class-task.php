@@ -62,15 +62,15 @@ class Kanban_Task extends Kanban_Db
 
 		if ( $hours < 1 )
 		{
-			$label = sprintf( '%sm', ceil( $hours*60/100));
+			$label = sprintf( __('%sm', 'kanban'), ceil( $hours*60/100));
 		}
 		elseif ( $hours < 8 )
 		{
-			$label = sprintf( '%sh', $hours );
+			$label = sprintf( __('%sh', 'kanban'), $hours );
 		}
 		else
 		{
-			$label = sprintf( '%sd %sh', floor( $hours/8 ), $hours % 8 );
+			$label = sprintf( __('%sd %sh', 'kanban'), floor( $hours/8 ), $hours % 8 );
 		}
 
 		return $label;
@@ -170,14 +170,14 @@ class Kanban_Task extends Kanban_Db
 		if ( $is_successful )
 		{
 			wp_send_json_success( array(
-				'message' => $do_message ? sprintf( '%s saved', self::$slug ) : '',
+				'message' => $do_message ? sprintf( __('%s saved', 'kanban'), self::$slug ) : '',
 				self::$slug => $post_data
 			) );
 		}
 		else
 		{
 			wp_send_json_error( array(
-				'message' => sprintf( 'Error saving %s', self::$slug )
+				'message' => sprintf( __('Error saving %s', 'kanban'), self::$slug )
 			) );
 		}
 	}
@@ -228,13 +228,13 @@ class Kanban_Task extends Kanban_Db
 		if ( $is_successful )
 		{
 			wp_send_json_success( array(
-				'message' => sprintf( '%s deleted', self::$slug )
+				'message' => sprintf( __('%s deleted', 'kanban'), self::$slug )
 			) );
 		}
 		else
 		{
 			wp_send_json_error( array(
-				'message' => sprintf( 'Error deleting %s', self::$slug )
+				'message' => sprintf( __('Error deleting %s', 'kanban'), self::$slug )
 			) );
 		}
 	}

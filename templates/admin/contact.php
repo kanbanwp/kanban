@@ -59,7 +59,7 @@
 						<label for="message">Message</label>
 					</th>
 					<td>
-						<textarea name="message" id="message" cols="80" rows="10" class="large-text" placeholder="Add your comments here..."></textarea>
+						<textarea name="message" id="message" cols="80" rows="10" class="large-text" placeholder="<?php _e('Add your comments here...', 'kanban') ?>"></textarea>
 					</td>
 				</tr>
 				<tr>

@@ -70,19 +70,19 @@ boards[<?php echo $board_id ?>] = {
 	},
 	settings: function ()
 	{
-		return <?php echo json_encode( $board->settings, JSON_UNESCAPED_UNICODE ); ?>;
+		return <?php echo json_encode( $board->settings); ?>;
 	},
-	filters: <?php echo json_encode( $board->filters, JSON_UNESCAPED_UNICODE ); ?>,
-	search: <?php echo json_encode( $board->search, JSON_UNESCAPED_UNICODE ); ?>,
+	filters: <?php echo json_encode( $board->filters); ?>,
+	search: <?php echo json_encode( $board->search); ?>,
 	status_records: function ()
 	{
-		return <?php echo (json_encode( $board->statuses, JSON_UNESCAPED_UNICODE )); ?>;
+		return <?php echo (json_encode( $board->statuses)); ?>;
 	},
-	tasks: <?php echo Kanban_Utils::slashes(json_encode( $board->tasks, JSON_UNESCAPED_UNICODE )); ?>,
-	project_records: <?php echo Kanban_Utils::slashes(json_encode( $board->projects, JSON_UNESCAPED_UNICODE )); ?>,
+	tasks: <?php echo Kanban_Utils::slashes(json_encode( $board->tasks)); ?>,
+	project_records: <?php echo Kanban_Utils::slashes(json_encode( $board->projects)); ?>,
 	allowed_users: function ()
 	{
-		return <?php echo Kanban_Utils::slashes(json_encode( $board->allowed_users, JSON_UNESCAPED_UNICODE )); ?>;
+		return <?php echo Kanban_Utils::slashes(json_encode( $board->allowed_users)); ?>;
 	},
 	current_user_id: function ()
 	{
@@ -90,7 +90,7 @@ boards[<?php echo $board_id ?>] = {
 	},
 	estimate_records: function ()
 	{
-		return <?php echo json_encode( $board->estimates, JSON_UNESCAPED_UNICODE ); ?>;
+		return <?php echo json_encode( $board->estimates); ?>;
 	}
 	<?php echo apply_filters( 'kanban_board_js_onpage', '' ); ?>
 };

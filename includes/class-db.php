@@ -210,7 +210,12 @@ abstract class Kanban_Db
 
 
 				case 'text':
-					$good_data[$key] = sanitize_text_field( $value );
+//					$good_data[$key] = sanitize_text_field( $value );
+
+					// @link https://developer.wordpress.org/reference/functions/sanitize_text_field/
+					$value = wp_check_invalid_utf8( $value );
+					$value = wp_pre_kses_less_than( $value );
+					$good_data[$key] = $value;
 					$format[] = '%s';
 
 					break;

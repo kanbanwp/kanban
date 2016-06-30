@@ -298,7 +298,7 @@ sub {
 		z-index: 1;
 	}
 
-	[contenteditable] {
+	[contenteditable="true"] {
 		cursor: pointer;
 		margin: 0 (-$margin/5) 0 (-$margin/5);
 		padding: $margin/5;
@@ -314,6 +314,10 @@ sub {
   			content: attr(placeholder);
   			display: block; /* For Firefox */
 		}
+
+        a {
+          cursor: pointer;
+        }
 	}
 
 	.task-menu {
@@ -340,7 +344,7 @@ sub {
 			z-index: 2;
 		}
 
-		[contenteditable] {
+		[contenteditable="true"] {
 			color: #888;
 		}
 	}

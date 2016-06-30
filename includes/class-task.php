@@ -129,7 +129,7 @@ class Kanban_Task extends Kanban_Db
 		}
 
 
-
+		// save the changes!
 		$is_successful = self::_replace( $_POST['task'] );
 
 
@@ -261,9 +261,17 @@ class Kanban_Task extends Kanban_Db
 
 	static function get_one( $task_id )
 	{
-		$record = self::_get_row( 'ID', $task_id );
-		$record->title = Kanban_Utils::str_for_frontend( $record->title );
-		$record->description = Kanban_Utils::str_for_frontend( $record->description );
+//		$record = self::_get_row( 'ID', $task_id );
+//		$record->title = Kanban_Utils::str_for_frontend( $record->title );
+//		$record->description = Kanban_Utils::str_for_frontend( $record->description );
+
+
+
+		$records = self::get_all();
+
+		$record = isset($records[$task_id]) ? $records[$task_id] : NULL;
+
+
 
 		return apply_filters( 'kanban_task_get_one_return', $record );
 	}

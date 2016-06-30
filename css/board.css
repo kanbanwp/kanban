@@ -176,17 +176,19 @@ sub {
   z-index: 0; }
   .task:hover, .task.active {
     z-index: 1; }
-  .task [contenteditable] {
+  .task [contenteditable="true"] {
     cursor: pointer;
     margin: 0 -3px 0 -3px;
     padding: 3px; }
-    .task [contenteditable]:hover, .task [contenteditable]:focus, .task [contenteditable]:active {
+    .task [contenteditable="true"]:hover, .task [contenteditable="true"]:focus, .task [contenteditable="true"]:active {
       background: #f9f9fa; }
-    .task [contenteditable]:empty:before {
+    .task [contenteditable="true"]:empty:before {
       color: #dfdfdf;
       content: attr(placeholder);
       display: block;
       /* For Firefox */ }
+    .task [contenteditable="true"] a {
+      cursor: pointer; }
   .task .task-menu {
     position: absolute;
     right: 9.9px;
@@ -201,7 +203,7 @@ sub {
     z-index: 1; }
     .task .task-project.open {
       z-index: 2; }
-    .task .task-project [contenteditable] {
+    .task .task-project [contenteditable="true"] {
       color: #888; }
   .task .task-title {
     font-size: 1.382em;

@@ -127,8 +127,6 @@ function update_page_title ()
 
 
 // @link http://stackoverflow.com/a/11892228/38241
-var ALLOWED_TAGS = ["STRONG", "EM", "BR"];
-
 function usurp (p)
 {
 	var last = p;
@@ -143,27 +141,54 @@ function usurp (p)
 
 
 
-function sanitize(el)
+function strip_tags(el, allowed_tags)
 {
-	var tags = Array.prototype.slice.apply(el.getElementsByTagName("*"), [0]);
-	for (var i = 0; i < tags.length; i++)
+	if (  typeof allowed_tags === 'undefined')
 	{
-		if (ALLOWED_TAGS.indexOf(tags[i].nodeName) == -1)
-		{
-			usurp(tags[i]);
-		}
+		allowed_tag = ["B", "I", "STRONG", "EM", "BR"];
 	}
+
+	$('*', el).each(function()
+	{
+		if (allowed_tag.indexOf(this.nodeName) == -1)
+		{
+			usurp(this);
+		}
+	});
 }
 
-
-
-function sanitize_string(string)
+function remove_attributes_from_tags (el)
 {
-	var div = document.createElement("div");
-	div.innerHTML = string;
-	sanitize(div);
-	return div.innerHTML;
+	$('*', el).each(function()
+	{
+		var attributes = this.attributes;
+		var i = attributes.length;
+		while( i-- ){
+			this.removeAttributeNode(attributes[i]);
+		}
+	});
+
 }
+
+
+function sanitize($div)
+{
+	strip_tags($div);
+	remove_attributes_from_tags ($div);
+	$div.html( $.trim( $div.html().replace(/&nbsp;/gi,' ') ));
+}
+
+
+// function sanitize_string(string)
+// {
+// 	var div = document.createElement("div");
+// 	div.innerHTML = string;
+// 	sanitize(div);
+// 	remove_attributes_from_tags(div);
+//
+// 	return $.trim( div.innerHTML.replace(/&nbsp;/gi,' ') );
+// }
+
 
 
 function encode_emails (str)

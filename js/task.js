@@ -317,7 +317,8 @@ Task.prototype.dom = function()
 
 			$div.data('orig', $div.html());
 
-			$div.html( sanitize_string($div.html()) );
+
+			strip_tags($div);
 		}
 	)
 	.on(
@@ -891,12 +892,16 @@ Task.prototype.save_title = function()
 	// prevent saving twice, if they blur instead of timeout
 	clearTimeout($div.data('save_timer'));
 
-	encode_urls_emails ($div);
-
 	// store prev title
 	var prev_title = this.record.title + '';
 
-	var new_title = $div.html();
+
+
+	// clean up html
+	sanitize($div);
+	var new_title = $div.html().replace(/\\/gi,'&#92;');
+
+
 
 	var comment = text['task_title_updated'].sprintf(
 		this.board().current_user().record().short_name,
@@ -917,6 +922,9 @@ Task.prototype.save_title = function()
 
 	this.record.title = new_title;
 	this.save(comment);
+
+	// lastly, add links and emails
+	encode_urls_emails ($div);
 
 }; // save_title
 
@@ -1005,7 +1013,12 @@ Task.prototype.parse_project = function()
 
 	var $div = $('.task-project [contenteditable]', this.$el);
 
-	var project_title = $.trim($div.text());
+	// clean up html
+	sanitize($div);
+	strip_tags($div, []); // strip all tags
+	var project_title = $div.html().replace(/\\/gi,'&#92;');
+
+
 
 	if ( typeof project_title === 'undefined' || project_title === '' || project_title === null )
 	{

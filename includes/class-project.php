@@ -201,10 +201,10 @@ class Kanban_Project extends Kanban_Db
 
 			self::$records = Kanban_Utils::build_array_with_id_keys( self::$records, 'id' );
 
-			foreach ( self::$records as $key => $record )
-			{
-				self::$records[$key]->title = Kanban_Utils::str_for_frontend( self::$records[$key]->title );
-			}
+//			foreach ( self::$records as $key => $record )
+//			{
+//				self::$records[$key]->title = Kanban_Utils::str_for_frontend( self::$records[$key]->title );
+//			}
 
 
 			$boards = Kanban_Board::get_all();

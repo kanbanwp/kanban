@@ -63,8 +63,6 @@ class Kanban_Board extends Kanban_Db
 		// make sure we're looking at the board
 		if ( ! isset( Kanban_Template::get_instance()->slug ) || Kanban_Template::get_instance()->slug != self::$slug ) return $template;
 
-
-
 		// get the template data
 		global $wp_query;
 

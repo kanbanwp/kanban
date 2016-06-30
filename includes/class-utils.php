@@ -98,21 +98,15 @@ class Kanban_Utils
 
 
 
-	static function str_for_frontend( $str )
-	{
-			return htmlentities( stripcslashes( stripcslashes( stripcslashes( $str ) ) ), ENT_QUOTES );
-	}
+//	static function str_for_frontend( $str )
+//	{
+//			return htmlentities( stripcslashes( stripcslashes( stripcslashes( $str ) ) ), ENT_QUOTES );
+//	}
 
 
 
 	static function slashes ($str)
 	{
-		preg_match('/\\\\"/', $str, $matches);
-
-		if ( !empty($matches) )
-		{
-			return stripslashes($str);
-		}
-		return $str;
+		return preg_replace('/\\\\{2,}/', '\\', $str);
 	}
 }

@@ -1,13 +1,13 @@
 <?php
 
-/**
- * @link http://mac-blog.org.ua/wordpress-custom-database-table-example-full/
- * @link https://deliciousbrains.com/managing-custom-tables-wordpress/
- */
+
+
+// Exit if accessed directly
+if ( ! defined( 'ABSPATH' ) ) exit;
 
 
 
-Kanban_Db::init();
+//Kanban_Db::init();
 
 
 

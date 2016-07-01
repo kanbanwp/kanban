@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 
 
 // instantiate the plugin
-Kanban_Board::init();
+//Kanban_Board::init();
 
 
 
@@ -74,7 +74,7 @@ class Kanban_Board extends Kanban_Db
 
 		$wp_query->query_vars['kanban']->text = apply_filters(
 				'kanban_board_text',
-				include(__DIR__ . '/inc-board-text.php')
+				include(Kanban::get_instance()->settings->path . '/includes/inc-board-text.php')
 			);
 
 

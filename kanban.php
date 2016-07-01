@@ -3,8 +3,8 @@
 Plugin Name:		Kanban for WordPress
 Plugin URI:			http://kanbanwp.com/
 Description:		A complete project management suite for WordPress.
-Version:			2.0.9
-Release Date:		June 29, 2016
+Version:			2.0.10
+Release Date:		July 1, 2016
 Author:				Gelform Inc
 Author URI:			http://gelwp.com
 License:			GPL2
@@ -36,8 +36,18 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 
 
 
-// instantiate the plugin
-Kanban::init();
+
+
+spl_autoload_register( 'kanban_autoloader' );
+function kanban_autoloader( $class_name )
+{
+	if ( false !== strpos( $class_name, 'Kanban' ) )
+	{
+		$classes_dir = realpath( plugin_dir_path( __FILE__ ) ) . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR;
+		$class_file = str_replace( '_', DIRECTORY_SEPARATOR, $class_name ) . '.php';
+		require_once $classes_dir . $class_file;
+	}
+}
 
 
 
@@ -96,16 +106,34 @@ class Kanban
 
 
 
-		// needs to come first
-		include_once Kanban::get_instance()->settings->path . '/includes/class-utils.php';
-		include_once Kanban::get_instance()->settings->path . '/includes/class-db.php';
+		Kanban_Admin::init();
+		Kanban_Board::init();
+		Kanban_Db::init();
+		Kanban_Estimate::init();
+		Kanban_Flash::init();
+		Kanban_License::init();
+		Kanban_Option::init();
+		Kanban_Project::init();
+		Kanban_Status::init();
+		Kanban_Task::init();
+		Kanban_Task_Hour::init();
+		Kanban_Template::init();
+		Kanban_User::init();
 
-		// Automatically load classes
-		$files = glob( Kanban::get_instance()->settings->path . '/includes/class-*.php' );
-		foreach ( $files as $file )
-		{
-			include_once $file;
-		}
+
+
+
+
+		// needs to come first
+//		include_once Kanban::get_instance()->settings->path . '/includes/class-utils.php';
+//		include_once Kanban::get_instance()->settings->path . '/includes/class-db.php';
+//
+//		// Automatically load classes
+//		$files = glob( Kanban::get_instance()->settings->path . '/includes/class-*.php' );
+//		foreach ( $files as $file )
+//		{
+//			include_once $file;
+//		}
 
 
 
@@ -203,3 +231,8 @@ class Kanban
 
 
 } // Kanban
+
+
+
+// instantiate the plugin
+Kanban::init();

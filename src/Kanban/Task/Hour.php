@@ -7,7 +7,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 
 
 
-Kanban_Task_Hour::init();
+//Kanban_Task_Hour::init();
 
 
 

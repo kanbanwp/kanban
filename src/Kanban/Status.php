@@ -7,24 +7,24 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 
 
 
-Kanban_Estimate::init();
+//Kanban_Status::init();
 
 
 
-class Kanban_Estimate extends Kanban_Db
+class Kanban_Status extends Kanban_Db
 {
 	// the instance of this object
 	// private static $instance;
 
 	// the table name of this class
-	protected static $table_name = 'estimates';
+	protected static $table_name = 'statuses';
 
 	// define db table columns and their validation type
 	protected static $table_columns = array(
-		'title'    => 'text',
-		'hours'    => 'float',
-		'board_id' => 'int',
-		'position' => 'int'
+		'title'     => 'text',
+		'color_hex' => 'text',
+		'board_id'  => 'int',
+		'position'  => 'int'
 	);
 
 	protected static $records = array();
@@ -41,9 +41,10 @@ class Kanban_Estimate extends Kanban_Db
 
 	static function get_all($board_id = NULL)
 	{
+
 		if ( empty( self::$records ) )
 		{
-			$sql = apply_filters( 'kanban_estimate_get_all_sql', "SELECT * FROM `%s` ORDER BY `position` ASC;" );
+			$sql = apply_filters( 'kanban_status_get_all_sql', "SELECT * FROM `%s` ORDER BY `position` ASC;" );
 
 			global $wpdb;
 			self::$records = $wpdb->get_results(
@@ -54,6 +55,11 @@ class Kanban_Estimate extends Kanban_Db
 			);
 
 			self::$records = Kanban_Utils::build_array_with_id_keys( self::$records, 'id' );
+
+//			foreach ( self::$records as $key => $record )
+//			{
+//				self::$records[$key]->title = Kanban_Utils::str_for_frontend( self::$records[$key]->title );
+//			}
 
 			$boards = Kanban_Board::get_all();
 			self::$records_by_board = array_fill_keys(array_keys($boards), array());
@@ -66,16 +72,17 @@ class Kanban_Estimate extends Kanban_Db
 
 		}
 
+
 		if ( is_null($board_id) )
 		{
 			return apply_filters(
-				'kanban_estimate_get_all_return',
+				'kanban_status_get_all_return',
 				self::$records
 			);
 		}
 
 		return apply_filters(
-			'kanban_estimate_get_all_return',
+			'kanban_status_get_all_return',
 			isset(self::$records_by_board[$board_id]) ? self::$records_by_board[$board_id] : array()
 		);
 	}
@@ -86,11 +93,11 @@ class Kanban_Estimate extends Kanban_Db
 	{
 		if ( ! isset( $_POST[Kanban_Utils::get_nonce()] ) || ! wp_verify_nonce( $_POST[Kanban_Utils::get_nonce()], 'kanban-options' ) || ! is_user_logged_in() ) return;
 
-		if ( !isset($_POST['estimates']) ) return;
+		if ( !isset($_POST['statuses']) ) return;
 
 
 
-		do_action( 'kanban_estimate_save_settings_before', $_POST );
+		do_action( 'kanban_status_save_settings_before', $_POST );
 
 
 
@@ -98,61 +105,76 @@ class Kanban_Estimate extends Kanban_Db
 
 
 
-		$estimates = Kanban_Estimate::get_all($current_board->id);
-		$estimate_ids = array_keys( $estimates );
+		$statuses = Kanban_Status::get_all($current_board->id);
+		$status_ids = array_keys( $statuses );
 
 
 
-		// any estimates to delete?
-		if ( isset( $_POST['estimates']['saved'] ) )
+		// any statuses to delete?
+		if ( isset( $_POST['statuses']['saved'] ) )
 		{
-			$deleted_estimates = array_diff( $estimate_ids, array_keys( $_POST['estimates']['saved'] ) );
+			$deleted_statuses = array_diff( $status_ids, array_keys( $_POST['statuses']['saved'] ) );
 
-			if ( ! empty( $deleted_estimates ) )
+			if ( ! empty( $deleted_statuses ) )
 			{
-				foreach ( $deleted_estimates as $key => $id )
+				foreach ( $deleted_statuses as $key => $id )
 				{
-					Kanban_Estimate::delete( array( 'id' => $id ) );
+					Kanban_Status::delete( array( 'id' => $id ) );
 				}
 			}
 		}
 
 
 
-		// add new estimates first
-		if ( isset( $_POST['estimates']['new'] ) )
+		// add new statuses first
+		if ( isset( $_POST['statuses']['new'] ) )
 		{
-			foreach ( $_POST['estimates']['new'] as $estimate )
+			foreach ( $_POST['statuses']['new'] as $status )
 			{
-				$estimate['board_id'] = $current_board->id;
-
+				$status['board_id'] = $current_board->id;
 				// save it
-				$success = Kanban_Estimate::replace( $estimate );
+				$success = Kanban_Status::replace( $status );
 
 				if ( $success )
 				{
-					$estimate_id = Kanban_Estimate::insert_id();
+					$status_id = Kanban_Status::insert_id();
 
-					// add it to all the estimates to save
-					$_POST['estimates']['saved'][$estimate_id] = $estimate;
+					// add it to all the statuses to save
+					$_POST['statuses']['saved'][$status_id] = $status;
 				}
 			}
 		}
 
 
 
-		// now save all estimates with positions
-		if ( isset( $_POST['estimates']['saved'] ) )
+		// now save all statuses with positions
+		if ( isset( $_POST['statuses']['saved'] ) )
 		{
-			foreach ( $_POST['estimates']['saved'] as $estimate_id => $estimate )
+			foreach ( $_POST['statuses']['saved'] as $status_id => $status )
 			{
-				$estimate['id'] = $estimate_id;
-				$estimate['board_id'] = $current_board->id;
+				$status['id'] = $status_id;
+				$status['board_id'] = $current_board->id;
 
-				Kanban_Estimate::replace( $estimate );
+				Kanban_Status::replace( $status );
 			}
 		}
 	}
+
+
+
+	// define the db schema
+	static function db_table()
+	{
+		return 'CREATE TABLE ' . self::table_name() . ' (
+					id bigint(20) NOT NULL AUTO_INCREMENT,
+					title varchar(64) NOT NULL,
+					color_hex varchar(7) NOT NULL,
+					position bigint(20) NOT NULL,
+					board_id bigint(20) NOT NULL DEFAULT 1,
+					UNIQUE KEY  (id),
+					KEY board_id (board_id)
+				)';
+	} // db_table
 
 
 
@@ -177,22 +199,6 @@ class Kanban_Estimate extends Kanban_Db
 	{
 		return self::_insert_id();
 	}
-
-
-
-	// define the db schema
-	static function db_table()
-	{
-		return 'CREATE TABLE ' . self::table_name() . ' (
-					id bigint(20) NOT NULL AUTO_INCREMENT,
-					title varchar(64) NOT NULL,
-					hours decimal(6, 4) NOT NULL,
-					position bigint(20) NOT NULL,
-					board_id bigint(20) NOT NULL DEFAULT 1,
-					UNIQUE KEY  (id),
-					KEY board_id (board_id)
-				)';
-	} // db_table
 
 
 

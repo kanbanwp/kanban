@@ -7,7 +7,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 
 
 
-Kanban_License::init();
+//Kanban_License::init();
 
 
 

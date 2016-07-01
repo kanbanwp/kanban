@@ -34,6 +34,8 @@ Modal_Projects.prototype.dom = function()
 				return false;
 			}
 
+			board.project_update_counts();
+
 			var $list = $('#accordion-projects').empty();
 
 			for ( var project_id in board.record.project_records )

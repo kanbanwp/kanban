@@ -7,7 +7,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 
 
 
-Kanban_Template::init();
+//Kanban_Template::init();
 
 
 

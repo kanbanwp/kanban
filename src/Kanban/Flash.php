@@ -7,7 +7,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 
 
 
-Kanban_Flash::init();
+//Kanban_Flash::init();
 
 
 

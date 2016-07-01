@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 
 
 // instantiate the class
-Kanban_Admin::init();
+//Kanban_Admin::init();
 
 
 

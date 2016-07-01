@@ -678,6 +678,7 @@ Board.prototype.project_update_counts = function()
 {
 	// build counts of projects
 	var counts = [];
+
 	for (var task_id in this.record.tasks)
 	{
 		var task = this.record.tasks[task_id];
@@ -713,7 +714,6 @@ Board.prototype.project_update_counts = function()
 
 Board.prototype.update_UI = function ()
 {
-	this.project_update_counts();
 	this.updates_status_counts();
 	this.match_col_h ();
 }

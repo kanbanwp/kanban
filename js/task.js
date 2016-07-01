@@ -691,7 +691,7 @@ Task.prototype.save = function(comment, do_growl)
 		return false;
 	}
 
-
+	var self = this;
 
 	var task_data = {
 		task: this.record,
@@ -732,6 +732,8 @@ Task.prototype.save = function(comment, do_growl)
 			growl (text.task_save_error);
 			return false;
 		}
+
+		self.update_board();
 	});
 
 }; // save
@@ -776,7 +778,7 @@ Task.prototype.delete = function(comment)
 			self.$el.remove();
 			self.update_board();
 			self.board().update_task_positions();
-			delete self.record;
+			delete self.board().record.tasks[self.record.id];
 		});
 	});
 
@@ -1083,7 +1085,6 @@ Task.prototype.parse_project = function()
 			// add project to available projects
 			self.board().record.project_records[response.data.project.id] = response.data.project;
 			self.project_save(response.data.project.id);
-			self.board().project_update_counts();
 		// }
 		// catch (err) {}
 	});

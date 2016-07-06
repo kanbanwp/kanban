@@ -41,7 +41,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 spl_autoload_register( 'kanban_autoloader' );
 function kanban_autoloader( $class_name )
 {
-	if ( false !== strpos( $class_name, 'Kanban' ) )
+	if ( false !== strpos( $class_name, 'Kanban' ) && !class_exists($class_name) )
 	{
 		$classes_dir = realpath( plugin_dir_path( __FILE__ ) ) . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR;
 		$class_file = str_replace( '_', DIRECTORY_SEPARATOR, $class_name ) . '.php';
@@ -110,7 +110,7 @@ class Kanban
 		Kanban_Board::init();
 		Kanban_Db::init();
 		Kanban_Estimate::init();
-		Kanban_Flash::init();
+//		Kanban_Flash::init();
 		Kanban_License::init();
 		Kanban_Option::init();
 		Kanban_Project::init();
@@ -150,9 +150,39 @@ class Kanban
 		do_action( 'kanban_loaded' );
 	}
 
+	
+
+	public static function on_activation( $network_wide )
+	{
+		if ( function_exists( 'is_multisite' ) && is_multisite() )
+		{
+			if ( $network_wide  )
+			{
+				// Get all blog ids
+				$blog_ids = self::get_blog_ids();
+
+				foreach ( $blog_ids as $blog_id )
+				{
+					switch_to_blog( $blog_id );
+					self::single_activate();
+				}
+				restore_current_blog();
+			}
+			else
+			{
+				self::single_activate();
+			}
+		}
+		else
+		{
+			self::single_activate();
+		}
+
+	}
 
 
-	static function on_activation()
+
+	static function single_activate()
 	{
 		// check for db updates and migration
 		Kanban_Db::check_for_updates();

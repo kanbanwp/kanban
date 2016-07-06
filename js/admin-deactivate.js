@@ -5,7 +5,7 @@ jQuery(function($)
 	var $a = $('[data-slug="kanban"] .deactivate a');
 
 	var url = $a.attr('href') + '';
-	$a.attr('href', '#TB_inline?inlineId=kanban-deactivate-modal&modal=true').addClass('thickbox');
+	$a.attr('href', kanban.url_plugins + '#TB_inline?inlineId=kanban-deactivate-modal&modal=true').addClass('thickbox');
 
 
 

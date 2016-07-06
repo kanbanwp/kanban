@@ -176,6 +176,8 @@ sub {
   z-index: 0; }
   .task:hover, .task.active {
     z-index: 1; }
+  .task [contenteditable] {
+    overflow-x: hidden; }
   .task [contenteditable="true"] {
     cursor: pointer;
     margin: 0 -3px 0 -3px;

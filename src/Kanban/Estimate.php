@@ -186,7 +186,7 @@ class Kanban_Estimate extends Kanban_Db
 		return 'CREATE TABLE ' . self::table_name() . ' (
 					id bigint(20) NOT NULL AUTO_INCREMENT,
 					title varchar(64) NOT NULL,
-					hours decimal(6, 4) NOT NULL,
+					hours decimal(8, 4) NOT NULL,
 					position bigint(20) NOT NULL,
 					board_id bigint(20) NOT NULL DEFAULT 1,
 					UNIQUE KEY  (id),

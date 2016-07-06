@@ -117,7 +117,8 @@ class Kanban_Admin
 		// Localize the script with new data
 		$translation_array = array(
 			'form_deactivate' => $html_output,
-			'url_contact' => admin_url()
+			'url_contact' => admin_url(),
+			'url_plugins' => admin_url('plugins.php')
 		);
 		wp_localize_script( 'kanban-deactivate', 'kanban', $translation_array );
 
@@ -400,7 +401,7 @@ class Kanban_Admin
 		$args = array(
 			'id'    => 'kanban_board',
 			'title' => 'Kanban Board',
-			'href'  => '/kanban/board',
+			'href'  => site_url('/kanban/board'),
 			'meta'  => array( 'class'  => 'kanban-board' )
 		);
 		$wp_admin_bar->add_node( $args );

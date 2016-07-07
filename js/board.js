@@ -101,9 +101,9 @@ Board.prototype.dom = function()
 		function ()
 		{
 			var $select = $(this);
-			var $modal = $select.closest('.modal-filter');
+			// var $modal = $select.closest('.modal-filter');
 			// var $tasks = $('.task', self.$el);
-			var $btn_reset = $('.btn-filter-reset').show();
+			// var $btn_reset = $('.btn-filter-reset').show();
 
 
 			var field = $select.attr('data-field');
@@ -134,7 +134,7 @@ Board.prototype.dom = function()
 			{
 				var project = self.record.project_records[project_id];
 
-				project_html = templates[self.record.id()]['t-option-project'].render(project);
+				var project_html = templates[self.record.id()]['t-option-project'].render(project);
 
 				$(project_html).insertAfter($first_option);
 
@@ -189,7 +189,7 @@ Board.prototype.dom = function()
 		forcePlaceholderSize: true,
 		forceHelperSize: true,
 		placeholder: "task-placeholder",
-		containment: $('.row-tasks-wrapper'),
+		containment: $('.row-tasks-wrapper', self.$el),
 		appendTo: "body",
 		scroll: false,
 		helper: "clone",
@@ -211,7 +211,7 @@ Board.prototype.dom = function()
 		// {
 		// 	ui.placeholder.closest('.col-tasks').removeClass('hover');
 		// },
-		stop: function (e, ui)
+		stop: function ()
 		{
 			self.update_task_positions();
 			is_dragging = false;
@@ -256,7 +256,7 @@ Board.prototype.dom = function()
 				}
 			}
 
-			
+
 
 			task.record.status_id = status_id_new;
 			task.save(comment);
@@ -487,7 +487,7 @@ Board.prototype.dom = function()
 		'.btn-status-empty',
 		function ()
 		{
-			var r = confirm(text.status_empty_confirm);
+			var r = window.confirm(text.status_empty_confirm);
 			if ( r )
 			{
 				var $btn = $(this);
@@ -718,7 +718,7 @@ Board.prototype.update_UI = function ()
 {
 	this.updates_status_counts();
 	this.match_col_h ();
-}
+};
 
 
 

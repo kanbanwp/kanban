@@ -593,6 +593,12 @@ $(function()
 
 							var $task = $('#task-{0}'.sprintf(task_record.id));
 
+							// make sure they're not editing
+							if ( $(':focus', $task).length > 0 )
+							{
+								continue;
+							}
+
 							// update existing
 							if ( $task.length > 0 )
 							{

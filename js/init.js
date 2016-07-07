@@ -513,6 +513,113 @@ $(function()
 
 
 
+	setInterval(function()
+	{
+		var data = {
+			action: 'updates_task',
+			datetime: js_date_to_mysql_dt(updates_dt),
+			kanban_nonce: $('#kanban_nonce').val()
+		};
+
+
+		
+		// now update time we last checked
+		updates_dt = new Date();
+
+
+
+		$.ajax({
+			type: "POST",
+			url: ajaxurl,
+			data: data,
+			success: function (response)
+			{
+				try
+				{
+					for ( var i in response.data.projects )
+					{
+						var project_record = response.data.projects[i];
+						var board = boards[project_record.board_id];
+
+						if ( project_record.is_active == 1 )
+						{
+							//add/update
+							board.record.project_records[project_record.id] = project_record;
+
+							// update the tasks
+							for ( var i in board.record.tasks )
+							{
+								var task = board.record.tasks[i];
+
+								if ( task.record.project_id == project_record.id )
+								{
+									// will only update the DOM
+									task.project_save(project_record.id);
+								}
+							}
+
+						}
+						else
+						{
+							// remove project from projects
+							delete board.record.project_records[project_record.id];
+
+							// remove project from tasks
+							for ( var i in board.record.tasks )
+							{
+								var task = board.record.tasks[i];
+								if ( task.record.project_id == project_record.id )
+								{
+									task.project_update_title('');
+								}
+							}
+						}
+					}
+				}
+				catch (err) {}
+
+
+
+				try
+				{
+					for ( var i in response.data.tasks )
+					{
+						var task_record = response.data.tasks[i];
+						var board = boards[task_record.board_id];
+
+						if ( task_record.is_active == 1 )
+						{
+							var task = board.record.tasks[task_record.id] = new Task(task_record);
+
+							var $task = $('#task-{0}'.sprintf(task_record.id));
+
+							// update existing
+							if ( $task.length > 0 )
+							{
+								$('#task-{0}'.sprintf(task_record.id)).replaceWith(task.$el);
+							}
+							else 
+							{
+								// add new to the board
+								task.add_to_board();
+								board.update_UI();
+							}
+						}
+						else 
+						{
+							var task = board.record.tasks[task_record.id];
+							task.delete_el();
+						}
+					}
+				}
+				catch (err) {}
+			}
+		});
+
+	}, 5000);
+
+
+
 	// $('#form-feedback').on(
 	// 	'submit',
 	// 	function ()

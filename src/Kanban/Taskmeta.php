@@ -56,6 +56,11 @@ class Kanban_Taskmeta extends Kanban_Db
 
 
 
+		// update modified data
+		Kanban_Task::update($task_id, array('modified_dt_gmt' => Kanban_Utils::mysql_now_gmt()));
+
+
+
 		return $success;
 	}
 

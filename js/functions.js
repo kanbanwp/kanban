@@ -52,6 +52,11 @@ function mysql_dt_to_js_date (dt)
 	return new Date(t[0], t[1]-1, t[2], t[3], t[4], t[5]);
 }
 
+function js_date_to_mysql_dt (dt)
+{
+	return dt.getUTCFullYear() + "-" + (1 + dt.getUTCMonth()).padZero(2) + "-" + (dt.getUTCDate()).padZero(2) + " " + (dt.getUTCHours()).padZero(2) + ":" + (dt.getUTCMinutes()).padZero(2) + ":" + (dt.getUTCSeconds()).padZero(2);
+};
+
 function get_screen_size ()
 {
 	return $('#screen-size div:visible:first').attr('data-size');

@@ -24,8 +24,9 @@ function Board (board)
 
 		for ( var i in tasks_by_position )
 		{
-			var task = tasks_by_position[i];
-			self.record.tasks[task.id] = new Task(self.record.tasks[task.id]);
+			var task_record = tasks_by_position[i];
+			var task = self.record.tasks[task_record.id] = new Task(self.record.tasks[task_record.id]);
+			task.add_to_board();
 		}
 
 		self.update_UI();
@@ -461,7 +462,8 @@ Board.prototype.dom = function()
 					}
 
 					// add the task
-					self.record.tasks[response.data.task.id] = new Task(response.data.task);
+					var task = self.record.tasks[response.data.task.id] = new Task(response.data.task);
+					task.add_to_board();
 
 					self.update_UI();
 

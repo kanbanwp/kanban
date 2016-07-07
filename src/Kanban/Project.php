@@ -163,7 +163,10 @@ class Kanban_Project extends Kanban_Db
 	protected static function delete( $id )
 	{
 		return self::_update(
-			array( 'is_active' => 0 ),
+			array( 
+				'is_active' => 0,
+				'modified_dt_gmt' => Kanban_Utils::mysql_now_gmt()
+			),
 			array( 'id' => $id )
 		);
 	}
@@ -174,28 +177,26 @@ class Kanban_Project extends Kanban_Db
 	{
 		if ( empty( self::$records ) )
 		{
-			$sql = "SELECT `projects`.*,
-					(
-						SELECT COUNT(`id`)
-						FROM `%s` tasks
-						WHERE `tasks`.`project_id` = `projects`.`id`
-						AND `tasks`.`is_active` = 1
-					)
-					AS 'task_count'
-					FROM `%s` projects
-					WHERE `projects`.`is_active` = 1
-			;";
+			$sql = sprintf(
+				"SELECT `projects`.*,
+				(
+					SELECT COUNT(`id`)
+					FROM `%s` tasks
+					WHERE `tasks`.`project_id` = `projects`.`id`
+					AND `tasks`.`is_active` = 1
+				)
+				AS 'task_count'
+				FROM `%s` projects
+				WHERE `projects`.`is_active` = 1
+				;",
+				Kanban_Task::table_name(),
+				self::table_name()
+			);
 
 			$sql = apply_filters( 'kanban_project_get_all_sql', $sql );
 
 			global $wpdb;
-			self::$records = $wpdb->get_results(
-				sprintf( 
-					$sql,
-					Kanban_Task::table_name(),
-					self::table_name()
-				)
-			);
+			self::$records = $wpdb->get_results($sql);
 
 
 

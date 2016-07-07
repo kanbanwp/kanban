@@ -47,6 +47,7 @@ class Kanban_Task extends Kanban_Db
 	{
 		add_action( sprintf( 'wp_ajax_save_%s', self::$slug ), array( __CLASS__, 'ajax_save' ) );
 		add_action( sprintf( 'wp_ajax_delete_%s', self::$slug ), array( __CLASS__, 'ajax_delete' ) );
+		add_action( sprintf( 'wp_ajax_updates_%s', self::$slug ), array( __CLASS__, 'ajax_get_updates' ) );
 
 		add_action( 'kanban_task_auto_archive', array( __CLASS__, 'auto_archive'), 10, 1 );
 	}
@@ -241,6 +242,78 @@ class Kanban_Task extends Kanban_Db
 
 
 
+	static function ajax_get_updates ()
+	{
+		if ( ! isset( $_POST[Kanban_Utils::get_nonce()] ) || ! wp_verify_nonce( $_POST[Kanban_Utils::get_nonce()], 'kanban-save' ) || ! is_user_logged_in() ) wp_send_json_error();
+
+		global $wpdb;
+
+		$datetime = new DateTime($_POST['datetime']);
+		$datetime_str = $datetime->format('Y-m-d H:i:s');
+
+
+		// getting active or inactive, in case they were deleted 
+		$sql = sprintf(
+				"SELECT tasks.*,
+			  	LPAD(position, 5, '0') as position,
+				COALESCE(SUM(worked.hours), 0) 'hour_count'
+				FROM `%s` tasks
+				LEFT JOIN `%s` worked
+				ON tasks.id = worked.task_id
+				WHERE TIMESTAMP(tasks.modified_dt_gmt) > TIMESTAMP('$datetime_str')
+				AND tasks.title != ''
+				GROUP BY tasks.id
+				ORDER BY position
+				;",
+				self::table_name(),
+				Kanban_Task_Hour::table_name()
+			);
+
+		$sql = apply_filters( 'kanban_task_get_updates_sql', $sql );
+
+		$tasks = $wpdb->get_results($sql);
+		$tasks = Kanban_Utils::build_array_with_id_keys( $tasks, 'id' );
+
+		$tasks = apply_filters(
+			'kanban_task_get_updates_tasks',
+			$tasks
+		);
+
+
+
+		add_filter(
+			'kanban_project_get_all_sql',
+			function($sql) use ($datetime_str)
+			{
+				return sprintf(
+					"SELECT `projects`.*
+					FROM `%s` projects
+					WHERE TIMESTAMP(projects.modified_dt_gmt) > TIMESTAMP('%s')
+					;",
+					Kanban_Project::table_name(),
+					$datetime_str
+				);
+			}
+		);
+
+		$projects = Kanban_Project::get_all();
+
+		$projects = apply_filters(
+			'kanban_task_get_updates_projects',
+			$projects
+		);
+
+
+
+
+		wp_send_json_success( array(
+			'projects' => $projects,
+			'tasks' => $tasks
+		) );
+	}
+
+
+
 	// extend parent, so it's accessible from other classes
 	static function replace( $data )
 	{
@@ -253,12 +326,27 @@ class Kanban_Task extends Kanban_Db
 	protected static function delete( $id )
 	{
 		return self::_update(
-			array( 'is_active' => 0 ),
+			array(
+				'is_active' => 0,
+				'modified_dt_gmt' => Kanban_Utils::mysql_now_gmt()
+			),
 			array( 'id' => $id )
 		);
 	}
 
 
+	
+	static function update( $id, $data )
+	{
+		return self::_update(
+			$data,
+			array( 'id' => $id )
+		);
+	}
+
+	
+	
+	
 	static function get_one( $task_id )
 	{
 //		$record = self::_get_row( 'ID', $task_id );
@@ -282,7 +370,8 @@ class Kanban_Task extends Kanban_Db
 	{
 		if ( empty( self::$records ) )
 		{
-			$sql = "SELECT tasks.*,
+			$sql = sprintf(
+				"SELECT tasks.*,
 			  	LPAD(position, 5, '0') as position,
 				COALESCE(SUM(worked.hours), 0) 'hour_count'
 				FROM `%s` tasks
@@ -291,18 +380,15 @@ class Kanban_Task extends Kanban_Db
 				WHERE tasks.is_active = 1
 				GROUP BY tasks.id
 				ORDER BY position
-			;";
+				;",
+				self::table_name(),
+				Kanban_Task_Hour::table_name()
+			);
 
 			$sql = apply_filters( 'kanban_task_get_all_sql', $sql );
 
 			global $wpdb;
-			self::$records = $wpdb->get_results(
-				sprintf( 
-					$sql,
-					self::table_name(),
-					Kanban_Task_Hour::table_name()
-				)
-			);
+			self::$records = $wpdb->get_results($sql);
 
 			self::$records = Kanban_Utils::build_array_with_id_keys( self::$records, 'id' );
 

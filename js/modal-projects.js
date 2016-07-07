@@ -27,21 +27,19 @@ Modal_Projects.prototype.dom = function()
 		'show.bs.modal',
 		function ()
 		{
-			var board = boards[current_board_id];
-
-			if ( !board.current_user().has_cap('write') )
+			if ( !self.board().current_user().has_cap('write') )
 			{
 				return false;
 			}
 
-			board.project_update_counts();
+			self.board().project_update_counts();
 
 			var $list = $('#accordion-projects').empty();
 
-			for ( var project_id in board.record.project_records )
+			for ( var project_id in self.board().record.project_records )
 			{
-				var project = board.record.project_records[project_id];
-				var project_html = templates[current_board_id]['t-modal-project'].render(project);
+				var project = self.board().record.project_records[project_id];
+				var project_html = templates[self.board().record.id()]['t-modal-project'].render(project);
 				$(project_html).appendTo($list);
 			}
 		}
@@ -72,9 +70,6 @@ Modal_Projects.prototype.dom = function()
 			})
 			.done(function(response )
 			{
-				// remove project from projects
-				delete project;
-
 				// remove project from tasks
 				for ( var i in self.board().record.tasks )
 				{
@@ -84,6 +79,9 @@ Modal_Projects.prototype.dom = function()
 						task.project_save(0);
 					}
 				}
+
+				// remove project from projects
+				delete self.board().record.project_records[project_id];
 
 				// remove from modal
 				$panel.remove();

@@ -1,8 +1,7 @@
 function Task (task)
 {
 	this.record = task;
-
-	this.add();
+	this.build_el();
 }
 
 
@@ -14,7 +13,15 @@ Task.prototype.board = function()
 
 
 
-Task.prototype.add = function()
+Task.prototype.add_to_board = function()
+{
+	var $col = $('#status-{0}-tasks'.sprintf(this.record.status_id) );
+	this.$el.prependTo($col);
+}
+
+
+
+Task.prototype.build_el = function()
 {
 	this.record.status = this.board().record.status_records()[this.record.status_id] ? this.board().record.status_records()[this.record.status_id] : {};
 	this.record.project = this.board().record.project_records[this.record.project_id] ? this.board().record.project_records[this.record.project_id] : {};
@@ -31,9 +38,8 @@ Task.prototype.add = function()
 		// hide_progress_bar: this.board().record.settings().hide_progress_bar
 	});
 
-	var $col = $('#status-{0}-tasks'.sprintf(this.record.status_id) );
 
-	this.$el = $(task_html).prependTo($col);
+	this.$el = $(task_html);
 
 	encode_urls_emails ( $('.task-title', this.$el) );
 
@@ -733,7 +739,7 @@ Task.prototype.save = function(comment, do_growl)
 			return false;
 		}
 
-		self.update_board();
+		self.board().update_UI();
 	});
 
 }; // save
@@ -773,24 +779,32 @@ Task.prototype.delete = function(comment)
 
 		$(document).trigger('/task/deleted/', self);
 
-		self.$el.slideUp('fast', function()
-		{
-			self.$el.remove();
-			self.update_board();
-			self.board().update_task_positions();
-			delete self.board().record.tasks[self.record.id];
-		});
+		self.delete_el();
 	});
 
 }; // delete
 
 
 
-Task.prototype.update_board = function()
+Task.prototype.delete_el = function()
 {
-	this.board().updates_status_counts();
-	this.board().match_col_h ();
+	var self = this;
+	self.$el.slideUp('fast', function()
+	{
+		self.$el.remove();
+		self.board().update_UI();
+		self.board().update_task_positions();
+		delete self.board().record.tasks[self.record.id];
+	});
+
 };
+
+
+// Task.prototype.update_board = function()
+// {
+// 	this.board().updates_status_counts();
+// 	this.board().match_col_h ();
+// };
 
 
 

@@ -97,6 +97,7 @@ boards[<?php echo $board_id ?>] = {
 <?php endforeach // boards ?>
 
 var current_board_id = <?php echo $wp_query->query_vars['kanban']->current_board_id ?>;
+var updates_dt = new Date(<?php echo time() ?>000);
 
 </script>
 

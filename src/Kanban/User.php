@@ -257,6 +257,11 @@ class Kanban_User
 			{
 				foreach ($allowed_users as $user_id => $user)
 				{
+					if ( !isset(self::$records[$user_id]) )
+					{
+						unset(self::$records_by_board[$board_record_id][$user_id]);
+						continue;
+					}
 					self::$records_by_board[$board_record_id][$user_id] = self::$records[$user_id];
 				}
 			}

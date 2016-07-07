@@ -4,8 +4,8 @@ Contributors: 		gelform
 Tags:				kanban, agile, scrum, project management, team management, task management, productivity, Trello, GTD, manage projects, management, planning, tracking, todo, contractor, freelance, clients
 Requires at least:	4.0
 Tested up to:		4.5.2
-Version:			2.0.10
-Release Date:		July 1, 2016
+Version:			2.1.2
+Release Date:		July 7, 2016
 License: 			GPLv2 or later
 License URI:		http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -32,6 +32,7 @@ Here's a 60-second intro to how to use the board, once you have it installed:
 * Create custom views by filtering and searching for tasks. Bookmark them for easy access.
 * Manage the users who have access to the board, for privacy and integrated project management.
 * Data is stored separately from your WordPress data, for better privacy and security.
+* Collaborate in real-time, and see updates live.
 * Works on mobile!
 * Lots of extra features available through paid add-ons - multiple boards, to-do lists, task flagging, notifications, and more.
 

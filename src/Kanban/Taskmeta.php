@@ -20,10 +20,12 @@ class Kanban_Taskmeta extends Kanban_Db
 	protected static $table_name = 'taskmeta';
 
 	// define db table columns and their validation type
-	// protected static $table_columns = array(
-	// 	'meta_value' => 'text',
-	// 	'created_dt_gmt' => 'datetime'
-	// );
+	 protected static $table_columns = array(
+		'meta_key' => 'text',
+	 	'meta_value' => 'text',
+	 	'created_dt_gmt' => 'datetime',
+		'task_id' => 'int'
+	 );
 
 
 	static function update( $task_id, $meta_key, $meta_value )
@@ -38,26 +40,43 @@ class Kanban_Taskmeta extends Kanban_Db
 
 
 		// create new record
-		$success = $wpdb->insert(
-			self::table_name(),
+//		$success = $wpdb->insert(
+//			self::table_name(),
+//			array(
+//				'meta_key'       => $meta_key,
+//				'meta_value'     => $meta_value,
+//				'created_dt_gmt' => Kanban_Utils::mysql_now_gmt(),
+//				'task_id'        => $task_id,
+//			),
+//			array(
+//				'%s',
+//				'%s',
+//				'%s',
+//				'%d'
+//			)
+//		);
+
+
+
+		$is_successful = self::_insert(
 			array(
 				'meta_key'       => $meta_key,
 				'meta_value'     => $meta_value,
 				'created_dt_gmt' => Kanban_Utils::mysql_now_gmt(),
 				'task_id'        => $task_id,
-			),
-			array(
-				'%s',
-				'%s',
-				'%s',
-				'%d'
 			)
 		);
 
 
 
+
 		// update modified data
-		Kanban_Task::update($task_id, array('modified_dt_gmt' => Kanban_Utils::mysql_now_gmt()));
+		Kanban_Task::update(
+			$task_id,
+			array(
+				'modified_dt_gmt' => Kanban_Utils::mysql_now_gmt()
+			)
+		);
 
 
 
@@ -73,8 +92,16 @@ class Kanban_Taskmeta extends Kanban_Db
 
 
 		// delete existing record
-		$success = $wpdb->delete(
-			self::table_name(),
+//		$success = $wpdb->delete(
+//			self::table_name(),
+//			array(
+//				'task_id'  => $task_id,
+//				'meta_key' => $meta_key
+//			)
+//		);
+
+
+		$is_successful = self::_delete(
 			array(
 				'task_id'  => $task_id,
 				'meta_key' => $meta_key

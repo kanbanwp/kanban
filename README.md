@@ -1,6 +1,8 @@
 # [Kanban for WordPress](http://kanbanwp.com/)
 
-[![A quick intrduction to the Kanban for WordPress plugin](https://i.vimeocdn.com/video/543343707_640.jpg)](https://vimeo.com/145274368)
+[![Learn more about the plugin for WordPress](https://kanbanwp.com/wp-content/uploads/2016/06/board-full-basic-992x564.png)](https://wordpress.org/plugins/kanban)
+
+[Read more and download it at WordPress.org](https://wordpress.org/plugins/kanban/)
 
 [Watch a short video on using the Kanban for WordPress plugin](https://vimeo.com/145274368)
 

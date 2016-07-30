@@ -7,6 +7,23 @@ jQuery(function($)
 	var url = $a.attr('href') + '';
 	$a.attr('href', kanban.url_plugins + '#TB_inline?inlineId=kanban-deactivate-modal&modal=true').addClass('thickbox');
 
+	$a.on('click', function ()
+	{
+		setTimeout(function ()
+		{
+			$('#TB_ajaxContent').css({
+				height: 'auto',
+				width: 'auto'
+			});
+			$('#TB_window').css({
+				height: 'auto'
+			});
+
+		}, 500);
+	});
+
+
+
 
 
 	$('body').on(
@@ -26,7 +43,7 @@ jQuery(function($)
 		{
 			var data = $('#kanban-deactivate-form').serialize();
 
-			$(this).closest('form').get(0).reset();
+			// $(this).closest('form').get(0).reset();
 
 			$.ajax({
 				method: "POST",
@@ -39,6 +56,14 @@ jQuery(function($)
 			});
 		}
 	);
-	
+
+
+	$('[name="request"]').on('change', function()
+	{
+		$('.kanban-deactivate-submit').text('Deactivate');
+		$(this).closest('form').find('textarea').removeAttr('name').hide();
+		$(this).closest('p').find('textarea').attr('name', 'message').show().focus();
+	});
+
 });
 

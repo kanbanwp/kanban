@@ -3,8 +3,8 @@
 Plugin Name:		Kanban for WordPress
 Plugin URI:			http://kanbanwp.com/
 Description:		A complete project management suite for WordPress.
-Version:			2.1.2
-Release Date:		July 7, 2016
+Version:			2.1.3
+Release Date:		July 30, 2016
 Author:				Gelform Inc
 Author URI:			http://gelwp.com
 License:			GPL2
@@ -93,19 +93,6 @@ class Kanban
 
 
 
-		$permalink_structure = get_option('permalink_structure');
-		if ( empty($permalink_structure) )
-		{
-			Kanban::get_instance()->settings->admin_notice = sprintf(
-				__('The %s plugin does not support "plain" permalinks. Please visit <a href="%s">Settings > Permalinks</a> and choose any option besides "Plain".', 'kanban'),
-				'%s',
-				admin_url('options-permalink.php')
-				);
-			add_action( 'admin_notices', array( __CLASS__, 'notify_php_version' ) );
-		}
-
-
-
 		Kanban_Admin::init();
 		Kanban_Board::init();
 		Kanban_Db::init();
@@ -119,27 +106,7 @@ class Kanban
 		Kanban_Task_Hour::init();
 		Kanban_Template::init();
 		Kanban_User::init();
-
-
-
-
-
-		// needs to come first
-//		include_once Kanban::get_instance()->settings->path . '/includes/class-utils.php';
-//		include_once Kanban::get_instance()->settings->path . '/includes/class-db.php';
-//
-//		// Automatically load classes
-//		$files = glob( Kanban::get_instance()->settings->path . '/includes/class-*.php' );
-//		foreach ( $files as $file )
-//		{
-//			include_once $file;
-//		}
-
-
-
-		// check for old records
-		// Kanban::get_instance()->settings->records_to_move = Kanban_Db::migrate_records_remaining();
-
+		
 
 
 		register_activation_hook( __FILE__, array( __CLASS__, 'on_activation' ) );
@@ -190,10 +157,10 @@ class Kanban
 
 
 		// populate defaults
-		if ( Kanban::get_instance()->settings->records_to_move == 0 )
-		{
-			add_action( 'init', Kanban_Db::add_defaults() );
-		}
+//		if ( Kanban::get_instance()->settings->records_to_move == 0 )
+//		{
+//			add_action( 'init', Kanban_Db::add_defaults() );
+//		}
 
 
 

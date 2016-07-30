@@ -93,6 +93,7 @@
 
 
 
+	<?php if ( count($board->statuses) > 2 ) : ?>
 	<?php $status = reset($board->statuses); ?>
 	<div class="col-tasks-sidebar col-tasks-sidebar-left" data-left="0" data-right="-<?php echo $board->status_w ?>%" style="background-color: <?php echo $status->color_hex ?>">
 		<div class="col-tasks-sidebar-label">
@@ -114,6 +115,7 @@
 		</div>
 		<div class="col-tasks-sidebar-arrow" style="border-right-color: <?php echo $status->color_hex ?>"></div>
 	</div>
+	<?php endif // count $board->statuses ?>
 
 
 

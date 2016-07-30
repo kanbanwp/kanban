@@ -14,7 +14,7 @@
 		<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 	<![endif]-->
 
-	<?php Kanban_Template::add_style(); ?>
+	<?php Kanban_Template::add_style($wp_query->query_vars['kanban']->slug); ?>
 </head>
 <body class="">
 

@@ -202,6 +202,7 @@ sub {
         opacity: 1; }
   .task .task-project {
     max-width: 80%;
+    min-height: .618em;
     z-index: 1; }
     .task .task-project.open {
       z-index: 2; }
@@ -209,7 +210,6 @@ sub {
       color: #888; }
   .task .task-title {
     font-size: 1.382em;
-    line-height: 1.142;
     margin-bottom: 3px;
     z-index: 1; }
   .task .row-task-actions {

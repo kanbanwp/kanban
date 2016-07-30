@@ -85,7 +85,7 @@
 
 <?php wp_nonce_field( 'kanban-save', Kanban_Utils::get_nonce() ); ?>
 
-<?php Kanban_Template::add_script(); ?>
+<?php Kanban_Template::add_script($wp_query->query_vars['kanban']->slug); ?>
 
 
 

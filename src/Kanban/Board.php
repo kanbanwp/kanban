@@ -46,9 +46,11 @@ class Kanban_Board extends Kanban_Db
 	static function init()
 	{
 		// send board data to the board template
-		add_filter( 'template_include', array( __CLASS__, 'send_page_data_to_template' ), 100 ); // must be higher than template
+//		add_filter( 'template_include', array( __CLASS__, 'send_page_data_to_template' ), 100 ); // must be higher than template
 
 		add_action( 'kanban_board_render_js_templates', array( __CLASS__, 'render_js_templates' ), 1, 1 );
+
+		add_action( 'kanban_board_template_before', array( __CLASS__, 'set_board_data' ) );
 	}
 
 
@@ -58,16 +60,16 @@ class Kanban_Board extends Kanban_Db
 	 * @param  string $template the passed in template path
 	 * @return string           the same template path
 	 */
-	static function send_page_data_to_template( $template )
+	static function set_board_data ()
 	{
-		// make sure we're looking at the board
-		if ( ! isset( Kanban_Template::get_instance()->slug ) || Kanban_Template::get_instance()->slug != self::$slug ) return $template;
-
 		// get the template data
 		global $wp_query;
 
 		// attach our object to the template data
-		$wp_query->query_vars['kanban'] = (object) array();
+		if ( !isset($wp_query->query_vars['kanban']) )
+		{
+			$wp_query->query_vars['kanban'] = (object) array();
+		}
 
 			// add passed alert
 		$wp_query->query_vars['kanban']->alert = ! empty( $_GET['alert'] ) ? stripcslashes( $_GET['alert'] ) : '';
@@ -126,7 +128,7 @@ class Kanban_Board extends Kanban_Db
 
 			// figure out percentages here (easier, quicker than in js)
 			$board_to_add->col_percent_w = count( $board_to_add->statuses ) > 0 ? 100/(count( $board_to_add->statuses )) : 100;
-			$board_to_add->status_w = count( $board_to_add->statuses ) > 0 ? 100/(count( $board_to_add->statuses )-2) : 0;
+			$board_to_add->status_w = count( $board_to_add->statuses ) > 2 ? 100/(count( $board_to_add->statuses )-2) : 0;
 
 			apply_filters(
 				'kanban_board_send_page_data_to_template_each_board',
@@ -157,8 +159,6 @@ class Kanban_Board extends Kanban_Db
 			'kanban_board_query_vars',
 			$wp_query->query_vars['kanban']
 		);
-
-		return $template;
 	}
 
 

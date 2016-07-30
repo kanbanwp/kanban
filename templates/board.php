@@ -1,4 +1,8 @@
-<?php do_action( 'kanban_board_template_before', $wp_query->query_vars['kanban']->boards ); ?>
+<?php
+
+global $wp_query;
+
+do_action( 'kanban_board_template_before' ); ?>
 
 
 

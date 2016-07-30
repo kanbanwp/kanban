@@ -625,46 +625,6 @@ $(function()
 	}, 5000);
 
 
-
-	// $('#form-feedback').on(
-	// 	'submit',
-	// 	function ()
-	// 	{
-	// 		var $form = $(this);
-	// 		var $alert = $('.alert', $form).hide();
-
-	// 		var url = $form.attr('action');
-	// 		var data = $form.serialize();
-
-	// 		$.ajax({
-	// 			type: "POST",
-	// 			url: url,
-	// 			data: data,
-	// 			success: function (response)
-	// 			{
-	// 				try
-	// 				{
-	// 					$alert
-	// 					.removeClass('alert-danger alert-success')
-	// 					.addClass((response.success ? 'alert-success' : 'alert-danger'))
-	// 					.text(response.data.message)
-	// 					.show();
-
-	// 					if ( response.success )
-	// 					{
-	// 						$('[name="message"]', $form).val('');
-	// 					}
-	// 				}
-	// 				catch (err) {}
-	// 			},
-	// 			dataType: 'json'
-	// 		});
-
-
-	// 		return false;
-	// 	}
-	// );
-
 });
 
 

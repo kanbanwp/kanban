@@ -370,12 +370,12 @@
 
 <script type="text/html" id="t-status">
 
-<?php include sprintf( '%s/t-status.php', __DIR__ ); ?>
+<?php echo Kanban_Template::render_template( 'admin/t-status'); ?>
 
 </script>
 
 <script type="text/html" id="t-estimate">
 
-<?php include sprintf( '%s/t-estimate.php', __DIR__ ); ?>
+	<?php echo Kanban_Template::render_template( 'admin/t-estimate'); ?>
 
 </script>

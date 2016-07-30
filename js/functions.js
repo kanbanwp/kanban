@@ -180,7 +180,7 @@ function sanitize($div)
 {
 	strip_tags($div);
 	remove_attributes_from_tags ($div);
-	$div.html( $.trim( $div.html().replace(/&nbsp;/gi,' ') ));
+	// $div.html( $.trim( $div.html().replace(/&nbsp;/gi,' ') ));
 }
 
 

@@ -69,47 +69,41 @@ class Kanban_Admin
 		ob_start();
 		?>
 		<div id="kanban-deactivate-modal" style="display: none;">
-			<form id="kanban-deactivate-form" style="background: white;">
+			<form id="kanban-deactivate-form" style="background: white; padding: 5px;">
 				<p style="font-size: 1.618em; margin-bottom: 0;">
-					<?php echo __( 'OPTIONAL: Please help us make our plugin better!', 'kanban' ) ?>
+					<?php echo __( 'OPTIONAL: Please Let us know why you are deactivating Kanban.', 'kanban' ) ?>
 				</p>
-				<p>
-					<?php echo __( 'Please Let us know why you are deactivating Kanban for WordPress. To skip this, simply click the "Deactivate" button below. Thank you!', 'kanban' ) ?>
+				<p style="padding: 0;">
+					<label><input type="radio" name="request" value="deactivated: decided to use something else"><?php echo __( 'I decided to use something else'); ?></label><br>
+					<textarea rows="2" class="large-text" placeholder="<?php echo __( 'What else did you decide to use?'); ?>" style="display: none;"></textarea>
 				</p>
-				<p style="line-height: 2;">
-					<label><input type="radio" name="request" value="deactivated: not what I was looking for">The plugin is not what I was looking for</label><br>
-					<label><input type="radio" name="request" value="deactivated: didn't have the features I wanted">The plugin didn't have the features I wanted</label><br>
-					<label><input type="radio" name="request" value="deactivated: didn't work as expected">The plugin didn't work as expected</label><br>
-					<label><input type="radio" name="request" value="deactivated: is not working">The plugin is not working</label>
-				</p>
-				<p>
-					<label>
-						<?php echo __( 'Suggestion? Comment? Complaint?', 'kanban' ) ?>
-					</label><br>
-					<textarea name="message" rows="2" class="large-text"></textarea>
+				<p style="padding: 0;">
+					<label><input type="radio" name="request" value="deactivated: not what I was looking for"><?php echo __( 'The plugin is not what I was looking for'); ?></label><br>
+					<textarea rows="2" class="large-text" placeholder="<?php echo __( 'What were you looking for?'); ?>" style="display: none;"></textarea>
+				<p style="padding: 0;">
+					<label><input type="radio" name="request" value="deactivated: didn't have the features I wanted"><?php echo __( 'The plugin didn\'t have the features I wanted'); ?></label><br>
+					<textarea rows="2" class="large-text" placeholder="<?php echo __( 'What features did you want?'); ?>" style="display: none;"></textarea>
+				<p style="padding: 0;">
+					<label><input type="radio" name="request" value="deactivated: didn't work as expected"><?php echo __( 'The plugin didn\'t work as expected'); ?></label><br>
+					<textarea rows="2" class="large-text" placeholder="<?php echo __( 'What were you expecting?'); ?>" style="display: none;"></textarea>
+				<p style="padding: 0;">
+					<label><input type="radio" name="request" value="deactivated: is not working"><?php echo __( 'The plugin is not working'); ?></label><br>
+					<textarea rows="2" class="large-text" placeholder="<?php echo __( 'What didn\'t work?'); ?>" style="display: none;"></textarea>
 				</p>
 				<p align="right">
 					<button type="button" class="button button-primary kanban-deactivate-submit">
-						<?php echo __( 'Deactivate', 'kanban' ) ?>
+						<?php echo __( 'Skip &amp; Deactivate', 'kanban' ) ?>
 					</button>
 					<button type="button" class="button kanban-deactivate-remove">
 						<?php echo __( 'Cancel', 'kanban' ) ?>
 					</button>
 				</p>
 				<?php wp_nonce_field( 'kanban-admin-comment', Kanban_Utils::get_nonce() ); ?>
+
 			</form>
 		</div>
 
 
-		<style>
-			#TB_window {
-				overflow: auto;
-			}
-			#TB_ajaxContent {
-				height: auto !important;
-				width: 96% !important;
-			}
-		</style>
 		<?php
 		$html_output = ob_get_contents();
 		ob_end_clean();

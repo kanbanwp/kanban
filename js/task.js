@@ -915,8 +915,25 @@ Task.prototype.save_title = function()
 
 	// clean up html
 	sanitize($div);
-	var new_title = $div.html().replace(/\\/gi,'&#92;');
+	var new_title = $div.html().replace(/\\/gi,'&#92;').replace(/&nbsp;/gi,' ');
 
+
+
+	// now that we have the title
+	// don't encode if we're focused on an input
+	var $any_input = $('input:focus, textarea:focus, [contenteditable]:focus');
+
+	if ( $any_input.length == 0 )
+	{
+		encode_urls_emails ($div);
+	}
+
+
+	// don't save if there's no change
+	if ( new_title === prev_title )
+	{
+		return false;
+	}
 
 
 	var comment = text['task_title_updated'].sprintf(
@@ -931,16 +948,13 @@ Task.prototype.save_title = function()
 		);
 	}
 
-	if ( new_title === '' || new_title === prev_title )
+	if ( new_title === '' )
 	{
 		comment = null;
 	}
 
 	this.record.title = new_title;
 	this.save(comment);
-
-	// lastly, add links and emails
-	encode_urls_emails ($div);
 
 }; // save_title
 
@@ -1032,7 +1046,7 @@ Task.prototype.parse_project = function()
 	// clean up html
 	sanitize($div);
 	strip_tags($div, []); // strip all tags
-	var project_title = $div.html().replace(/\\/gi,'&#92;');
+	var project_title = $div.html().replace(/\\/gi,'&#92;').replace(/&nbsp;/gi,' ');
 
 
 

@@ -198,9 +198,9 @@ class Kanban_Option extends Kanban_Db
 		}
 
 		return apply_filters(
-				'kanban_option_get_all_by_board_return',
-				self::$options_by_board[$board_id]
-			);
+			'kanban_option_get_all_by_board_return',
+			self::$options_by_board[$board_id]
+		);
 	}
 
 

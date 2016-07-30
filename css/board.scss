@@ -342,6 +342,7 @@ sub {
 
 	.task-project {
 		max-width: 80%;
+        min-height: .618em;
 		z-index: 1;
 
 		&.open {
@@ -355,7 +356,6 @@ sub {
 
 	.task-title {
 		font-size: 1.382em;
-		line-height: 1.142;
 		margin-bottom: $margin/5;
 		z-index: 1;
 	}

@@ -1,4 +1,8 @@
-<!DOCTYPE html>
+<?php
+
+global $wp_query;
+
+?><!DOCTYPE html>
 <html lang="en">
 <head>
 	<link href='https://fonts.googleapis.com/css?family=Open+Sans:700,400,400italic' rel='stylesheet' type='text/css'>
@@ -14,11 +18,11 @@
 		<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 	<![endif]-->
 
-	<?php Kanban_Template::add_style(); ?>
+	<?php Kanban_Template::add_style($wp_query->query_vars['kanban']->slug); ?>
 </head>
 <body>
 
-
+<div class="container">
 
 
 <div class="row" style="margin-top: 60px;">
@@ -77,7 +81,7 @@
 </div><!-- row -->
 
 
-
+</div><!--container-->
 
 </body>
 </html>

@@ -36,6 +36,12 @@ Here's a 60-second intro to how to use the board, once you have it installed:
 * Works on mobile!
 * Lots of extra features available through paid add-ons - multiple boards, to-do lists, task flagging, notifications, and more.
 
+"Easy to install, easy to use!" - Hovig Devejian
+
+"Kanban for WordPress allows us to focus on our work and not waste time managing tasks." - Brad Chellingwort
+
+"I've used lot of commercial project management tools but was never overjoyed on data security. These guys have done it. You Own All Your Data." - wpsupport.io
+
 = Add-ons available at KanbanWP.com =
 * [Multiple boards](https://kanbanwp.com/addons/multiple-boards/?utm_medium=documentation&utm_source=wordpress.org&utc_campaign=documentation)
 * [Advanced User Management](https://kanbanwp.com/addons/advanced-user-management/?utm_medium=documentation&utm_source=wordpress.org&utc_campaign=documentation)

@@ -146,30 +146,28 @@ class Kanban_Template
 
 		$uri = strtolower(strtok( $_SERVER['REQUEST_URI'], '?' ));
 
+		// last "kanban", optional /, capture everything up to the next /
+		// /kanban, /kanban/ returns set but empty matches[1]
+		// /kanban/board, /kanban/board/, /kanban/board/123 returns matches[1] = board
+		$pattern = '/(?:.*kanban\/?)([^\/]*)/';
+
+		preg_match($pattern, $uri, $matches);
+
 
 
 		// if url doesn't include our slug, return
-		if ( strpos( $uri, sprintf( '/%s', Kanban::$slug ) ) === FALSE ) return;
+		if ( empty($matches) ) return;
 
 
 
-		$url_parts = explode('/', $uri);
-
-		// if starts with /, remove the first
-		if ( empty($url_parts[0]) )
-		{
-			array_shift($url_parts );
-		}
-
-		// if first isn't Kanban, or there's no second, return
-		if ( $url_parts[0] != Kanban::$slug || !isset($url_parts[1]) || empty($url_parts[1]) )
-		{
-			return;
-		}
+		$slug = $matches[1];
 
 
-		$slug = $url_parts[1];
 
+		self::$page_slugs = apply_filters( 'kanban_template_chooser_slugs', self::$page_slugs );
+
+
+		if ( !isset(self::$page_slugs[$slug]) ) return;
 
 
 		$continue = self::protect_slug($slug);
@@ -177,7 +175,6 @@ class Kanban_Template
 
 
 
-		self::$page_slugs = apply_filters( 'kanban_template_chooser_slugs', self::$page_slugs );
 
 
 

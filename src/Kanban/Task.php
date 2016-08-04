@@ -305,10 +305,10 @@ class Kanban_Task extends Kanban_Db
 
 
 
-
+		// use slashes to ensure there are no multiple slashes
 		wp_send_json_success( array(
-			'projects' => $projects,
-			'tasks' => $tasks
+			'projects' => json_decode(Kanban_Utils::slashes(json_encode($projects))),
+			'tasks' => json_decode(Kanban_Utils::slashes(json_encode($tasks)))
 		) );
 	}
 

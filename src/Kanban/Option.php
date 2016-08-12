@@ -380,12 +380,16 @@ class Kanban_Option extends Kanban_Db
 		// save all single settings
 		foreach ( $settings as $key => $value )
 		{
-			// save licenses, just in case
-			// if ( !isset($settings[$key]) && substr($key, 0, 7) != 'license' ) continue;
+			// if empty and not license, use default
+			if ( !isset($_POST['settings'][$key]) && substr($key, 0, 7) != 'license' )
+			{
+				$_POST['settings'][$key] = self::get_default($key);
+			}
 
-			// if empty, use default
-			if ( !isset($_POST['settings'][$key]) ) $_POST['settings'][$key] = self::get_default($key);
+			// if not in the post (most likely a license), skip it
+			if ( !isset($_POST['settings'][$key]) ) continue;
 
+			// update the option
 			Kanban_Option::update_option($key, $_POST['settings'][$key]);
 		}
 

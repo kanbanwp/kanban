@@ -70,6 +70,10 @@
   border-radius: 0;
   clear: left; }
 
+#default_assigned_switch label {
+  min-width: 12em;
+  text-align: left; }
+
 #row-addons .addon {
   margin: 0 1% 15px 0;
   width: 30%; }
@@ -90,3 +94,5 @@
 @media only screen and (max-width: 960px) {
   .form-table label {
     color: black !important; } }
+
+/*# sourceMappingURL=admin.css.map */

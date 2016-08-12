@@ -31,7 +31,7 @@ class Kanban_License
 
 
 
-		$board = Kanban_Board::get_current_by('POST');
+		$board = Kanban_Board::get_current();
 
 
 
@@ -43,10 +43,10 @@ class Kanban_License
 		// save all single settings
 		foreach ( $settings as $key => $value )
 		{
-			// if empty, skip it
-			if ( !isset($_POST['settings'][$key]) ) continue;
+			// if empty or not license, skip it
+			if ( substr($key, 0, 7) != 'license' ) continue;
 
-			Kanban_Option::update_option($key, $_POST['settings'][$key]);
+			Kanban_Option::update_option($key, $_POST['settings'][$key], 0);
 		}
 
 

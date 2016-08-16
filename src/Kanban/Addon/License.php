@@ -187,7 +187,7 @@ class Kanban_Addon_License
 		// get this way, without board
 		$license = $wpdb->get_var(
 			$wpdb->prepare(
-				"SELECT `value` FROM $option_table WHERE name = %s",
+				"SELECT `value` FROM $option_table WHERE name = %s ORDER BY `board_id` DESC;",
 				'license_' . $parent::$slug
 			)
 		);

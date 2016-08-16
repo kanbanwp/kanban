@@ -7,10 +7,6 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 
 
 
-//Kanban_License::init();
-
-
-
 class Kanban_License
 {
 
@@ -27,6 +23,10 @@ class Kanban_License
 
 
 
+		global $wpdb;
+
+
+
 		do_action( 'kanban_license_save_settings_before', $_POST );
 
 
@@ -38,6 +38,9 @@ class Kanban_License
 		// get current settings
 		$settings = Kanban_Option::get_all($board->id);
 
+		// get options table for deleting below
+		$option_table = Kanban_Option::table_name();
+
 
 
 		// save all single settings
@@ -45,6 +48,9 @@ class Kanban_License
 		{
 			// if empty or not license, skip it
 			if ( substr($key, 0, 7) != 'license' ) continue;
+
+			// delete any previously set licenses
+			$wpdb->delete( $option_table, array( 'name' => $key ) );
 
 			Kanban_Option::update_option($key, $_POST['settings'][$key], 0);
 		}

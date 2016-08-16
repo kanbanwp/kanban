@@ -139,9 +139,7 @@ sub {
 	}
 
 	@media screen and (max-width: $screen-sm-max) {
-		height: auto;
 		margin: 0;
-		// overflow: auto;
 
 		.row-statuses,
 		.row-tasks {
@@ -247,27 +245,11 @@ sub {
 			}
 		}
 
-		// &:hover,
-		// &.hover {
-		// 	// background: lighten($color-grey-wp, 60);;
-
-		// 	.task {
-		// 		border-color: #BBB;
-		// 	}
-
-		// 	@media screen and (max-width: $screen-sm-max) {
-		// 		background: transparent;
-		// 	}
-		// }
-
 		&.active,
         &.hover {
 			z-index: 1;
 		}
 
-		@media screen and (min-width: $screen-sm-min) {
-			// width: 16.66%;
-		}
 
 		@media screen and (max-width: $screen-sm-max) {
 			display: none;
@@ -277,10 +259,6 @@ sub {
 		}
 	}
 
-	@media screen and (max-width: $screen-sm-max) {
-		// height: auto;
-		// overflow: auto;
-	}
 } // row-tasks-wrapper
 
 // must be "global" for dragging styles

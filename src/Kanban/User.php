@@ -23,8 +23,8 @@ class Kanban_User
 
 	static function init()
 	{
-		add_action( 'wp', array( __CLASS__, 'login' ) );
-		add_action( 'wp', array( __CLASS__, 'request_access' ) );
+		add_action( 'init', array( __CLASS__, 'login' ) );
+		add_action( 'init', array( __CLASS__, 'request_access' ) );
 	}
 
 
@@ -153,7 +153,7 @@ class Kanban_User
 
 
 
-		wp_redirect( site_url( isset($_POST['redirect']) ? $_POST['redirect'] : '/kanban/board' ) );
+		wp_redirect( site_url( isset($_POST['redirect']) && !empty($_POST['redirect']) ? $_POST['redirect'] : '/kanban/board' ) );
 		exit;
 
 

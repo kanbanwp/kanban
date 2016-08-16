@@ -67,6 +67,13 @@
 							</a>
 						</li>
 						<?php endif ?>
+						<?php if ( !is_user_logged_in() ) : ?>
+							<li>
+								<a href="<?php echo site_url('/kanban/login') ?>">
+									<?php echo __( 'Login', 'kanban' ); ?>
+								</a>
+							</li>
+						<?php endif ?>
 					</ul>
 				</li>
 			</ul>

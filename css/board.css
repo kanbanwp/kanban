@@ -87,7 +87,6 @@ sub {
     width: 100%; }
   @media screen and (max-width: 767px) {
     .board {
-      height: auto;
       margin: 0; }
       .board .row-statuses,
       .board .row-tasks {
@@ -457,3 +456,5 @@ body.board-view-compact #btn-view-compact .glyphicon {
 
 body.board-view-all-cols #btn-view-all-cols .glyphicon {
   display: inline-block; }
+
+/*# sourceMappingURL=board.css.map */

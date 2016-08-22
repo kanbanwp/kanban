@@ -153,7 +153,7 @@ class Kanban_User
 
 
 
-		wp_redirect( site_url( isset($_POST['redirect']) && !empty($_POST['redirect']) ? $_POST['redirect'] : '/kanban/board' ) );
+		wp_redirect( site_url( isset($_POST['redirect']) && !empty($_POST['redirect']) ? $_POST['redirect'] : Kanban_Template::get_uri() ) );
 		exit;
 
 

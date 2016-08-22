@@ -201,7 +201,7 @@ jQuery(function($)
 
 
 			$.post(
-				ajaxurl,
+				kanban.ajaxurl,
 				data
 			)
 			.done(function(response)

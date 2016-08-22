@@ -31,7 +31,7 @@
 							
 							<div class="inside">
 								<p>
-									<a href="<?php echo sprintf( '%s/%s/board', home_url(), Kanban::$slug ); ?>" class="button-primary" target="_blank" id="btn-go-to-board" onclick="window.open('<?php echo sprintf( '%s/%s/board', home_url(), Kanban::$slug ); ?>', 'kanbanboard'); return false;">
+									<a href="<?php echo Kanban_Template::get_uri() ?>" class="button-primary" target="_blank" id="btn-go-to-board" onclick="window.open('<?php echo Kanban_Template::get_uri() ?>', 'kanbanboard'); return false;">
 										<?php echo __( 'Go to your board', 'kanban' ); ?>
 									</a>
 									<a href="http://kanbanwp.com/documentation" class="button" target="_blank">

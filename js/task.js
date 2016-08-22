@@ -29,7 +29,7 @@ Task.prototype.build_el = function()
 	this.record.user_assigned = this.board().record.allowed_users()[this.record.user_id_assigned] ? this.board().record.allowed_users()[this.record.user_id_assigned] : {};
 	this.record.hour_count_formatted = format_hours(this.record.hour_count);
 
-	var task_html = templates[this.board().record.id()]['t-task'].render({
+	var task_html = kanban.templates[this.board().record.id()]['t-task'].render({
 		task: this.record,
 		estimate_records: obj_order_by_prop(this.board().record.estimate_records(), 'position'),
 		project_records: this.board().record.project_records,
@@ -116,7 +116,7 @@ Task.prototype.dom = function()
 			{
 				var project = self.board().record.project_records[project_id];
 
-				var project_html = templates[self.board().record.id()]['t-task-project-dropdown'].render(project);
+				var project_html = kanban.templates[self.board().record.id()]['t-task-project-dropdown'].render(project);
 
 				$(project_html).prependTo($dropdown);
 
@@ -511,7 +511,7 @@ Task.prototype.dom = function()
 
 
 			// build comment
-			var comment = text['task_estimate_updated'].sprintf(
+			var comment = kanban.text['task_estimate_updated'].sprintf(
 				self.board().current_user().record().short_name,
 				estimate.title
 			);
@@ -526,7 +526,7 @@ Task.prototype.dom = function()
 					return true;
 				}
 
-				comment += text['task_estimate_updated_previous'].sprintf(
+				comment += kanban.text['task_estimate_updated_previous'].sprintf(
 					old_estimate.title
 				);
 			}
@@ -567,7 +567,7 @@ Task.prototype.dom = function()
 
 
 			// build comment
-			var comment = text['task_assigned_to'].sprintf(
+			var comment = kanban.text['task_assigned_to'].sprintf(
 				self.board().current_user().record().short_name,
 				user.short_name
 			);
@@ -582,7 +582,7 @@ Task.prototype.dom = function()
 					return true;
 				}
 
-				comment += text['task_assigned_to_previous'].sprintf(
+				comment += kanban.text['task_assigned_to_previous'].sprintf(
 					old_user.short_name
 				);
 			}
@@ -728,14 +728,14 @@ Task.prototype.save = function(comment, do_growl)
 
 	$.ajax({
 		method: "POST",
-		url: ajaxurl,
+		url: kanban.ajaxurl,
 		data: task_data
 	})
 	.done(function(response )
 	{
 		if ( !response.success )
 		{
-			growl (text.task_save_error);
+			growl (kanban.text.task_save_error);
 			return false;
 		}
 
@@ -759,21 +759,21 @@ Task.prototype.delete = function(comment)
 		task: this.record,
 		action: 'delete_task',
 		kanban_nonce: $('#kanban_nonce').val(),
-		comment: text['task_deleted'].sprintf(
+		comment: kanban.text['task_deleted'].sprintf(
 			self.board().current_user().record().short_name
 		)
 	};
 
 	$.ajax({
 		method: "POST",
-		url: ajaxurl,
+		url: kanban.ajaxurl,
 		data: task_data
 	})
 	.done(function(response)
 	{
 		if ( !response.success )
 		{
-			growl (text.task_delete_error);
+			growl (kanban.text.task_delete_error);
 			return false;
 		}
 
@@ -846,14 +846,14 @@ Task.prototype.update_position = function(position)
 	// store prev pos
 	var prev_pos = this.record.position + '';
 
-	var comment = text['task_moved_to_position'].sprintf(
+	var comment = kanban.text['task_moved_to_position'].sprintf(
 		this.board().current_user().record().short_name,
 		position
 	);
 
 	if ( prev_pos !== '' )
 	{
-		comment += text['task_moved_to_position_previous'].sprintf(
+		comment += kanban.text['task_moved_to_position_previous'].sprintf(
 			parseInt(prev_pos)
 		);
 	}
@@ -936,14 +936,14 @@ Task.prototype.save_title = function()
 	}
 
 
-	var comment = text['task_title_updated'].sprintf(
+	var comment = kanban.text['task_title_updated'].sprintf(
 		this.board().current_user().record().short_name,
 		new_title
 	);
 
 	if ( prev_title !== '' )
 	{
-		comment += text['task_title_updated_previous'].sprintf(
+		comment += kanban.text['task_title_updated_previous'].sprintf(
 			prev_title
 		);
 	}
@@ -1002,14 +1002,14 @@ Task.prototype.project_save = function(project_id)
 	if ( typeof project === 'undefined' )
 	{
 		// build comment
-		var comment = text['task_removed_from_project'].sprintf(
+		var comment = kanban.text['task_removed_from_project'].sprintf(
 			this.board().current_user().record().short_name
 		);
 	}
 	else
 	{
 		// build comment
-		var comment = text['task_added_to_project'].sprintf(
+		var comment = kanban.text['task_added_to_project'].sprintf(
 			this.board().current_user().record().short_name,
 			project.title
 		);
@@ -1022,7 +1022,7 @@ Task.prototype.project_save = function(project_id)
 
 	if ( typeof prev_project !== 'undefined' )
 	{
-		comment += text['task_added_to_project_previous'].sprintf(
+		comment += kanban.text['task_added_to_project_previous'].sprintf(
 			prev_project.title
 		);
 	}
@@ -1081,7 +1081,7 @@ Task.prototype.parse_project = function()
 
 
 
-	var comment = text['project_added'].sprintf(
+	var comment = kanban.text['project_added'].sprintf(
 		this.board().current_user().record().short_name,
 		project_title
 	);
@@ -1102,7 +1102,7 @@ Task.prototype.parse_project = function()
 	// save new project
 	$.ajax({
 		method: "POST",
-		url: ajaxurl,
+		url: kanban.ajaxurl,
 		data: data
 	})
 	.done(function(response )
@@ -1138,7 +1138,7 @@ Task.prototype.log_work_hour = function(operator)
 
 	$.ajax({
 		method: "POST",
-		url: ajaxurl,
+		url: kanban.ajaxurl,
 		data: task_data
 	});
 }; // add_work_hour

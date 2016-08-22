@@ -59,14 +59,14 @@ $(function()
 				// show first board
 				boards[current_board_id].$el.addClass('active');
 
-				if ( typeof url_params['search'] !== 'undefined' )
+				if ( typeof kanban.url_params['search'] !== 'undefined' )
 				{
-					$('#board-search').val(url_params['search']).trigger('keyup');
+					$('#board-search').val(kanban.url_params['search']).trigger('keyup');
 				}
 
-				if ( typeof url_params['filters'] !== 'undefined' )
+				if ( typeof kanban.url_params['filters'] !== 'undefined' )
 				{
-					boards[current_board_id].record.filters = url_params['filters'];
+					boards[current_board_id].record.filters = kanban.url_params['filters'];
 					boards[current_board_id].apply_filters();
 				}
 
@@ -83,12 +83,12 @@ $(function()
 		var board_id = $t.attr('data-board-id');
 		var basename = $t.attr('data-basename');
 
-		if ( typeof templates[board_id] === 'undefined' )
+		if ( typeof kanban.templates[board_id] === 'undefined' )
 		{
-			templates[board_id] = {};
+			kanban.templates[board_id] = {};
 		}
 
-		templates[board_id][basename] = new t( $t.html() );
+		kanban.templates[board_id][basename] = new t( $t.html() );
 	});
 
 
@@ -102,10 +102,10 @@ $(function()
 
 
 	// move to col
-	if ( typeof url_params['col_index'] !== 'undefined' )
+	if ( typeof kanban.url_params['col_index'] !== 'undefined' )
 	{
 		var board = boards[current_board_id];
-		board.status_cols_toggle(url_params['col_index']);
+		board.status_cols_toggle(kanban.url_params['col_index']);
 	}
 
 
@@ -136,7 +136,7 @@ $(function()
 			clientX = 0;
 		}
 
-		if ( is_dragging )
+		if ( kanban.is_dragging )
 		{
 			$('.col-tasks-sidebar-left').css({
 				left: '-' + col_tasks_sidebar_left + 'px',
@@ -166,7 +166,7 @@ $(function()
 			clientX_r = 0;
 		}
 
-		if ( is_dragging )
+		if ( kanban.is_dragging )
 		{
 			$('.col-tasks-sidebar-right').css({
 				right: '-' + col_tasks_sidebar_right + 'px',
@@ -220,7 +220,7 @@ $(function()
 				board.record.filters[field] = null;
 			}
 
-			delete url_params.filters;
+			delete kanban.url_params.filters;
 			update_url();
 
 			$('.task', board.$el).slideDown();
@@ -277,7 +277,7 @@ $(function()
 			// reset if search field is empty
 			if ( valueLower.length === 0 )
 			{
-				delete url_params['search'];
+				delete kanban.url_params['search'];
 				update_url();
 				$list.slideDown('fast', function ()
 				{
@@ -291,7 +291,7 @@ $(function()
 			$reset.show();
 
 			// update url
-			url_params['search'] = valueLower;
+			kanban.url_params['search'] = valueLower;
 			update_url();
 
 
@@ -499,10 +499,10 @@ $(function()
 
 
 	// if an alert is passed, show it
-	if ( alert !== '' )
+	if ( kanban.alert !== '' )
 	{
 		$.bootstrapGrowl(
-			alert,
+			kanban.alert,
 			{
 				type: 'info',
 				allow_dismiss: true
@@ -530,7 +530,7 @@ $(function()
 
 		$.ajax({
 			type: "POST",
-			url: ajaxurl,
+			url: kanban.ajaxurl,
 			data: data,
 			success: function (response)
 			{

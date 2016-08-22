@@ -26,30 +26,32 @@ do_action( 'kanban_board_template_before' ); ?>
 
 
 <script type="text/javascript">
-var ajaxurl = '<?php echo admin_url('admin-ajax.php'); ?>';
+var kanban = {};
 
-var alert = "<?php echo addslashes($wp_query->query_vars['kanban']->alert); ?>";
-var text = <?php echo json_encode( apply_filters( 'kanban_board_text', $wp_query->query_vars['kanban']->text) ); ?>;
+kanban.ajaxurl = '<?php echo admin_url('admin-ajax.php'); ?>';
 
-var templates = {};
+kanban.alert = "<?php echo addslashes($wp_query->query_vars['kanban']->alert); ?>";
+kanban.text = <?php echo json_encode( apply_filters( 'kanban_board_text', $wp_query->query_vars['kanban']->text) ); ?>;
+
+kanban.templates = {};
 var window_w, window_h, screen_size, scrollbar_w;
-var is_dragging = false;
-var current_user = {
-	has_cap: function()
-	{
-		return false;
-	}
-};
+kanban.is_dragging = false;
+//kanban.current_user = {
+//	has_cap: function()
+//	{
+//		return false;
+//	}
+//};
 
-var url_params = {
+kanban.url_params = {
 	board_id: <?php echo $wp_query->query_vars['kanban']->current_board_id ?>
 };
 
 <?php if ( !empty($_GET) ) : foreach ($_GET as $key => $value) : ?>
 <?php if ( is_array($value) ) : ?>
-url_params['<?php echo str_replace(array('\'', '"'), '', $key) ?>'] = <?php echo json_encode( $value ) ?>;
+kanban.url_params['<?php echo str_replace(array('\'', '"'), '', $key) ?>'] = <?php echo json_encode( $value ) ?>;
 <?php else : ?>
-url_params['<?php echo str_replace(array('\'', '"'), '', $key) ?>'] = '<?php echo $value ?>';
+kanban.url_params['<?php echo str_replace(array('\'', '"'), '', $key) ?>'] = '<?php echo $value ?>';
 <?php endif ?>
 <?php endforeach; endif ?>
 

@@ -7,7 +7,7 @@
 
 	<h1>
 		<?php echo __( sprintf( '%s Settings', Kanban::get_instance()->settings->pretty_name ), 'kanban' ); ?>
-		<a href="<?php echo sprintf( '%s/%s/board', home_url(), Kanban::$slug ); ?><?php echo isset($_GET['board_id']) ? '?board_id=' . $_GET['board_id'] : '' ?>" class="page-title-action" target="_blank" id="btn-go-to-board" onclick="window.open('<?php echo sprintf( '%s/%s/board', home_url(), Kanban::$slug ); ?><?php echo isset($_GET['board_id']) ? '?board_id=' . $_GET['board_id'] : '' ?>', 'kanbanboard'); return false;">
+		<a href="<?php echo Kanban_Template::get_uri() ?><?php echo isset($_GET['board_id']) ? '?board_id=' . $_GET['board_id'] : '' ?>" class="page-title-action" target="_blank" id="btn-go-to-board" onclick="window.open('<?php echo Kanban_Template::get_uri() ?><?php echo isset($_GET['board_id']) ? '?board_id=' . $_GET['board_id'] : '' ?>', 'kanbanboard'); return false;">
 			<?php echo __( 'Go to your board', 'kanban' ); ?>
 		</a>
 	</h1>

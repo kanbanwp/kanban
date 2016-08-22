@@ -39,7 +39,7 @@ Modal_Projects.prototype.dom = function()
 			for ( var project_id in self.board().record.project_records )
 			{
 				var project = self.board().record.project_records[project_id];
-				var project_html = templates[self.board().record.id()]['t-modal-project'].render(project);
+				var project_html = kanban.templates[self.board().record.id()]['t-modal-project'].render(project);
 				$(project_html).appendTo($list);
 			}
 		}
@@ -65,7 +65,7 @@ Modal_Projects.prototype.dom = function()
 
 			$.ajax({
 				method: "POST",
-				url: ajaxurl,
+				url: kanban.ajaxurl,
 				data: data
 			})
 			.done(function(response )
@@ -155,7 +155,7 @@ Modal_Projects.prototype.dom = function()
 
 			$.ajax({
 				method: "POST",
-				url: ajaxurl,
+				url: kanban.ajaxurl,
 				data: data
 			})
 			.done(function(response )

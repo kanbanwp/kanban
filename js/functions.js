@@ -102,7 +102,7 @@ function build_url ()
 {
 	var url_current = window.location.href;
 	var url_arr = url_current.split('?');
-	var url = url_arr[0] + '?' + decodeURIComponent($.param(url_params));
+	var url = url_arr[0] + '?' + decodeURIComponent($.param(kanban.url_params));
 	return url;
 }
 
@@ -116,16 +116,16 @@ function update_url ()
 
 function update_page_title ()
 {
-	if ( typeof url_params['board_id'] !== 'undefined' )
+	if ( typeof kanban.url_params['board_id'] !== 'undefined' )
 	{
-		var board = boards[url_params['board_id']];
+		var board = boards[kanban.url_params['board_id']];
 
 		if ( typeof board === 'undefined' )
 		{
 			return false;
 		}
 
-		document.title = '{0} | {1}'.sprintf(board.record.title(), text.kanban);
+		document.title = '{0} | {1}'.sprintf(board.record.title(), kanban.text.kanban);
 	}
 
 }
@@ -270,6 +270,68 @@ function placeCaretAtEnd(el) {
 	}
 }
 
+
+
+function notification(params)
+{
+	var settings = {
+		body: 'kanban alert',
+		// tag: new Date.getTime()
+	};
+
+	jQuery.extend(settings, params);
+
+
+	if (!("Notification" in window))
+	{
+		return false;
+	}
+
+	if (Notification.permission === "granted")
+	{
+		var options = {
+			body: settings.body,
+			icon: notification_icon
+		};
+		var notification = new Notification('kanban',options);
+
+		setTimeout(function()
+		{
+			notification.close();
+		}, 5000);
+		return;
+	}
+
+	if (Notification.permission === 'denied')
+	{
+
+	}
+
+	if (Notification.permission !== 'denied')
+	{
+		Notification.requestPermission(function (permission)
+		{
+			if (!('permission' in Notification))
+			{
+				Notification.permission = permission;
+			}
+
+			if (permission === "granted")
+			{
+				var options = {
+					body: settings.body,
+					icon: notification_icon
+				};
+				var notification = new Notification('kanban',options);
+
+				setTimeout(function()
+				{
+					notification.close();
+				}, 5000);
+			}
+		});
+	}
+}
 
 
 function growl_response_message (response)

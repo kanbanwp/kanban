@@ -53,7 +53,7 @@ Board.prototype.dom = function()
 		'.col-tasks-sidebar',
 		function(e)
 		{
-			if ( e.type == 'click' && is_dragging )
+			if ( e.type == 'click' && kanban.is_dragging )
 			{
 				return false;
 			}
@@ -134,7 +134,7 @@ Board.prototype.dom = function()
 			{
 				var project = self.record.project_records[project_id];
 
-				var project_html = templates[self.record.id()]['t-option-project'].render(project);
+				var project_html = kanban.templates[self.record.id()]['t-option-project'].render(project);
 
 				$(project_html).insertAfter($first_option);
 
@@ -201,7 +201,7 @@ Board.prototype.dom = function()
 				'left': '',
 				'right': ''
 			});
-			is_dragging = true;
+			kanban.is_dragging = true;
 		},
 		// over: function (e, ui)
 		// {
@@ -214,7 +214,7 @@ Board.prototype.dom = function()
 		stop: function ()
 		{
 			self.update_task_positions();
-			is_dragging = false;
+			kanban.is_dragging = false;
 		},
 		// update: function (e, ui)
 		// {
@@ -234,12 +234,12 @@ Board.prototype.dom = function()
 
 
 
-			var comment = text.task_moved_to_status.sprintf(
+			var comment = kanban.text.task_moved_to_status.sprintf(
 								self.current_user().record().short_name,
 								status_new.title
 							);
 
-			comment += text.task_moved_to_status_previous.sprintf(
+			comment += kanban.text.task_moved_to_status_previous.sprintf(
 				status_old.title
 			);
 
@@ -438,7 +438,7 @@ Board.prototype.dom = function()
 
 			$.ajax({
 				method: "POST",
-				url: ajaxurl,
+				url: kanban.ajaxurl,
 				data: task_data
 			})
 			.done(function(response )
@@ -451,7 +451,7 @@ Board.prototype.dom = function()
 				{
 					if ( !response.success )
 					{
-						growl (text.task_added_error);
+						growl (kanban.text.task_added_error);
 						return false;
 					}
 
@@ -487,7 +487,7 @@ Board.prototype.dom = function()
 		'.btn-status-empty',
 		function ()
 		{
-			var r = window.confirm(text.status_empty_confirm);
+			var r = window.confirm(kanban.text.status_empty_confirm);
 			if ( r )
 			{
 				var $btn = $(this);
@@ -670,7 +670,7 @@ Board.prototype.apply_filters = function()
 		self.match_col_h ();
 	});
 
-	url_params = $.extend(url_params, {filters: this.record.filters} );
+	kanban.url_params = $.extend(kanban.url_params, {filters: this.record.filters} );
 	update_url();
 }; // apply_filters
 
@@ -724,7 +724,7 @@ Board.prototype.update_UI = function ()
 
 Board.prototype.status_cols_toggle = function (col_index)
 {
-	url_params.col_index = col_index;
+	kanban.url_params.col_index = col_index;
 	update_url();
 
 	$('.row-statuses, .row-tasks', this.$el).each(function()

@@ -395,7 +395,7 @@ class Kanban_Admin
 		$args = array(
 			'id'    => 'kanban_board',
 			'title' => 'Kanban Board',
-			'href'  => site_url('/kanban/board'),
+			'href'  => Kanban_Template::get_uri(),
 			'meta'  => array( 'class'  => 'kanban-board' )
 		);
 		$wp_admin_bar->add_node( $args );

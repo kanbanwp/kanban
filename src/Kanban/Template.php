@@ -67,7 +67,7 @@ class Kanban_Template
 			// redirect away from login
 			if ( $slug == 'login' )
 			{
-				wp_redirect( sprintf( '%s/%s/board', site_url(), Kanban::$slug ) );
+				wp_redirect(Kanban_Template::get_uri());
 				exit;
 			}
 			else
@@ -96,7 +96,7 @@ class Kanban_Template
 		if ( $slug == 'login' && (bool) $use_default_login_page && !is_user_logged_in() )
 		{
 			wp_redirect(
-				wp_login_url(sprintf( '%s/%s/board', site_url(), Kanban::$slug ))
+				wp_login_url(Kanban_Template::get_uri())
 			);
 			exit;
 		}
@@ -111,7 +111,7 @@ class Kanban_Template
 		if ( (bool) $use_default_login_page && !is_user_logged_in() )
 		{
 			wp_redirect( 
-				wp_login_url(sprintf( '%s/%s/board', site_url(), Kanban::$slug ))
+				wp_login_url( Kanban_Template::get_uri() )
 			);
 			exit;
 		}
@@ -119,11 +119,11 @@ class Kanban_Template
 		{
 			// otherwise redirect to login
 			wp_redirect(
-				sprintf(
-					'%s/%s/login?redirect=%s',
-					site_url(),
-					Kanban::$slug,
-					urlencode($_SERVER['REQUEST_URI'])
+				add_query_arg(
+					array(
+					 	'redirect' => urlencode($_SERVER['REQUEST_URI'])
+					),
+					Kanban_Template::get_uri('login')
 				)
 			);
 			exit;
@@ -146,17 +146,28 @@ class Kanban_Template
 
 		$uri = strtolower(strtok( $_SERVER['REQUEST_URI'], '?' ));
 
-		// last "kanban", optional /, capture everything up to the next /
-		// /kanban, /kanban/ returns set but empty matches[1]
-		// /kanban/board, /kanban/board/, /kanban/board/123 returns matches[1] = board
-		$pattern = '/(?:.*kanban\/?)([^\/]*)/';
 
-		preg_match($pattern, $uri, $matches);
+        $matches = array();
+		if ( !Kanban_Template::is_plain_permalink () )
+		{
+            // last "kanban", optional /, capture everything up to the next /
+            // /kanban, /kanban/ returns set but empty matches[1]
+            // /kanban/board, /kanban/board/, /kanban/board/123 returns matches[1] = board
+            $pattern = '/(?:.*kanban\/?)([^\/]*)/';
+
+            preg_match($pattern, $uri, $matches);
+
+
+        }
+        elseif ( isset($_GET['kanban']) )
+        {
+			$matches[1] = $_GET['kanban'];
+        }
 
 
 
-		// if url doesn't include our slug, return
-		if ( empty($matches) ) return;
+        // if url doesn't include our slug, return
+        if ( empty($matches) ) return;
 
 
 
@@ -172,11 +183,6 @@ class Kanban_Template
 
 		$continue = self::protect_slug($slug);
 		if ( !$continue ) return;
-
-
-
-
-
 
 
 
@@ -325,6 +331,46 @@ class Kanban_Template
 				Kanban::get_instance()->settings->plugin_data['Version']
 			);
 		}
+	}
+
+
+
+	/**
+	 * Determines if there's a custom permalink used or not
+	 *
+	 * @return bool Permalink is empty
+	 */
+	static function is_plain_permalink ()
+	{
+		$permalink_structure = get_option('permalink_structure');
+		return empty($permalink_structure);
+	}
+
+
+
+	/**
+	 * Builds Kanban urls depending on permalink
+	 *
+	 * @param string $page	What slug should be used
+	 * @return string Url with /kanban/slug or ?kanban=slug
+	 */
+	static function get_uri ($page = 'board')
+	{
+		if ( !self::is_plain_permalink () )
+		{
+			return sprintf(
+				'%s/%s/%s',
+				site_url(),
+				Kanban::$slug,
+				$page
+			);
+		}
+
+		return add_query_arg(
+			array(
+				Kanban::$slug => $page
+			),
+			site_url());
 	}
 
 

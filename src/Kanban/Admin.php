@@ -53,6 +53,9 @@ class Kanban_Admin
 		add_action( 'wp_ajax_kanban_register_user', array( __CLASS__, 'ajax_register_user' ) );
 
 		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'add_deactivate_thickbox') );
+
+
+		add_action( 'wp_ajax_kanban_diagnostic_info', array( __CLASS__, 'get_diagnostic_info' ) );
 	}
 
 
@@ -225,9 +228,10 @@ class Kanban_Admin
 				'support@kanbanwp.com',
 				stripcslashes(sprintf( '[kbwp] %s', $_POST['request'] )),
 				stripcslashes(sprintf(
-					"%s\n\n%s\n%s",
+					"%s\n\n%s\n%s\n%s",
 					stripcslashes( $_POST['message'] ),
-					get_option( 'siteurl' ),
+					site_url(),
+					Kanban_Template::get_uri(),
 					$_SERVER['HTTP_USER_AGENT']
 				)),
 				sprintf( 'From: "%s" <%s>', get_option( 'blogname' ), $_POST['from'] )
@@ -462,18 +466,212 @@ class Kanban_Admin
 
 
 
+
+	static function get_diagnostic_info ()
+	{
+		global $wpdb;
+		$table_prefix = $wpdb->base_prefix;
+
+		echo 'site_url: ';
+		echo esc_html( site_url() );
+		echo "\r\n";
+
+		echo 'home_url: ';
+		echo esc_html( home_url() );
+		echo "\r\n";
+
+//		echo 'Database Name: ';
+//		echo esc_html( $wpdb->dbname );
+//		echo "\r\n";
+//
+//		echo 'Table Prefix: ';
+//		echo esc_html( $table_prefix );
+//		echo "\r\n";
+
+		echo 'WordPress Version: ';
+		echo bloginfo( 'version' );
+		if ( is_multisite() ) {
+			echo ' Multisite';
+		}
+		echo "\r\n";
+
+		echo 'permalink_structure: ';
+		echo '"' . get_option('permalink_structure') . '"' . "\r\n";
+
+		echo 'board: ';
+		echo Kanban_Template::get_uri() . "\r\n";
+
+
+		echo 'Kanban Version: ';
+		echo Kanban::get_instance()->settings->plugin_data['Version'] . "\r\n";
+
+
+
+		echo 'Web Server: ';
+		echo esc_html( ! empty( $_SERVER['SERVER_SOFTWARE'] ) ? $_SERVER['SERVER_SOFTWARE'] : '' );
+		echo "\r\n";
+
+		echo 'PHP: ';
+		if ( function_exists( 'phpversion' ) ) {
+			echo esc_html( phpversion() );
+		}
+		echo "\r\n";
+
+		echo 'MySQL: ';
+		echo esc_html( empty( $wpdb->use_mysqli ) ? mysql_get_server_info() : mysqli_get_server_info( $wpdb->dbh ) );
+		echo "\r\n";
+
+		echo 'ext/mysqli: ';
+		echo empty( $wpdb->use_mysqli ) ? 'no' : 'yes';
+		echo "\r\n";
+
+//		echo 'WP Memory Limit: ';
+//		echo esc_html( WP_MEMORY_LIMIT );
+//		echo "\r\n";
+//
+//		echo 'Blocked External HTTP Requests: ';
+//		if ( ! defined( 'WP_HTTP_BLOCK_EXTERNAL' ) || ! WP_HTTP_BLOCK_EXTERNAL ) {
+//			echo 'None';
+//		} else {
+//			$accessible_hosts = ( defined( 'WP_ACCESSIBLE_HOSTS' ) ) ? WP_ACCESSIBLE_HOSTS : '';
+//
+//			if ( empty( $accessible_hosts ) ) {
+//				echo 'ALL';
+//			} else {
+//				echo 'Partially (Accessible Hosts: ' . esc_html( $accessible_hosts ) . ')';
+//			}
+//		}
+//		echo "\r\n";
+
+
+		echo 'WP Locale: ';
+		echo esc_html( get_locale() );
+		echo "\r\n";
+
+		echo 'DB Charset: ';
+		echo esc_html( DB_CHARSET );
+		echo "\r\n";
+
+//		if ( function_exists( 'ini_get' ) && $suhosin_limit = ini_get( 'suhosin.post.max_value_length' ) ) {
+//			echo 'Suhosin Post Max Value Length: ';
+//			echo esc_html( is_numeric( $suhosin_limit ) ? size_format( $suhosin_limit ) : $suhosin_limit );
+//			echo "\r\n";
+//		}
+//
+//		if ( function_exists( 'ini_get' ) && $suhosin_limit = ini_get( 'suhosin.request.max_value_length' ) ) {
+//			echo 'Suhosin Request Max Value Length: ';
+//			echo esc_html( is_numeric( $suhosin_limit ) ? size_format( $suhosin_limit ) : $suhosin_limit );
+//			echo "\r\n";
+//		}
+
+		echo 'Debug Mode: ';
+		echo esc_html( ( defined( 'WP_DEBUG' ) && WP_DEBUG ) ? 'Yes' : 'No' );
+		echo "\r\n";
+
+//		echo 'WP Max Upload Size: ';
+//		echo esc_html( size_format( wp_max_upload_size() ) );
+//		echo "\r\n";
+//
+//
+//		echo 'PHP Time Limit: ';
+//		if ( function_exists( 'ini_get' ) ) {
+//			echo esc_html( ini_get( 'max_execution_time' ) );
+//		}
+//		echo "\r\n";
+//
+		echo 'PHP Error Log: ';
+		if ( function_exists( 'ini_get' ) ) {
+			echo esc_html( ini_get( 'error_log' ) );
+		}
+		echo "\r\n";
+
+//		echo 'fsockopen: ';
+//		if ( function_exists( 'fsockopen' ) ) {
+//			echo 'Enabled';
+//		} else {
+//			echo 'Disabled';
+//		}
+//		echo "\r\n";
+
+
+		echo 'cURL: ';
+		if ( function_exists( 'curl_init' ) ) {
+			echo 'Enabled';
+		} else {
+			echo 'Disabled';
+		}
+		echo "\r\n";
+
+
+		echo 'Compatibility Mode: ';
+		if ( isset( $GLOBALS['wpmdb_compatibility'] ) ) {
+			echo 'Yes';
+		} else {
+			echo 'No';
+		}
+		echo "\r\n";
+
+
+//		do_action( 'wpmdb_diagnostic_info' );
+//		if ( has_action( 'wpmdb_diagnostic_info' ) ) {
+//			echo "\r\n";
+//		}
+
+//		$theme_info = wp_get_theme();
+//		echo "Active Theme Name: " . esc_html( $theme_info->Name ) . "\r\n";
+//		echo "Active Theme Folder: " . esc_html( basename( $theme_info->get_stylesheet_directory() ) ) . "\r\n";
+//		if ( $theme_info->get( 'Template' ) ) {
+//			echo "Parent Theme Folder: " . esc_html( $theme_info->get( 'Template' ) ) . "\r\n";
+//		}
+//		if ( ! file_exists( $theme_info->get_stylesheet_directory() ) ) {
+//			echo "WARNING: Active Theme Folder Not Found\r\n";
+//		}
+//
+//		echo "\r\n";
+
+		echo "Active Plugins:\r\n";
+
+		$active_plugins = (array) get_option( 'active_plugins', array() );
+
+//		if ( is_multisite() ) {
+//			$network_active_plugins = wp_get_active_network_plugins();
+//			$active_plugins = array_map( array( $this, 'remove_wp_plugin_dir' ), $network_active_plugins );
+//		}
+
+		foreach ( $active_plugins as $plugin ) {
+			echo '- ' . $plugin . "\r\n";
+		}
+
+
+		$mu_plugins = wp_get_mu_plugins();
+		if ( $mu_plugins ) {
+			echo "\r\n";
+
+			echo "Must-use Plugins:\r\n";
+
+			foreach ( $mu_plugins as $mu_plugin ) {
+				echo '- ' . $mu_plugin . "\r\n";
+			}
+		}
+
+		exit;
+	}
+
+
+
+
 	/**
 	 * get the instance of this class
 	 * @return object the instance
 	 */
-	public static function get_instance()
-	{
-		if ( ! self::$instance )
-		{
-			self::$instance = new self();
-		}
-		return self::$instance;
-	}
+//	public static function get_instance()
+//	{
+//		if ( ! self::$instance )
+//		{
+//			self::$instance = new self();
+//		}
+//		return self::$instance;
+//	}
 
 
 

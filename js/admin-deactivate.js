@@ -43,8 +43,6 @@ jQuery(function($)
 		{
 			var data = $('#kanban-deactivate-form').serialize();
 
-			// $(this).closest('form').get(0).reset();
-
 			$.ajax({
 				method: "POST",
 				url: kanban.url_contact,

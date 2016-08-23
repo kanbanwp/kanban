@@ -319,13 +319,24 @@ class Kanban_Option extends Kanban_Db
 		);
 
 
-		wp_enqueue_script(
+
+
+        wp_register_script(
 			'kanban-settings',
 			sprintf( '%s/js/min/admin-settings-min.js', Kanban::get_instance()->settings->uri ),
 			array( 'wp-color-picker' ),
 			false,
 			true
 		);
+
+        $translation_array = array(
+            'url_contact' => admin_url(),
+            'url_board' => Kanban_Template::get_uri(),
+            Kanban_Utils::get_nonce() => wp_create_nonce('kanban-admin-comment')
+        );
+        wp_localize_script( 'kanban-settings', 'kanban', $translation_array );
+
+        wp_enqueue_script( 'kanban-settings' );
 	}
 
 

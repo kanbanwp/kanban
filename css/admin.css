@@ -91,8 +91,11 @@
       text-align: center;
       width: 100%; }
 
+#tab-help-tab {
+  opacity: .382; }
+  #tab-help-tab:hover {
+    opacity: 1; }
+
 @media only screen and (max-width: 960px) {
   .form-table label {
     color: black !important; } }
-
-/*# sourceMappingURL=admin.css.map */

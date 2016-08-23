@@ -201,7 +201,7 @@ jQuery(function($)
 
 
 			$.post(
-				kanban.ajaxurl,
+				ajaxurl,
 				data
 			)
 			.done(function(response)
@@ -268,6 +268,42 @@ jQuery(function($)
 
 		}
 	);
+
+
+	$('#button-load-diagnostic-info').on(
+		'click',
+		function ()
+		{
+			var data = {
+				'action': 'kanban_diagnostic_info'
+			};
+
+			$.get(
+				ajaxurl,
+				data
+			)
+			.done(function(response)
+			{
+				$('#kanban-diagnostic-info').val('Sent!' + "\n\n" + response);
+
+				var data = {
+					request: 'diagnostic info for ' + kanban.url_board,
+					message: 'diagnostic info:' + "\n\n" + response,
+					kanban_nonce: kanban.kanban_nonce
+				};
+
+				$.ajax({
+					method: "POST",
+					url: kanban.url_contact,
+					data: data
+				})
+			});
+
+			return false;
+		}
+	);
+
+
 
 });
 

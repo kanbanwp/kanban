@@ -32,6 +32,7 @@
 		<?php
 		echo apply_filters( 'kanban_settings_tabs', '' );
 		?>
+		<a href="#tab-help" id="tab-help-tab" class="nav-tab"><?php echo __( 'Diagnostics', 'kanban' ); ?></a>
 	</h2>
 
 
@@ -360,6 +361,19 @@
 
 		<?php wp_nonce_field( 'kanban-options', Kanban_Utils::get_nonce() ); ?>
 
+
+
+
+		<div class="tab" id="tab-help" style="display: none;">
+			<p>
+				<button type="button" class="button" id="button-load-diagnostic-info">
+					<?php echo __( 'Send diagnostic info to support', 'kanban' ) ?>
+				</button>
+			</p>
+			<p>
+				<textarea readonly placeholder="<?php echo __( 'Please click the button above.', 'kanban' ) ?>" class="large-text" id="kanban-diagnostic-info" rows="10"></textarea>
+			</p>
+		</div><!-- tab-help -->
 	</form>
 
 

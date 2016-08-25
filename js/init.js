@@ -11,25 +11,25 @@ $(function()
 		catch (err) {}
 	});
 
-
+	
 
 	//set scrollbar width
-    parent = $('<div style="width:50px;height:50px;overflow:auto"><div/></div>').appendTo('body');
-    child=parent.children();
-    scrollbar_w=child.innerWidth()-child.height(99).innerWidth();
-    parent.remove();
+	var parent = $('<div style="width:50px;height:50px;overflow:auto"><div></div></div>').appendTo('body');
+	var child = parent.children();
+	var scrollbar_w=child.innerWidth()-child.height(99).innerWidth();
+	parent.remove();
 
-    // add scrollbar width to el
-    $('.row-statuses-wrapper').css('marginRight', scrollbar_w);
-
-
-
-    // init dom elements
-    new Modal_Projects( $('#modal-projects') );
+	// add scrollbar width to el
+	$('.row-statuses-wrapper').css('marginRight', scrollbar_w);
 
 
 
-    // re-add previous view settings
+	// init dom elements
+	new Modal_Projects( $('#modal-projects') );
+
+
+
+	// re-add previous view settings
 	var view_classes = Cookies.get('view');
 	if ( view_classes !== 'undefined' )
 	{
@@ -76,7 +76,7 @@ $(function()
 
 
 
-    // store all templates
+	// store all templates
 	$('.template').each(function ()
 	{
 		var $t = $(this);

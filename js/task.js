@@ -1050,8 +1050,16 @@ Task.prototype.parse_project = function()
 
 
 
-	if ( typeof project_title === 'undefined' || project_title === '' || project_title === null )
+	if ( typeof project_title === 'undefined' || project_title === null )
 	{
+		return;
+	}
+
+
+
+	if (  '' === project_title )
+	{
+		this.project_save(0);
 		return;
 	}
 

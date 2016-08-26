@@ -20,12 +20,34 @@ class Kanban_Taskmeta extends Kanban_Db
 	protected static $table_name = 'taskmeta';
 
 	// define db table columns and their validation type
-	 protected static $table_columns = array(
+	protected static $table_columns = array(
 		'meta_key' => 'text',
 	 	'meta_value' => 'text',
 	 	'created_dt_gmt' => 'datetime',
 		'task_id' => 'int'
-	 );
+	);
+
+
+
+	static function get_one ($task_id, $meta_key)
+	{
+		global $wpdb;
+
+		$table_name = self::table_name();
+
+		$sql = $wpdb->prepare(
+			"SELECT * FROM $table_name WHERE task_id = %d AND meta_key = %s",
+			$task_id,
+			$meta_key
+		);
+
+		$sql = apply_filters( 'kanban_taskmeta_get_one_sql', $sql );
+
+		$record = $wpdb->get_row($sql);
+
+		return $record;
+	}
+
 
 
 	static function update( $task_id, $meta_key, $meta_value )

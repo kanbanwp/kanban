@@ -117,7 +117,38 @@ class Kanban_Status_Change extends Kanban_Db
 				$task_id
 			);
 
-			wp_schedule_single_event(time() + 60*60*24*$status_auto_archive_days, 'kanban_task_auto_archive', array($task_id));
+			$next_occurance = time() + 60*60*24*$status_auto_archive_days;
+
+			wp_schedule_single_event($next_occurance, 'kanban_task_auto_archive', array($task_id));
+
+			// serialize vars for unscheduling later
+			$value = serialize(
+				array(
+					'timestamp' => $next_occurance,
+					'hook' => 'kanban_task_auto_archive',
+					'args' => array($task_id)
+				)
+			);
+
+			// store variables for canceling
+			Kanban_Taskmeta::update($task_id, 'auto-archive', $value);
+		}
+		else
+		{
+			// see if the task was previous scheduled for auto-archiving
+			$meta = Kanban_Taskmeta::get_one($task_id, 'auto-archive');
+
+			// if scheduled
+			if ( !empty($meta) )
+			{
+				// unserialize vars for unscheduling
+				$meta_value = unserialize($meta->meta_value);
+
+				wp_unschedule_event( $meta_value['timestamp'], $meta_value['hook'], $meta_value['args'] );
+
+				// delete taskmeta record so we don't keep trying to unschedule
+				Kanban_Taskmeta::delete($task_id, 'auto-archive');
+			}
 		}
 
 

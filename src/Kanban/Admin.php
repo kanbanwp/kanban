@@ -255,6 +255,7 @@ class Kanban_Admin
 		$user_email		= $_POST["new-user-email"];
 		$user_first 	= $_POST["new-user-first"];
 		$user_last	 	= $_POST["new-user-last"];
+		$board_id	 	= $_POST["board_id"];
 
 		$errors = array();
 
@@ -290,6 +291,13 @@ class Kanban_Admin
 			return;
 		}
 
+		$boards = Kanban_Board::get_all();
+
+		if ( !in_array($board_id, array_keys($boards)) )
+		{
+			$board_id = Kanban_Board::get_current();
+		}
+
 
 
 		$userdata = array(
@@ -316,7 +324,7 @@ class Kanban_Admin
 		$allowed_users = Kanban_Option::get_option( 'allowed_users' );
 		$allowed_users[] = $user_id;
 
-		Kanban_Option::update_option( 'allowed_users', $allowed_users );
+		Kanban_Option::update_option( 'allowed_users', $allowed_users, $board_id );
 
 
 

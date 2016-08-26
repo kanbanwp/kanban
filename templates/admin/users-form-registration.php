@@ -15,13 +15,12 @@
 		<label for="new-user-last"><?php _e('Last Name'); ?></label><br>
 		<input type="text" id="new-user-last" class="large-text required">
 	</p>
-	<p>
+		<input type="hidden" id="board_id" value="<?php echo $board->id ?>">
 		<input type="hidden" id="<?php echo Kanban_Utils::get_nonce() ?>" value="<?php echo wp_create_nonce('kanban-new-user'); ?>">
 		<?php submit_button(
 			__( 'Add a user', 'kanban' ),
 				'primary button-add-user',
 				'button'
 		); ?>
-	</p>
 </fieldset>
 

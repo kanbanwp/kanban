@@ -189,7 +189,7 @@ jQuery(function($)
 			$('.error', $form).remove();
 
 			var data = {
-				'action': 'kanban_register_user',
+				'action': 'kanban_register_user'
 			};
 
 			$('input', $form).each(function()

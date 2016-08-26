@@ -243,7 +243,7 @@
 											<?php echo __( 'Note: user will immediately be added to the Kanban board.', 'kanban' ); ?>
 										</i>
 									</p>
-									<?php echo Kanban_Template::render_template( 'admin/users-form-registration'); ?>
+									<?php echo Kanban_Template::render_template( 'admin/users-form-registration', array('board' => $board)); ?>
 								</div>
 
 							</div>

@@ -269,7 +269,7 @@
 <?php endforeach // statuses ?>
 			</ol><!-- sortable -->
 			<span style="float: right">
-				<?php echo __( 'Auto-archive', 'kanban' ); ?>: <?php echo sprintf(__( 'Tasks will be automatically deleted after %s days', 'kanban' ), '<input type="number" name="settings[status_auto_archive_days]" min="1" max="30" step="1" value="' . (isset( $settings['status_auto_archive_days'] ) ? $settings['status_auto_archive_days'] : 30) . '">'); ?>
+				<?php echo __( 'Auto-archive', 'kanban' ); ?>: <?php echo sprintf(__( 'Tasks will be automatically deleted after %s days', 'kanban' ), '<input type="number" name="settings[status_auto_archive_days]" min="1" max="120" step="1" value="' . (isset( $settings['status_auto_archive_days'] ) ? $settings['status_auto_archive_days'] : 30) . '">'); ?>
 			</span>
 			<p>
 				<button type="button" class="button button-sortable-add" data-t="t-status">

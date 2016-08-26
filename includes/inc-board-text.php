@@ -23,5 +23,6 @@ return array(
 	'project_added' => __('{0} added the project "{1}"'),
 	'project_updated' => __('{0} updated the project title "{1}"'),
 	'project_delete' => __('{0} deleted the project "{1}"'),
+	'project_delete_confirm' => __('Are you sure you want to delete this project?'),
 	'status_empty_confirm' => __('Are you sure you want to delete all tasks in this column?'),
 ); // no trailing slash

@@ -112,6 +112,23 @@ abstract class Kanban_Db
 
 
 
+
+	protected function _duplicate ($id, $data = array())
+	{
+		global $wpdb;
+		$record = (array) self::_get_row('id', $id);
+
+		// reset
+		unset($record['id']);
+
+		// update with different values
+		$record = array_merge($record, $data);
+
+		// insert new record
+		return self::_insert( $record );
+	}
+
+
 	// get last inserted id
 	protected static function _insert_id()
 	{

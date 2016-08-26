@@ -42,6 +42,7 @@ class Kanban_Project extends Kanban_Db
 	{
 		add_action( sprintf( 'wp_ajax_save_%s', self::$slug ), array( __CLASS__, 'ajax_save' ) );
 		add_action( sprintf( 'wp_ajax_delete_%s', self::$slug ), array( __CLASS__, 'ajax_delete' ) );
+        add_action( sprintf( 'wp_ajax_reset_%s', self::$slug ), array( __CLASS__, 'ajax_reset' ) );
 	}
 
 
@@ -149,6 +150,67 @@ class Kanban_Project extends Kanban_Db
 			) );
 		}
 	}
+
+
+
+    static function ajax_reset()
+    {
+        if ( ! isset( $_POST[Kanban_Utils::get_nonce()] ) || ! wp_verify_nonce( $_POST[Kanban_Utils::get_nonce()], 'kanban-save' ) || ! is_user_logged_in() ) wp_send_json_error();
+
+
+
+        if ( !Kanban_User::current_user_has_cap ('write') )
+        {
+            wp_send_json_error();
+        }
+
+
+
+        do_action( 'kanban_project_ajax_reset_before', $_POST['project_id'] );
+
+
+		// get the task id's for the project
+        $sql = sprintf(
+            "SELECT tasks.id
+				FROM `%s` tasks
+				WHERE tasks.is_active = 1
+				AND tasks.project_id = %s
+				;",
+            Kanban_Task::table_name(),
+            $_POST['project_id']
+        );
+
+        $sql = apply_filters( 'kanban_project_ajax_reset_sql', $sql );
+
+        global $wpdb;
+        $task_ids = $wpdb->get_col($sql);
+
+
+
+		// build data with new status id
+		$data = array(
+			'status_id' => $_POST['status_id']
+		);
+
+
+
+		// dupe each task, and delete it
+        foreach ( $task_ids as $task_id )
+		{
+			Kanban_Task::duplicate($task_id, $data);
+			Kanban_Task::delete($task_id);
+		}
+
+
+
+		do_action( 'kanban_project_ajax_reset_after', $_POST['project_id'] );
+
+
+
+		wp_send_json_success( array(
+			'message' => sprintf( __('%s reset', 'kanban'), self::$slug )
+		) );
+    }
 
 
 

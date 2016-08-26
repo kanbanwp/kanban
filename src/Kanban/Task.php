@@ -323,7 +323,7 @@ class Kanban_Task extends Kanban_Db
 
 
 	// extend parent, so it's accessible from other classes
-	protected static function delete( $id )
+	static function delete( $id )
 	{
 		return self::_update(
 			array(
@@ -427,6 +427,56 @@ class Kanban_Task extends Kanban_Db
 			isset(self::$records_by_board[$board_id]) ? self::$records_by_board[$board_id] : array()
 		);
 	}
+
+
+
+	function duplicate ($task_id, $data = array())
+    {
+		// reset
+		unset($data['id']);
+		$data['created_dt_gmt'] = Kanban_Utils::mysql_now_gmt();
+		$data['modified_dt_gmt'] = Kanban_Utils::mysql_now_gmt();
+
+
+
+		// insert new task
+		$is_success = self::_duplicate( $task_id, $data );
+
+		if ( !$is_success ) return FALSE;
+
+
+
+		// get new id to set in meta
+		$new_task_id = self::_insert_id();
+
+
+
+		$taskmeta_table = Kanban_Taskmeta::table_name();
+
+		global $wpdb;
+
+		// get metarecords for original task to dupe
+		$meta = $wpdb->get_col(
+			$wpdb->prepare(
+				"SELECT id FROM $taskmeta_table WHERE task_id = %d",
+				$task_id
+			)
+		);
+
+
+
+		// build data for meta, set the new task id
+		$data = array(
+			'task_id' => $new_task_id,
+			'created_dt_gmt' => Kanban_Utils::mysql_now_gmt()
+		);
+
+		// dupe meta
+		foreach ( $meta as $meta_id )
+		{
+			Kanban_Taskmeta::duplicate($meta_id, $data);
+		}
+    }
 
 
 

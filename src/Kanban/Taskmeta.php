@@ -30,31 +30,8 @@ class Kanban_Taskmeta extends Kanban_Db
 
 	static function update( $task_id, $meta_key, $meta_value )
 	{
-		global $wpdb;
-
-
-
 		// delete existing record
 		self::delete($task_id, $meta_key);
-
-
-
-		// create new record
-//		$success = $wpdb->insert(
-//			self::table_name(),
-//			array(
-//				'meta_key'       => $meta_key,
-//				'meta_value'     => $meta_value,
-//				'created_dt_gmt' => Kanban_Utils::mysql_now_gmt(),
-//				'task_id'        => $task_id,
-//			),
-//			array(
-//				'%s',
-//				'%s',
-//				'%s',
-//				'%d'
-//			)
-//		);
 
 
 
@@ -63,7 +40,7 @@ class Kanban_Taskmeta extends Kanban_Db
 				'meta_key'       => $meta_key,
 				'meta_value'     => $meta_value,
 				'created_dt_gmt' => Kanban_Utils::mysql_now_gmt(),
-				'task_id'        => $task_id,
+				'task_id'        => $task_id
 			)
 		);
 
@@ -80,27 +57,13 @@ class Kanban_Taskmeta extends Kanban_Db
 
 
 
-		return $success;
+		return $is_successful;
 	}
 
 
 
 	static function delete( $task_id, $meta_key )
 	{
-		global $wpdb;
-
-
-
-		// delete existing record
-//		$success = $wpdb->delete(
-//			self::table_name(),
-//			array(
-//				'task_id'  => $task_id,
-//				'meta_key' => $meta_key
-//			)
-//		);
-
-
 		$is_successful = self::_delete(
 			array(
 				'task_id'  => $task_id,
@@ -108,9 +71,21 @@ class Kanban_Taskmeta extends Kanban_Db
 			)
 		);
 
+		return $is_successful;
+	}
 
 
-		return $success;
+
+
+	static function duplicate( $taskmeta_id, $data = array() )
+	{
+		// reset
+		unset($data['id']);
+		$data['created_dt_gmt'] = Kanban_Utils::mysql_now_gmt();
+
+		$is_successful = self::_duplicate( $taskmeta_id, $data );
+
+		return $is_successful;
 	}
 
 

@@ -95,6 +95,12 @@ class Kanban_Board extends Kanban_Db
 		{
 			$allowed_users = Kanban_User::get_allowed_users($board_id);
 
+			$allowed_users = apply_filters(
+				'kanban_board_set_board_data_allowed_users',
+				$allowed_users,
+				$board_id
+			);
+
 			if ( !isset($allowed_users[$wp_query->query_vars['kanban']->current_user_id]) ) continue;
 
 

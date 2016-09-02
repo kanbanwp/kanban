@@ -75,6 +75,23 @@
 						</td>
 					</tr>
 
+
+
+					<tr>
+						<th width="33%" scope="row">
+							<?php echo __( 'Show task IDs', 'kanban' ); ?>
+						</th>
+						<td>
+
+							<div class="switch-field">
+								<input type="radio" id="show_task_ids_1" name="settings[show_task_ids]" value="1" <?php echo (bool) $settings['show_task_ids'] ? 'checked' : ''; ?>>
+								<label for="show_task_ids_1">Yes</label>
+								<input type="radio" id="show_task_ids_0" name="settings[show_task_ids]" value="0" <?php echo ! (bool) $settings['show_task_ids'] ? 'checked' : ''; ?>>
+								<label for="show_task_ids_0">No</label>
+							</div>
+
+						</td>
+					</tr>
 <?php /*
 					<tr>
 						<th width="33%" scope="row">
@@ -126,7 +143,31 @@
 					'primary',
 					'submit-settings'
 			); ?>
+
+
+			<a href="#settings-general-advanced" class="slide-toggle"><?php echo __( 'Advanced settings', 'kanban' ); ?></a>
+
+			<div id="settings-general-advanced" style="display: none;">
+				<table class="form-table">
+					<tbody>
+					<tr>
+						<th width="33%" scope="row">
+							<label for="board_css">
+								<?php echo __( 'Board CSS', 'kanban' ); ?><br>
+								<small><?php echo __( 'Extra CSS that will applied to all boards', 'kanban' ); ?></small>
+							</label>
+						</th>
+						<td>
+							<textarea name="settings[board_css]" id="board_css" class="large-text" rows="4"><?php echo isset($settings['board_css']) ? $settings['board_css'] : '' ?></textarea>
+						</td>
+					</tr>
+					</tbody>
+				</table>
+			</div>
+
+
 		</div><!-- tab-settings -->
+
 
 
 

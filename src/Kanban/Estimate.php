@@ -189,7 +189,7 @@ class Kanban_Estimate extends Kanban_Db
 					hours decimal(8, 4) NOT NULL,
 					position bigint(20) NOT NULL,
 					board_id bigint(20) NOT NULL DEFAULT 1,
-					UNIQUE KEY  (id),
+					UNIQUE KEY id (id),
 					KEY board_id (board_id)
 				)';
 	} // db_table

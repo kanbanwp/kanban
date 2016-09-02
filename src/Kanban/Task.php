@@ -505,7 +505,7 @@ class Kanban_Task extends Kanban_Db
 					estimate_id bigint(20) NOT NULL,
 					board_id bigint(20) NOT NULL DEFAULT 1,
 					is_active BOOLEAN NOT NULL DEFAULT TRUE,
-					UNIQUE KEY  (id),
+					UNIQUE KEY id (id),
 					KEY is_active (is_active),
 					KEY board_id (board_id)
 				)';

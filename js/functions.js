@@ -72,6 +72,7 @@ function on_window_resize ()
 }
 
 
+
 function cookie_views ()
 {
 	var class_str = $('body').attr('class');
@@ -345,23 +346,25 @@ function growl_response_message (response)
 
 
 
-function growl (message)
+function growl (message, type)
 {
-	if ( typeof message === 'undefined' )
-	{
+	if ( typeof message === 'undefined' ) {
 		return;
 	}
 
-	if ( message == '' )
-	{
+	if ( message == '' ) {
 		return;
+	}
+
+	if ( 'undefined' === typeof type ) {
+		type = 'info';
 	}
 
 	// https://github.com/ifightcrime/bootstrap-growl/
 	$.bootstrapGrowl(
 		message,
 		{
-			type: 'info',
+			type: type,
 				allow_dismiss: true
 		}
 	);

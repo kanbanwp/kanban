@@ -309,7 +309,7 @@ class Kanban_Project extends Kanban_Db
 					modified_dt_gmt datetime NOT NULL,
 					is_active BOOLEAN NOT NULL DEFAULT TRUE,
 					board_id bigint(20) NOT NULL DEFAULT 1,
-					UNIQUE KEY  (id),
+					UNIQUE KEY id (id),
 					KEY is_active (is_active)
 				)';
 	} // db_table

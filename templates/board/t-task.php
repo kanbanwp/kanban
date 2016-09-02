@@ -3,8 +3,12 @@
 		<?php echo apply_filters( 'kanban_task_id_before', '', $board ); ?>
 
 		<div class="dropdown">
-			<a href="#" class="task-id btn btn-xs btn-default btn-block" data-toggle="dropdown">
+			<a href="#" class="task-id btn btn-xs btn-default btn-block" data-toggle="dropdown" title="Task #{{=task.id}}">
+{{show_task_ids}}
 				{{=task.id}}
+{{:show_task_ids}}
+				<span class="glyphicon glyphicon-menu-hamburger"></span>
+{{/show_task_ids}}
 			</a>
 {{current_user_can_write}}
 			<ul class="dropdown-menu dropdown-menu-right">

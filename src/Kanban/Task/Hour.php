@@ -143,7 +143,7 @@ class Kanban_Task_Hour extends Kanban_Db
 					status_id bigint(20) NOT NULL,
 					user_id_author bigint(20) NOT NULL,
 					user_id_worked bigint(20) NOT NULL,
-					UNIQUE KEY  (id)
+					UNIQUE KEY id (id)
 				)';
 	} // db_table
 

@@ -120,6 +120,12 @@ var updates_dt = new Date(<?php echo time() ?>000);
 	margin-left: -<?php echo $board->status_w ?>%;
 	width: <?php echo 100+($board->status_w*2) ?>%;
 }
+
+
+<?php if ( !empty($board->settings['board_css']) ) : ?>
+<?php echo $board->settings['board_css'] ?>
+<?php endif ?>
+
 <?php endforeach // boards ?>
 </style>
 

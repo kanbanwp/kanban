@@ -34,8 +34,8 @@ Task.prototype.build_el = function()
 		estimate_records: obj_order_by_prop(this.board().record.estimate_records(), 'position'),
 		project_records: this.board().record.project_records,
 		allowed_users: this.board().record.allowed_users(),
-		current_user_can_write: this.board().current_user().has_cap('write')
-		// hide_progress_bar: this.board().record.settings().hide_progress_bar
+		current_user_can_write: this.board().current_user().has_cap('write'),
+		show_task_ids: this.board().record.settings().show_task_ids == 1 ? true : false
 	});
 
 

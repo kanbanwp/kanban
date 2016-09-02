@@ -41,6 +41,8 @@ class Kanban_Option extends Kanban_Db
 		'status_auto_archive' => array(),
 		'status_auto_archive_days' => 30, // days
 		'hide_time_tracking' => 0,
+		'show_task_ids' => 0,
+		'board_css' => 0
 	);
 
 	// store the options on first load, to prevent mulitple db calls
@@ -77,7 +79,7 @@ class Kanban_Option extends Kanban_Db
 					name varchar(64) NOT NULL,
 					value longtext NOT NULL,
 					board_id bigint(20) NOT NULL DEFAULT 1,
-					UNIQUE KEY  (id)
+					UNIQUE KEY id (id)
 				)';
 	} // db_table
 

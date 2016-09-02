@@ -147,7 +147,7 @@ class Kanban_Comment extends Kanban_Db
 					comment_type varchar(64) NOT NULL,
 					description text NOT NULL,
 					user_id_author bigint(20) NOT NULL,
-					UNIQUE KEY  (id)
+					UNIQUE KEY id (id)
 				)';
 	} // db_table
 

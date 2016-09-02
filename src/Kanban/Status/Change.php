@@ -176,7 +176,7 @@ class Kanban_Status_Change extends Kanban_Db
 					status_id_old bigint(20) NOT NULL,
 					status_id_new bigint(20) NOT NULL,
 					user_id_author bigint(20) NOT NULL,
-					UNIQUE KEY  (id)
+					UNIQUE KEY id (id)
 				)';
 	} // db_table
 

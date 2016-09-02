@@ -12,55 +12,61 @@
 					<?php echo apply_filters( 'kanban_page_modal_keyboard_shortcuts_before', '' ); ?>
 
 					<dt>
-						shift + K
+						Shift + K
 					</dt>
 					<dd>
 						<?php echo __( 'Toggle keyboard shortcuts modal.', 'kanban' ); ?>
 					</dd>
 					<dt>
-						shift + C
+						Shift + C
 					</dt>
 					<dd>
 						<?php echo __( 'Toggle compact view mode.', 'kanban' ); ?>
 					</dd>
 					<dt>
-						shift + &larr;
+						Shift + U
+					</dt>
+					<dd>
+						<?php echo __( 'Toggle full screen mode.', 'kanban' ); ?>
+					</dd>
+					<dt>
+						Shift + &larr;
 					</dt>
 					<dd>
 						<?php echo __( 'Slide the current board columns to the left (if all columns are not shown).', 'kanban' ); ?>
 					</dd>
 					<dt>
-						shift + &rarr;
+						Shift + &rarr;
 					</dt>
 					<dd>
 						<?php echo __( 'Slide the current board columns to the right (if all columns are not shown).', 'kanban' ); ?>
 					</dd>
 					<dt>
-						shift + P
+						Shift + P
 					</dt>
 					<dd>
 						<?php echo __( 'Toggle projects modal.', 'kanban' ); ?>
 					</dd>
 					<dt>
-						shift + A
+						Shift + A
 					</dt>
 					<dd>
 						<?php echo __( 'Toggle showing all columns.', 'kanban' ); ?>
 					</dd>
 					<dt>
-						shift + S
+						Shift + S
 					</dt>
 					<dd>
 						<?php echo __( 'Jump to the search bar.', 'kanban' ); ?>
 					</dd>
 					<dt>
-						shift + F
+						Shift + F
 					</dt>
 					<dd>
 						<?php echo __( 'Toggle filter modal.', 'kanban' ); ?>
 					</dd>
 					<dt>
-						shift + enter
+						Shift + Enter
 					</dt>
 					<dd>
 						<?php echo __( 'Add a new line in the task title field (enter without shift will save your changes).', 'kanban' ); ?>

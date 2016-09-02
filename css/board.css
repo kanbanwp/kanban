@@ -124,6 +124,9 @@ sub {
       text-align: center; }
       .row-statuses .col-status h3 .status-task-count {
         color: #c6c6c6; }
+      .row-statuses .col-status h3 .status-wip-task-limit {
+        color: #c6c6c6;
+        margin-left: -.236em; }
     .row-statuses .col-status .btn-group-status-actions {
       bottom: 0;
       position: absolute;
@@ -192,8 +195,8 @@ sub {
       cursor: pointer; }
   .task .task-menu {
     position: absolute;
-    right: 9.9px;
-    top: 9.9px;
+    right: 5px;
+    top: 5px;
     z-index: 1; }
     .task .task-menu .dropdown {
       opacity: .618; }

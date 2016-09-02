@@ -258,6 +258,28 @@ $(function()
 
 
 
+	$('#btn-view-fullscreen').on(
+		'click',
+		function ()
+		{
+			var $btn = $(this);
+			if (screenfull.enabled) {
+				screenfull.toggle();
+				if ( $('.glyphicon:visible', $btn).length > 0 ) {
+					$('.glyphicon', $btn).css('display', 'none');
+				}
+				else {
+					$('.glyphicon', $btn).css('display', 'inline-block');
+				}
+
+
+			}
+			return false;
+		}
+	);
+
+
+
 	// http://stackoverflow.com/questions/1772035/filtering-a-list-as-you-type-with-jquery
 	// http://stackoverflow.com/questions/177719/javascript-case-insensitive-search
 	$('#board-search').on(
@@ -440,6 +462,19 @@ $(function()
 				if ( e.shiftKey )
 				{
 					$('#btn-view-all-cols').trigger('click');
+					return false;
+				}
+			}
+
+
+
+
+			// shift + u: toggle full screen
+			if( e.keyCode === 85 && $any_input.length === 0 )
+			{
+				if ( e.shiftKey )
+				{
+					$('#btn-view-fullscreen').trigger('click');
 					return false;
 				}
 			}

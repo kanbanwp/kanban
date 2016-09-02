@@ -21,10 +21,11 @@ class Kanban_Status extends Kanban_Db
 
 	// define db table columns and their validation type
 	protected static $table_columns = array(
-		'title'     => 'text',
-		'color_hex' => 'text',
-		'board_id'  => 'int',
-		'position'  => 'int'
+		'title'     		=> 'text',
+		'color_hex'	 		=> 'text',
+		'board_id'  		=> 'int',
+		'position'  		=> 'int',
+		'wip_task_limit'	=> 'int'
 	);
 
 	protected static $records = array();
@@ -132,6 +133,7 @@ class Kanban_Status extends Kanban_Db
 			foreach ( $_POST['statuses']['new'] as $status )
 			{
 				$status['board_id'] = $current_board->id;
+
 				// save it
 				$success = Kanban_Status::replace( $status );
 
@@ -169,9 +171,10 @@ class Kanban_Status extends Kanban_Db
 					id bigint(20) NOT NULL AUTO_INCREMENT,
 					title varchar(64) NOT NULL,
 					color_hex varchar(7) NOT NULL,
+					wip_task_limit bigint(20) NOT NULL DEFAULT 0,
 					position bigint(20) NOT NULL,
 					board_id bigint(20) NOT NULL DEFAULT 1,
-					UNIQUE KEY  (id),
+					UNIQUE KEY id (id),
 					KEY board_id (board_id)
 				)';
 	} // db_table

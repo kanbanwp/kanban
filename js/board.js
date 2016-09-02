@@ -234,6 +234,25 @@ Board.prototype.dom = function()
 
 
 
+			// just in case, use 0
+			var wip_task_limit = 0;
+			if ( 'undefined' !== typeof status_new.wip_task_limit ) {
+				wip_task_limit = status_new.wip_task_limit;
+			}
+
+			if ( wip_task_limit > 0 ) {
+				var status_task_count = $('#status-' + status_id_new + ' .status-task-count').text();
+
+				if ( status_task_count >= wip_task_limit )
+				{
+					$(ui.sender).sortable('cancel');
+					growl (kanban.text.status_wip_task_limit_error, 'warning');
+					return false;
+				}
+			}
+
+
+
 			var comment = kanban.text.task_moved_to_status.sprintf(
 								self.current_user().record().short_name,
 								status_new.title
@@ -364,6 +383,25 @@ Board.prototype.dom = function()
 
 			// get status we're going to add it to
 			var status_id = $btn.attr('data-status-id');
+
+
+
+			var status = self.record.status_records()[status_id];
+
+			// just in case, use 0
+			var wip_task_limit = 0;
+			if ( 'undefined' !== typeof status.wip_task_limit ) {
+				wip_task_limit = status.wip_task_limit;
+			}
+
+			if ( wip_task_limit > 0 ) {
+				var status_task_count = $('#status-' + status_id + ' .status-task-count').text();
+				if ( status_task_count >= wip_task_limit )
+				{
+					growl( kanban.text.status_wip_task_limit_error, 'warning' );
+					return false;
+				}
+			}
 
 
 
@@ -571,15 +609,21 @@ Board.prototype.dom = function()
 
 
 
+// update the task count in each column header
 Board.prototype.updates_status_counts = function()
 {
+	// loop over each column
 	$('.col-tasks', this.$el).each(function()
 	{
 		var $col = $(this);
+
+		// get count of tasks
 		var count = $('.task', $col).length;
 
+		// get the status id
 		var status_id = $col.attr('data-status-id');
 
+		// update count
 		$('#status-' + status_id + ' .status-task-count').text(count);
 	});
 }; // updates_status_counts

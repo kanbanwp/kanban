@@ -121,7 +121,7 @@ class Kanban_Taskmeta extends Kanban_Db
 			created_dt_gmt datetime NOT NULL,
 			meta_key varchar(255) DEFAULT NULL,
 			meta_value longtext,
-			UNIQUE KEY  (id),
+			UNIQUE KEY id (id),
 			KEY task_id (task_id),
 			KEY meta_key (meta_key)
 			)";

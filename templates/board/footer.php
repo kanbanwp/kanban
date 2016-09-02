@@ -46,6 +46,12 @@
 								<?php echo __('Compact View', 'kanban') ?>
 							</a>
 						</li>
+						<li>
+							<a href="#" class="btn-view-toggle" id="btn-view-fullscreen" title="shift + U">
+								<span class="glyphicon glyphicon-ok"></span>
+								<?php echo __('Full Screen', 'kanban') ?>
+							</a>
+						</li>
 						<li class="divider"></li>
 						<?php echo apply_filters( 'kanban_page_footer_menu_dropup', '' ); ?>
 

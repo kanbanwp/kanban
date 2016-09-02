@@ -23,6 +23,7 @@ class Kanban_Template
 				'bootstrap-growl' => '%sjs/min/jquery.bootstrap-growl-min.js',
 				'matchHeight' => '%sjs/min/jquery.matchHeight-min.js',
 				'cookie' => '%sjs/min/js.cookie-min.js',
+				'screenfull' => '%sjs/min/screenfull-min.js',
 				't' => '%sjs/min/t-min.js',
 				'modal-projects' => '%sjs/min/modal-projects-min.js',
 				'user' => '%sjs/min/user-min.js',
@@ -178,7 +179,9 @@ class Kanban_Template
 		self::$page_slugs = apply_filters( 'kanban_template_chooser_slugs', self::$page_slugs );
 
 
+
 		if ( !isset(self::$page_slugs[$slug]) ) return;
+
 
 
 		$continue = self::protect_slug($slug);

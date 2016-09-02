@@ -191,6 +191,11 @@ sub {
 			.status-task-count {
 				color: lighten($color-grey-wp, 50);
 			}
+
+			.status-wip-task-limit {
+				color: lighten($color-grey-wp, 50);
+			  margin-left: -.236em;
+		  	}
 		}
 
 		.btn-group-status-actions {
@@ -304,8 +309,8 @@ sub {
 
 	.task-menu {
 		position: absolute;
-		right: $margin*.66;
-		top: $margin*.66;
+		right: $margin/3;
+		top: $margin/3;
 		z-index: 1;
 
 		.dropdown {

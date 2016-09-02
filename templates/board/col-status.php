@@ -9,6 +9,9 @@
 	<h3 class="h4" style="border-color: <?php echo $status->color_hex ?>">
 		<?php echo $status->title ?>
 		<sup class="status-task-count"></sup>
+<?php if ( $status->wip_task_limit > 0 ) : ?>
+		<sup class="status-wip-task-limit">/<?php echo $status->wip_task_limit ?></sup>
+<?php endif // wip_task_limit ?>
 	</h3>
 	<div class="btn-group btn-group-status-actions" style="display: none;">
 		<button type="button" class="btn btn-primary btn-task-new" data-status-id="<?php echo $status_id ?>">

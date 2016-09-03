@@ -26,7 +26,7 @@ class Kanban_Admin
 	static function init()
 	{
 		// redirect to welcome screen on activation
-		add_action( 'admin_init', array( __CLASS__, 'welcome_screen_do_activation_redirect' ) );
+		add_action( 'admin_init', array( __CLASS__, 'screen_do_activation_redirect' ) );
 
 		// add settings link
 		add_filter(
@@ -444,16 +444,16 @@ class Kanban_Admin
 
 	// redirect to welcome page
 	// @link http://premium.wpmudev.org/blog/tabbed-interface/
-	static function welcome_screen_do_activation_redirect()
+	static function screen_do_activation_redirect()
 	{
 		// Bail if no activation redirect
-		if ( ! get_transient( sprintf( '_%s_welcome_screen_activation_redirect', Kanban::get_instance()->settings->basename ) ) )
+		if ( ! get_transient( sprintf( '_%s_screen_activation_redirect', Kanban::get_instance()->settings->basename ) ) )
 		{
 			return;
 		}
 
 		// Delete the redirect transient
-		delete_transient( sprintf( '_%s_welcome_screen_activation_redirect', Kanban::get_instance()->settings->basename ) );
+		delete_transient( sprintf( '_%s_screen_activation_redirect', Kanban::get_instance()->settings->basename ) );
 
 		// Bail if activating from network, or bulk
 		if ( is_network_admin() || isset( $_GET['activate-multi'] ) )
@@ -465,7 +465,7 @@ class Kanban_Admin
 		wp_safe_redirect(
 			add_query_arg(
 				array(
-					'page'       => sprintf( '%s_welcome', Kanban::get_instance()->settings->basename ),
+					'page'       => Kanban::get_instance()->settings->basename,
 					'activation' => '1'
 				),
 				admin_url( 'admin.php' )

@@ -2,16 +2,14 @@
 /*
 Plugin Name:		Kanban for WordPress
 Plugin URI:			http://kanbanwp.com/
-Description:		A complete project management suite for WordPress.
-Version:			2.1.10
-Release Date:		August 26, 2016
+Description:		A complete Kanban project management suite for WordPress.
+Version:			2.2.0
+Release Date:		September 3, 2016
 Author:				Gelform Inc
 Author URI:			http://gelwp.com
 License:			GPL2
 Text Domain:		kanban
 Domain Path: 		/languages/
-
-
 
 Kanban is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -24,8 +22,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
-along with Kanban. if not, write to the Free Software
-Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+along with Kanban. If not, see <http://www.gnu.org/licenses/>.
 
 */
 

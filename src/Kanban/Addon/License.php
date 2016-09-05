@@ -106,10 +106,10 @@ class Kanban_Addon_License
 
 	public function is_licenses_page()
 	{
-		if ( !isset($GLOBALS['submenu']['kanban_welcome']) ) return;
+		if ( !isset($GLOBALS['submenu']['kanban']) ) return;
 
 		$is_licenses_page = FALSE;
-		foreach ( $GLOBALS['submenu']['kanban_welcome'] as $subpage)
+		foreach ( $GLOBALS['submenu']['kanban'] as $subpage)
 		{
 
 			foreach ($subpage as $option)
@@ -125,7 +125,7 @@ class Kanban_Addon_License
 		if ( !$is_licenses_page )
 		{
 			add_submenu_page(
-				'kanban_welcome',
+				'kanban',
 				'Licenses',
 				'Licenses',
 				'manage_options',

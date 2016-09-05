@@ -58,7 +58,9 @@
 		}
 
 		label {
-			margin: 0 3em;
+		  	display: inline-block;
+			margin: 0 2em 0 0;
+		  	text-align: left;
 			white-space: nowrap;
 		}
 	}

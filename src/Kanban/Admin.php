@@ -163,7 +163,7 @@ class Kanban_Admin
 
 			try
 			{
-				$addons = json_decode( $response['body'] );
+				$addons = @json_decode( $response['body'] );
 			}
 			catch ( Exception $e )
 			{

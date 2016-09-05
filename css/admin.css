@@ -42,7 +42,9 @@
     .sortable li .delete:hover {
       opacity: 1; }
   .sortable li label {
-    margin: 0 3em;
+    display: inline-block;
+    margin: 0 2em 0 0;
+    text-align: left;
     white-space: nowrap; }
 
 .switch-field .switch-title {
@@ -99,3 +101,5 @@
 @media only screen and (max-width: 960px) {
   .form-table label {
     color: black !important; } }
+
+/*# sourceMappingURL=admin.css.map */

@@ -3,7 +3,7 @@
 
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) ) { exit; }
 
 
 
@@ -12,16 +12,15 @@ class Kanban_Addon_License
 	private $parent;
 
 
-	public function __construct ($parent)
-	{
+	public function __construct( $parent ) {
 
 		$this->parent = $parent;
 
-		$parent::$options[$this->get_license_name()] = '';
+		$parent::$options[ $this->get_license_name() ] = '';
 
 		add_action(
-			"after_plugin_row_" . $parent::$plugin_basename,
-			array($this, 'add_license_check_plugins_page'),
+			'after_plugin_row_' . $parent::$plugin_basename,
+			array( $this, 'add_license_check_plugins_page' ),
 			100,
 			3
 		);
@@ -31,22 +30,21 @@ class Kanban_Addon_License
 		// add add-on settings to settings page
 		add_filter(
 			'kanban_licenses_licenses',
-			array($this, 'add_settings_license')
+			array( $this, 'add_settings_license' )
 		);
 
 		add_action(
 			'kanban_license_save_settings_before',
-			array($this, 'check_license')
+			array( $this, 'check_license' )
 		);
 
-		$parent::$update_checker->addQueryArgFilter(array($this, 'add_license_to_request'));
-		$parent::$update_checker->addHttpRequestArgFilter(array($this, 'add_license_to_request'));
+		$parent::$update_checker->addQueryArgFilter( array( $this, 'add_license_to_request' ) );
+		$parent::$update_checker->addHttpRequestArgFilter( array( $this, 'add_license_to_request' ) );
 	}
 
 
 
-	public function add_license_to_request($args)
-	{
+	public function add_license_to_request( $args ) {
 		$license = $this->get_license();
 		$args['license_key'] = $license;
 
@@ -58,23 +56,21 @@ class Kanban_Addon_License
 
 
 
-	public function get_license_name ()
-	{
+	public function get_license_name() {
 		$parent = $this->parent;
 		return 'license_' . $parent::$slug;
 	}
 
 
 
-	public function add_license_check_plugins_page ($plugin_file, $plugin_data, $status)
-	{
+	public function add_license_check_plugins_page( $plugin_file, $plugin_data, $status ) {
 		$parent = $this->parent;
 		$license = $this->get_license();
 
-		if ( !empty($license) ) return;
+		if ( ! empty( $license ) ) { return; }
 
-		$is_newer = FALSE;
-		if ( isset($plugin_data['Version']) && isset($plugin_data['new_version']) ) {
+		$is_newer = false;
+		if ( isset( $plugin_data['Version'] ) && isset( $plugin_data['new_version'] ) ) {
 
 			$is_newer = version_compare( $plugin_data['Version'], $plugin_data['new_version'], '<' );
 		}
@@ -85,7 +81,7 @@ class Kanban_Addon_License
 			<td colspan="3" class="plugin-update colspanchange">
 				<div class="update-message notice inline notice-error notice-alt">
 					<p>
-						You have not entered a license yet. To get updates, please add your license to <a href="<?php echo admin_url('admin.php?page=kanban_licenses') ?>#tab-licenses">Kanban &gt; Licenses</a>!
+						You have not entered a license yet. To get updates, please add your license to <a href="<?php echo admin_url( 'admin.php?page=kanban_licenses' ) ?>#tab-licenses">Kanban &gt; Licenses</a>!
 					</p>
 				</div>
 			</td>
@@ -104,26 +100,21 @@ class Kanban_Addon_License
 
 
 
-	public function is_licenses_page()
-	{
-		if ( !isset($GLOBALS['submenu']['kanban']) ) return;
+	public function is_licenses_page() {
+		if ( ! isset( $GLOBALS['submenu']['kanban'] ) ) { return; }
 
-		$is_licenses_page = FALSE;
-		foreach ( $GLOBALS['submenu']['kanban'] as $subpage)
-		{
+		$is_licenses_page = false;
+		foreach ( $GLOBALS['submenu']['kanban'] as $subpage ) {
 
-			foreach ($subpage as $option)
-			{
-				if ( $option == 'kanban_licenses' )
-				{
-					$is_licenses_page = TRUE;
+			foreach ( $subpage as $option ) {
+				if ( $option == 'kanban_licenses' ) {
+					$is_licenses_page = true;
 					break 2;
 				}
 			}
 		}
 
-		if ( !$is_licenses_page )
-		{
+		if ( ! $is_licenses_page ) {
 			add_submenu_page(
 				'kanban',
 				'Licenses',
@@ -143,8 +134,7 @@ class Kanban_Addon_License
 	 *
 	 * @return Html returned to the page
 	 */
-	public function add_settings_license ($val)
-	{
+	public function add_settings_license( $val ) {
 		$parent = $this->parent;
 
 		$license = $this->get_license();
@@ -168,16 +158,13 @@ class Kanban_Addon_License
 		$html_output = ob_get_contents();
 		ob_end_clean();
 
-
-
 		return $val . $html_output;
 
 	}
 
 
 
-	public function get_license ()
-	{
+	public function get_license() {
 		global $wpdb;
 
 		$parent = $this->parent;
@@ -197,41 +184,30 @@ class Kanban_Addon_License
 
 
 
-	public function check_license ()
-	{
+	public function check_license() {
 		$parent = $this->parent;
 
 		// check nonce
-		if (  !isset( $_POST[Kanban_Utils::get_nonce()] ) || ! wp_verify_nonce( $_POST[Kanban_Utils::get_nonce()], 'kanban-licenses') || !is_user_logged_in() ) return;
+		if ( ! isset( $_POST[ Kanban_Utils::get_nonce() ] ) || ! wp_verify_nonce( $_POST[ Kanban_Utils::get_nonce() ], 'kanban-licenses' ) || ! is_user_logged_in() ) { return; }
 
 		// make sure the license is set
-		if ( !isset($_POST['settings']['license_' . $parent::$slug]) || empty($_POST['settings']['license_' . $parent::$slug]) ) return;
-
-
+		if ( ! isset( $_POST['settings'][ 'license_' . $parent::$slug ] ) || empty( $_POST['settings'][ 'license_' . $parent::$slug ] ) ) { return; }
 
 		// get current license
 		$license = $this->get_license();
 
 		// don't send if the same
-		if ( $license == $_POST['settings']['license_' . $parent::$slug] ) return;
+		if ( $license == $_POST['settings'][ 'license_' . $parent::$slug ] ) { return; }
 
-
-
-		try
-		{
+		try {
 			wp_remote_get(sprintf(
 				'https://kanbanwp.com/?action=license-check&license=%s&url=%s&addon=%s',
-				$_POST['settings']['license_' . $parent::$slug],
+				$_POST['settings'][ 'license_' . $parent::$slug ],
 				site_url(),
 				$parent::$slug
 			));
-		}
-		catch (Exception $e) {}
+		} catch (Exception $e) {}
 	}
-
-
-
-
 }
 
 

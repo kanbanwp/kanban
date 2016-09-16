@@ -422,6 +422,11 @@ function format_hours (h)
 
 function obj_order_by_key(obj, reverse)
 {
+	if ( 'undefined' === typeof obj )
+	{
+		return false;
+	}
+
 	if ( typeof reverse === 'undefined')
 	{
 		reverse = false;

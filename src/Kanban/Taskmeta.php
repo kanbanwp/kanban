@@ -3,14 +3,11 @@
 
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) ) { exit; }
 
 
 
 // Kanban_Taskmeta::init();
-
-
-
 class Kanban_Taskmeta extends Kanban_Db
 {
 	// the common name for this class
@@ -24,13 +21,12 @@ class Kanban_Taskmeta extends Kanban_Db
 		'meta_key' => 'text',
 	 	'meta_value' => 'text',
 	 	'created_dt_gmt' => 'datetime',
-		'task_id' => 'int'
+		'task_id' => 'int',
 	);
 
 
 
-	static function get_one ($task_id, $meta_key)
-	{
+	static function get_one( $task_id, $meta_key ) {
 		global $wpdb;
 
 		$table_name = self::table_name();
@@ -43,53 +39,44 @@ class Kanban_Taskmeta extends Kanban_Db
 
 		$sql = apply_filters( 'kanban_taskmeta_get_one_sql', $sql );
 
-		$record = $wpdb->get_row($sql);
+		$record = $wpdb->get_row( $sql );
 
 		return $record;
 	}
 
 
 
-	static function update( $task_id, $meta_key, $meta_value )
-	{
+	static function update( $task_id, $meta_key, $meta_value ) {
 		// delete existing record
-		self::delete($task_id, $meta_key);
-
-
+		self::delete( $task_id, $meta_key );
 
 		$is_successful = self::_insert(
 			array(
 				'meta_key'       => $meta_key,
 				'meta_value'     => $meta_value,
 				'created_dt_gmt' => Kanban_Utils::mysql_now_gmt(),
-				'task_id'        => $task_id
+				'task_id'        => $task_id,
 			)
 		);
-
-
-
 
 		// update modified data
 		Kanban_Task::update(
 			$task_id,
 			array(
-				'modified_dt_gmt' => Kanban_Utils::mysql_now_gmt()
+				'modified_dt_gmt' => Kanban_Utils::mysql_now_gmt(),
 			)
 		);
-
-
 
 		return $is_successful;
 	}
 
 
 
-	static function delete( $task_id, $meta_key )
-	{
+	static function delete( $task_id, $meta_key ) {
 		$is_successful = self::_delete(
 			array(
 				'task_id'  => $task_id,
-				'meta_key' => $meta_key
+				'meta_key' => $meta_key,
 			)
 		);
 
@@ -99,10 +86,9 @@ class Kanban_Taskmeta extends Kanban_Db
 
 
 
-	static function duplicate( $taskmeta_id, $data = array() )
-	{
+	static function duplicate( $taskmeta_id, $data = array() ) {
 		// reset
-		unset($data['id']);
+		unset( $data['id'] );
 		$data['created_dt_gmt'] = Kanban_Utils::mysql_now_gmt();
 
 		$is_successful = self::_duplicate( $taskmeta_id, $data );
@@ -113,8 +99,7 @@ class Kanban_Taskmeta extends Kanban_Db
 
 
 	// define the db schema
-	static function db_table()
-	{
+	static function db_table() {
 		return 'CREATE TABLE ' . self::table_name() . " (
 			id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
 			task_id bigint(20) unsigned NOT NULL DEFAULT '0',

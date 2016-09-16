@@ -3,29 +3,24 @@
 
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) ) { exit; }
 
 
 
-//Kanban_Db::init();
-
-
-
+// Kanban_Db::init();
 abstract class Kanban_Db
 {
 	static $installed_ver;
 
 
 
-	static function init()
-	{
+	static function init() {
 		add_action( 'plugins_loaded', array( __CLASS__, 'check_for_updates' ) );
 	}
 
 
 
-	private static function _fetch_sql( $key, $value )
-	{
+	private static function _fetch_sql( $key, $value ) {
 		global $wpdb;
 		$sql = sprintf(
 			'SELECT * FROM %s WHERE %s = %%s',
@@ -39,8 +34,7 @@ abstract class Kanban_Db
 
 
 
-	protected static function _get_row( $key, $value )
-	{
+	protected static function _get_row( $key, $value ) {
 		global $wpdb;
 		return $wpdb->get_row( self::_fetch_sql( $key, $value ) );
 	}
@@ -50,28 +44,19 @@ abstract class Kanban_Db
 
 	// protected static function _get_all( $sql )
 	// {
-	// 	global $wpdb;
-	// 	$records = $wpdb->get_results( $sql, OBJECT );
-
-	// 	return $records;
+	// global $wpdb;
+	// $records = $wpdb->get_results( $sql, OBJECT );
+	// return $records;
 	// }
-
-
-
-
-	protected static function _replace( $data )
-	{
+	protected static function _replace( $data ) {
 		$data = self::sanitize_data( $data );
 
-		if ( isset( $data->data['id'] ) && (int) $data->data['id'] > 0 )
-		{
+		if ( isset( $data->data['id'] ) && (int) $data->data['id'] > 0 ) {
 			$success = (bool) self::_update(
-						$data->data,
-						array( 'id' => $data->data['id'] )
-					);
-		}
-		else
-		{
+				$data->data,
+				array( 'id' => $data->data['id'] )
+			);
+		} else {
 			$success = (bool) self::_insert( $data->data );
 		}
 
@@ -80,8 +65,7 @@ abstract class Kanban_Db
 
 
 
-	protected static function _insert( $data )
-	{
+	protected static function _insert( $data ) {
 		$data = self::sanitize_data( $data );
 
 		global $wpdb;
@@ -92,8 +76,7 @@ abstract class Kanban_Db
 
 
 
-	protected static function _update( $data, $where )
-	{
+	protected static function _update( $data, $where ) {
 		$data = self::sanitize_data( $data );
 
 		global $wpdb;
@@ -104,8 +87,7 @@ abstract class Kanban_Db
 
 
 
-	protected static function _delete( $where )
-	{
+	protected static function _delete( $where ) {
 		global $wpdb;
 		$success = $wpdb->delete( static::table_name(), $where );
 	}
@@ -113,16 +95,15 @@ abstract class Kanban_Db
 
 
 
-	protected function _duplicate ($id, $data = array())
-	{
+	protected function _duplicate( $id, $data = array() ) {
 		global $wpdb;
-		$record = (array) self::_get_row('id', $id);
+		$record = (array) self::_get_row( 'id', $id );
 
 		// reset
-		unset($record['id']);
+		unset( $record['id'] );
 
 		// update with different values
-		$record = array_merge($record, $data);
+		$record = array_merge( $record, $data );
 
 		// insert new record
 		return self::_insert( $record );
@@ -130,140 +111,116 @@ abstract class Kanban_Db
 
 
 	// get last inserted id
-	protected static function _insert_id()
-	{
+	protected static function _insert_id() {
 		global $wpdb;
 		return $wpdb->insert_id;
 	}
 
 
 
-	static function time_to_date( $time )
-	{
+	static function time_to_date( $time ) {
 		return gmdate( 'Y-m-d H:i:s', $time );
 	}
 
 
 
-	static function now()
-	{
+	static function now() {
 		return self::time_to_date( time() );
 	}
 
 
 
-	static function date_to_time( $date )
-	{
+	static function date_to_time( $date ) {
 		return strtotime( $date . ' GMT' );
 	}
 
 
 
-	public static function table_name()
-	{
+	public static function table_name() {
 		return Kanban_Db::format_table_name( static::$table_name );
 	}
 
 
 
-	static function sanitize_data( $data )
-	{
+	static function sanitize_data( $data ) {
 		$good_data = array();
 		$format = array();
-		foreach ( $data as $key => $value )
-		{
-			if ( $key == 'id' )
-			{
-				if ( ! is_numeric( $value ) ) continue;
+		foreach ( $data as $key => $value ) {
+			if ( $key == 'id' ) {
+				if ( ! is_numeric( $value ) ) { continue; }
 
 				$value = intval( $value );
-				if ( empty( $value ) ) continue;
+				if ( empty( $value ) ) { continue; }
 
-				$good_data[$key] = $value;
+				$good_data[ $key ] = $value;
 				$format[] = '%d';
 
 				continue;
 			}
 
-			if ( !isset(static::$table_columns) || !isset(static::$table_columns[$key]) ) continue;
+			if ( ! isset( static::$table_columns ) || ! isset( static::$table_columns[ $key ] ) ) { continue; }
 
-			switch ( static::$table_columns[$key] )
-			{
+			switch ( static::$table_columns[ $key ] ) {
 				case 'bool':
 					$value = (bool) $value;
 
-					$good_data[$key] = $value;
+					$good_data[ $key ] = $value;
 					$format[] = '%d';
 
 					break;
 
-
-
 				case 'float':
-					if ( ! is_numeric( $value ) ) continue;
+					if ( ! is_numeric( $value ) ) { continue; }
 
 					$value = floatval( $value );
-					if ( empty( $value ) ) continue;
+					if ( empty( $value ) ) { continue; }
 
-					$good_data[$key] = $value;
+					$good_data[ $key ] = $value;
 					$format[] = '%f';
 
 					break;
 
-
-
 				case 'int':
-					if ( ! is_numeric( $value ) ) continue;
+					if ( ! is_numeric( $value ) ) { continue; }
 
 					$value = intval( $value );
 
-					if ( ! is_int( $value ) ) continue;
+					if ( ! is_int( $value ) ) { continue; }
 
-					$good_data[$key] = $value;
+					$good_data[ $key ] = $value;
 					$format[] = '%d';
 
 					break;
 
-
-
 				case 'text':
-//					$good_data[$key] = sanitize_text_field( $value );
-
+					// $good_data[$key] = sanitize_text_field( $value );
 					// @link https://developer.wordpress.org/reference/functions/sanitize_text_field/
 					$value = wp_check_invalid_utf8( $value );
 					$value = wp_pre_kses_less_than( $value );
-					$good_data[$key] = $value;
+					$good_data[ $key ] = $value;
 					$format[] = '%s';
 
 					break;
 
-
-
 				case 'datetime':
-					if ( is_a( $value, 'DateTime' ) )
-					{
-						$good_data[$key] = $value->format( 'Y-m-d H:i:s' );
+					if ( is_a( $value, 'DateTime' ) ) {
+						$good_data[ $key ] = $value->format( 'Y-m-d H:i:s' );
 						$format[] = '%s';
-					}
-					elseif ( ($timestamp = strtotime( $value )) !== FALSE )
-					{
+					} elseif ( ($timestamp = strtotime( $value )) !== false ) {
 						$dt = new DateTime( $value );
-						$good_data[$key] = $dt->format( 'Y-m-d H:i:s' );
+						$good_data[ $key ] = $dt->format( 'Y-m-d H:i:s' );
 						$format[] = '%s';
 					}
 
 					break;
 			} // switch
 
-
 		}
-
 
 		return (object) array(
 			'data'   => $good_data,
-			'format' => $format
+			'format' => $format,
 		);
-
 
 	}
 
@@ -272,9 +229,8 @@ abstract class Kanban_Db
 	/**
 	 * @link http://mac-blog.org.ua/wordpress-custom-database-table-example-full/
 	 */
-	static function check_for_updates()
-	{
-		if ( version_compare(self::installed_ver(), Kanban::get_instance()->settings->plugin_data['Version']) === 0 ) return FALSE;
+	static function check_for_updates() {
+		if ( version_compare( self::installed_ver(), Kanban::get_instance()->settings->plugin_data['Version'] ) === 0 ) { return false; }
 
 		global $charset_collate, $wpdb;
 
@@ -290,11 +246,10 @@ abstract class Kanban_Db
 			'Kanban_Status',
 			'Kanban_Task',
 			'Kanban_Taskmeta',
-			'Kanban_Task_Hour'
+			'Kanban_Task_Hour',
 		);
 
-		foreach ( $classes_with_tables as $class )
-		{
+		foreach ( $classes_with_tables as $class ) {
 			$sql = $class::db_table();
 
 			$sql = sprintf( '%s %s;', $sql, $charset_collate );
@@ -303,11 +258,7 @@ abstract class Kanban_Db
 			dbDelta( $sql );
 		}
 
-
-
 		Kanban_Db::add_defaults();
-
-
 
 		// make sure every task has a board
 		$boards_table = Kanban_Board::table_name();
@@ -319,16 +270,13 @@ abstract class Kanban_Db
 
 		$board_id = $wpdb->get_var( $sql );
 
-
-
 		$classes_with_board_id = array(
 			'Kanban_Estimate',
 			'Kanban_Status',
 			'Kanban_Task',
 		);
 
-		foreach ( $classes_with_board_id as $class )
-		{
+		foreach ( $classes_with_board_id as $class ) {
 			$table = $class::table_name();
 
 			$sql = "UPDATE $table
@@ -340,20 +288,14 @@ abstract class Kanban_Db
 			$wpdb->query( $sql );
 		}
 
-
-
-
 		// save db version to avoid updates
-		update_option('kanban_db_version', Kanban::get_instance()->settings->plugin_data['Version'] );
+		update_option( 'kanban_db_version', Kanban::get_instance()->settings->plugin_data['Version'] );
 	}
 
 
 
-	static function add_defaults()
-	{
+	static function add_defaults() {
 		global $wpdb;
-
-
 
 		$boards_table = Kanban_Board::table_name();
 
@@ -363,21 +305,17 @@ abstract class Kanban_Db
 
 		$boards_count = $wpdb->get_var( $sql );
 
-
-
-		if ( $boards_count == 0 )
-		{
+		if ( $boards_count == 0 ) {
 			$data = array(
 				'title'           => 'Kanban board',
 				'created_dt_gmt'  => Kanban_Utils::mysql_now_gmt(),
 				'modified_dt_gmt' => Kanban_Utils::mysql_now_gmt(),
 				'user_id_author'  => get_current_user_id(),
-				'is_active'       => 1
+				'is_active'       => 1,
 			);
 
 			Kanban_Board::replace( $data );
 		}
-
 
 		// get first board for task
 		$sql = "SELECT `id`
@@ -388,17 +326,11 @@ abstract class Kanban_Db
 
 		$board_id = $wpdb->get_var( $sql );
 
-
-
 		$allowed_users = kanban_Option::get_option( 'allowed_users', $board_id );
 
-		if ( empty($allowed_users ) )
-		{
-			Kanban_Option::update_option('allowed_users', array(get_current_user_id()), $board_id);
+		if ( empty( $allowed_users ) ) {
+			Kanban_Option::update_option( 'allowed_users', array( get_current_user_id() ), $board_id );
 		}
-
-
-
 
 		$status_table = Kanban_Status::table_name();
 
@@ -408,34 +340,29 @@ abstract class Kanban_Db
 
 		$status_count = $wpdb->get_var( $sql );
 
-
-
-		if ( $status_count == 0 )
-		{
+		if ( $status_count == 0 ) {
 			$statuses = array(
 				'Backlog'     => '#8224e3',
 				'Ready'       => '#eeee22',
 				'In progress' => '#81d742',
 				'QA'          => '#f7a738',
 				'Done'        => '#1e73be',
-				'Archive'     => '#333333'
+				'Archive'     => '#333333',
 			);
 
 			$i = 0;
-			foreach ( $statuses as $status => $color )
-			{
+			foreach ( $statuses as $status => $color ) {
 				$data = array(
 					'title'     => $status,
 					'color_hex' => $color,
 					'position'  => $i,
-					'board_id'  => $board_id
+					'board_id'  => $board_id,
 				);
 
 				Kanban_Status::replace( $data );
 
 				$i++;
 			}
-
 		}
 
 		// get second status for task
@@ -447,8 +374,6 @@ abstract class Kanban_Db
 
 		$status_id = $wpdb->get_var( $sql );
 
-
-
 		$estimate_table = Kanban_Estimate::table_name();
 
 		$sql = "SELECT count(`id`)
@@ -457,21 +382,17 @@ abstract class Kanban_Db
 
 		$estimate_count = $wpdb->get_var( $sql );
 
-
-
-		if ( $estimate_count == 0 )
-		{
+		if ( $estimate_count == 0 ) {
 			$estimates = array(
 					'2'  => '2h',
 					'4'  => '4h',
 					'8'  => '1d',
 					'16' => '2d',
-					'32' => '4d'
+					'32' => '4d',
 				);
 
 			$i = 0;
-			foreach ( $estimates as $hours => $title )
-			{
+			foreach ( $estimates as $hours => $title ) {
 				$data = array(
 					'title'    => $title,
 					'hours'    => $hours,
@@ -485,8 +406,6 @@ abstract class Kanban_Db
 			}
 		}
 
-
-
 		$tasks_table = Kanban_Task::table_name();
 
 		$sql = "SELECT count(`id`)
@@ -495,10 +414,7 @@ abstract class Kanban_Db
 
 		$tasks_count = $wpdb->get_var( $sql );
 
-
-
-		if ( $tasks_count == 0 )
-		{
+		if ( $tasks_count == 0 ) {
 			$data = array(
 				'title'           => 'Your first task',
 				'board_id'        => $board_id,
@@ -506,13 +422,11 @@ abstract class Kanban_Db
 				'created_dt_gmt'  => Kanban_Utils::mysql_now_gmt(),
 				'modified_dt_gmt' => Kanban_Utils::mysql_now_gmt(),
 				'user_id_author'  => get_current_user_id(),
-				'is_active'       => 1
+				'is_active'       => 1,
 			);
 
 			Kanban_Task::replace( $data );
 		}
-
-
 
 		$options_table = Kanban_Option::table_name();
 
@@ -523,18 +437,14 @@ abstract class Kanban_Db
 		$options = $wpdb->get_results( $sql );
 
 		$options_arr = array();
-		foreach ( $options as $option )
-		{
-			$options_arr[$option->name] = $option->value;
+		foreach ( $options as $option ) {
+			$options_arr[ $option->name ] = $option->value;
 		}
-
-
 
 		$defaults = Kanban_Option::get_defaults();
 
-		foreach ( $defaults as $key => $value )
-		{
-			if ( isset( $options_arr[$key] ) ) continue;
+		foreach ( $defaults as $key => $value ) {
+			if ( isset( $options_arr[ $key ] ) ) { continue; }
 
 			Kanban_Option::update_option( $key, $value );
 		}
@@ -545,13 +455,12 @@ abstract class Kanban_Db
 
 	/**
 	 * get the stored db version
+	 *
 	 * @return float the current stored version
 	 */
-	static function installed_ver()
-	{
+	static function installed_ver() {
 		// if it hasn't been loaded yet
-		if ( ! isset( self::$installed_ver ) )
-		{
+		if ( ! isset( self::$installed_ver ) ) {
 			// get it from the db, and store it
 			self::$installed_ver = get_option( 'kanban_db_version' );
 		}
@@ -564,11 +473,11 @@ abstract class Kanban_Db
 
 	/**
 	 * build the table name with "namespacing"
+	 *
 	 * @param  string $table the classname for the table
 	 * @return string        the complete table name
 	 */
-	static function format_table_name( $table )
-	{
+	static function format_table_name( $table ) {
 		global $wpdb;
 
 		return sprintf(
@@ -583,22 +492,19 @@ abstract class Kanban_Db
 
 	/**
 	 * get the instance of this class
+	 *
 	 * @return object the instance
 	 */
-//	public static function get_instance()
-//	{
-//		if ( ! self::$instance )
-//		{
-//			self::$instance = new self();
-//		}
-//		return self::$instance;
-//	}
-
-
-
+	// public static function get_instance()
+	// {
+	// if ( ! self::$instance )
+	// {
+	// self::$instance = new self();
+	// }
+	// return self::$instance;
+	// }
 	/**
 	 * construct that can't be overwritten
 	 */
 	private function __construct() { }
-
 }

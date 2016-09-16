@@ -3,7 +3,7 @@
 
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) ) { exit; }
 
 
 
@@ -14,7 +14,7 @@ class Kanban_Template
 		'board' => array(
 			'style'  => array(
 				'bootstrap' => '%sbootstrap/css/bootstrap.min.css',
-				'board' => '%scss/board.css'
+				'board' => '%scss/board.css',
 			),
 			'script' => array(
 				'jquery' => '%sjs/min/jquery-1.11.3-min.js',
@@ -30,20 +30,19 @@ class Kanban_Template
 				'board' => '%sjs/min/board-min.js',
 				'task' => '%sjs/min/task-min.js',
 				'functions' => '%sjs/min/functions-min.js',
-				'init' => '%sjs/min/init-min.js'
-			)
+				'init' => '%sjs/min/init-min.js',
+			),
 		),
 		'login' => array(
 			'style' => array(
 				'bootstrap' => '%sbootstrap/css/bootstrap.min.css',
-			)
-		)
+			),
+		),
 	);
 
 
 
-	static function init()
-	{
+	static function init() {
 		add_action( 'wp_loaded', array( __CLASS__, 'template_chooser' ) );
 	}
 
@@ -52,155 +51,109 @@ class Kanban_Template
 	/**
 	 * make sure only authenticated users can see our pages
 	 */
-	static function protect_slug($slug)
-	{
+	static function protect_slug( $slug ) {
 		// get my id, and allowed id's
 		$current_user_id = get_current_user_id();
 
 		// $users_field_name = sprintf( '%s_user', Kanban::get_instance()->settings->basename );
-		$allowed_user_ids = array_keys(Kanban_User::get_allowed_users());
-
-
+		$allowed_user_ids = array_keys( Kanban_User::get_allowed_users() );
 
 		// return if I'm allowed on *any* board
-		if ( in_array( $current_user_id, $allowed_user_ids ) )
-		{
+		if ( in_array( $current_user_id, $allowed_user_ids ) ) {
 			// redirect away from login
-			if ( $slug == 'login' )
-			{
-				wp_redirect(Kanban_Template::get_uri());
+			if ( $slug == 'login' ) {
+				wp_redirect( Kanban_Template::get_uri() );
 				exit;
+			} else {
+				return true;
 			}
-			else
-			{
-				return TRUE;
-			}
-
 		}
 
-
-
 		// allow for addition checks
-		$can_view = apply_filters ( 'kanban_template_protect_slug_check', FALSE );
+		$can_view = apply_filters( 'kanban_template_protect_slug_check', false );
 
+		if ( $can_view ) { return true; }
 
-
-		if ( $can_view ) return TRUE;
-
-
-
-		$use_default_login_page = Kanban_Option::get_option('use_default_login_page');
-
-
+		$use_default_login_page = Kanban_Option::get_option( 'use_default_login_page' );
 
 		// if still on login, and $use_default_login_page, redirect
-		if ( $slug == 'login' && (bool) $use_default_login_page && !is_user_logged_in() )
-		{
+		if ( $slug == 'login' && (bool) $use_default_login_page && ! is_user_logged_in() ) {
 			wp_redirect(
-				wp_login_url(Kanban_Template::get_uri())
+				wp_login_url( Kanban_Template::get_uri() )
 			);
 			exit;
 		}
 
 		// anyone can see login screen
-		if ( $slug == 'login' ) return TRUE;
-
-
+		if ( $slug == 'login' ) { return true; }
 
 		// otherwise redirect to login
-
-		if ( (bool) $use_default_login_page && !is_user_logged_in() )
-		{
-			wp_redirect( 
+		if ( (bool) $use_default_login_page && ! is_user_logged_in() ) {
+			wp_redirect(
 				wp_login_url( Kanban_Template::get_uri() )
 			);
 			exit;
-		}
-		else
-		{
+		} else {
 			// otherwise redirect to login
 			wp_redirect(
 				add_query_arg(
 					array(
-					 	'redirect' => urlencode($_SERVER['REQUEST_URI'])
+					 	'redirect' => urlencode( $_SERVER['REQUEST_URI'] ),
 					),
-					Kanban_Template::get_uri('login')
+					Kanban_Template::get_uri( 'login' )
 				)
 			);
 			exit;
 		}
 
-		return FALSE;
+		return false;
 	}
 
 
 
 	/**
 	 * routing to interpret our custom URLs
+	 *
 	 * @param  string $template the template being passed
 	 * @return string           the template found (or not found)
 	 */
-	static function template_chooser()
-	{
-		if ( is_admin() ) return;
+	static function template_chooser() {
+		if ( is_admin() ) { return; }
 
+		$uri = strtolower( strtok( $_SERVER['REQUEST_URI'], '?' ) );
 
-		$uri = strtolower(strtok( $_SERVER['REQUEST_URI'], '?' ));
+		$matches = array();
+		if ( ! Kanban_Template::is_plain_permalink() ) {
+			// last "kanban", optional /, capture everything up to the next /
+			// /kanban, /kanban/ returns set but empty matches[1]
+			// /kanban/board, /kanban/board/, /kanban/board/123 returns matches[1] = board
+			$pattern = '/(?:.*kanban\/?)([^\/]*)/';
 
+			preg_match( $pattern, $uri, $matches );
 
-        $matches = array();
-		if ( !Kanban_Template::is_plain_permalink () )
-		{
-            // last "kanban", optional /, capture everything up to the next /
-            // /kanban, /kanban/ returns set but empty matches[1]
-            // /kanban/board, /kanban/board/, /kanban/board/123 returns matches[1] = board
-            $pattern = '/(?:.*kanban\/?)([^\/]*)/';
-
-            preg_match($pattern, $uri, $matches);
-
-
-        }
-        elseif ( isset($_GET['kanban']) )
-        {
+		} elseif ( isset( $_GET['kanban'] ) ) {
 			$matches[1] = $_GET['kanban'];
-        }
+		}
 
-
-
-        // if url doesn't include our slug, return
-        if ( empty($matches) ) return;
-
-
+		// if url doesn't include our slug, return
+		if ( empty( $matches ) ) { return; }
 
 		$slug = $matches[1];
 
-
-
 		self::$page_slugs = apply_filters( 'kanban_template_chooser_slugs', self::$page_slugs );
 
+		if ( ! isset( self::$page_slugs[ $slug ] ) ) { return; }
 
-
-		if ( !isset(self::$page_slugs[$slug]) ) return;
-
-
-
-		$continue = self::protect_slug($slug);
-		if ( !$continue ) return;
-
-
+		$continue = self::protect_slug( $slug );
+		if ( ! $continue ) { return; }
 
 		$template = sprintf( '%s/templates/%s', Kanban::get_instance()->settings->path, sprintf( '%s.php', $slug ) );
 
-
-
 		global $wp_query;
-		if ( !isset($wp_query->query_vars['kanban']) )
-		{
+		if ( ! isset( $wp_query->query_vars['kanban'] ) ) {
 			$wp_query->query_vars['kanban'] = (object) array();
 		}
 		$wp_query->query_vars['kanban']->slug = $slug;
-
-
 
 		// page found. set the header
 		status_header( 200 );
@@ -208,42 +161,36 @@ class Kanban_Template
 		echo self::render_template( $template );
 		exit;
 
-
 	}
 
 
 
 	/**
 	 * higherarchy of template locations, to allow for customization
+	 *
 	 * @param  string $basename filename of the template we're looking for
 	 * @return string           fill template path
 	 */
-	static function find_template( $basename )
-	{
-//		// look for template in theme/name_of_class
-//		$template = sprintf( '%s/%s/%s', get_stylesheet_directory(), Kanban::get_instance()->settings->basename, sprintf( '%s.php', $basename ) );
-//
-//		// if not found, look for it in the plugin
-//		if ( ! is_file( $template ) )
-//		{
+	static function find_template( $basename ) {
+		// look for template in theme/name_of_class
+		// $template = sprintf( '%s/%s/%s', get_stylesheet_directory(), Kanban::get_instance()->settings->basename, sprintf( '%s.php', $basename ) );
+		//
+		// if not found, look for it in the plugin
+		// if ( ! is_file( $template ) )
+		// {
 			$template = sprintf( '%s/templates/%s', Kanban::get_instance()->settings->path, sprintf( '%s.php', $basename ) );
-//		}
-//
-//		// if not found, use the theme default
-//		if ( ! is_file( $template ) )
-//		{
-//			$template = sprintf( '%s/%s', get_stylesheet_directory(), sprintf( '%s.php', $basename ) );
-//		}
-
+		// }
+		//
+		// if not found, use the theme default
+		// if ( ! is_file( $template ) )
+		// {
+		// $template = sprintf( '%s/%s', get_stylesheet_directory(), sprintf( '%s.php', $basename ) );
+		// }
 		// if not found, use the original
-		if ( ! is_file( $template ) )
-		{
-			if ( is_file( $basename ) )
-			{
+		if ( ! is_file( $template ) ) {
+			if ( is_file( $basename ) ) {
 				$template = $basename;
-			}
-			else
-			{
+			} else {
 				$template = false;
 			}
 		}
@@ -255,16 +202,16 @@ class Kanban_Template
 
 	/**
 	 * render an html template, and populate variables
+	 *
 	 * @param  string $basename the filename of the template we're looking for
 	 * @param  array  $data     the variables to populate
 	 * @return string           the html output
 	 */
-	static function render_template( $basename, $data = array() )
-	{
+	static function render_template( $basename, $data = array() ) {
 
 		$template_path = Kanban_Template::find_template( $basename );
 
-		if ( ! is_file($template_path) ) return false;
+		if ( ! is_file( $template_path ) ) { return false; }
 
 		extract( $data );
 		ob_start();
@@ -280,17 +227,14 @@ class Kanban_Template
 	/**
 	 * add a css sheet to a kanban template, without using the WordPress queue
 	 */
-	static function add_style($slug)
-	{
+	static function add_style( $slug ) {
 
-		if ( !isset(self::$page_slugs[$slug]) ) return;
+		if ( ! isset( self::$page_slugs[ $slug ] ) ) { return; }
 
-		if ( !isset(self::$page_slugs[$slug]['style']) ) return;
+		if ( ! isset( self::$page_slugs[ $slug ]['style'] ) ) { return; }
 
-		foreach ( self::$page_slugs[$slug]['style'] as $handle => $path )
-		{
-			if ( strpos( $path, '%s' ) !== FALSE )
-			{
+		foreach ( self::$page_slugs[ $slug ]['style'] as $handle => $path ) {
+			if ( strpos( $path, '%s' ) !== false ) {
 				$path = sprintf( $path, Kanban::get_instance()->settings->uri );
 			}
 
@@ -308,23 +252,19 @@ class Kanban_Template
 	/**
 	 * add a js script to a kanban template, without using the WordPress queue
 	 */
-	static function add_script($slug)
-	{
-		if ( !isset(self::$page_slugs[$slug]) ) return;
+	static function add_script( $slug ) {
+		if ( ! isset( self::$page_slugs[ $slug ] ) ) { return; }
 
-		if ( !isset(self::$page_slugs[$slug]['script']) ) return;
+		if ( ! isset( self::$page_slugs[ $slug ]['script'] ) ) { return; }
 
-		foreach ( self::$page_slugs[$slug]['script'] as $handle => &$path )
-		{
-			if (isset($_GET['debug']) && $_GET['debug'] == 'script')
-			{
-				$path = str_replace('min/', '', $path);
-				$path = str_replace('-min', '', $path);
+		foreach ( self::$page_slugs[ $slug ]['script'] as $handle => &$path ) {
+			if ( isset( $_GET['debug'] ) && $_GET['debug'] == 'script' ) {
+				$path = str_replace( 'min/', '', $path );
+				$path = str_replace( '-min', '', $path );
 			}
 
-			if (strpos($path, '%s') !== FALSE)
-			{
-				$path = sprintf($path, Kanban::get_instance()->settings->uri);
+			if ( strpos( $path, '%s' ) !== false ) {
+				$path = sprintf( $path, Kanban::get_instance()->settings->uri );
 			}
 
 			echo sprintf(
@@ -343,10 +283,9 @@ class Kanban_Template
 	 *
 	 * @return bool Permalink is empty
 	 */
-	static function is_plain_permalink ()
-	{
-		$permalink_structure = get_option('permalink_structure');
-		return empty($permalink_structure);
+	static function is_plain_permalink() {
+		$permalink_structure = get_option( 'permalink_structure' );
+		return empty( $permalink_structure );
 	}
 
 
@@ -357,10 +296,8 @@ class Kanban_Template
 	 * @param string $page	What slug should be used
 	 * @return string Url with /kanban/slug or ?kanban=slug
 	 */
-	static function get_uri ($page = 'board')
-	{
-		if ( !self::is_plain_permalink () )
-		{
+	static function get_uri( $page = 'board' ) {
+		if ( ! self::is_plain_permalink() ) {
 			return sprintf(
 				'%s/%s/%s',
 				site_url(),
@@ -371,9 +308,9 @@ class Kanban_Template
 
 		return add_query_arg(
 			array(
-				Kanban::$slug => $page
+				Kanban::$slug => $page,
 			),
-			site_url());
+		site_url());
 	}
 
 
@@ -382,5 +319,4 @@ class Kanban_Template
 	 * construct that can't be overwritten
 	 */
 	private function __construct() { }
-
 } // Kanban_Template

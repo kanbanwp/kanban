@@ -123,7 +123,7 @@ class Kanban_Task extends Kanban_Db
 			do_action( 'kanban_task_ajax_save_after_comment' );
 		}
 
-		$do_message = $_POST['message'] == 'true' ? true : false;
+		$do_message = isset($_POST['message']) && $_POST['message'] == 'true' ? true : false;
 
 		if ( $is_successful ) {
 			wp_send_json_success( array(

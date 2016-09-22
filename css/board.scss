@@ -281,14 +281,17 @@ sub {
 		z-index: 1;
 	}
 
-    [contenteditable] {
+    [contenteditable],
+	[data-contenteditable] {
       overflow-x: hidden;
+	  margin: 0 (-$margin/5) 0 (-$margin/5);
+	  min-height: $margin+($margin/5*2);
+	  padding: $margin/5;
     }
 
-	[contenteditable="true"] {
+	[contenteditable="true"],
+	[data-contenteditable="true"] {
 		cursor: pointer;
-		margin: 0 (-$margin/5) 0 (-$margin/5);
-		padding: $margin/5;
 
 		&:hover,
 		&:focus,

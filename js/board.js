@@ -465,7 +465,8 @@ Board.prototype.dom = function () {
 
 					self.update_task_positions();
 
-					$( '.task-title', self.record.tasks[response.data.task.id].$el ).focus();
+					// Put the focus on the title.
+					$( '.task-title', self.record.tasks[response.data.task.id].$el ).trigger('click');
 				}
 				catch ( err ) {
 				}

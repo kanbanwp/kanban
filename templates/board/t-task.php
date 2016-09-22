@@ -41,7 +41,7 @@
 		{{/current_user_can_write}}
 	</div><!-- task-id-menu -->
 
-	<div class="task-title" contenteditable="{{current_user_can_write}}true{{:current_user_can_write}}false{{/current_user_can_write}}" placeholder="<?php echo __('Add a title', 'kanban') ?>">{{=task.title}}</div>
+	<div class="task-title" data-contenteditable="{{current_user_can_write}}true{{:current_user_can_write}}false{{/current_user_can_write}}" placeholder="<?php echo __('Add a title', 'kanban') ?>">{{=task.title}}</div>
 
 	<?php echo apply_filters( 'kanban_task_title_after', '', $board ); ?>
 	

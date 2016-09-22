@@ -178,20 +178,28 @@ sub {
   z-index: 0; }
   .task:hover, .task.active {
     z-index: 1; }
-  .task [contenteditable] {
-    overflow-x: hidden; }
-  .task [contenteditable="true"] {
-    cursor: pointer;
+  .task [contenteditable],
+  .task [data-contenteditable] {
+    overflow-x: hidden;
     margin: 0 -3px 0 -3px;
+    min-height: 21px;
     padding: 3px; }
-    .task [contenteditable="true"]:hover, .task [contenteditable="true"]:focus, .task [contenteditable="true"]:active {
+  .task [contenteditable="true"],
+  .task [data-contenteditable="true"] {
+    cursor: pointer; }
+    .task [contenteditable="true"]:hover, .task [contenteditable="true"]:focus, .task [contenteditable="true"]:active,
+    .task [data-contenteditable="true"]:hover,
+    .task [data-contenteditable="true"]:focus,
+    .task [data-contenteditable="true"]:active {
       background: #f9f9fa; }
-    .task [contenteditable="true"]:empty:before {
+    .task [contenteditable="true"]:empty:before,
+    .task [data-contenteditable="true"]:empty:before {
       color: #dfdfdf;
       content: attr(placeholder);
       display: block;
       /* For Firefox */ }
-    .task [contenteditable="true"] a {
+    .task [contenteditable="true"] a,
+    .task [data-contenteditable="true"] a {
       cursor: pointer; }
   .task .task-menu {
     position: absolute;

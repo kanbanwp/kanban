@@ -263,92 +263,118 @@ Task.prototype.dom = function () {
 	);
 
 
+
 	self.$el
-		.on(
-			'focus',
-			'.task-title',
-			function ( e ) {
-				if ( !self.board().current_user().has_cap( 'write' ) ) {
-					return false;
-				}
+	.on(
+		'click',
+		'.task-title',
+		function ( e ) {
 
-				var $div = $( this );
-
-				if ( $( e.target ).is( 'a' ) ) {
-					return false;
-				}
-
-				$div.data( 'orig', $div.html() );
-
-
-				strip_tags( $div );
+			// Let a link be a link.
+			if ( $(e.target).is('a') ) {
+				return;
 			}
-		)
-		.on(
-			'keydown',
-			'.task-title',
-			function ( e ) {
-				if ( !self.board().current_user().has_cap( 'write' ) ) {
-					return false;
-				}
 
-				var $div = $( this );
-
-				// escape
-				if ( e.keyCode === 27 ) {
-					// get prev value
-					var orig = $div.data( 'orig' );
-
-					// restore prev value
-					$div.html( orig );
-
-					// trigger save
-					$div.blur();
-
-					return;
-				}
-
-				// enter
-				if ( e.keyCode === 13 && !e.shiftKey ) {
-					$div.blur();
-					return;
-				}
+			// If they can't edit, return.
+			if ( !self.board().current_user().has_cap( 'write' ) ) {
+				return false;
 			}
-		)
-		.on(
-			'keyup',
-			'.task-title',
-			function () {
-				if ( !self.board().current_user().has_cap( 'write' ) ) {
-					return false;
-				}
 
-				var $div = $( this );
+			// Get the field.
+			var $div = $( this );
 
-				// delete prev timer
-				clearTimeout( $div.data( 'save_timer' ) );
+			// Make it editable. Maybe.
+			$div.attr('contenteditable', $div.attr('data-contenteditable'));
 
-				// set new timer
-				var save_timer = setTimeout( function () {
-					self.save_title();
-				}, 3000 );
-
-				$div.data( 'save_timer', save_timer );
+			// If it's not editable.
+			if ( $div.attr('contenteditable') != 'true' ) {
+				return false;
 			}
-		)
-		.on(
-			'blur',
-			'.task-title',
-			function () {
-				window.getSelection().removeAllRanges();
 
-				if ( !self.board().current_user().has_cap( 'write' ) ) {
-					return false;
-				}
+			// Store the original for restoring.
+			$div.data( 'orig', $div.html() );
 
+			// Remove html.
+			strip_tags( $div );
+
+			// Focus on it.
+			$div.focus();
+		}
+	)
+	.on(
+		'keydown',
+		'.task-title',
+		function ( e ) {
+			if ( !self.board().current_user().has_cap( 'write' ) ) {
+				return false;
+			}
+
+			var $div = $( this );
+
+			// escape
+			if ( e.keyCode === 27 ) {
+				// get prev value
+				var orig = $div.data( 'orig' );
+
+				// restore prev value
+				$div.html( orig );
+
+				// trigger save
+				$div.blur();
+
+				return;
+			}
+
+			// enter
+			if ( e.keyCode === 13 && !e.shiftKey ) {
+				$div.blur();
+				return;
+			}
+		}
+	)
+	.on(
+		'keyup',
+		'.task-title',
+		function () {
+			if ( !self.board().current_user().has_cap( 'write' ) ) {
+				return false;
+			}
+
+			var $div = $( this );
+
+			// delete prev timer
+			clearTimeout( $div.data( 'save_timer' ) );
+
+			// set new timer
+			var save_timer = setTimeout( function () {
 				self.save_title();
+			}, 3000 );
+
+			$div.data( 'save_timer', save_timer );
+		}
+	)
+	.on(
+		'blur',
+		'.task-title',
+		function () {
+			window.getSelection().removeAllRanges();
+
+			var $div = $( this );
+
+			// (Re)encode links.
+			encode_urls_emails( $div );
+
+			// Make it non-editable.
+			$div.removeAttr('contenteditable');
+
+			if ( !self.board().current_user().has_cap( 'write' ) ) {
+				return false;
 			}
-		); // task-title
+
+			self.save_title();
+		}
+	); // task-title
+
 
 
 	self.$el
@@ -823,6 +849,7 @@ Task.prototype.update_assigned_to = function ( user_id ) {
 }
 
 
+
 Task.prototype.save_title = function () {
 	var $div = $( '.task-title', this.$el );
 
@@ -833,24 +860,33 @@ Task.prototype.save_title = function () {
 	var prev_title = this.record.title + '';
 
 
+
 	// clean up html
 	sanitize( $div );
 	var new_title = $div.html().replace( /\\/gi, '&#92;' ).replace( /&nbsp;/gi, ' ' );
+
 
 
 	// now that we have the title
 	// don't encode if we're focused on an input
 	var $any_input = $( 'input:focus, textarea:focus, [contenteditable]:focus' );
 
-	if ( $any_input.length == 0 ) {
+	if ( !$div.is(':focus') ) {
+
+		// (Re)encode links.
 		encode_urls_emails( $div );
+
+		// Make it non-editable.
+		$div.removeAttr('contenteditable');
 	}
+
 
 
 	// don't save if there's no change
 	if ( new_title === prev_title ) {
 		return false;
 	}
+
 
 
 	var comment = kanban.text['task_title_updated'].sprintf(

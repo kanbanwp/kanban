@@ -144,6 +144,13 @@ class Kanban_Option extends Kanban_Db
 
 
 	static function get_all( $board_id = null ) {
+
+		$boards = Kanban_Board::get_all();
+
+		if ( !is_null($boards) && !isset($boards[$board_id]) ) return array();
+
+
+
 		if ( empty( self::$options_by_board ) ) {
 			foreach ( self::get_results_by_board() as $record_board_id => $records ) {
 				self::$options_by_board[ $record_board_id ] = array();
@@ -153,7 +160,6 @@ class Kanban_Option extends Kanban_Db
 				}
 			}
 
-			$boards = Kanban_Board::get_all();
 
 			foreach ( $boards as $id => $board ) {
 				if ( ! isset( self::$options_by_board[ $id ] ) ) {

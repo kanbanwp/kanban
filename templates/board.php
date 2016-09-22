@@ -29,6 +29,8 @@ do_action( 'kanban_board_template_before' ); ?>
 var kanban = {};
 
 kanban.ajaxurl = '<?php echo admin_url('admin-ajax.php'); ?>';
+kanban.favicon = '<?php echo Kanban::get_instance()->settings->uri ?>img/notify-favicon-250.png';
+
 
 kanban.alert = "<?php echo addslashes($wp_query->query_vars['kanban']->alert); ?>";
 kanban.text = <?php echo json_encode( apply_filters( 'kanban_board_text', $wp_query->query_vars['kanban']->text) ); ?>;

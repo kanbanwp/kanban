@@ -225,7 +225,7 @@ Board.prototype.dom = function () {
 
 				if ( status_task_count >= wip_task_limit ) {
 					$( ui.sender ).sortable( 'cancel' );
-					growl( kanban.text.status_wip_task_limit_error, 'warning' );
+					notify( kanban.text.status_wip_task_limit_error, 'warning' );
 					return false;
 				}
 			}
@@ -367,7 +367,7 @@ Board.prototype.dom = function () {
 			if ( wip_task_limit > 0 ) {
 				var status_task_count = $( '#status-' + status_id + ' .status-task-count' ).text();
 				if ( status_task_count >= wip_task_limit ) {
-					growl( kanban.text.status_wip_task_limit_error, 'warning' );
+					notify( kanban.text.status_wip_task_limit_error, 'warning' );
 					return false;
 				}
 			}
@@ -448,7 +448,7 @@ Board.prototype.dom = function () {
 				// just in case
 				try {
 					if ( !response.success ) {
-						growl( kanban.text.task_added_error );
+						notify( kanban.text.task_added_error );
 						return false;
 					}
 

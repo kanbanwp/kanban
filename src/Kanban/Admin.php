@@ -7,7 +7,9 @@
 
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) ) { exit; }
+if ( !defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 
 
@@ -31,7 +33,7 @@ class Kanban_Admin
 		);
 
 		// Remove Admin bar
-		if ( strpos( $_SERVER['REQUEST_URI'], sprintf( '/%s/', Kanban::$slug ) ) !== false ) {
+		if ( strpos( $_SERVER[ 'REQUEST_URI' ], sprintf( '/%s/', Kanban::$slug ) ) !== false ) {
 			add_filter( 'show_admin_bar', '__return_false' );
 		}
 
@@ -52,8 +54,11 @@ class Kanban_Admin
 	}
 
 
+
 	static function add_deactivate_thickbox( $hook ) {
-		if ( $hook != 'plugins.php' ) { return; }
+		if ( $hook != 'plugins.php' ) {
+			return;
+		}
 
 		wp_register_script(
 			'kanban-deactivate',
@@ -69,21 +74,39 @@ class Kanban_Admin
 					<?php echo __( 'OPTIONAL: Please Let us know why you are deactivating Kanban.', 'kanban' ) ?>
 				</p>
 				<p style="padding: 0;">
-					<label><input type="radio" name="request" value="deactivated: decided to use something else"><?php echo __( 'I decided to use something else' ); ?></label><br>
-					<textarea rows="2" class="large-text" placeholder="<?php echo __( 'What else did you decide to use?' ); ?>" style="display: none;"></textarea>
+					<label><input type="radio" name="request"
+								  value="deactivated: decided to use something else"><?php echo __( 'I decided to use something else' ); ?>
+					</label><br>
+					<textarea rows="2" class="large-text"
+							  placeholder="<?php echo __( 'What else did you decide to use?' ); ?>"
+							  style="display: none;"></textarea>
 				</p>
 				<p style="padding: 0;">
-					<label><input type="radio" name="request" value="deactivated: not what I was looking for"><?php echo __( 'The plugin is not what I was looking for' ); ?></label><br>
-					<textarea rows="2" class="large-text" placeholder="<?php echo __( 'What were you looking for?' ); ?>" style="display: none;"></textarea>
+					<label><input type="radio" name="request"
+								  value="deactivated: not what I was looking for"><?php echo __( 'The plugin is not what I was looking for' ); ?>
+					</label><br>
+					<textarea rows="2" class="large-text"
+							  placeholder="<?php echo __( 'What were you looking for?' ); ?>"
+							  style="display: none;"></textarea>
 				<p style="padding: 0;">
-					<label><input type="radio" name="request" value="deactivated: didn't have the features I wanted"><?php echo __( 'The plugin didn\'t have the features I wanted' ); ?></label><br>
-					<textarea rows="2" class="large-text" placeholder="<?php echo __( 'What features did you want?' ); ?>" style="display: none;"></textarea>
+					<label><input type="radio" name="request"
+								  value="deactivated: didn't have the features I wanted"><?php echo __( 'The plugin didn\'t have the features I wanted' ); ?>
+					</label><br>
+					<textarea rows="2" class="large-text"
+							  placeholder="<?php echo __( 'What features did you want?' ); ?>"
+							  style="display: none;"></textarea>
 				<p style="padding: 0;">
-					<label><input type="radio" name="request" value="deactivated: didn't work as expected"><?php echo __( 'The plugin didn\'t work as expected' ); ?></label><br>
-					<textarea rows="2" class="large-text" placeholder="<?php echo __( 'What were you expecting?' ); ?>" style="display: none;"></textarea>
+					<label><input type="radio" name="request"
+								  value="deactivated: didn't work as expected"><?php echo __( 'The plugin didn\'t work as expected' ); ?>
+					</label><br>
+					<textarea rows="2" class="large-text" placeholder="<?php echo __( 'What were you expecting?' ); ?>"
+							  style="display: none;"></textarea>
 				<p style="padding: 0;">
-					<label><input type="radio" name="request" value="deactivated: is not working"><?php echo __( 'The plugin is not working' ); ?></label><br>
-					<textarea rows="2" class="large-text" placeholder="<?php echo __( 'What didn\'t work?' ); ?>" style="display: none;"></textarea>
+					<label><input type="radio" name="request"
+								  value="deactivated: is not working"><?php echo __( 'The plugin is not working' ); ?>
+					</label><br>
+					<textarea rows="2" class="large-text" placeholder="<?php echo __( 'What didn\'t work?' ); ?>"
+							  style="display: none;"></textarea>
 				</p>
 				<p align="right">
 					<button type="button" class="button button-primary kanban-deactivate-submit">
@@ -115,6 +138,7 @@ class Kanban_Admin
 	}
 
 
+
 	/**
 	 * render the welcome page
 	 */
@@ -140,7 +164,7 @@ class Kanban_Admin
 		global $wpdb;
 
 		$current_user_id = get_current_user_id();
-		$lastRun = (int) Kanban_Option::get_option( 'admin-addons-check' );
+		$lastRun = (int)Kanban_Option::get_option( 'admin-addons-check' );
 
 		if ( time() - $lastRun >= 60 * 60 * 24 ) {
 			Kanban_Option::update_option( 'admin-addons-check', time() );
@@ -148,7 +172,7 @@ class Kanban_Admin
 			$response = wp_remote_get( 'https://kanbanwp.com?feed=addons' );
 
 			try {
-				$addons = @json_decode( $response['body'] );
+				$addons = @json_decode( $response[ 'body' ] );
 			} catch ( Exception $e ) {
 				$addons = array();
 			}
@@ -162,7 +186,7 @@ class Kanban_Admin
 		global $wp_query;
 
 		// attach our object to the template data
-		$wp_query->query_vars['addons'] = $addons;
+		$wp_query->query_vars[ 'addons' ] = $addons;
 
 		$template = Kanban_Template::find_template( 'admin/addons' );
 
@@ -188,44 +212,54 @@ class Kanban_Admin
 
 
 	static function contact_support() {
-		if ( ! isset( $_POST[ Kanban_Utils::get_nonce() ] ) || ! wp_verify_nonce( $_POST[ Kanban_Utils::get_nonce() ], 'kanban-admin-comment' ) || ! is_user_logged_in() ) { return false; }
+		if ( !isset( $_POST[ Kanban_Utils::get_nonce() ] ) || !wp_verify_nonce( $_POST[ Kanban_Utils::get_nonce() ], 'kanban-admin-comment' ) || !is_user_logged_in() ) {
+			return false;
+		}
 
-		if ( empty( $_POST['request'] ) && empty( $_POST['message'] ) ) { return; }
+		if ( empty( $_POST[ 'request' ] ) && empty( $_POST[ 'message' ] ) ) {
+			return;
+		}
 
-		if ( empty( $_POST['request'] ) ) { $_POST['request'] = ''; }
+		if ( empty( $_POST[ 'request' ] ) ) {
+			$_POST[ 'request' ] = '';
+		}
 
-		if ( empty( $_POST['from'] ) ) { $_POST['from'] = get_option( 'admin_email' ); }
+		if ( empty( $_POST[ 'from' ] ) ) {
+			$_POST[ 'from' ] = get_option( 'admin_email' );
+		}
 
 		try {
 			wp_mail(
 				'support@kanbanwp.com',
-				stripcslashes( sprintf( '[kbwp] %s', $_POST['request'] ) ),
-				stripcslashes(sprintf(
+				stripcslashes( sprintf( '[kbwp] %s', $_POST[ 'request' ] ) ),
+				stripcslashes( sprintf(
 					"%s\n\n%s\n%s\n%s",
-					stripcslashes( $_POST['message'] ),
+					stripcslashes( $_POST[ 'message' ] ),
 					site_url(),
 					Kanban_Template::get_uri(),
-					$_SERVER['HTTP_USER_AGENT']
-				)),
-				sprintf( 'From: "%s" <%s>', get_option( 'blogname' ), $_POST['from'] )
+					$_SERVER[ 'HTTP_USER_AGENT' ]
+				) ),
+				sprintf( 'From: "%s" <%s>', get_option( 'blogname' ), $_POST[ 'from' ] )
 			);
 
-			$_GET['alert'] = __( "Email sent! We'll get back to you as soon as we can.", 'kanban' );
+			$_GET[ 'alert' ] = __( "Email sent! We'll get back to you as soon as we can.", 'kanban' );
 		} catch ( Exception $e ) {
-			$_GET['alert'] = __( 'Email could not be sent. Please contact us through <a href="http://kanbanwp.com" target="_blank">https://kanbanwp.com</a>.', 'kanban' );
+			$_GET[ 'alert' ] = __( 'Email could not be sent. Please contact us through <a href="http://kanbanwp.com" target="_blank">https://kanbanwp.com</a>.', 'kanban' );
 		}
 	}
 
 
 
 	static function ajax_register_user() {
-		if ( ! wp_verify_nonce( $_POST[ Kanban_Utils::get_nonce() ], 'kanban-new-user' ) ) { return; }
+		if ( !wp_verify_nonce( $_POST[ Kanban_Utils::get_nonce() ], 'kanban-new-user' ) ) {
+			return;
+		}
 
-		$user_login		= $_POST['new-user-login'];
-		$user_email		= $_POST['new-user-email'];
-		$user_first 	= $_POST['new-user-first'];
-		$user_last	 	= $_POST['new-user-last'];
-		$board_id	 	= $_POST['board_id'];
+		$user_login = $_POST[ 'new-user-login' ];
+		$user_email = $_POST[ 'new-user-email' ];
+		$user_first = $_POST[ 'new-user-first' ];
+		$user_last = $_POST[ 'new-user-last' ];
+		$board_id = $_POST[ 'board_id' ];
 
 		$errors = array();
 
@@ -233,7 +267,7 @@ class Kanban_Admin
 			$errors[] = __( 'Username already taken' );
 		}
 
-		if ( ! validate_username( $user_login ) ) {
+		if ( !validate_username( $user_login ) ) {
 			$errors[] = __( 'Invalid username' );
 		}
 
@@ -241,7 +275,7 @@ class Kanban_Admin
 			$errors[] = __( 'Please enter a username' );
 		}
 
-		if ( ! is_email( $user_email ) ) {
+		if ( !is_email( $user_email ) ) {
 
 			$errors[] = __( 'Invalid email' );
 		}
@@ -250,23 +284,23 @@ class Kanban_Admin
 			$errors[] = __( 'Email already registered' );
 		}
 
-		if ( ! empty( $errors ) ) {
+		if ( !empty( $errors ) ) {
 			wp_send_json_error( array( 'error' => implode( '<br>', $errors ) ) );
 			return;
 		}
 
 		$boards = Kanban_Board::get_all();
 
-		if ( ! in_array( $board_id, array_keys( $boards ) ) ) {
+		if ( !in_array( $board_id, array_keys( $boards ) ) ) {
 			$board_id = Kanban_Board::get_current();
 		}
 
 		$userdata = array(
-			'user_login'  => $user_login,
-			'user_email'  => $user_email,
-			'first_name'  => $user_first,
-			'last_name'  => $user_last,
-			'user_pass'   => null,// When creating an user, `user_pass` is expected.
+			'user_login' => $user_login,
+			'user_email' => $user_email,
+			'first_name' => $user_first,
+			'last_name' => $user_last,
+			'user_pass' => null,// When creating an user, `user_pass` is expected.
 		);
 
 		$user_id = wp_insert_user( $userdata );
@@ -297,8 +331,8 @@ class Kanban_Admin
 	 */
 	static function admin_menu() {
 		$svg = '<svg id="Layer_2" data-name="Layer 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 63.84"><defs><style>.cls-1{fill:#82878c;}</style></defs><title>kanban</title><ellipse class="cls-1" cx="50.52" cy="13.51" rx="13.48" ry="13.51"/><ellipse class="cls-1" cx="13.48" cy="13.51" rx="13.48" ry="13.51"/><ellipse class="cls-1" cx="50.52" cy="50.33" rx="13.48" ry="13.51"/><ellipse class="cls-1" cx="13.48" cy="50.33" rx="13.48" ry="13.51"/></svg>';
-
 		$icon_svg = 'data:image/svg+xml;base64,' . base64_encode( $svg );
+
 
 		// add the base slug and page
 		add_menu_page(
@@ -355,10 +389,10 @@ class Kanban_Admin
 
 	static function add_admin_bar_link_to_board( $wp_admin_bar ) {
 		$args = array(
-			'id'    => 'kanban_board',
+			'id' => 'kanban_board',
 			'title' => 'Kanban Board',
-			'href'  => Kanban_Template::get_uri(),
-			'meta'  => array( 'class' => 'kanban-board' ),
+			'href' => Kanban_Template::get_uri(),
+			'meta' => array( 'class' => 'kanban-board' ),
 		);
 		$wp_admin_bar->add_node( $args );
 	}
@@ -394,7 +428,7 @@ class Kanban_Admin
 	// @link http://premium.wpmudev.org/blog/tabbed-interface/
 	static function screen_do_activation_redirect() {
 		// Bail if no activation redirect
-		if ( ! get_transient( sprintf( '_%s_screen_activation_redirect', Kanban::get_instance()->settings->basename ) ) ) {
+		if ( !get_transient( sprintf( '_%s_screen_activation_redirect', Kanban::get_instance()->settings->basename ) ) ) {
 			return;
 		}
 
@@ -402,7 +436,7 @@ class Kanban_Admin
 		delete_transient( sprintf( '_%s_screen_activation_redirect', Kanban::get_instance()->settings->basename ) );
 
 		// Bail if activating from network, or bulk
-		if ( is_network_admin() || isset( $_GET['activate-multi'] ) ) {
+		if ( is_network_admin() || isset( $_GET[ 'activate-multi' ] ) ) {
 			return;
 		}
 
@@ -410,14 +444,13 @@ class Kanban_Admin
 		wp_safe_redirect(
 			add_query_arg(
 				array(
-					'page'       => Kanban::get_instance()->settings->basename,
+					'page' => Kanban::get_instance()->settings->basename,
 					'activation' => '1',
 				),
 				admin_url( 'admin.php' )
 			)
 		);
 	}
-
 
 
 
@@ -454,10 +487,10 @@ class Kanban_Admin
 		echo Kanban_Template::get_uri() . "\r\n";
 
 		echo 'Kanban Version: ';
-		echo Kanban::get_instance()->settings->plugin_data['Version'] . "\r\n";
+		echo Kanban::get_instance()->settings->plugin_data[ 'Version' ] . "\r\n";
 
 		echo 'Web Server: ';
-		echo esc_html( ! empty( $_SERVER['SERVER_SOFTWARE'] ) ? $_SERVER['SERVER_SOFTWARE'] : '' );
+		echo esc_html( !empty( $_SERVER[ 'SERVER_SOFTWARE' ] ) ? $_SERVER[ 'SERVER_SOFTWARE' ] : '' );
 		echo "\r\n";
 
 		echo 'PHP: ';
@@ -474,9 +507,9 @@ class Kanban_Admin
 		echo empty( $wpdb->use_mysqli ) ? 'no' : 'yes';
 		echo "\r\n";
 
-		// echo 'WP Memory Limit: ';
-		// echo esc_html( WP_MEMORY_LIMIT );
-		// echo "\r\n";
+		 echo 'WP Memory Limit: ';
+		 echo esc_html( WP_MEMORY_LIMIT );
+		 echo "\r\n";
 		//
 		// echo 'Blocked External HTTP Requests: ';
 		// if ( ! defined( 'WP_HTTP_BLOCK_EXTERNAL' ) || ! WP_HTTP_BLOCK_EXTERNAL ) {
@@ -514,17 +547,17 @@ class Kanban_Admin
 		echo esc_html( ( defined( 'WP_DEBUG' ) && WP_DEBUG ) ? 'Yes' : 'No' );
 		echo "\r\n";
 
-		// echo 'WP Max Upload Size: ';
-		// echo esc_html( size_format( wp_max_upload_size() ) );
-		// echo "\r\n";
-		//
-		//
-		// echo 'PHP Time Limit: ';
-		// if ( function_exists( 'ini_get' ) ) {
-		// echo esc_html( ini_get( 'max_execution_time' ) );
-		// }
-		// echo "\r\n";
-		//
+		 echo 'WP Max Upload Size: ';
+		 echo esc_html( size_format( wp_max_upload_size() ) );
+		 echo "\r\n";
+
+
+		 echo 'PHP Time Limit: ';
+		 if ( function_exists( 'ini_get' ) ) {
+		 echo esc_html( ini_get( 'max_execution_time' ) );
+		 }
+		 echo "\r\n";
+
 		echo 'PHP Error Log: ';
 		if ( function_exists( 'ini_get' ) ) {
 			echo esc_html( ini_get( 'error_log' ) );
@@ -534,12 +567,12 @@ class Kanban_Admin
 		echo 'Upload dir: ';
 		if ( function_exists( 'wp_upload_dir' ) ) {
 			$wp_upload_dir = wp_upload_dir();
-			echo $wp_upload_dir['basedir'];
+			echo $wp_upload_dir[ 'basedir' ];
 			echo "\r\n";
 
 			echo 'Upload dir is writable: ';
-			if ( isset( $wp_upload_dir['basedir'] ) && function_exists( 'is_writable' ) ) {
-				echo is_writable( $wp_upload_dir['basedir'] ) ? 'true' : 'false';
+			if ( isset( $wp_upload_dir[ 'basedir' ] ) && function_exists( 'is_writable' ) ) {
+				echo is_writable( $wp_upload_dir[ 'basedir' ] ) ? 'true' : 'false';
 			}
 		}
 		echo "\r\n";
@@ -560,7 +593,7 @@ class Kanban_Admin
 		echo "\r\n";
 
 		echo 'Compatibility Mode: ';
-		if ( isset( $GLOBALS['wpmdb_compatibility'] ) ) {
+		if ( isset( $GLOBALS[ 'wpmdb_compatibility' ] ) ) {
 			echo 'Yes';
 		} else {
 			echo 'No';
@@ -584,7 +617,7 @@ class Kanban_Admin
 		// echo "\r\n";
 		echo "Active Plugins:\r\n";
 
-		$active_plugins = (array) get_option( 'active_plugins', array() );
+		$active_plugins = (array)get_option( 'active_plugins', array() );
 
 		// if ( is_multisite() ) {
 		// $network_active_plugins = wp_get_active_network_plugins();
@@ -627,5 +660,6 @@ class Kanban_Admin
 	/**
 	 * construct that can't be overwritten
 	 */
-	private function __construct() { }
+	private function __construct() {
+	}
 } // Kanban_Admin

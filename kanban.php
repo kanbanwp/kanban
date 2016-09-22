@@ -1,16 +1,16 @@
 <?php
 /**
  *
- * Plugin Name:		Kanban for WordPress
- * Plugin URI:		http://kanbanwp.com/
- * Description:		A complete Kanban project management suite for WordPress.
- * Version:			2.2.2
- * Release Date:	September 19, 2016
- * Author:			Gelform Inc
- * Author URI:		http://gelwp.com
- * License:			GPL2
- * Text Domain:		kanban
- * Domain Path: 	/languages/
+ * Plugin Name:        Kanban for WordPress
+ * Plugin URI:         http://kanbanwp.com/
+ * Description:        A complete Kanban project management suite for WordPress.
+ * Version:            2.2.3
+ * Release Date:       September 22, 2016
+ * Author:             Gelform Inc
+ * Author URI:         http://gelwp.com
+ * License:            GPL2
+ * Text Domain:        kanban
+ * Domain Path:        /languages/
  */
 
 // Kanban is free software: you can redistribute it and/or modify
@@ -26,16 +26,18 @@
 // You should have received a copy of the GNU General Public License
 // along with Kanban. If not, see <http://www.gnu.org/licenses/>.
 // Exit if accessed directly.
-if ( ! defined( 'ABSPATH' ) ) { exit; }
+if ( !defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 
 /**
  * Load Kanban-specific classes
  *
- * @param	string $class_name Name of class to load.
+ * @param    string $class_name Name of class to load.
  */
 function kanban_autoloader( $class_name ) {
-	if ( false !== strpos( $class_name, 'Kanban' ) && ! class_exists( $class_name ) ) {
+	if ( false !== strpos( $class_name, 'Kanban' ) && !class_exists( $class_name ) ) {
 		$classes_dir = realpath( plugin_dir_path( __FILE__ ) ) . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR;
 		$class_file = str_replace( '_', DIRECTORY_SEPARATOR, $class_name ) . '.php';
 		require_once $classes_dir . $class_file;
@@ -43,6 +45,7 @@ function kanban_autoloader( $class_name ) {
 }
 
 spl_autoload_register( 'kanban_autoloader' );
+
 
 
 /**
@@ -75,11 +78,11 @@ class Kanban
 		self::$instance = self::get_instance();
 
 		// Build settings used throughout the plugin and add-ons.
-		Kanban::get_instance()->settings = (object) array();
+		Kanban::get_instance()->settings = (object)array();
 		Kanban::get_instance()->settings->path = dirname( __FILE__ );
 		Kanban::get_instance()->settings->file = basename( __FILE__, '.php' );
 
-		if ( ! function_exists( 'get_plugin_data' ) ) {
+		if ( !function_exists( 'get_plugin_data' ) ) {
 			require_once( ABSPATH . 'wp-admin/includes/plugin.php' );
 		}
 
@@ -117,6 +120,7 @@ class Kanban
 	}
 
 
+
 	/**
 	 * On activation, run the single activation across all blogs.
 	 *
@@ -124,7 +128,7 @@ class Kanban
 	 */
 	public static function on_activation( $network_wide ) {
 		if ( function_exists( 'is_multisite' ) && is_multisite() ) {
-			if ( $network_wide  ) {
+			if ( $network_wide ) {
 				// Get all blog ids
 				$blog_ids = self::get_blog_ids();
 
@@ -160,6 +164,17 @@ class Kanban
 
 
 
+	private static function get_blog_ids() {
+		$sites = wp_get_sites();
+		$blog_ids = array();
+		foreach ( $sites as $site ) {
+			$blog_ids[] = $site[ 'blog_id' ];
+		}
+		return $blog_ids;
+	}
+
+
+
 	/**
 	 * Functions to do on single blog activation, like remove db option.
 	 */
@@ -173,10 +188,12 @@ class Kanban
 	 * Friendly notice about php version requirement
 	 */
 	static function notify_php_version() {
-		if ( ! is_admin() ) { return; }
+		if ( !is_admin() ) {
+			return;
+		}
 		?>
-			<div class="error below-h2">
-				<p>
+		<div class="error below-h2">
+			<p>
 				<?php
 				echo sprintf(
 					Kanban::get_instance()->settings->admin_notice,
@@ -184,9 +201,9 @@ class Kanban
 					PHP_VERSION
 				);
 				?>
-				</p>
-			</div>
-	<?php
+			</p>
+		</div>
+		<?php
 	}
 
 
@@ -197,7 +214,7 @@ class Kanban
 	 * @return object the instance
 	 */
 	public static function get_instance() {
-		if ( ! self::$instance ) {
+		if ( !self::$instance ) {
 			self::$instance = new self();
 		}
 		return self::$instance;
@@ -208,7 +225,8 @@ class Kanban
 	/**
 	 * Construct that can't be overwritten
 	 */
-	private function __construct() { }
+	private function __construct() {
+	}
 } // Kanban
 
 

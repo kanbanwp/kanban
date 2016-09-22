@@ -65,7 +65,7 @@ class Kanban_Board extends Kanban_Db
 			$wp_query->query_vars['kanban'] = (object) array();
 		}
 
-			// add passed alert
+		// add passed alert
 		$wp_query->query_vars['kanban']->alert = ! empty( $_GET['alert'] ) ? stripcslashes( $_GET['alert'] ) : '';
 
 		$wp_query->query_vars['kanban']->text = apply_filters(

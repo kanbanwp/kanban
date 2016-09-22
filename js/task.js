@@ -631,6 +631,7 @@ Task.prototype.update_progress = function () {
 }
 
 
+
 Task.prototype.save = function ( comment, do_growl ) {
 	if ( !this.board().current_user().has_cap( 'write' ) ) {
 		return false;
@@ -652,11 +653,13 @@ Task.prototype.save = function ( comment, do_growl ) {
 	}
 
 
+	// If growl is not set to true, then ajax will not return a message to growl
 	if ( typeof do_growl === 'undefined' ) {
 		do_growl = true;
 	}
 
 	task_data.message = do_growl;
+
 
 
 	$.ajax( {
@@ -666,7 +669,7 @@ Task.prototype.save = function ( comment, do_growl ) {
 	} )
 		.done( function ( response ) {
 			if ( !response.success ) {
-				growl( kanban.text.task_save_error );
+				notify( kanban.text.task_save_error );
 				return false;
 			}
 
@@ -674,6 +677,7 @@ Task.prototype.save = function ( comment, do_growl ) {
 		} );
 
 }; // save
+
 
 
 Task.prototype.delete = function (  ) {
@@ -699,7 +703,7 @@ Task.prototype.delete = function (  ) {
 	} )
 		.done( function ( response ) {
 			if ( !response.success ) {
-				growl( kanban.text.task_delete_error );
+				notify( kanban.text.task_delete_error );
 				return false;
 			}
 

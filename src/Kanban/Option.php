@@ -26,7 +26,7 @@ class Kanban_Option extends Kanban_Db
 	protected static $defaults = array(
 		'hour_interval' => '1',
 		'allowed_users' => array(),
-		// 'show_all_cols' => 0,
+		 'show_all_cols' => 0,
 		// 'default_to_compact_view' => 0,
 		'hide_progress_bar' => 0,
 		'use_default_login_page' => 0,

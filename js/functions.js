@@ -8,13 +8,13 @@ String.prototype.sprintf = function () {
 };
 
 // @link http://stackoverflow.com/a/6700/38241
-// Object.size = function(obj) {
-//     var size = 0, key;
-//     for (key in obj) {
-//         if (obj.hasOwnProperty(key)) size++;
-//     }
-//     return size;
-// };
+Object.size = function(obj) {
+    var size = 0, key;
+    for (key in obj) {
+        if (obj.hasOwnProperty(key)) size++;
+    }
+    return size;
+};
 
 
 
@@ -91,6 +91,8 @@ function cookie_views() {
 
 	Cookies.set( 'view', view_classes.join( ' ' ) );
 }
+
+
 
 function all_match_col_h() {
 	for ( var board_id in boards ) {

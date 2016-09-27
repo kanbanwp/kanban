@@ -4,6 +4,7 @@
 return array(
 	'kanban' => __('Kanban'),
 	'task_deleted' => __('{0} deleted the task'),
+	'task_updates' => __('Your tasks have been synced.'),
 	'task_added_to_project' => __('{0} added the task to the project "{1}"'),
 	'task_removed_from_project' => __('{0} removed the task project'),
 	'task_added_error' => __('There was an error adding a task'),
@@ -22,6 +23,7 @@ return array(
 	'task_estimate_updated_previous' => __(' (previously "{0}")'),
 	'project_added' => __('{0} added the project "{1}"'),
 	'project_updated' => __('{0} updated the project title "{1}"'),
+	'project_updates' => __('Your projects have been synced.'),
 	'project_delete' => __('{0} deleted the project "{1}"'),
 	'project_delete_confirm' => __('Are you sure you want to delete this project?'),
 	'status_empty_confirm' => __('Are you sure you want to delete all tasks in this column?'),

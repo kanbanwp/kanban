@@ -27,14 +27,6 @@ $( function () {
 
 
 
-	// re-add previous view settings
-	var view_classes = Cookies.get( 'view' );
-	if ( view_classes !== 'undefined' ) {
-		$( 'body' ).addClass( view_classes );
-	}
-
-
-
 	// when boards are done
 	var populated_board_count = 0;
 
@@ -179,6 +171,7 @@ $( function () {
 	);
 
 
+
 	$( '.btn-filter-reset' )
 	.on(
 		'click',
@@ -206,10 +199,13 @@ $( function () {
 	);
 
 
+
 	$( '#btn-view-compact' ).on(
 		'click',
 		function () {
-			$( 'body' ).toggleClass( 'board-view-compact' );
+			$( 'body' )
+			.addClass('board-view-set')
+			.toggleClass( 'board-view-compact' );
 			cookie_views();
 
 			// make sure we redraw
@@ -223,7 +219,9 @@ $( function () {
 	$( '#btn-view-all-cols' ).on(
 		'click',
 		function () {
-			$( 'body' ).toggleClass( 'board-view-all-cols' );
+			$( 'body' )
+			.addClass('board-view-set')
+			.toggleClass( 'board-view-all-cols' );
 			cookie_views();
 			return false;
 		}
@@ -249,6 +247,21 @@ $( function () {
 			return false;
 		}
 	);
+
+
+
+	// re-add previous view settings
+	var view_classes = Cookies.get( 'view' );
+
+	if ( view_classes !== 'undefined' ) {
+		$( 'body' ).addClass( view_classes );
+	}
+
+	// If user hasn't applied a view, apply the global option
+	if ( !$('body').is('.board-view-set') && 1 == boards[current_board_id].record.settings().show_all_cols )
+	{
+		$( '#btn-view-all-cols' ).trigger( 'click' );
+	}
 
 
 
@@ -477,6 +490,7 @@ $( function () {
 
 
 
+	// If debugging, notify javascript  errors.
 	if ( 'script' == kanban.url_params.debug ) {
 		window.onerror = function ( errorMsg, url, lineNumber ) {
 			notify(
@@ -507,6 +521,7 @@ $( function () {
 			url: kanban.ajaxurl,
 			data: data,
 			success: function ( response ) {
+
 				try {
 					for ( var i in response.data.projects ) {
 						var project_record = response.data.projects[i];
@@ -540,9 +555,14 @@ $( function () {
 							}
 						}
 					}
+
+					if ( Object.size(response.data.projects) > 0 ) {
+						notify( kanban.text.project_updates, 'success' );
+					}
 				}
 				catch ( err ) {
 				}
+
 
 
 
@@ -575,6 +595,10 @@ $( function () {
 							var task = board.record.tasks[task_record.id];
 							task.delete_el();
 						}
+					}
+
+					if ( Object.size(response.data.tasks) > 0 ) {
+						notify( kanban.text.task_updates, 'success' );
 					}
 				}
 				catch ( err ) {

@@ -869,8 +869,6 @@ Task.prototype.save_title = function () {
 
 	// now that we have the title
 	// don't encode if we're focused on an input
-	var $any_input = $( 'input:focus, textarea:focus, [contenteditable]:focus' );
-
 	if ( !$div.is(':focus') ) {
 
 		// (Re)encode links.

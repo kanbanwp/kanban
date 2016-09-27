@@ -92,7 +92,23 @@
 
 						</td>
 					</tr>
-<?php /*
+
+					<tr>
+						<th width="33%" scope="row">
+							<?php echo __( 'Show all columns', 'kanban' ); ?><br>
+							<small><?php echo __( '(Users can still choose their own preference)', 'kanban' ); ?></small>
+						</th>
+						<td>
+							<div class="switch-field">
+								<input type="radio" id="show_all_cols_1" name="settings[show_all_cols]" value="1" <?php echo (bool) $settings['show_all_cols'] ? 'checked' : ''; ?>>
+								<label for="show_all_cols_1">Yes</label>
+								<input type="radio" id="show_all_cols_0" name="settings[show_all_cols]" value="0" <?php echo ! (bool) $settings['show_all_cols'] ? 'checked' : ''; ?>>
+								<label for="show_all_cols_0">No</label>
+							</div>
+						</td>
+					</tr>
+
+					<?php /*
 					<tr>
 						<th width="33%" scope="row">
 							<?php echo __( 'Default the view to "compact"', 'kanban' ); ?>

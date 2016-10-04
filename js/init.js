@@ -204,7 +204,7 @@ $( function () {
 		'click',
 		function () {
 			$( 'body' )
-			.addClass('board-view-set')
+			.addClass( 'board-view-set' )
 			.toggleClass( 'board-view-compact' );
 			cookie_views();
 
@@ -220,7 +220,7 @@ $( function () {
 		'click',
 		function () {
 			$( 'body' )
-			.addClass('board-view-set')
+			.addClass( 'board-view-set' )
 			.toggleClass( 'board-view-all-cols' );
 			cookie_views();
 			return false;
@@ -258,8 +258,7 @@ $( function () {
 	}
 
 	// If user hasn't applied a view, apply the global option
-	if ( !$('body').is('.board-view-set') && 1 == boards[current_board_id].record.settings().show_all_cols )
-	{
+	if ( !$( 'body' ).is( '.board-view-set' ) && 1 == boards[current_board_id].record.settings().show_all_cols ) {
 		$( '#btn-view-all-cols' ).trigger( 'click' );
 	}
 
@@ -502,6 +501,7 @@ $( function () {
 
 
 
+	// Check for updates by other users every 5 seconds.
 	setInterval( function () {
 		var data = {
 			action: 'updates_task',
@@ -525,7 +525,13 @@ $( function () {
 				try {
 					for ( var i in response.data.projects ) {
 						var project_record = response.data.projects[i];
+
 						var board = boards[project_record.board_id];
+
+						// Skip it, if this user made the update.
+						if ( project_record.modified_user_id == board.record.current_user_id() ) {
+							return;
+						}
 
 						if ( project_record.is_active == 1 ) {
 							//add/update
@@ -556,7 +562,7 @@ $( function () {
 						}
 					}
 
-					if ( Object.size(response.data.projects) > 0 ) {
+					if ( Object.size( response.data.projects ) > 0 ) {
 						notify( kanban.text.project_updates, 'success' );
 					}
 				}
@@ -565,11 +571,15 @@ $( function () {
 
 
 
-
 				try {
 					for ( var i in response.data.tasks ) {
 						var task_record = response.data.tasks[i];
 						var board = boards[task_record.board_id];
+
+						// Skip it, if this user made the update.
+						if ( task_record.modified_user_id == board.record.current_user_id() ) {
+							return;
+						}
 
 						if ( task_record.is_active == 1 ) {
 							var task = board.record.tasks[task_record.id] = new Task( task_record );
@@ -597,7 +607,7 @@ $( function () {
 						}
 					}
 
-					if ( Object.size(response.data.tasks) > 0 ) {
+					if ( Object.size( response.data.tasks ) > 0 ) {
 						notify( kanban.text.task_updates, 'success' );
 					}
 				}

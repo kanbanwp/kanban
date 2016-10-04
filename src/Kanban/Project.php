@@ -25,6 +25,7 @@ class Kanban_Project extends Kanban_Db
 		'user_id_author'  => 'int',
 		'created_dt_gmt'  => 'datetime',
 		'modified_dt_gmt' => 'datetime',
+		'modified_user_id' => 'int',
 		'is_active'       => 'bool',
 		'board_id'  	  => 'int',
 	);
@@ -60,6 +61,8 @@ class Kanban_Project extends Kanban_Db
 		do_action( 'kanban_project_ajax_save_before', $_POST['project']['id'] );
 
 		$_POST['project']['modified_dt_gmt'] = Kanban_Utils::mysql_now_gmt();
+		$_POST['project']['modified_user_id'] = get_current_user_id();
+
 		$_POST['project']['user_id_author'] = get_current_user_id();
 
 		$is_successful = self::_replace( $_POST['project'] );
@@ -239,6 +242,7 @@ class Kanban_Project extends Kanban_Db
 					user_id_author bigint(20) NOT NULL,
 					created_dt_gmt datetime NOT NULL,
 					modified_dt_gmt datetime NOT NULL,
+					modified_user_id  bigint(20) NOT NULL,
 					is_active BOOLEAN NOT NULL DEFAULT TRUE,
 					board_id bigint(20) NOT NULL DEFAULT 1,
 					UNIQUE KEY id (id),

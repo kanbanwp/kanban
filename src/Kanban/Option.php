@@ -306,6 +306,8 @@ class Kanban_Option extends Kanban_Db
 
 
 	static function settings_page() {
+		add_thickbox();
+
 		$board = Kanban_Board::get_current_by( 'GET' );
 
 		$settings = Kanban_Option::get_all( $board->id );

@@ -29,23 +29,24 @@
     .sortable li .wp-picker-container .wp-picker-holder {
       position: absolute;
       z-index: 1; }
-  .sortable li .delete {
-    background: red;
-    border-radius: .5em;
-    border-width: 0;
-    color: white;
-    cursor: pointer;
-    display: inline-block;
-    float: right;
-    opacity: .5;
-    padding: .236em .618em; }
-    .sortable li .delete:hover {
-      opacity: 1; }
   .sortable li label {
     display: inline-block;
     margin: 0 2em 0 0;
     text-align: left;
     white-space: nowrap; }
+
+button.delete {
+  background: red;
+  border-radius: .5em;
+  border-width: 0;
+  color: white;
+  cursor: pointer;
+  display: inline-block;
+  float: right;
+  opacity: .5;
+  padding: .236em .618em; }
+  button.delete:hover {
+    opacity: 1; }
 
 .switch-field .switch-title {
   margin-bottom: 6px; }

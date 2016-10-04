@@ -24,6 +24,7 @@ class Kanban_Task extends Kanban_Db
 		'description'      => 'text',
 		'created_dt_gmt'   => 'datetime',
 		'modified_dt_gmt'  => 'datetime',
+		'modified_user_id'  => 'int',
 		'position'	       => 'int',
 		'user_id_author'   => 'int',
 		'user_id_assigned' => 'int',
@@ -82,6 +83,7 @@ class Kanban_Task extends Kanban_Db
 		do_action( 'kanban_task_ajax_save_before', $_POST['task']['id'] );
 
 		$_POST['task']['modified_dt_gmt'] = Kanban_Utils::mysql_now_gmt();
+		$_POST['task']['modified_user_id'] = get_current_user_id();
 
 		if ( ! isset( $_POST['task']['user_id_author'] ) ) {
 			$_POST['task']['user_id_author'] = get_current_user_id();
@@ -401,6 +403,7 @@ class Kanban_Task extends Kanban_Db
 					position bigint(20) NOT NULL,
 					created_dt_gmt datetime NOT NULL,
 					modified_dt_gmt datetime NOT NULL,
+					modified_user_id bigint(20) NOT NULL,
 					user_id_author bigint(20) NOT NULL,
 					user_id_assigned bigint(20) NOT NULL,
 					status_id bigint(20) NOT NULL,

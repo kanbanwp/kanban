@@ -41,21 +41,7 @@
 			}
 		}
 
-		.delete {
-			background: red;
-			border-radius: .5em;
-			border-width: 0;
-			color: white;
-			cursor: pointer;
-			display: inline-block;
-			float: right;
-			opacity: .5;
-			padding: .236em .618em;
 
-			&:hover {
-				opacity: 1;
-			}
-		}
 
 		label {
 		  	display: inline-block;
@@ -66,7 +52,21 @@
 	}
 }
 
+button.delete {
+  background: red;
+  border-radius: .5em;
+  border-width: 0;
+  color: white;
+  cursor: pointer;
+  display: inline-block;
+  float: right;
+  opacity: .5;
+  padding: .236em .618em;
 
+  &:hover {
+	opacity: 1;
+  }
+}
 
 .switch-field {
 

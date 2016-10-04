@@ -64,6 +64,7 @@ class Kanban_Taskmeta extends Kanban_Db
 			$task_id,
 			array(
 				'modified_dt_gmt' => Kanban_Utils::mysql_now_gmt(),
+				'modified_user_id' => get_current_user_id()
 			)
 		);
 

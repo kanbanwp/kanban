@@ -203,13 +203,26 @@ sub {
       cursor: pointer; }
   .task .task-menu {
     position: absolute;
-    right: 5px;
-    top: 5px;
+    padding: 3px;
+    right: 3px;
+    top: 3px;
     z-index: 1; }
     .task .task-menu .dropdown {
       opacity: .618; }
       .task .task-menu .dropdown:hover, .task .task-menu .dropdown.open {
         opacity: 1; }
+    @media screen and (min-width: 768px) {
+      .task .task-menu > .btn {
+        display: none; }
+      .task .task-menu:hover, .task .task-menu:active, .task .task-menu:focus {
+        background: white;
+        border: 1px solid #EEE; }
+        .task .task-menu:hover > .btn, .task .task-menu:active > .btn, .task .task-menu:focus > .btn {
+          display: block; } }
+    @media screen and (max-width: 767px) {
+      .task .task-menu {
+        background: white;
+        border: 1px solid #EEE; } }
   .task .task-project {
     max-width: 80%;
     min-height: .618em;

@@ -142,6 +142,15 @@ abstract class Kanban_Db
 
 
 
+	public static function table_columns () {
+		return apply_filters(
+			'kanban_db_table_columns',
+			static::$table_columns
+		);
+	}
+
+
+
 	static function sanitize_data( $data ) {
 		$good_data = array();
 		$format = array();

@@ -21,7 +21,7 @@ class Kanban_Task extends Kanban_Db
 	// define db table columns and their validation type
 	protected static $table_columns = array(
 		'title'            => 'text',
-		'description'      => 'text',
+//		'description'      => 'text',
 		'created_dt_gmt'   => 'datetime',
 		'modified_dt_gmt'  => 'datetime',
 		'modified_user_id'  => 'int',

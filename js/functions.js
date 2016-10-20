@@ -113,6 +113,12 @@ function build_url() {
 
 
 function update_url() {
+
+	// Prevent error in IE9.
+	if ("undefined" === typeof history.pushState ) {
+		return;
+	}
+
 	var url = build_url();
 	window.history.replaceState( '', '', url );
 

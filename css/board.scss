@@ -319,8 +319,8 @@ sub {
 	}
 
 	.task-menu {
+		border: 1px solid transparent;
 		position: absolute;
-		padding: $margin/5;
 		right: $margin/5;
 		top: $margin/5;
 		z-index: 1;

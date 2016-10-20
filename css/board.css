@@ -202,8 +202,8 @@ sub {
     .task [data-contenteditable="true"] a {
       cursor: pointer; }
   .task .task-menu {
+    border: 1px solid transparent;
     position: absolute;
-    padding: 3px;
     right: 3px;
     top: 3px;
     z-index: 1; }

@@ -68,182 +68,182 @@ Task.prototype.dom = function () {
 
 
 	self.$el
-		.on(
-			'shown.bs.dropdown',
-			'.dropdown',
-			function () {
-				var $dropdown = $( this );
-				$( '.task.active', self.board().$el ).not( self.$el ).removeClass( 'active' );
-				self.$el.addClass( 'active' );
-			}
-		)
-		.on(
-			'hidden.bs.dropdown',
-			function () {
-				self.$el.removeClass( 'active' );
-			}
-		);
+	.on(
+		'shown.bs.dropdown',
+		'.dropdown',
+		function () {
+			var $dropdown = $( this );
+			$( '.task.active', self.board().$el ).not( self.$el ).removeClass( 'active' );
+			self.$el.addClass( 'active' );
+		}
+	)
+	.on(
+		'hidden.bs.dropdown',
+		function () {
+			self.$el.removeClass( 'active' );
+		}
+	);
 
 
 	self.$el
-		.on(
-			'show.bs.dropdown',
-			'.task-project',
-			function () {
-				var $project = $( this );
-				var $dropdown = $( '.dropdown-menu', $project ).empty();
+	.on(
+		'show.bs.dropdown',
+		'.task-project',
+		function () {
+			var $project = $( this );
+			var $dropdown = $( '.dropdown-menu', $project ).empty();
 
-				var project_count = 0;
-				for ( var project_id in self.board().record.project_records ) {
-					var project = self.board().record.project_records[project_id];
+			var project_count = 0;
+			for ( var project_id in self.board().record.project_records ) {
+				var project = self.board().record.project_records[project_id];
 
-					var project_html = kanban.templates[self.board().record.id()]['t-task-project-dropdown'].render( project );
+				var project_html = kanban.templates[self.board().record.id()]['t-task-project-dropdown'].render( project );
 
-					$( project_html ).prependTo( $dropdown );
+				$( project_html ).prependTo( $dropdown );
 
-					project_count++;
-				}
-
-				if ( project_count == 0 ) {
-					return false;
-				}
+				project_count++;
 			}
-		)
-		.on(
-			'hide.bs.dropdown',
-			'.task-project',
-			function () {
-				var $project = $( this );
-				var $contenteditable = $( '[contenteditable]', $project );
-				if ( $contenteditable.is( ':focus' ) ) {
-					return false;
-				}
+
+			if ( project_count == 0 ) {
+				return false;
 			}
-		)
-		.on(
-			'keydown',
-			'.task-project [contenteditable]',
-			function ( e ) {
-				var $div = $( this );
-				var $dropdown = $div.closest( '.dropdown' );
-
-				// escape
-				if ( e.keyCode === 27 ) {
-					// get prev value
-					var orig = $div.data( 'orig' );
-
-					// restore prev value
-					$div.html( orig );
-
-					// trigger save
-					$div.blur();
-
-					// prevent save
-					clearTimeout( $div.data( 'save_timer' ) );
-
-					if ( $dropdown.hasClass( 'open' ) ) {
-						$dropdown.removeClass( 'open' )
-					}
-
-					return;
-				}
-
-
-				// enter
-				if ( e.keyCode === 13 ) {
-					$div.blur();
-
-					if ( $dropdown.hasClass( 'open' ) ) {
-						$dropdown.removeClass( 'open' )
-					}
-
-					return;
-				}
-
-
-				// allow space (undermine bootstrap behavior)
-				if ( e.keyCode === 32 ) {
-					$div.html( $div.html() + '&nbsp;' );
-					placeCaretAtEnd( $div.get( 0 ) );
-					return false;
-				}
-
-
-				// allow arrow keys to select project
-				// if (e.keyCode === 40 || e.keyCode === 38)
-				// {
-				// 	placeCaretAtEnd($div.get(0));
-				// 	e.preventDefault();
-				// }
-
-
+		}
+	)
+	.on(
+		'hide.bs.dropdown',
+		'.task-project',
+		function () {
+			var $project = $( this );
+			var $contenteditable = $( '[contenteditable]', $project );
+			if ( $contenteditable.is( ':focus' ) ) {
+				return false;
 			}
-		)
-		// .on(
-		// 	'keyup',
-		// 	'.task-project [contenteditable]',
-		// 	function (e)
-		// 	{
-		// 		var $div = $(this);
-		//
-		// 		var $task_project = $div.closest('.task-project');
-		// 		var $list = $('.dropdown-menu li', $task_project);
-		// 		var valueLower = $.trim($div.text().toLowerCase());
-		//
-		//
-		//
-		// 		$list.each(function()
-		// 		{
-		// 			var $li = $(this);
-		//
-		// 			var textLower = $.trim($li.text().toLowerCase());
-		//
-		// 			if ( textLower.search(valueLower) > -1 ) //  && $li.is(':visible')
-		// 			{
-		// 				console.log(valueLower, textLower, 'found');
-		// 				$li.slideDown('fast');
-		// 			}
-		// 			else // if ( !$li.is(':visible') )
-		// 			{
-		// 				console.log(valueLower, textLower, 'not found');
-		// 				$li.slideUp('fast');
-		// 			}
-		// 		});
-		//
-		//
-		// 		placeCaretAtEnd($div.get(0));
-		// 	}
-		// )
-		.on(
-			'blur',
-			'.task-project [contenteditable]',
-			function () {
-				window.getSelection().removeAllRanges();
+		}
+	)
+	.on(
+		'keydown',
+		'.task-project [contenteditable]',
+		function ( e ) {
+			var $div = $( this );
+			var $dropdown = $div.closest( '.dropdown' );
 
-				if ( !self.board().current_user().has_cap( 'write' ) ) {
-					return false;
+			// escape
+			if ( e.keyCode === 27 ) {
+				// get prev value
+				var orig = $div.data( 'orig' );
+
+				// restore prev value
+				$div.html( orig );
+
+				// trigger save
+				$div.blur();
+
+				// prevent save
+				clearTimeout( $div.data( 'save_timer' ) );
+
+				if ( $dropdown.hasClass( 'open' ) ) {
+					$dropdown.removeClass( 'open' )
 				}
 
-				var save_timer = setTimeout( function () {
-					self.parse_project();
-				}, 100 );
-
-				$( this ).data( 'save_timer', save_timer );
+				return;
 			}
-		)
-		.on(
-			'focus',
-			'.task-project [contenteditable]',
-			function () {
-				if ( !self.board().current_user().has_cap( 'write' ) ) {
-					return false;
+
+
+			// enter
+			if ( e.keyCode === 13 ) {
+				$div.blur();
+
+				if ( $dropdown.hasClass( 'open' ) ) {
+					$dropdown.removeClass( 'open' )
 				}
 
-				var $div = $( this );
-
-				$div.data( 'orig', $div.text() );
+				return;
 			}
-		); // task-project;
+
+
+			// allow space (undermine bootstrap behavior)
+			if ( e.keyCode === 32 ) {
+				$div.html( $div.html() + '&nbsp;' );
+				placeCaretAtEnd( $div.get( 0 ) );
+				return false;
+			}
+
+
+			// allow arrow keys to select project
+			// if (e.keyCode === 40 || e.keyCode === 38)
+			// {
+			// 	placeCaretAtEnd($div.get(0));
+			// 	e.preventDefault();
+			// }
+
+
+		}
+	)
+	// .on(
+	// 	'keyup',
+	// 	'.task-project [contenteditable]',
+	// 	function (e)
+	// 	{
+	// 		var $div = $(this);
+	//
+	// 		var $task_project = $div.closest('.task-project');
+	// 		var $list = $('.dropdown-menu li', $task_project);
+	// 		var valueLower = $.trim($div.text().toLowerCase());
+	//
+	//
+	//
+	// 		$list.each(function()
+	// 		{
+	// 			var $li = $(this);
+	//
+	// 			var textLower = $.trim($li.text().toLowerCase());
+	//
+	// 			if ( textLower.search(valueLower) > -1 ) //  && $li.is(':visible')
+	// 			{
+	// 				console.log(valueLower, textLower, 'found');
+	// 				$li.slideDown('fast');
+	// 			}
+	// 			else // if ( !$li.is(':visible') )
+	// 			{
+	// 				console.log(valueLower, textLower, 'not found');
+	// 				$li.slideUp('fast');
+	// 			}
+	// 		});
+	//
+	//
+	// 		placeCaretAtEnd($div.get(0));
+	// 	}
+	// )
+	.on(
+		'blur',
+		'.task-project [contenteditable]',
+		function () {
+			window.getSelection().removeAllRanges();
+
+			if ( !self.board().current_user().has_cap( 'write' ) ) {
+				return false;
+			}
+
+			var save_timer = setTimeout( function () {
+				self.parse_project();
+			}, 100 );
+
+			$( this ).data( 'save_timer', save_timer );
+		}
+	)
+	.on(
+		'focus',
+		'.task-project [contenteditable]',
+		function () {
+			if ( !self.board().current_user().has_cap( 'write' ) ) {
+				return false;
+			}
+
+			var $div = $( this );
+
+			$div.data( 'orig', $div.text() );
+		}
+	); // task-project;
 
 
 	self.$el.on(
@@ -271,7 +271,7 @@ Task.prototype.dom = function () {
 		function ( e ) {
 
 			// Let a link be a link.
-			if ( $(e.target).is('a') ) {
+			if ( $( e.target ).is( 'a' ) ) {
 				return;
 			}
 
@@ -284,10 +284,10 @@ Task.prototype.dom = function () {
 			var $div = $( this );
 
 			// Make it editable. Maybe.
-			$div.attr('contenteditable', $div.attr('data-contenteditable'));
+			$div.attr( 'contenteditable', $div.attr( 'data-contenteditable' ) );
 
 			// If it's not editable.
-			if ( $div.attr('contenteditable') != 'true' ) {
+			if ( $div.attr( 'contenteditable' ) != 'true' ) {
 				return false;
 			}
 
@@ -365,7 +365,7 @@ Task.prototype.dom = function () {
 			encode_urls_emails( $div );
 
 			// Make it non-editable.
-			$div.removeAttr('contenteditable');
+			$div.removeAttr( 'contenteditable' );
 
 			if ( !self.board().current_user().has_cap( 'write' ) ) {
 				return false;
@@ -378,46 +378,46 @@ Task.prototype.dom = function () {
 
 
 	self.$el
-		.on(
-			'mouseenter',
-			'.btn-task-action',
-			function () {
-				var $btn = $( this );
-				var $dropdown = $btn.closest( '.dropdown' );
+	.on(
+		'mouseenter',
+		'.btn-task-action',
+		function () {
+			var $btn = $( this );
+			var $dropdown = $btn.closest( '.dropdown' );
 
+			if ( $dropdown.is( '.open' ) ) {
+				return false;
+			}
+
+			var timer_open = setTimeout( function () {
 				if ( $dropdown.is( '.open' ) ) {
 					return false;
 				}
 
-				var timer_open = setTimeout( function () {
-					if ( $dropdown.is( '.open' ) ) {
-						return false;
-					}
+				$btn.trigger( 'click' );
+			}, 500 );
 
-					$btn.trigger( 'click' );
+			$btn.data( 'timer-open', timer_open );
+		}
+	)
+	.on(
+		'mouseleave',
+		'.btn-task-action',
+		function () {
+			var $btn = $( this );
+			var $dropdown = $btn.closest( '.dropdown' );
+
+			clearTimeout( $btn.data( 'timer-open' ) );
+
+			if ( $dropdown.is( '.open' ) ) {
+				var timer_close = setTimeout( function () {
+					$dropdown.removeClass( 'open' ); // dropdown('toggle');
+
 				}, 500 );
-
-				$btn.data( 'timer-open', timer_open );
+				$dropdown.data( 'timer-close', timer_close );
 			}
-		)
-		.on(
-			'mouseleave',
-			'.btn-task-action',
-			function () {
-				var $btn = $( this );
-				var $dropdown = $btn.closest( '.dropdown' );
-
-				clearTimeout( $btn.data( 'timer-open' ) );
-
-				if ( $dropdown.is( '.open' ) ) {
-					var timer_close = setTimeout( function () {
-						$dropdown.removeClass( 'open' ); // dropdown('toggle');
-
-					}, 500 );
-					$dropdown.data( 'timer-close', timer_close );
-				}
-			}
-		).on(
+		}
+	).on(
 		'mouseenter',
 		'.dropdown-menu',
 		function () {
@@ -429,17 +429,17 @@ Task.prototype.dom = function () {
 
 
 	self.$el
-		.on(
-			'show.bs.dropdown',
-			'.row-task-actions .dropdown',
-			function ( e ) {
-				var $relatedTarget = $( e.relatedTarget );
-				var $dropdown = $relatedTarget.closest( '.dropdown' );
-				var $menu = $( '.dropdown-menu', $dropdown );
+	.on(
+		'show.bs.dropdown',
+		'.row-task-actions .dropdown',
+		function ( e ) {
+			var $relatedTarget = $( e.relatedTarget );
+			var $dropdown = $relatedTarget.closest( '.dropdown' );
+			var $menu = $( '.dropdown-menu', $dropdown );
 
-				$menu.css( 'maxWidth', self.$el.outerWidth() );
-			}
-		);
+			$menu.css( 'maxWidth', self.$el.outerWidth() );
+		}
+	);
 
 
 	self.$el.on(
@@ -586,37 +586,37 @@ Task.prototype.dom = function () {
 
 
 	self.$el
-		.on(
-			'mousedown',
-			'.btn-task-hour',
-			function () {
-				var $div = $( this );
+	.on(
+		'mousedown',
+		'.btn-task-hour',
+		function () {
+			var $div = $( this );
 
-				// wait 500 ms
+			// wait 500 ms
+			var timer = setInterval( function () {
+				// clear 500ms
+				clearInterval( $div.data( 'click_timer' ) );
+
+				// click every 100ms
 				var timer = setInterval( function () {
-					// clear 500ms
-					clearInterval( $div.data( 'click_timer' ) );
-
-					// click every 100ms
-					var timer = setInterval( function () {
-						$div.trigger( 'click' );
-					}, 100 );
-
-					$div.data( 'click_timer', timer );
-
-				}, 500 );
+					$div.trigger( 'click' );
+				}, 100 );
 
 				$div.data( 'click_timer', timer );
-			}
-		)
-		.on(
-			'mouseup mouseleave',
-			'.btn-task-hour',
-			function () {
-				var $div = $( this );
-				clearInterval( $div.data( 'click_timer' ) );
-			}
-		);
+
+			}, 500 );
+
+			$div.data( 'click_timer', timer );
+		}
+	)
+	.on(
+		'mouseup mouseleave',
+		'.btn-task-hour',
+		function () {
+			var $div = $( this );
+			clearInterval( $div.data( 'click_timer' ) );
+		}
+	);
 
 }; // dom
 
@@ -649,11 +649,11 @@ Task.prototype.update_progress = function () {
 	}
 
 	$( '.progress-bar', this.$el )
-		.css( {
-			width: progress_percent + '%'
-		} )
-		.removeClass( 'progress-bar-success progress-bar-warning progress-bar-danger' )
-		.addClass( 'progress-bar-' + progress_type );
+	.css( {
+		width: progress_percent + '%'
+	} )
+	.removeClass( 'progress-bar-success progress-bar-warning progress-bar-danger' )
+	.addClass( 'progress-bar-' + progress_type );
 }
 
 
@@ -693,25 +693,26 @@ Task.prototype.save = function ( comment, do_growl ) {
 		url: kanban.ajaxurl,
 		data: task_data
 	} )
-		.done( function ( response ) {
-			if ( !response.success ) {
-				notify( kanban.text.task_save_error );
-				return false;
-			}
+	.done( function ( response ) {
+		if ( !response.success ) {
+			notify( kanban.text.task_save_error );
+			return false;
+		}
 
-			self.board().update_UI();
-		} );
+		self.board().update_UI();
+	} );
 
 }; // save
 
 
 
-Task.prototype.delete = function (  ) {
+Task.prototype.delete = function () {
 	if ( !this.board().current_user().has_cap( 'write' ) ) {
 		return false;
 	}
 
 	var self = this;
+	this.record.is_active = 0;
 
 	var task_data = {
 		task: this.record,
@@ -727,24 +728,36 @@ Task.prototype.delete = function (  ) {
 		url: kanban.ajaxurl,
 		data: task_data
 	} )
-		.done( function ( response ) {
-			if ( !response.success ) {
-				notify( kanban.text.task_delete_error );
-				return false;
-			}
+	.done( function ( response ) {
+		if ( !response.success ) {
+			notify( kanban.text.task_delete_error );
+			return false;
+		}
 
-			$( document ).trigger( '/task/deleted/', self );
+		$( document ).trigger( '/task/deleted/', self );
 
-			self.delete_el();
-		} );
+		self.delete_el();
+	} );
 
 }; // delete
 
 
-Task.prototype.delete_el = function () {
+
+Task.prototype.delete_el = function ( do_undelete ) {
+
+	if ( typeof do_undelete === 'undefined' ) {
+		do_undelete = true;
+	}
+
 	var self = this;
 	self.$el.slideUp( 'fast', function () {
+
+		if ( do_undelete ) {
+			self.undelete_el();
+		}
+
 		self.$el.remove();
+
 		self.board().update_UI();
 		self.board().update_task_positions();
 		delete self.board().record.tasks[self.record.id];
@@ -753,11 +766,75 @@ Task.prototype.delete_el = function () {
 };
 
 
+
+Task.prototype.undelete_el = function () {
+	var self = this;
+
+	var $alert = $(
+		'<div class="alert alert-warning alert-task-restore" id="task-{0}-restore" role="alert" data-id="{1}">{2}</div>'.sprintf(
+			self.record.id,
+			self.record.id,
+			kanban.text.task_restore
+		)
+	)
+	.insertAfter( self.$el );
+
+	setTimeout( function () {
+		$alert.slideUp( 'fast', function () {
+			$alert.remove();
+		} );
+	}, 8000 );
+
+	if ( !this.board().current_user().has_cap( 'write' ) ) {
+		return false;
+	}
+
+	$alert.on(
+		'click',
+		function () {
+
+			var task_id = $alert.attr( 'data-id' );
+
+			var task_data = {
+				task: {
+					id: task_id
+				},
+				action: 'undelete_task',
+				kanban_nonce: $( '#kanban_nonce' ).val(),
+				comment: kanban.text['task_undeleted'].sprintf(
+					self.board().current_user().record().short_name
+				)
+			};
+
+			$.ajax( {
+				method: "POST",
+				url: kanban.ajaxurl,
+				data: task_data
+			} )
+			.done( function ( response ) {
+				if ( !response.success ) {
+					// notify( kanban.text.task_delete_error );
+					return false;
+				}
+
+				// If it hasn't happened already, remove it now.
+				$alert.remove();
+
+				$( document ).trigger( '/task/undeleted/', task_id );
+
+				// self.delete_el();
+			} );
+		}
+	);
+};
+
+
 // Task.prototype.update_board = function()
 // {
 // 	this.board().updates_status_counts();
 // 	this.board().match_col_h ();
 // };
+
 
 
 Task.prototype.update_status = function ( status_id ) {
@@ -771,6 +848,7 @@ Task.prototype.update_status = function ( status_id ) {
 		background: status.color_hex
 	} );
 }
+
 
 
 Task.prototype.update_position = function ( position, do_comment ) {
@@ -821,6 +899,7 @@ Task.prototype.update_position = function ( position, do_comment ) {
 }
 
 
+
 Task.prototype.update_assigned_to = function ( user_id ) {
 	if ( !this.board().current_user().has_cap( 'write' ) ) {
 		return false;
@@ -869,13 +948,13 @@ Task.prototype.save_title = function () {
 
 	// now that we have the title
 	// don't encode if we're focused on an input
-	if ( !$div.is(':focus') ) {
+	if ( !$div.is( ':focus' ) ) {
 
 		// (Re)encode links.
 		encode_urls_emails( $div );
 
 		// Make it non-editable.
-		$div.removeAttr('contenteditable');
+		$div.removeAttr( 'contenteditable' );
 	}
 
 
@@ -908,9 +987,11 @@ Task.prototype.save_title = function () {
 }; // save_title
 
 
+
 Task.prototype.project_update_title = function ( title ) {
 	$( '.task-project [contenteditable]', this.$el ).text( title );
 }
+
 
 
 Task.prototype.project_save = function ( project_id ) {
@@ -1033,16 +1114,16 @@ Task.prototype.parse_project = function () {
 		url: kanban.ajaxurl,
 		data: data
 	} )
-		.done( function ( response ) {
+	.done( function ( response ) {
 
-			// try
-			// {
-			// add project to available projects
-			self.board().record.project_records[response.data.project.id] = response.data.project;
-			self.project_save( response.data.project.id );
-			// }
-			// catch (err) {}
-		} );
+		// try
+		// {
+		// add project to available projects
+		self.board().record.project_records[response.data.project.id] = response.data.project;
+		self.project_save( response.data.project.id );
+		// }
+		// catch (err) {}
+	} );
 
 
 }; // parse_project

@@ -314,6 +314,9 @@ sub {
       .task .task-handle {
         cursor: default; } }
 
+.alert-task-restore {
+  cursor: pointer; }
+
 .task-placeholder {
   border: 1px dashed #999;
   margin-bottom: 15px;

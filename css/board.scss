@@ -503,9 +503,13 @@ sub {
 			cursor: default;
 		}
 	}
+}  // task
+
+
+.alert-task-restore {
+	cursor: pointer;
 }
 
-// task
 
 .task-placeholder {
 	border: 1px dashed #999;

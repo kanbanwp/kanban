@@ -4,6 +4,8 @@
 return array(
 	'kanban' => __('Kanban'),
 	'task_deleted' => __('{0} deleted the task'),
+	'task_restore' => __('Task deleted. <u>Undo</u>?'),
+	'task_undeleted' => __('{0} restored the deleted task'),
 	'task_updates' => __('Your tasks have been synced.'),
 	'task_added_to_project' => __('{0} added the task to the project "{1}"'),
 	'task_removed_from_project' => __('{0} removed the task project'),

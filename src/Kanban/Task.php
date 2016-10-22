@@ -459,9 +459,7 @@ class Kanban_Task extends Kanban_Db {
 			$sql = apply_filters( 'kanban_task_get_all_sql', $sql );
 
 			global $wpdb;
-			self::$records = $wpdb->get_results(
-				$wpdb->prepare( $sql )
-			);
+			self::$records = $wpdb->get_results( $sql );
 
 			self::$records = Kanban_Utils::build_array_with_id_keys( self::$records, 'id' );
 

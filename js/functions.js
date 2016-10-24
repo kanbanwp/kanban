@@ -49,9 +49,15 @@ Number.prototype.padZero = function ( len ) {
 
 
 
+/**
+ * Convert mysql-formatted date string to javascript date object ASSUMES UTC.
+ *
+ * @param dt The mysql-formatted date string.
+ * @returns {Date}The date object.
+ */
 function mysql_dt_to_js_date( dt ) {
 	var t = dt.split( /[- :]/ );
-	return new Date( t[0], t[1] - 1, t[2], t[3], t[4], t[5] );
+	return new Date( Date.UTC( t[0], t[1] - 1, t[2], t[3], t[4], t[5] ) );
 }
 
 

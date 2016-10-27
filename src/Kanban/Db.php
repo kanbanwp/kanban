@@ -95,7 +95,7 @@ abstract class Kanban_Db
 
 
 
-	protected function _duplicate( $id, $data = array() ) {
+	protected static function _duplicate( $id, $data = array() ) {
 		global $wpdb;
 		$record = (array) self::_get_row( 'id', $id );
 

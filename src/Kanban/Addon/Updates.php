@@ -99,7 +99,10 @@ class Kanban_Addon_Updates
 		if ( version_compare( $current_version, $remote_version, '<' ) ) {
 
 			$plugin_data = $this->get_remote_info();
-
+//			echo '<pre>';
+//			print_r($plugin_data);
+//			echo "</pre><br>\n";
+//			exit;
 			$obj = new stdClass();
 			$obj->id = 0;
 			$obj->slug = $parent::$slug;
@@ -107,8 +110,15 @@ class Kanban_Addon_Updates
 			$obj->new_version = $remote_version;
 			$obj->url = $plugin_data->homepage;
 
+			$obj->package = '';
+			$obj->upgrade_notice = '';
+
 			if ( isset($plugin_data->download_link) && filter_var($plugin_data->download_link, FILTER_VALIDATE_URL) !== FALSE) {
 				$obj->package = $plugin_data->download_link;
+			}
+
+			if ( isset($plugin_data->upgrade_notice) ) {
+				$obj->upgrade_notice = $plugin_data->upgrade_notice;
 			}
 
 			$obj->tested = $plugin_data->tested;
@@ -225,7 +235,7 @@ class Kanban_Addon_Updates
 
 		$license_str = $license->get_license();
 
-		if ( empty( $license_str ) ) return false;
+//		if ( empty( $license_str ) ) return false;
 
 
 		// Add slug and to update path.

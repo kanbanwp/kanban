@@ -509,12 +509,13 @@ class Kanban_Task extends Kanban_Db {
 	 *
 	 * @return bool Success.
 	 */
-	function duplicate( $task_id, $data = array() ) {
+	static function duplicate( $task_id, $data = array() ) {
 
 		// Reset.
 		unset( $data['id'] );
 		$data['created_dt_gmt']  = Kanban_Utils::mysql_now_gmt();
 		$data['modified_dt_gmt'] = Kanban_Utils::mysql_now_gmt();
+		$data['modified_user_id'] = 0; // So task is shown on sync.
 
 		// Insert new task.
 		$is_success = self::_duplicate( $task_id, $data );

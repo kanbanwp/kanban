@@ -1,23 +1,36 @@
 <?php
+/**
+ * Manage addon licenses.
+ */
+
+// Exit if accessed directly.
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 
 
-// Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) ) { exit; }
+/**
+ * Class Kanban_License
+ */
+class Kanban_License {
 
-
-
-class Kanban_License
-{
-
+	/**
+	 * Setup the class.
+	 */
 	static function init() {
 		add_action( 'init', array( __CLASS__, 'save_licenses' ), 10 );
 	}
 
 
 
+	/**
+	 * Save settings from Kanban > Licenses admin menu page.
+	 */
 	static function save_licenses() {
-		if ( ! isset( $_POST[ Kanban_Utils::get_nonce() ] ) || ! wp_verify_nonce( $_POST[ Kanban_Utils::get_nonce() ], 'kanban-licenses' ) || ! is_user_logged_in() ) { return; }
+		if ( ! isset( $_POST[ Kanban_Utils::get_nonce() ] ) || ! wp_verify_nonce( $_POST[ Kanban_Utils::get_nonce() ], 'kanban-licenses' ) || ! is_user_logged_in() ) {
+			return;
+		}
 
 		global $wpdb;
 
@@ -25,18 +38,20 @@ class Kanban_License
 
 		$board = Kanban_Board::get_current();
 
-		// get current settings
+		// Get current settings.
 		$settings = Kanban_Option::get_all( $board->id );
 
-		// get options table for deleting below
+		// Get options table for deleting below.
 		$option_table = Kanban_Option::table_name();
 
-		// save all single settings
+		// Save all single settings.
 		foreach ( $settings as $key => $value ) {
-			// if empty or not license, skip it
-			if ( substr( $key, 0, 7 ) != 'license' ) { continue; }
+			// If empty or not license, skip it.
+			if ( substr( $key, 0, 7 ) != 'license' ) {
+				continue;
+			}
 
-			// delete any previously set licenses
+			// Delete any previously set licenses.
 			$wpdb->delete( $option_table, array( 'name' => $key ) );
 
 			Kanban_Option::update_option( $key, $_POST['settings'][ $key ], 0 );

@@ -173,21 +173,19 @@ class Kanban_Template
 	 * @return string           fill template path
 	 */
 	static function find_template( $basename ) {
-		// look for template in theme/name_of_class
-		// $template = sprintf( '%s/%s/%s', get_stylesheet_directory(), Kanban::get_instance()->settings->basename, sprintf( '%s.php', $basename ) );
-		//
-		// if not found, look for it in the plugin
-		// if ( ! is_file( $template ) )
-		// {
-			$template = sprintf( '%s/templates/%s', Kanban::get_instance()->settings->path, sprintf( '%s.php', $basename ) );
-		// }
-		//
-		// if not found, use the theme default
-		// if ( ! is_file( $template ) )
-		// {
-		// $template = sprintf( '%s/%s', get_stylesheet_directory(), sprintf( '%s.php', $basename ) );
-		// }
-		// if not found, use the original
+
+		// Try to build the template path in the context of the plugin.
+		$template = sprintf(
+			'%s/templates/%s',
+			Kanban::get_instance()->settings->path,
+			sprintf(
+				'%s.php', str_replace('.php', '', $basename) // Strip .php so it can be re-added safely.
+			)
+		);
+
+
+
+		// If not found, use the original.
 		if ( ! is_file( $template ) ) {
 			if ( is_file( $basename ) ) {
 				$template = $basename;
@@ -286,7 +284,13 @@ class Kanban_Template
 	 */
 	static function is_plain_permalink() {
 		$permalink_structure = get_option( 'permalink_structure' );
-		return empty( $permalink_structure );
+
+		// If permalink is not set, or includes index.php, then user ?kanban=board option.
+		if ( empty( $permalink_structure ) || strpos($permalink_structure, 'index.php') !== FALSE ) {
+			return TRUE;
+		}
+
+		return FALSE; // empty( $permalink_structure );
 	}
 
 

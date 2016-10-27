@@ -149,7 +149,7 @@ class Kanban_Project extends Kanban_Db
 		// dupe each task, and delete it
 		foreach ( $task_ids as $task_id ) {
 			Kanban_Task::duplicate( $task_id, $data );
-			Kanban_Task::delete( $task_id );
+			Kanban_Task::delete( $task_id, 0, 0 );
 		}
 
 		do_action( 'kanban_project_ajax_reset_after', $_POST['project_id'] );

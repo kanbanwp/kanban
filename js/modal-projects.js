@@ -221,7 +221,10 @@ Modal_Projects.prototype.dom = function()
 			})
 			.done(function(response )
 			{
-				console.log(response);
+				// force refresh
+				kanban.updates_task();
+
+				// console.log(response);
 			});
 
 			return false;

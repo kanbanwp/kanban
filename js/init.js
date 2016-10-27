@@ -501,8 +501,10 @@ $( function () {
 
 
 
-	// Check for updates by other users every 5 seconds.
-	setInterval( function () {
+
+
+
+	kanban.updates_task = function () {
 		var data = {
 			action: 'updates_task',
 			datetime: js_date_to_mysql_dt( updates_dt ),
@@ -619,7 +621,13 @@ $( function () {
 			}
 		} );
 
-	}, 5000 );
+	};
+
+
+
+	// Check for updates by other users every 5 seconds.
+	setInterval( kanban.updates_task, 5000 );
+
 
 
 } );

@@ -795,6 +795,9 @@ Task.prototype.undelete_el = function () {
 
 			var task_id = $alert.attr( 'data-id' );
 
+			// Replace undo with spinner.
+			$alert.html('<span class="hidden-xs glyphicon glyphicon-refresh glyphicon-refresh-animate"></span>');
+
 			var task_data = {
 				task: {
 					id: task_id
@@ -816,6 +819,9 @@ Task.prototype.undelete_el = function () {
 					// notify( kanban.text.task_delete_error );
 					return false;
 				}
+
+				// force refresh
+				kanban.updates_task();
 
 				// If it hasn't happened already, remove it now.
 				$alert.remove();

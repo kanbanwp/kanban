@@ -54,7 +54,7 @@ class Kanban_License {
 			// Delete any previously set licenses.
 			$wpdb->delete( $option_table, array( 'name' => $key ) );
 
-			Kanban_Option::update_option( $key, $_POST['settings'][ $key ], 0 );
+			Kanban_Option::update_option( $key, $_POST[ 'settings' ][ $key ], 0 );
 		}
 
 		do_action( 'kanban_license_save_settings_after', $_POST );
@@ -63,7 +63,7 @@ class Kanban_License {
 			array(
 				'message' => urlencode( __( 'Licenses saved', 'kanban' ) ),
 			),
-			$_POST['_wp_http_referer']
+			sanitize_text_field( wp_unslash( $_POST[ '_wp_http_referer' ] ) )
 		);
 
 		wp_redirect( $url );

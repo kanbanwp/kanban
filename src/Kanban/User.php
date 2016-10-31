@@ -81,7 +81,7 @@ class Kanban_User
 			'success'
 		);
 
-		wp_redirect( $_POST['_wp_http_referer'] );
+		wp_redirect( sanitize_text_field( wp_unslash( $_POST[ '_wp_http_referer' ] ) ) );
 		exit;
 	}
 
@@ -102,7 +102,7 @@ class Kanban_User
 					'danger'
 				);
 
-				wp_redirect( $_POST['_wp_http_referer'] );
+				wp_redirect( sanitize_text_field( wp_unslash( $_POST[ '_wp_http_referer' ] ) ) );
 				exit;
 			}
 		} else {
@@ -114,7 +114,7 @@ class Kanban_User
 					'danger'
 				);
 
-				wp_redirect( wp_unslash( $_POST['_wp_http_referer'] ) );
+				wp_redirect( sanitize_text_field( wp_unslash( $_POST[ '_wp_http_referer' ] ) ) );
 				exit;
 			}
 		}
@@ -132,7 +132,7 @@ class Kanban_User
 				'danger'
 			);
 
-			wp_redirect( wp_unslash( $_POST['_wp_http_referer'] ) );
+			wp_redirect( sanitize_text_field( wp_unslash( $_POST[ '_wp_http_referer' ] ) ) );
 			exit;
 		}
 

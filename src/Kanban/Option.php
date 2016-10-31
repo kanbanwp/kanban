@@ -362,7 +362,7 @@ class Kanban_Option extends Kanban_Db
 			array(
 				'message' => urlencode( __( 'Settings saved', 'kanban' ) ),
 			),
-			$_POST['_wp_http_referer']
+			sanitize_text_field( wp_unslash( $_POST[ '_wp_http_referer' ] ) )
 		);
 
 		wp_redirect( $url );

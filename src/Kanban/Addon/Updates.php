@@ -27,7 +27,7 @@ class Kanban_Addon_Updates
 	 * The plugin remote update path
 	 * @var string
 	 */
-	public $update_path = 'http://kanbanwp.dev/plugin-updates/update.php';
+	public $update_path = 'https://kanbanwp.com/plugin-updates/update.php';
 
 	/**
 	 * Plugin Slug (plugin_directory/plugin_file.php)

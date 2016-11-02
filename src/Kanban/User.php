@@ -171,11 +171,15 @@ class Kanban_User
 		if ( empty( self::$records ) ) {
 			global $wpdb;
 
+			// Get all boards.
 			$boards = Kanban_Board::get_all();
+
+			// Fill records_by_board with boards and empty arrays.
 			self::$records_by_board = array_fill_keys( array_keys( $boards ), array() );
 
 			$query_in = array( 0 );
 			foreach ( array_keys( $boards ) as $board_record_id ) {
+
 				// Get all settings.
 				$allowed_users = Kanban_Option::get_option( 'allowed_users', $board_record_id );
 

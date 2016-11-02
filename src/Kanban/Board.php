@@ -187,7 +187,10 @@ class Kanban_Board extends Kanban_Db
 				)
 			);
 
-			self::$boards = Kanban_Utils::build_array_with_id_keys( self::$boards, 'id' );
+			self::$boards = apply_filters(
+				'kanban_board_get_all',
+				Kanban_Utils::build_array_with_id_keys( self::$boards, 'id' )
+			);
 
 		}
 

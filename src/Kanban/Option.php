@@ -160,8 +160,10 @@ class Kanban_Option extends Kanban_Db
 				}
 			}
 
+			foreach ( $boards as $board ) {
 
-			foreach ( $boards as $id => $board ) {
+				$id = $board->id;
+
 				if ( ! isset( self::$options_by_board[ $id ] ) ) {
 					self::$options_by_board[ $id ] = array();
 				}
@@ -195,7 +197,7 @@ class Kanban_Option extends Kanban_Db
 		$options = self::get_all( $board_id );
 
 		if ( ! isset( $options[ $name ] ) ) {
-			return null;
+			return self::get_default($name);
 		}
 
 		return $options[ $name ];

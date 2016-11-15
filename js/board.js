@@ -718,3 +718,6 @@ Board.prototype.status_cols_toggle = function ( col_index ) {
 
 
 
+Board.prototype.get_current_board_id = function () {
+	return parseInt(current_board_id);
+};

@@ -1,6 +1,5 @@
-function Modal_Projects ($el)
-{
-	$(document).trigger('/modal-projects/init/', $el);
+function Modal_Projects( $el ) {
+	$( document ).trigger( '/modal-projects/init/', $el );
 
 	this.$el = $el;
 
@@ -8,15 +7,13 @@ function Modal_Projects ($el)
 }
 
 
-Modal_Projects.prototype.board = function()
-{
+Modal_Projects.prototype.board = function () {
 	return boards[current_board_id];
 };
 
 
 
-Modal_Projects.prototype.dom = function()
-{
+Modal_Projects.prototype.dom = function () {
 
 	var self = this;
 
@@ -25,27 +22,24 @@ Modal_Projects.prototype.dom = function()
 	// populate with projects
 	self.$el.on(
 		'show.bs.modal',
-		function ()
-		{
-			if ( !self.board().current_user().has_cap('write') )
-			{
+		function () {
+			if ( !self.board().current_user().has_cap( 'write' ) ) {
 				return false;
 			}
 
 			self.board().project_update_counts();
 
-			var $list = $('#accordion-projects').empty();
+			var $list = $( '#accordion-projects' ).empty();
 
 			var statuses = self.board().record.status_records();
 
-			for ( var project_id in self.board().record.project_records )
-			{
+			for ( var project_id in self.board().record.project_records ) {
 				var project = self.board().record.project_records[project_id];
-				var project_html = kanban.templates[self.board().record.id()]['t-modal-project'].render({
+				var project_html = kanban.templates[self.board().record.id()]['t-modal-project'].render( {
 					project: project,
 					statuses: statuses
-				});
-				$(project_html).appendTo($list);
+				} );
+				$( project_html ).appendTo( $list );
 			}
 		}
 	);
@@ -55,39 +49,34 @@ Modal_Projects.prototype.dom = function()
 	self.$el.on(
 		'click',
 		'.btn-project-delete',
-		function()
-		{
-			var r = confirm(kanban.text.project_delete_confirm);
-			if (r !== true)
-			{
+		function () {
+			var r = confirm( kanban.text.project_delete_confirm );
+			if ( r !== true ) {
 				return false;
 			}
 
-			var $btn = $(this);
-			var $panel = $btn.closest('.panel');
-			var project_id = $btn.attr('data-id');
+			var $btn = $( this );
+			var $panel = $btn.closest( '.panel' );
+			var project_id = $btn.attr( 'data-id' );
 			var project = self.board().record.project_records[project_id];
 
 			var data = {
 				project: project,
 				action: 'delete_project',
-				kanban_nonce: $('#kanban_nonce').val()
+				kanban_nonce: $( '#kanban_nonce' ).val()
 			};
 
-			$.ajax({
+			$.ajax( {
 				method: "POST",
 				url: kanban.ajaxurl,
 				data: data
-			})
-			.done(function(response )
-			{
+			} )
+			.done( function ( response ) {
 				// remove project from tasks
-				for ( var i in self.board().record.tasks )
-				{
+				for ( var i in self.board().record.tasks ) {
 					var task = self.board().record.tasks[i];
-					if ( task.record.project_id == project_id )
-					{
-						task.project_save(0);
+					if ( task.record.project_id == project_id ) {
+						task.project_save( 0 );
 					}
 				}
 
@@ -97,7 +86,7 @@ Modal_Projects.prototype.dom = function()
 				// remove from modal
 				$panel.remove();
 
-			});
+			} );
 		}
 	);
 
@@ -106,10 +95,9 @@ Modal_Projects.prototype.dom = function()
 	self.$el.on(
 		'focus',
 		'.project-title',
-		function()
-		{
-			var $input = $(this);
-			$input.data('orig', $input.val());
+		function () {
+			var $input = $( this );
+			$input.data( 'orig', $input.val() );
 		}
 	);
 
@@ -118,22 +106,19 @@ Modal_Projects.prototype.dom = function()
 	self.$el.on(
 		'keyup',
 		'.project-title',
-		function(e)
-		{
-			var $input = $(this);
+		function ( e ) {
+			var $input = $( this );
 
 			// enter
-			if(e.keyCode==13)
-			{
-				$input.trigger('blur');
+			if ( e.keyCode == 13 ) {
+				$input.trigger( 'blur' );
 				return false;
 			}
 
 			// escape
-			if(e.keyCode==27)
-			{
-				var orig = $input.data('orig');
-				$input.val(orig).trigger('blur');
+			if ( e.keyCode == 27 ) {
+				var orig = $input.data( 'orig' );
+				$input.val( orig ).trigger( 'blur' );
 				return false;
 			}
 		}
@@ -144,16 +129,15 @@ Modal_Projects.prototype.dom = function()
 	self.$el.on(
 		'blur',
 		'.project-title',
-		function()
-		{
-			var $input = $(this);
-			var $panel = $input.closest('.panel');
+		function () {
+			var $input = $( this );
+			var $panel = $input.closest( '.panel' );
 
 			var project_title = $input.val();
 
 
 
-			var project_id = $input.attr('data-id');
+			var project_id = $input.attr( 'data-id' );
 			var project = self.board().record.project_records[project_id];
 
 			project.title = project_title;
@@ -161,29 +145,26 @@ Modal_Projects.prototype.dom = function()
 			var data = {
 				project: project,
 				action: 'save_project',
-				kanban_nonce: $('#kanban_nonce').val()
+				kanban_nonce: $( '#kanban_nonce' ).val()
 			};
 
-			$.ajax({
+			$.ajax( {
 				method: "POST",
 				url: kanban.ajaxurl,
 				data: data
-			})
-			.done(function(response )
-			{
-				$('.label-project-title', $panel).text(project_title);
+			} )
+			.done( function ( response ) {
+				$( '.label-project-title', $panel ).text( project_title );
 
 				// update the tasks
-				for ( var i in self.board().record.tasks )
-				{
+				for ( var i in self.board().record.tasks ) {
 					var task = self.board().record.tasks[i];
-					if ( task.record.project_id == project_id )
-					{
+					if ( task.record.project_id == project_id ) {
 						// will only update the DOM
-						task.project_save(project_id);
+						task.project_save( project_id );
 					}
 				}
-			});
+			} );
 
 		}
 	);
@@ -193,17 +174,15 @@ Modal_Projects.prototype.dom = function()
 	self.$el.on(
 		'click',
 		'.btn-project-reset',
-		function()
-		{
-			var $btn = $(this);
-			var $panel = $btn.closest('.panel-project');
-			var $select = $('.select-project-reset', $panel);
+		function () {
+			var $btn = $( this );
+			var $panel = $btn.closest( '.panel-project' );
+			var $select = $( '.select-project-reset', $panel );
 
-			var project_id = $panel.attr('data-id');
+			var project_id = $panel.attr( 'data-id' );
 			var status_id = $select.val();
 
-			if ( '' == status_id || '' == project_id )
-			{
+			if ( '' == status_id || '' == project_id ) {
 				return false;
 			}
 
@@ -211,26 +190,49 @@ Modal_Projects.prototype.dom = function()
 				action: 'reset_project',
 				project_id: project_id,
 				status_id: status_id,
-				kanban_nonce: $('#kanban_nonce').val()
+				kanban_nonce: $( '#kanban_nonce' ).val()
 			};
 
-			$.ajax({
+			$.ajax( {
 				method: "POST",
 				url: kanban.ajaxurl,
 				data: data
-			})
-			.done(function(response )
-			{
+			} )
+			.done( function ( response ) {
 				// force refresh
 				kanban.updates_task();
 
 				// console.log(response);
-			});
+			} );
 
 			return false;
 		}
 	);
 
+
+	self.$el.on(
+		'click',
+		'#modal-project-new-btn',
+		function () {
+			var project_title = $( '#modal-project-new-input' ).val();
+
+			if ( '' == project_title ) {
+				return false;
+			}
+
+			// add project
+			Project.prototype.add(
+				Board.prototype.get_current_board_id(),
+				project_title,
+				function () {
+					$( '#modal-project-new-input' ).val( '' );
+					$( '#modal-projects' ).modal( 'hide' );
+				}
+			);
+
+			return false;
+		}
+	);
 
 
 }; // dom

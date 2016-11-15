@@ -11,6 +11,21 @@
 				<div class="panel-group" id="accordion-projects">
 				</div><!-- panel-group -->
 
+				<div class="row">
+					<p class="col-sm-6 col-sm-offset-3">
+						<label for="modal-project-new-input" class="sr-only">
+							<?php echo __( 'Add a project', 'kanban' ); ?>:
+						</label>
+						<span class="input-group">
+							<input type="text" class="form-control input-sm" id="modal-project-new-input" placeholder="<?php echo __( 'Add a project', 'kanban' ); ?>" autocomplete="off">
+							<span class="input-group-btn">
+								<button class="btn btn-default btn-sm" type="button" id="modal-project-new-btn">
+									<?php echo __( 'Add a project', 'kanban' ); ?>
+								</button>
+							</span>
+						</span>
+					</p>
+				</div>
 			</div><!-- body -->
 		</div><!-- content -->
 	</div><!-- dialog -->

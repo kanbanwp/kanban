@@ -28,6 +28,7 @@ class Kanban_Template
 				't' => '%sjs/min/t-min.js',
 				'modal-projects' => '%sjs/min/modal-projects-min.js',
 				'user' => '%sjs/min/user-min.js',
+				'project' => '%sjs/min/project-min.js',
 				'board' => '%sjs/min/board-min.js',
 				'task' => '%sjs/min/task-min.js',
 				'functions' => '%sjs/min/functions-min.js',

@@ -1097,42 +1097,19 @@ Task.prototype.parse_project = function () {
 	}
 
 
-	var comment = kanban.text['project_added'].sprintf(
-		this.board().current_user().record().short_name,
-		project_title
+
+	// add project
+	Project.prototype.add(
+		self.board().record.id(),
+		project_title,
+		function() {
+			self.project_save( this.data.project.id );
+		}
 	);
 
 
-	var data = {
-		action: 'save_project',
-		post_type: 'kanban_project',
-		kanban_nonce: $( '#kanban_nonce' ).val(),
-		project: {
-			title: project_title,
-			board_id: self.board().record.id()
-		},
-		comment: comment
-	};
-
-	// save new project
-	$.ajax( {
-		method: "POST",
-		url: kanban.ajaxurl,
-		data: data
-	} )
-	.done( function ( response ) {
-
-		// try
-		// {
-		// add project to available projects
-		self.board().record.project_records[response.data.project.id] = response.data.project;
-		self.project_save( response.data.project.id );
-		// }
-		// catch (err) {}
-	} );
-
-
 }; // parse_project
+
 
 
 Task.prototype.log_work_hour = function ( operator ) {

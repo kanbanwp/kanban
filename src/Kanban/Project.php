@@ -65,6 +65,8 @@ class Kanban_Project extends Kanban_Db
 
 		$_POST['project']['user_id_author'] = get_current_user_id();
 
+
+
 		$is_successful = self::_replace( $_POST['project'] );
 
 		$project_id = ! empty( $_POST['project']['id'] ) ? $_POST['project']['id'] : self::_insert_id();
@@ -73,7 +75,24 @@ class Kanban_Project extends Kanban_Db
 
 		if ( ! $post_data ) { wp_send_json_error(); }
 
+
+
 		do_action( 'kanban_project_ajax_save_after', $post_data );
+
+
+
+		if ( ! empty( $_POST['comment'] ) ) {
+			do_action( 'kanban_comment_ajax_save_before_comment' );
+
+			Kanban_Comment::add(
+				$_POST['comment'],
+				'system'
+			);
+
+			do_action( 'kanban_comment_ajax_save_after_comment' );
+		}
+
+
 
 		if ( $is_successful ) {
 			wp_send_json_success( array(

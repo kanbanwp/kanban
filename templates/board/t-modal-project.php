@@ -13,18 +13,24 @@
 				<?php echo sprintf(__('There are %s tasks assigned to this project.', 'kanban'), '{{=project.task_count}}') ?>
 			</p>
 			<p>
-				<label>Rename the project:</label>
+				<label for="modal-project-rename-{{=project.id}}">
+					<?php echo __( 'Rename the project', 'kanban' ); ?>:
+				</label>
 				<span class="input-group">
-					<input type="text" class="form-control input-lg project-title" value="{{=project.title}}" data-id="{{=project.id}}">
+					<input type="text" class="form-control input-lg project-title" value="{{=project.title}}" id="modal-project-rename-{{=project.id}}" data-id="{{=project.id}}">
 					<span class="input-group-btn">
-						<button class="btn btn-default btn-lg" type="button">Save</button>
+						<button class="btn btn-default btn-lg" type="button">
+							<?php echo __('Save') ?>
+						</button>
 					</span>
 				</span>
 			</p>
 			<p>
-				<label><?php echo __('Reset all tasks in this project to') ?>:</label>
+				<label for="modal-project-reset-{{=project.id}}">
+					<?php echo __('Reset all tasks in this project to') ?>:
+				</label>
 				<span class="input-group">
-					<select class="form-control select-project-reset">
+					<select class="form-control select-project-reset" id="modal-project-reset-{{=project.id}}" data-id="{{=project.id}}">
 						<option value="">-- <?php echo __('Choose a status', 'kanban') ?> --</option>
 	{{@statuses}}
 						<option value="{{=_key}}">{{=_val.title}}</option>

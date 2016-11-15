@@ -120,7 +120,7 @@ class Kanban_Utils
 	 * @return false|string
 	 */
 	static function mysql_now_gmt() {
-		return gmdate( 'Y-m-d H:i:s' );
+		return current_time('mysql', TRUE);
 	}
 
 

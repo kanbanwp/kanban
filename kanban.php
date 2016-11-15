@@ -26,7 +26,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Kanban. If not, see <http://www.gnu.org/licenses/>.
 // Exit if accessed directly.
-if ( !defined( 'ABSPATH' ) ) {
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
@@ -37,9 +37,9 @@ if ( !defined( 'ABSPATH' ) ) {
  * @param    string $class_name Name of class to load.
  */
 function kanban_autoloader( $class_name ) {
-	if ( false !== strpos( $class_name, 'Kanban' ) && !class_exists( $class_name ) ) {
+	if ( false !== strpos( $class_name, 'Kanban' ) && ! class_exists( $class_name ) ) {
 		$classes_dir = realpath( plugin_dir_path( __FILE__ ) ) . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR;
-		$class_file = str_replace( '_', DIRECTORY_SEPARATOR, $class_name ) . '.php';
+		$class_file  = str_replace( '_', DIRECTORY_SEPARATOR, $class_name ) . '.php';
 		require_once $classes_dir . $class_file;
 	}
 }
@@ -51,8 +51,7 @@ spl_autoload_register( 'kanban_autoloader' );
 /**
  * Class Kanban
  */
-class Kanban
-{
+class Kanban {
 	/**
 	 * The singleton instance of Kanban.
 	 *
@@ -115,6 +114,7 @@ class Kanban
 
 		register_activation_hook( __FILE__, array( __CLASS__, 'on_activation' ) );
 		register_deactivation_hook( __FILE__, array( __CLASS__, 'on_deactivation' ) );
+		add_action( 'wpmu_new_blog', array( __CLASS__, 'on_new_blog' ), 10, 6 );
 
 		do_action( 'kanban_loaded' );
 	}
@@ -123,20 +123,33 @@ class Kanban
 
 	/**
 	 * On activation, run the single activation across all blogs.
+	 * @link http://shibashake.com/wordpress-theme/write-a-plugin-for-wordpress-multi-site
 	 *
 	 * @param bool $network_wide If plugin is being used across the multisite.
 	 */
-	public static function on_activation( $network_wide ) {
-		if ( function_exists( 'is_multisite' ) && is_multisite() ) {
-			if ( $network_wide ) {
-				// Get all blog ids
-				$blog_ids = self::get_blog_ids();
+	public static function on_activation( $networkwide ) {
+		global $wpdb;
 
-				foreach ( $blog_ids as $blog_id ) {
+		if ( function_exists( 'is_multisite' ) && is_multisite() ) {
+
+			// Check if it is a network activation - if so, run the activation function for each blog id.
+			if ( $networkwide ) {
+
+				$old_blog = $wpdb->blogid;
+
+				// Get all blog ids.
+				$blogids = $wpdb->get_col( "SELECT blog_id FROM $wpdb->blogs" );
+
+				foreach ( $blogids as $blog_id ) {
 					switch_to_blog( $blog_id );
+
+					// Activate based on switched-to blog.
 					self::single_activate();
 				}
-				restore_current_blog();
+
+				// Switch back to previous.
+				switch_to_blog( $old_blog );
+
 			} else {
 				self::single_activate();
 			}
@@ -164,14 +177,15 @@ class Kanban
 
 
 
-	private static function get_blog_ids() {
-		$sites = wp_get_sites();
-		$blog_ids = array();
-		foreach ( $sites as $site ) {
-			$blog_ids[] = $site[ 'blog_id' ];
-		}
-		return $blog_ids;
-	}
+//	private static function get_blog_ids() {
+//		$sites    = wp_get_sites();
+//		$blog_ids = array();
+//		foreach ( $sites as $site ) {
+//			$blog_ids[] = $site[ 'blog_id' ];
+//		}
+//
+//		return $blog_ids;
+//	}
 
 
 
@@ -184,11 +198,22 @@ class Kanban
 
 
 
+	static function on_new_blog( $blog_id, $user_id, $domain, $path, $site_id, $meta ) {
+		global $wpdb;
+
+		$old_blog = $wpdb->blogid;
+		switch_to_blog( $blog_id );
+		self::single_activate();
+		switch_to_blog( $old_blog );
+	}
+
+
+
 	/**
 	 * Friendly notice about php version requirement
 	 */
 	static function notify_php_version() {
-		if ( !is_admin() ) {
+		if ( ! is_admin() ) {
 			return;
 		}
 		?>
@@ -214,9 +239,10 @@ class Kanban
 	 * @return object the instance
 	 */
 	public static function get_instance() {
-		if ( !self::$instance ) {
+		if ( ! self::$instance ) {
 			self::$instance = new self();
 		}
+
 		return self::$instance;
 	}
 

@@ -245,8 +245,43 @@ class Kanban_Board extends Kanban_Db
 
 
 	// extend parent, so it's accessible from other classes
-	static function delete( $where ) {
-		return self::_delete( $where );
+	static function delete( $where, $is_delete = FALSE ) {
+
+		if ( !$is_delete ) {
+			self::_update(
+				array(
+					'is_active' => FALSE
+				),
+				$where
+			);
+		}
+		else {
+
+			// Delete board.
+			self::_delete( $where );
+
+			global $wpdb;
+
+			// Get id for deleting everything else.
+			$board_id = $where['id'];
+
+			$sub_where = array(
+				'board_id' => $board_id
+			);
+
+			$table_name_status = Kanban_Status::table_name();
+			$wpdb->delete( $table_name_status, $sub_where );
+
+			$table_name_estimate = Kanban_Estimate::table_name();
+			$wpdb->delete( $table_name_estimate, $sub_where );
+
+			$table_name_project = Kanban_Project::table_name();
+			$wpdb->delete( $table_name_project, $sub_where );
+
+			$table_name_option = Kanban_Option::table_name();
+			$wpdb->delete( $table_name_option, $sub_where );
+		}
+
 	}
 
 

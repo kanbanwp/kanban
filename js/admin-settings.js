@@ -126,12 +126,13 @@ jQuery(function($)
 			var $button = $(this);
 
 			var confirm_msg = $button.attr('data-confirm');
-			if ( 'undefined' !== confirm_msg && '' !== confirm_msg )
+			var r = false;
+			if ( 'undefined' !== typeof confirm_msg && '' !== confirm_msg )
 			{
 				var r = confirm(confirm_msg);
 			}
 
-			if ( 'undefined' === confirm_msg || '' == confirm_msg || r == true ) {
+			if ( 'undefined' === typeof confirm_msg || '' == confirm_msg || r == true ) {
 				$button
 				.closest( 'li' )
 				.slideUp(

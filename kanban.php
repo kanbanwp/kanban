@@ -4,8 +4,8 @@
  * Plugin Name:        Kanban for WordPress
  * Plugin URI:         http://kanbanwp.com/
  * Description:        A complete Kanban project management suite for WordPress.
- * Version:            2.3.0
- * Release Date:       November 2, 2016
+ * Version:            2.3.1
+ * Release Date:       November 16, 2016
  * Author:             Gelform Inc
  * Author URI:         http://gelwp.com
  * License:            GPL2
@@ -144,17 +144,17 @@ class Kanban {
 					switch_to_blog( $blog_id );
 
 					// Activate based on switched-to blog.
-					self::single_activate();
+					self::single_activation();
 				}
 
 				// Switch back to previous.
 				switch_to_blog( $old_blog );
 
 			} else {
-				self::single_activate();
+				self::single_activation();
 			}
 		} else {
-			self::single_activate();
+			self::single_activation();
 		}
 
 	}
@@ -164,7 +164,7 @@ class Kanban {
 	/**
 	 * Functions to do on single blog activation, like update db.
 	 */
-	static function single_activate() {
+	static function single_activation() {
 
 		Kanban_Db::check_for_updates();
 
@@ -174,18 +174,6 @@ class Kanban {
 			30
 		);
 	}
-
-
-
-//	private static function get_blog_ids() {
-//		$sites    = wp_get_sites();
-//		$blog_ids = array();
-//		foreach ( $sites as $site ) {
-//			$blog_ids[] = $site[ 'blog_id' ];
-//		}
-//
-//		return $blog_ids;
-//	}
 
 
 
@@ -203,7 +191,7 @@ class Kanban {
 
 		$old_blog = $wpdb->blogid;
 		switch_to_blog( $blog_id );
-		self::single_activate();
+		self::single_activation();
 		switch_to_blog( $old_blog );
 	}
 

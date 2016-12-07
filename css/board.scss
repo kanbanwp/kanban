@@ -380,6 +380,7 @@ sub {
 	.row-task-actions {
 		$task-action-size: 1.8em;
 
+		clear: both;
 		margin: 0 0 $margin/3;
 
 		.col {

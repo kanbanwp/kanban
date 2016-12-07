@@ -236,6 +236,7 @@ sub {
     margin-bottom: 3px;
     z-index: 1; }
   .task .row-task-actions {
+    clear: both;
     margin: 0 0 5px; }
     .task .row-task-actions .col {
       padding: 0;

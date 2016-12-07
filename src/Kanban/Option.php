@@ -116,7 +116,7 @@ class Kanban_Option extends Kanban_Db
 			}
 		}
 
-		if ( is_null( $board_id ) ) {
+		if ( !is_numeric( $board_id ) ) {
 			return apply_filters(
 				'kanban_option_get_results_return',
 				self::$records
@@ -133,7 +133,7 @@ class Kanban_Option extends Kanban_Db
 
 
 	static function get_results_by_board( $board_id = null ) {
-		if ( is_null( $board_id ) ) {
+		if ( !is_numeric( $board_id ) ) {
 			self::get_results();
 			return self::$records_by_board;
 		} else {
@@ -147,7 +147,7 @@ class Kanban_Option extends Kanban_Db
 
 		$boards = Kanban_Board::get_all();
 
-		if ( !is_null($boards) && !isset($boards[$board_id]) ) return array();
+		if ( is_numeric($boards) && !isset($boards[$board_id]) ) return array();
 
 
 
@@ -172,7 +172,7 @@ class Kanban_Option extends Kanban_Db
 			}
 		}
 
-		if ( is_null( $board_id ) ) {
+		if ( !is_numeric( $board_id ) ) {
 			return apply_filters(
 				'kanban_option_get_all_return',
 				self::$options_by_board
@@ -188,7 +188,7 @@ class Kanban_Option extends Kanban_Db
 
 
 	static function get_option( $name, $board_id = null ) {
-		if ( is_null( $board_id ) ) {
+		if ( !is_numeric( $board_id ) ) {
 			$board = Kanban_Board::get_current();
 
 			$board_id = $board->id;
@@ -206,7 +206,7 @@ class Kanban_Option extends Kanban_Db
 
 
 	static function update_option( $key, $value, $board_id = null ) {
-		if ( is_null( $board_id ) ) {
+		if ( !is_numeric( $board_id ) ) {
 			$board = Kanban_Board::get_current();
 			$board_id = $board->id;
 		}
@@ -236,7 +236,7 @@ class Kanban_Option extends Kanban_Db
 
 
 	static function get_row_by( $key, $value, $board_id = null ) {
-		if ( is_null( $board_id ) ) {
+		if ( !is_numeric( $board_id ) ) {
 			$board = Kanban_Board::get_current();
 			$board_id = $board->id;
 		}
@@ -346,6 +346,12 @@ class Kanban_Option extends Kanban_Db
 
 		// save all single settings
 		foreach ( $settings as $key => $value ) {
+
+			// Don't save if no default is set
+			if ( !isset(self::get_defaults()[$key]) ) {
+				continue;
+			}
+
 			// if empty and not license, use default
 			if ( ! isset( $_POST['settings'][ $key ] ) && substr( $key, 0, 7 ) != 'license' ) {
 				$_POST['settings'][ $key ] = self::get_default( $key );

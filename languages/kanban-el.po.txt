@@ -1,0 +1,264 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Kanban for WordPress\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/kanban\n"
+"POT-Creation-Date: 2016-11-27 09:35+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"PO-Revision-Date: 2016-11-27 09:40+0000\n"
+"Last-Translator: Webia <marco@webia.be>\n"
+"Language-Team: Greek\n"
+"Language: el\n"
+"Plural-Forms: nplurals=2; plural=n != 1\n"
+"X-Generator: Loco - https://localise.biz/"
+
+#: templates/inc/t-card-project.php:2 templates/inc/t-card.php:18
+msgid "Task project"
+msgstr "Εργασία"
+
+#: templates/inc/t-card-project.php:6 templates/inc/t-card.php:22
+msgid "Edit"
+msgstr "Επεξεργασία"
+
+#: templates/inc/t-card-task-hours.php:2
+msgid "Worked:"
+msgstr "Επεξεργάστηκε: "
+
+#: templates/inc/t-card.php:11
+msgid "Delete this task"
+msgstr "Διαγραφή εργασίας "
+
+#: templates/inc/t-card.php:29
+msgid "Task name"
+msgstr "Όνομα εργασίας"
+
+#: templates/login.php:6
+msgid "Login"
+msgstr "Είσοδος"
+
+#: templates/login.php:26
+msgid "email"
+msgstr "email"
+
+#: templates/login.php:30
+msgid "Password"
+msgstr "Συνθηματικό"
+
+#: templates/login.php:32
+msgid "password"
+msgstr "συνθηματικό"
+
+#: templates/login.php:36
+msgid "Log in"
+msgstr "Είσοδος"
+
+#: templates/login.php:42
+msgid ""
+"Whoops, looks like you haven't been granted access yet. Click below to "
+"request access."
+msgstr ""
+"Μάλλον δεν έχετε ζητήσει πρόσβαση ακόμη! Κάντε click παρακάτω να ζητήσετε "
+"πρόσβαση. "
+
+#: templates/login.php:46
+msgid "Request access"
+msgstr "Ζητήστε πρόσβαση"
+
+#. Description of the plugin/theme
+msgid ""
+"A complete kanban board for WordPress. Use agile project management to get "
+"more done, right inside your WordPress site!"
+msgstr ""
+"Ένας πλήρης πίνακας ελέγχου του kanban για το WordPress. Χρησιμοποιείστε το "
+"Agile project management για περισσότερα οφέλη κατά την χρήση του WordPress!"
+
+#: includes/class-admin.php:56
+msgid "Warning!"
+msgstr "Προσοχή!"
+
+#: includes/class-admin.php:57 includes/class-board.php:43
+msgid ""
+"We've found %s kanban records that need to be migrated for the latest "
+"version of Kanban for WordPress!"
+msgstr ""
+"Βρήκαμε %s εγγραφές του Kanban οι οποίες πρέπει να μεταφερθούν την τελευταία "
+"έκδοση του Kanban για το WordPress!"
+
+#: includes/class-admin.php:60
+msgid "Please click \"migrate\" below and we'll move them for you."
+msgstr ""
+"Παρακαλούμε κάνετε click στην λέξη \"Συγχνώνευση\" και θα μεταφερθούν "
+"αυτόματα. "
+
+#: includes/class-admin.php:64
+msgid "Migrate"
+msgstr "Συγχώνευση"
+
+#: includes/class-admin.php:69
+msgid "Migration Progress"
+msgstr "Διαδικασία συγχώνευσης"
+
+#: includes/class-admin.php:70
+msgid "(Please do not browse away from the page until migration is complete)"
+msgstr "(Μην βγείτε από αυτή την σελίδα έως ότου συγχωνευθούν τα δεδομένα)"
+
+#: includes/class-admin.php:379
+msgid "Settings saved"
+msgstr "Οι ιδιότητες αποθηκεύτηκαν"
+
+#: includes/class-board.php:47
+msgid ""
+"Please visit the <a href=\"%s\">Kanban welcome page</a> to migrate your data."
+msgstr ""
+"Επισκεφθείτε την σελίδα καλωσορίσματος <a href=\"%s\">Kanban welcome page</a>"
+" για την συγχώνευση των δεδομένων σας."
+
+#: includes/class-user.php:61
+msgid "Your request has been sent."
+msgstr "Το αίτημά σας στάλθηκε."
+
+#: includes/class-user.php:84
+msgid "Whoops! We can't find an account for that email address."
+msgstr "Δεν μπορούμε να βρούμε λογαριασμό συνδεδεμένο με αυτό το email."
+
+#: includes/class-user.php:105
+msgid "Whoops! That password is incorrect for this email address."
+msgstr ""
+"Το συνθηματικό που υποβάλετε δεν ταιριάζει με αυτή την διεύθυνση email. "
+
+#: kanban.php:91
+msgid "Kanban"
+msgstr "Kanban"
+
+#: kanban.php:178
+msgid ""
+"The %s plugin requires at least PHP 5.3. You have %s. Please upgrade and "
+"then re-install the plugin."
+msgstr ""
+"Το πρόσθετο %s χρειάζεται τουλάχιστον PHP 5.3 για να λειτουργήσει σωστά. "
+"Παρακαλούμε εγκαταστήστε ή αναβαθμίστε την γλώσσα PHP που χρησιμοποιείτε και "
+"εγκαταστήστε το πρόσθετο εκ νέου.  "
+
+#: templates/admin/settings.php:9 templates/admin/welcome.php:23
+msgid "Go to your board"
+msgstr "Πηγαίνετε στον Πίνακα Ελέγχου"
+
+#: templates/admin/settings.php:21 templates/board.php:82
+msgid "General"
+msgstr "Γενικά"
+
+#: templates/admin/settings.php:23
+msgid "Statuses"
+msgstr "Καταστάσεις"
+
+#: templates/admin/settings.php:24
+msgid "Estimates"
+msgstr "Εκτιμήσεις"
+
+#: templates/admin/settings.php:38
+msgid "Work hour interval"
+msgstr "Διαστήματα ωρών εργασίας"
+
+#: templates/admin/settings.php:39
+msgid "in hours"
+msgstr "σε ώρες"
+
+#: templates/admin/settings.php:45
+msgid ""
+"Example: If you want to track work in 10 minute increments, enter \".1667\" "
+"here."
+msgstr ""
+"Παράδειγμα: εάν θέλετε να παρακολουθήσετε μια εργασία ανά δεκάλεπτα "
+"διαστήματα, πληκτρολογήστε \".1967\" εδώ"
+
+#: templates/admin/settings.php:53 templates/admin/settings.php:86
+#: templates/admin/settings.php:108 templates/admin/settings.php:130
+msgid "Save your Settings"
+msgstr "Αποθήκευση των αλλαγών"
+
+#: templates/admin/settings.php:68
+msgid "Allowed users"
+msgstr "Επιτρεπόμενοι χρήστες "
+
+#: templates/admin/settings.php:103
+msgid "Add another status"
+msgstr "Ορίστε μια νέα κατάσταση"
+
+#: templates/admin/settings.php:125
+msgid "Add another estimate"
+msgstr "Ορίστε μια νέα εκτίμηση"
+
+#: templates/admin/t-estimate.php:2 templates/admin/t-status.php:2
+msgid "Reorder"
+msgstr "Επαναδιάταξη "
+
+#: templates/admin/t-estimate.php:8
+msgid "Hours"
+msgstr "Ώρες"
+
+#: templates/admin/t-estimate.php:12 templates/admin/t-status.php:11
+msgid "Delete"
+msgstr "Διαγραφή"
+
+#: templates/admin/welcome.php:14
+msgid "Thanks for using Kanban for WordPress!"
+msgstr "Σας ευχαριστούμε που χρησιμοποιείτε το Kanban για WordPress!"
+
+#: templates/admin/welcome.php:16
+msgid "Dismiss this notice."
+msgstr "Αγνοήστε την ειδοποίηση."
+
+#: templates/admin/welcome.php:26
+msgid "Documentation"
+msgstr "Αρχείο βοήθειας"
+
+#: templates/admin/welcome.php:27
+msgid "(On kanbanwp.com)"
+msgstr "(Στο kanbanwp.com)"
+
+#: templates/board.php:15
+msgid "Filter by"
+msgstr "Φιλτράρισμα "
+
+#: templates/board.php:19
+msgid "Project"
+msgstr "Έργασία"
+
+#: templates/board.php:26
+msgid "No project assigned"
+msgstr "Δεν ανατέθηκε καμία εργασία"
+
+#: templates/board.php:35
+msgid "User"
+msgstr "Χρήστης"
+
+#: templates/board.php:42
+msgid "No user assigned"
+msgstr "Δεν ανατέθηκε κανένας χρήστης"
+
+#: templates/board.php:49
+msgid "Filter"
+msgstr "Φίλτρο"
+
+#: templates/board.php:52 templates/board.php:62
+msgid "Show All"
+msgstr "Προβολή όλων"
+
+#: templates/board.php:60
+msgid "Search"
+msgstr "Αναζήτηση"
+
+#: templates/board.php:94
+msgid "Close"
+msgstr "Κλείσιμο"
+
+#. #-#-#-#-#  plugin.pot (Kanban for WordPress)  #-#-#-#-#
+#. Plugin Name of the plugin/theme
+#: templates/inc/header.php:8
+msgid "Kanban for WordPress"
+msgstr "Kanban για το WordPress"
+
+#: templates/inc/t-card-estimate.php:2
+msgid "Estimate:"
+msgstr "Εκτίμηση: "

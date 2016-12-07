@@ -525,9 +525,42 @@ Board.prototype.dom = function () {
 			var task_id = $task_id.val();
 			var task = self.record.tasks[task_id];
 
+
+
 			var status_id = $a.attr( 'data-status-id' );
+
+			// If no change, return to close the modal.
+			if ( task.record.status_id == status_id ) {
+				return;
+			}
+
 			task.record.status_id = status_id;
+
+
+
+			var board_id = $a.attr( 'data-board-id' );
+
+			// If moved between boards.
+			if ( task.record.board_id != board_id )
+			{
+				// Store old board id for removing.
+				var board_id_old = parseInt(task.record.board_id + '');
+
+				// Update task record.
+				task.record.board_id = board_id;
+
+				// Move task to new board.
+				boards[board_id].record.tasks[task_id] = task;
+
+				// Remove from old board.
+				delete boards[board_id_old].record.tasks[task_id];
+			}
+
+
+			// Save updates to task.
 			task.save();
+
+
 
 			var $task = $( '#task-' + task_id );
 			setTimeout( function () {
@@ -535,7 +568,14 @@ Board.prototype.dom = function () {
 					'fast',
 					function () {
 						task.update_status( status_id );
-						$( this ).prependTo( '#status-' + status_id + '-tasks' ).slideDown( 'fast' );
+						$( this ).prependTo( '#status-' + status_id + '-tasks' ).slideDown( 'fast', function() {
+
+							// Update link to move modal, in case board changed.
+							$('.btn-task-move', this).attr('data-target', '#modal-task-move-' + board_id);
+
+							// Update col counts.
+							self.update_UI();
+						} );
 					}
 				);
 			}, 300 );

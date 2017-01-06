@@ -6,7 +6,7 @@
 
 
 
-// Exit if accessed directly
+// Exit if accessed directly.
 if ( !defined( 'ABSPATH' ) ) {
 	exit;
 }

@@ -1,54 +1,62 @@
 <?php
 
+/**
+ * For saving and getting Kanban-specific options.
+ */
 
 
-// Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) ) { exit; }
+
+// Exit if accessed directly.
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 
 
-// Kanban_Option::init();
-class Kanban_Option extends Kanban_Db
-{
-	// the instance of this object
-	// private static $instance;
-	// the table name of this class
+/**
+ * Class Kanban_Option
+ */
+class Kanban_Option extends Kanban_Db {
+
+	// The table name of this class.
 	protected static $table_name = 'options';
 
-	// define db table columns and their validation type
+	// Define db table columns and their validation type.
 	protected static $table_columns = array(
-		'name'  => 'text',
-		'value' => 'text',
+		'name'     => 'text',
+		'value'    => 'text',
 		'board_id' => 'int',
 	);
 
-	// defaults for all options, so at least something is returned
+	// Defaults for all options, so at least something is returned.
 	protected static $defaults = array(
-		'hour_interval' => '1',
-		'allowed_users' => array(),
-		 'show_all_cols' => 0,
+		'hour_interval'               => '1',
+		'allowed_users'               => array(),
+		'show_all_cols'               => 0,
 		// 'default_to_compact_view' => 0,
-		'hide_progress_bar' => 0,
-		'use_default_login_page' => 0,
-		'default_estimate' => '',
-		'default_assigned_to' => '',
+		'hide_progress_bar'           => 0,
+		'use_default_login_page'      => 0,
+		'default_estimate'            => '',
+		'default_assigned_to'         => '',
 		'default_assigned_to_creator' => 0,
-		'default_assigned_to_first' => 0,
-		'status_auto_archive' => array(),
-		'status_auto_archive_days' => 30, // days
-		'hide_time_tracking' => 0,
-		'show_task_ids' => 0,
-		'board_css' => 0,
+		'default_assigned_to_first'   => 0,
+		'status_auto_archive'         => array(),
+		'status_auto_archive_days'    => 30, // days
+		'hide_time_tracking'          => 0,
+		'show_task_ids'               => 0,
+		'board_css'                   => 0,
 	);
 
-	// store the options on first load, to prevent mulitple db calls
-	// protected static $options = array();
+	// Store the options on first load, to prevent mulitple db calls.
 	protected static $options_by_board = array();
 	protected static $records = array();
 	protected static $records_by_board = array();
 
 
 
+	/**
+	 * Init the class
+	 */
 	static function init() {
 		add_action( 'init', array( __CLASS__, 'save_settings' ), 10 );
 
@@ -57,12 +65,11 @@ class Kanban_Option extends Kanban_Db
 
 
 
-	// extend parent, so it's accessible from other classes
-	// static function replace( $data )
-	// {
-	// return self::_replace( $data );
-	// }
-	// define the db schema
+	/**
+	 * Define the db schema.
+	 *
+	 * @return string Sql statement.
+	 */
 	static function db_table() {
 		return 'CREATE TABLE ' . self::table_name() . ' (
 					id bigint(20) NOT NULL AUTO_INCREMENT,
@@ -71,23 +78,39 @@ class Kanban_Option extends Kanban_Db
 					board_id bigint(20) NOT NULL DEFAULT 1,
 					UNIQUE KEY id (id)
 				)';
-	} // db_table
+	}
 
 
 
+	// Get the defaults for the class.
 	static function get_defaults() {
 		return apply_filters( 'kanban_option_get_defaults_return', self::$defaults );
 	}
 
 
 
+	/**
+	 * Get a single default.
+	 *
+	 * @param $key The default to get.
+	 *
+	 * @return mixed False or the default option.
+	 */
 	static function get_default( $key ) {
 		$defaults = self::get_defaults();
+
 		return isset( $defaults[ $key ] ) ? $defaults[ $key ] : false;
 	}
 
 
 
+	/**
+	 * Get the options as db records.
+	 *
+	 * @param null $board_id The board id.
+	 *
+	 * @return mixed An array of db results.
+	 */
 	static function get_results( $board_id = null ) {
 		if ( empty( self::$records ) ) {
 			$sql = apply_filters( 'kanban_option_get_results_sql', 'SELECT * FROM `%s`;' );
@@ -102,7 +125,7 @@ class Kanban_Option extends Kanban_Db
 
 			self::$records = Kanban_Utils::build_array_with_id_keys( self::$records, 'id' );
 
-			// unserialize arrays
+			// Unserialize arrays.
 			foreach ( self::$records as $key => $record ) {
 				self::$records[ $key ]->value = maybe_unserialize( $record->value );
 			}
@@ -111,12 +134,14 @@ class Kanban_Option extends Kanban_Db
 			self::$records_by_board = array_fill_keys( array_keys( $boards ), array() );
 
 			foreach ( self::$records as $key => $record ) {
-				if ( ! isset( self::$records_by_board[ $record->board_id ] ) ) { continue; }
+				if ( ! isset( self::$records_by_board[ $record->board_id ] ) ) {
+					continue;
+				}
 				self::$records_by_board[ $record->board_id ][ $key ] = $record;
 			}
 		}
 
-		if ( !is_numeric( $board_id ) ) {
+		if ( ! is_numeric( $board_id ) ) {
 			return apply_filters(
 				'kanban_option_get_results_return',
 				self::$records
@@ -132,9 +157,17 @@ class Kanban_Option extends Kanban_Db
 
 
 
+	/**
+	 * Get the option as a db record.
+	 *
+	 * @param null $board_id The board id.
+	 *
+	 * @return array|mixed The option as a db record.
+	 */
 	static function get_results_by_board( $board_id = null ) {
-		if ( !is_numeric( $board_id ) ) {
+		if ( ! is_numeric( $board_id ) ) {
 			self::get_results();
+
 			return self::$records_by_board;
 		} else {
 			return self::get_results( $board_id );
@@ -143,13 +176,20 @@ class Kanban_Option extends Kanban_Db
 
 
 
+	/**
+	 * Get all the options for a board.
+	 *
+	 * @param null $board_id The board id.
+	 *
+	 * @return array The options.
+	 */
 	static function get_all( $board_id = null ) {
 
 		$boards = Kanban_Board::get_all();
 
-		if ( is_numeric($boards) && !isset($boards[$board_id]) ) return array();
-
-
+		if ( is_numeric( $boards ) && ! isset( $boards[ $board_id ] ) ) {
+			return array();
+		}
 
 		if ( empty( self::$options_by_board ) ) {
 			foreach ( self::get_results_by_board() as $record_board_id => $records ) {
@@ -172,7 +212,7 @@ class Kanban_Option extends Kanban_Db
 			}
 		}
 
-		if ( !is_numeric( $board_id ) ) {
+		if ( ! is_numeric( $board_id ) ) {
 			return apply_filters(
 				'kanban_option_get_all_return',
 				self::$options_by_board
@@ -187,8 +227,16 @@ class Kanban_Option extends Kanban_Db
 
 
 
+	/**
+	 * Get a single option.
+	 *
+	 * @param $name The name of the option.
+	 * @param null $board_id The board id.
+	 *
+	 * @return mixed The option.
+	 */
 	static function get_option( $name, $board_id = null ) {
-		if ( !is_numeric( $board_id ) ) {
+		if ( ! is_numeric( $board_id ) ) {
 			$board = Kanban_Board::get_current();
 
 			$board_id = $board->id;
@@ -197,7 +245,7 @@ class Kanban_Option extends Kanban_Db
 		$options = self::get_all( $board_id );
 
 		if ( ! isset( $options[ $name ] ) ) {
-			return self::get_default($name);
+			return self::get_default( $name );
 		}
 
 		return $options[ $name ];
@@ -205,15 +253,22 @@ class Kanban_Option extends Kanban_Db
 
 
 
+	/**
+	 * Update a single option.
+	 *
+	 * @param $key The name of the option.
+	 * @param $value The new value.
+	 * @param int $board_id The board id.
+	 */
 	static function update_option( $key, $value, $board_id = null ) {
-		if ( !is_numeric( $board_id ) ) {
-			$board = Kanban_Board::get_current();
+		if ( ! is_numeric( $board_id ) ) {
+			$board    = Kanban_Board::get_current();
 			$board_id = $board->id;
 		}
 
 		$data = (object) array(
-			'name'  => $key,
-			'value' => maybe_serialize( $value ),
+			'name'     => $key,
+			'value'    => maybe_serialize( $value ),
 			'board_id' => $board_id,
 		);
 
@@ -235,25 +290,34 @@ class Kanban_Option extends Kanban_Db
 
 
 
+	/**
+	 * Get an option by some other property instead of name.
+	 *
+	 * @param $key The property name to get an option.
+	 * @param $value The value the property should match.
+	 * @param null $board_id THe board id.
+	 *
+	 * @return mixed|null The value of the matched option.
+	 */
 	static function get_row_by( $key, $value, $board_id = null ) {
-		if ( !is_numeric( $board_id ) ) {
-			$board = Kanban_Board::get_current();
+		if ( ! is_numeric( $board_id ) ) {
+			$board    = Kanban_Board::get_current();
 			$board_id = $board->id;
 		}
 
-		// make sure it's there
+		// Make sure it's there.
 		$results = self::get_results_by_board( $board_id );
 
-		// if it's not, maybe it's a new board. reset and try again.
+		// If it's not, maybe it's a new board. reset and try again.
 		if ( ! isset( $results ) ) {
 			self::$options_by_board = array();
-			self::$records = array();
+			self::$records          = array();
 			self::$records_by_board = array();
 		}
 
 		$results = self::get_results_by_board( $board_id );
 
-		// if it's not there, DENIED
+		// If it's not there, DENIED.
 		if ( ! isset( $results ) ) {
 			return null;
 		}
@@ -270,8 +334,13 @@ class Kanban_Option extends Kanban_Db
 
 
 
+	/**
+	 * @param $hook string The necessary hook.
+	 */
 	static function enqueue_js( $hook ) {
-		if ( ! is_admin() || ! isset( $_GET['page'] ) || $_GET['page'] != 'kanban_settings' ) { return; }
+		if ( ! is_admin() || ! isset( $_GET[ 'page' ] ) || $_GET[ 'page' ] != 'kanban_settings' ) {
+			return;
+		}
 
 		wp_enqueue_style( 'wp-color-picker' );
 
@@ -296,8 +365,8 @@ class Kanban_Option extends Kanban_Db
 		);
 
 		$translation_array = array(
-			'url_contact' => admin_url(),
-			'url_board' => Kanban_Template::get_uri(),
+			'url_contact'             => admin_url(),
+			'url_board'               => Kanban_Template::get_uri(),
 			Kanban_Utils::get_nonce() => wp_create_nonce( 'kanban-admin-comment' ),
 		);
 		wp_localize_script( 'kanban-settings', 'kanban', $translation_array );
@@ -307,26 +376,36 @@ class Kanban_Option extends Kanban_Db
 
 
 
+	/**
+	 * Render the admin settings page.
+	 */
 	static function settings_page() {
+
+		// Add thickbox for extra options.
 		add_thickbox();
 
+		// Get the current board.
 		$board = Kanban_Board::get_current_by( 'GET' );
 
+		// Get all the settings for display.
 		$settings = Kanban_Option::get_all( $board->id );
 
-		// $settings['allowed_users'] = maybe_unserialize( $settings['allowed_users'] );
-		$all_users = get_users();
+		// Get all users to popualte user settings.
+		$all_users     = get_users();
 		$all_users_arr = array();
 		foreach ( $all_users as $user ) {
 			$all_users_arr[ $user->ID ] = Kanban_User::get_username_long( $user );
 		}
 
+		// Get all statuses to populate status settings.
 		$statuses = Kanban_Status::get_all( $board->id );
 		$statuses = Kanban_Utils::order_array_of_objects_by_property( $statuses, 'position', 'int' );
 
+		// Get all estimates to populate $estimate settings.
 		$estimates = Kanban_Estimate::get_all( $board->id );
 		$estimates = Kanban_Utils::order_array_of_objects_by_property( $estimates, 'position', 'int' );
 
+		// Get the template.
 		$template = Kanban_Template::find_template( 'admin/settings' );
 
 		include_once $template;
@@ -334,34 +413,47 @@ class Kanban_Option extends Kanban_Db
 
 
 
+	/**
+	 * Save the settings from admin.
+	 */
 	static function save_settings() {
-		if ( ! isset( $_POST[ Kanban_Utils::get_nonce() ] ) || ! wp_verify_nonce( $_POST[ Kanban_Utils::get_nonce() ], 'kanban-options' ) || ! is_user_logged_in() ) { return; }
+		if ( ! isset( $_POST[ Kanban_Utils::get_nonce() ] ) || ! wp_verify_nonce( $_POST[ Kanban_Utils::get_nonce() ], 'kanban-options' ) || ! is_user_logged_in() ) {
+			return;
+		}
 
 		do_action( 'kanban_option_save_settings_before', $_POST );
 
 		$board = Kanban_Board::get_current_by( 'POST' );
 
-		// get current settings
+		// Get current settings.
 		$settings = Kanban_Option::get_all( $board->id );
 
-		// save all single settings
+		// Get defaults.
+		$defaults = self::get_defaults();
+
+		// Save all single settings.
 		foreach ( $settings as $key => $value ) {
 
-			// Don't save if no default is set
-			if ( !isset(self::get_defaults()[$key]) ) {
+			// Don't save if no default is set.
+			if ( ! isset( $defaults[ $key ] ) ) {
 				continue;
 			}
 
-			// if empty and not license, use default
-			if ( ! isset( $_POST['settings'][ $key ] ) && substr( $key, 0, 7 ) != 'license' ) {
-				$_POST['settings'][ $key ] = self::get_default( $key );
+			// If empty and not license, use default.
+			if ( ! isset( $_POST[ 'settings' ][ $key ] ) && substr( $key, 0, 7 ) != 'license' ) {
+				$_POST[ 'settings' ][ $key ] = self::get_default( $key );
 			}
 
-			// if not in the post (most likely a license), skip it
-			if ( ! isset( $_POST['settings'][ $key ] ) ) { continue; }
+			// If not in the post (most likely a license), skip it.
+			if ( ! isset( $_POST[ 'settings' ][ $key ] ) ) {
+				continue;
+			}
 
-			// update the option
-			Kanban_Option::update_option( $key, $_POST['settings'][ $key ] );
+			// Update the option.
+			Kanban_Option::update_option(
+				$key,
+				sanitize_text_field( wp_unslash( $_POST[ 'settings' ][ $key ] ) )
+			);
 		}
 
 		do_action( 'kanban_option_save_settings_after', $_POST );
@@ -380,20 +472,8 @@ class Kanban_Option extends Kanban_Db
 
 
 	/**
-	 * get the instance of this class
-	 *
-	 * @return object the instance
+	 * Construct that can't be overwritten.
 	 */
-	// public static function get_instance()
-	// {
-	// if ( ! self::$instance )
-	// {
-	// self::$instance = new self();
-	// }
-	// return self::$instance;
-	// }
-	/**
-	 * construct that can't be overwritten
-	 */
-	private function __construct() { }
+	private function __construct() {
+	}
 }

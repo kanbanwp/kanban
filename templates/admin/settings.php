@@ -216,7 +216,7 @@
 					<?php endif // count $all_users_arr ?>
 					<?php foreach ( $all_users_arr as $user_id => $user_name ) : ?>
 													<label style="display: block;">
-														<input name="settings[allowed_users][]" type="checkbox" value="<?php echo $user_id; ?>" class="tab-users-user" id="tab-users-user-<?php echo $user_id; ?>" <?php echo isset( $settings['allowed_users'] ) ? in_array( $user_id, $settings['allowed_users'] ) ? 'checked' : '' : ''; ?>>
+														<input name="settings[allowed_users][]" type="checkbox" value="<?php echo $user_id; ?>" class="tab-users-user" id="tab-users-user-<?php echo $user_id; ?>" <?php echo is_array( $settings['allowed_users'] ) ? in_array( $user_id, $settings['allowed_users'] ) ? 'checked' : '' : ''; ?>>
 														<?php echo $user_name; ?>
 													</label>
 					<?php endforeach // $all_users_arr; ?>

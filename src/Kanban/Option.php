@@ -452,7 +452,7 @@ class Kanban_Option extends Kanban_Db {
 			// Update the option.
 			Kanban_Option::update_option(
 				$key,
-				sanitize_text_field( wp_unslash( $_POST[ 'settings' ][ $key ] ) )
+				$_POST[ 'settings' ][ $key ]
 			);
 		}
 

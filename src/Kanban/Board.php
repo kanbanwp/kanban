@@ -106,6 +106,7 @@ class Kanban_Board extends Kanban_Db
 			$board_to_add->search = array(
 				'$(".task-title", $task).text()',
 				'$task.attr("data-id")',
+				'$task.find(".task-field").text()',
 			);
 
 			// get all data for the javascript

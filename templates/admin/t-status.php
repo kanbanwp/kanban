@@ -16,7 +16,7 @@
 <?php if ( isset($status->id) ) : ?>
 	<label class="status_auto_archive">
 		<small><?php echo __( 'Auto-archive', 'kanban' ); ?>:</small>
-		<input type="checkbox" name="settings[status_auto_archive][]" value="<?php echo isset($status->id) ? $status->id : ''; ?>" <?php echo isset($settings['status_auto_archive']) && in_array($status->id, $settings['status_auto_archive']) ? 'checked' : '' ?>>
+		<input type="checkbox" name="settings[status_auto_archive][]" value="<?php echo isset($status->id) ? $status->id : ''; ?>" <?php echo isset($settings['status_auto_archive']) && is_array($settings['status_auto_archive']) && in_array($status->id, $settings['status_auto_archive']) ? 'checked' : '' ?>>
 	</label>
 <?php endif ?>
 	<label style="float: right; margin: .5em;">

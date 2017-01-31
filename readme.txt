@@ -1,7 +1,7 @@
 === Kanban Boards for WordPress ===
 
 Contributors: 		gelform
-Tags:				kanban, boards, agile, scrum, project management, team management, task management, productivity, Trello, GTD, manage projects, management, planning, tracking, todo, contractor, freelance, clients
+Tags:				kanban, boards, agile, scrum, project management, tasks, productivity, Trello, GTD, manage, planning, todo
 Requires at least:	4.0
 Tested up to:		4.7.0
 Version:            2.3.4

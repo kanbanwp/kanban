@@ -851,7 +851,7 @@ Task.prototype.update_status = function ( status_id ) {
 	var status = this.board().record.status_records()[status_id];
 
 	$( '.task-handle', this.$el ).css( {
-		background: status.color_hex
+		'background-color': status.color_hex
 	} );
 }
 

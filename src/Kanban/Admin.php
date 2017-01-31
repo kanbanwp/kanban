@@ -388,6 +388,9 @@ class Kanban_Admin
 
 
 	static function add_admin_bar_link_to_board( $wp_admin_bar ) {
+
+		if ( is_network_admin() ) return;
+
 		$args = array(
 			'id' => 'kanban_board',
 			'title' => 'Kanban Board',
@@ -428,12 +431,12 @@ class Kanban_Admin
 	// @link http://premium.wpmudev.org/blog/tabbed-interface/
 	static function screen_do_activation_redirect() {
 		// Bail if no activation redirect
-		if ( !get_transient( sprintf( '_%s_screen_activation_redirect', Kanban::get_instance()->settings->basename ) ) ) {
+		if ( !get_transient( sprintf( '_%s_welcome_screen_activation_redirect', Kanban::get_instance()->settings->basename ) ) ) {
 			return;
 		}
 
 		// Delete the redirect transient
-		delete_transient( sprintf( '_%s_screen_activation_redirect', Kanban::get_instance()->settings->basename ) );
+		delete_transient( sprintf( '_%s_welcome_screen_activation_redirect', Kanban::get_instance()->settings->basename ) );
 
 		// Bail if activating from network, or bulk
 		if ( is_network_admin() || isset( $_GET[ 'activate-multi' ] ) ) {

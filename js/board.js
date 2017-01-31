@@ -1,4 +1,10 @@
-function Board( board ) {
+function Board( board, delay ) {
+
+	// Make sure there's a delay set.
+	if ( null == delay || isNaN( delay ) ) {
+		delay = 50;
+	}
+
 	$( document ).trigger( '/board/init/', board );
 
 	this.record = board;
@@ -12,23 +18,28 @@ function Board( board ) {
 	};
 
 
+	// Set up dom elements.
 	this.dom();
 
 	var self = this;
-	setTimeout( function () {
-		// put in order by vertical position
-		var tasks_by_position = obj_order_by_prop( self.record.tasks, 'position', true );
+	setTimeout(
+		function () {
+			// put in order by vertical position
+			var tasks_by_position = obj_order_by_prop( self.record.tasks, 'position', true );
 
-		for ( var i in tasks_by_position ) {
-			var task_record = tasks_by_position[i];
-			var task = self.record.tasks[task_record.id] = new Task( self.record.tasks[task_record.id] );
-			task.add_to_board();
-		}
+			for ( var i in tasks_by_position ) {
+				var task_record = tasks_by_position[i];
+				var task = self.record.tasks[task_record.id] = new Task( self.record.tasks[task_record.id] );
+				task.add_to_board();
+			}
 
-		self.update_UI();
+			self.update_UI();
 
-		$( document ).trigger( '/board/tasks/done/', self.$el );
-	}, 50 );
+			$( document ).trigger( '/board/tasks/done/', self );
+
+		},
+		delay
+	);
 }
 
 
@@ -466,7 +477,7 @@ Board.prototype.dom = function () {
 					self.update_task_positions();
 
 					// Put the focus on the title.
-					$( '.task-title', self.record.tasks[response.data.task.id].$el ).trigger('click');
+					$( '.task-title', self.record.tasks[response.data.task.id].$el ).trigger( 'click' );
 				}
 				catch ( err ) {
 				}
@@ -541,10 +552,9 @@ Board.prototype.dom = function () {
 			var board_id = $a.attr( 'data-board-id' );
 
 			// If moved between boards.
-			if ( task.record.board_id != board_id )
-			{
+			if ( task.record.board_id != board_id ) {
 				// Store old board id for removing.
-				var board_id_old = parseInt(task.record.board_id + '');
+				var board_id_old = parseInt( task.record.board_id + '' );
 
 				// Update task record.
 				task.record.board_id = board_id;
@@ -568,10 +578,10 @@ Board.prototype.dom = function () {
 					'fast',
 					function () {
 						task.update_status( status_id );
-						$( this ).prependTo( '#status-' + status_id + '-tasks' ).slideDown( 'fast', function() {
+						$( this ).prependTo( '#status-' + status_id + '-tasks' ).slideDown( 'fast', function () {
 
 							// Update link to move modal, in case board changed.
-							$('.btn-task-move', this).attr('data-target', '#modal-task-move-' + board_id);
+							$( '.btn-task-move', this ).attr( 'data-target', '#modal-task-move-' + board_id );
 
 							// Update col counts.
 							self.update_UI();
@@ -630,8 +640,7 @@ Board.prototype.update_task_positions = function ( $el_moved ) {
 			var $task = $( this );
 
 			var do_comment = false;
-			if ( $task.is( $el_moved )  )
-			{
+			if ( $task.is( $el_moved ) ) {
 				do_comment = true;
 			}
 
@@ -759,5 +768,5 @@ Board.prototype.status_cols_toggle = function ( col_index ) {
 
 
 Board.prototype.get_current_board_id = function () {
-	return parseInt(current_board_id);
+	return parseInt( current_board_id );
 };

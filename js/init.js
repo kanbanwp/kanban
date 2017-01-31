@@ -28,15 +28,19 @@ $( function () {
 
 
 	// when boards are done
-	var populated_board_count = 0;
+	// var populated_board_count = 0;
+
+
 
 	$( document ).bind(
 		'/board/tasks/done/',
-		function ( event ) {
-			populated_board_count++;
+		function ( e, board ) {
+			// populated_board_count++;
 
-			// boards popualted!
-			if ( populated_board_count == Object.keys( boards ).length ) {
+
+			// Current board
+			if ( board.record.id() == current_board_id ) {
+
 				// add board to url
 				update_url();
 
@@ -54,8 +58,8 @@ $( function () {
 					boards[current_board_id].record.filters = kanban.url_params['filters'];
 					boards[current_board_id].apply_filters();
 				}
-
 			}
+
 		}
 	);
 
@@ -76,9 +80,20 @@ $( function () {
 
 
 
-	// populate boards
+	// Populate current board first
+	boards[current_board_id] = new Board( boards[current_board_id] );
+
+
+
+	// Then populate the rest of the boards, with a delay.
 	for ( var board_id in boards ) {
-		boards[board_id] = new Board( boards[board_id] );
+
+		// Skip current board. Already done.
+		if ( board_id == current_board_id ) {
+			continue;
+		}
+
+		boards[board_id] = new Board( boards[board_id], 500 );
 	}
 
 

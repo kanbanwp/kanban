@@ -51,7 +51,7 @@ spl_autoload_register( 'kanban_autoloader' );
 /**
  * Class Kanban
  */
-class Kanban {
+final class Kanban {
 	/**
 	 * The singleton instance of Kanban.
 	 *
@@ -71,7 +71,7 @@ class Kanban {
 	/**
 	 * Setup the core plugin.
 	 */
-	static function init() {
+	public static function init() {
 
 		// Get instance.
 		self::$instance = self::get_instance();
@@ -114,7 +114,7 @@ class Kanban {
 
 		register_activation_hook( __FILE__, array( __CLASS__, 'on_activation' ) );
 		register_deactivation_hook( __FILE__, array( __CLASS__, 'on_deactivation' ) );
-		add_action( 'wpmu_new_blog', array( __CLASS__, 'on_new_blog' ), 10, 6 );
+//		add_action( 'wpmu_new_blog', array( __CLASS__, 'on_new_blog' ), 10, 6 );
 
 		do_action( 'kanban_loaded' );
 	}
@@ -135,20 +135,20 @@ class Kanban {
 			// Check if it is a network activation - if so, run the activation function for each blog id.
 			if ( $networkwide ) {
 
-				$old_blog = $wpdb->blogid;
-
-				// Get all blog ids.
-				$blogids = $wpdb->get_col( "SELECT blog_id FROM $wpdb->blogs" );
-
-				foreach ( $blogids as $blog_id ) {
-					switch_to_blog( $blog_id );
-
-					// Activate based on switched-to blog.
-					self::single_activation();
-				}
-
-				// Switch back to previous.
-				switch_to_blog( $old_blog );
+//				$old_blog = $wpdb->blogid;
+//
+//				// Get all blog ids.
+//				$blogids = $wpdb->get_col( "SELECT blog_id FROM $wpdb->blogs WHERE site_id = $wpdb->siteid;" );
+//
+//				foreach ( $blogids as $blog_id ) {
+//					switch_to_blog( $blog_id );
+//
+//					// Activate based on switched-to blog.
+//					self::single_activation();
+//				}
+//
+//				// Switch back to previous.
+//				switch_to_blog( $old_blog );
 
 			} else {
 				self::single_activation();
@@ -166,7 +166,7 @@ class Kanban {
 	 */
 	static function single_activation() {
 
-		Kanban_Db::check_for_updates();
+//		Kanban_Db::check_for_updates();
 
 		set_transient(
 			sprintf( '_%s_welcome_screen_activation_redirect', Kanban::get_instance()->settings->basename ),
@@ -186,18 +186,18 @@ class Kanban {
 
 
 
-	static function on_new_blog( $blog_id, $user_id, $domain, $path, $site_id, $meta ) {
-
-		//replace with your base plugin path E.g. dirname/filename.php
-		if ( !is_plugin_active_for_network( 'kanban/kanban.php' ) ) return;
-
-		global $wpdb;
-
-		$old_blog = $wpdb->blogid;
-		switch_to_blog( $blog_id );
-		self::single_activation();
-		switch_to_blog( $old_blog );
-	}
+//	static function on_new_blog( $blog_id, $user_id, $domain, $path, $site_id, $meta ) {
+//
+//		//replace with your base plugin path E.g. dirname/filename.php
+//		if ( !is_plugin_active_for_network( 'kanban/kanban.php' ) ) return;
+//
+//		global $wpdb;
+//
+//		$old_blog = $wpdb->blogid;
+//		switch_to_blog( $blog_id );
+//		self::single_activation();
+//		switch_to_blog( $old_blog );
+//	}
 
 
 
@@ -250,4 +250,12 @@ class Kanban {
 
 
 // Instantiate the plugin.
-Kanban::init();
+//Kanban::init();
+
+
+function Kanban()
+{
+	return Kanban::init();
+}
+
+Kanban();

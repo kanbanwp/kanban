@@ -15,7 +15,9 @@ abstract class Kanban_Db
 
 
 	static function init() {
-		add_action( 'plugins_loaded', array( __CLASS__, 'check_for_updates' ) );
+
+		// Make sure custom tables exist - HIGHEST PRIORITY!
+		add_action( 'plugins_loaded', array( __CLASS__, 'check_for_updates' ), 0, 10 );
 	}
 
 

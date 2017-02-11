@@ -17,7 +17,7 @@ abstract class Kanban_Db
 	static function init() {
 
 		// Make sure custom tables exist - HIGHEST PRIORITY!
-		add_action( 'plugins_loaded', array( __CLASS__, 'check_for_updates' ), 0, 10 );
+		add_action( 'plugins_loaded', array( __CLASS__, 'check_for_updates' ), 10, 0 );
 	}
 
 
@@ -238,15 +238,19 @@ abstract class Kanban_Db
 
 
 	/**
+	 * Triggered on plugins_loaded priority 10
 	 * @link http://mac-blog.org.ua/wordpress-custom-database-table-example-full/
 	 */
 	static function check_for_updates() {
+
+		// See if we're out of sync.
 		if ( version_compare( self::installed_ver(), Kanban::get_instance()->settings->plugin_data['Version'] ) === 0 ) { return false; }
 
 		global $charset_collate, $wpdb;
 
 		require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
 
+		// Get all classes that have db tables for updating.
 		$classes_with_tables = array(
 			'Kanban_Board',
 			'Kanban_Comment',
@@ -260,6 +264,7 @@ abstract class Kanban_Db
 			'Kanban_Task_Hour',
 		);
 
+		// Loop over dbtables, checking for updates.
 		foreach ( $classes_with_tables as $class ) {
 			$sql = $class::db_table();
 
@@ -269,38 +274,46 @@ abstract class Kanban_Db
 			dbDelta( $sql );
 		}
 
+		// Now that we know we have tables, populate them.
 		Kanban_Db::add_defaults();
 
-		// make sure every task has a board
+		Kanban_License::migrate_licenses();
+
+		// Make sure every task has a board.
 		$boards_table = Kanban_Board::table_name();
 
+		// Get first board.
 		$sql = "SELECT `id`
 				FROM `{$boards_table}`
+				WHERE `is_active` = 1
+				ORDER BY id ASC
 				LIMIT 1
 		;";
 
 		$board_id = $wpdb->get_var( $sql );
 
-		$classes_with_board_id = array(
-			'Kanban_Estimate',
-			'Kanban_Status',
-			'Kanban_Task',
-		);
+		if ( is_numeric($board_id) && $board_id > 0 ) {
+			$classes_with_board_id = array(
+				'Kanban_Estimate',
+				'Kanban_Status',
+				'Kanban_Task',
+			);
 
-		foreach ( $classes_with_board_id as $class ) {
-			$table = $class::table_name();
+			foreach ( $classes_with_board_id as $class ) {
+				$table = $class::table_name();
 
-			$sql = "UPDATE $table
-				SET `board_id` = $board_id
-				WHERE `board_id` IS NULL
-				OR `board_id` = 0
-			;";
+				$sql = "UPDATE $table
+					SET `board_id` = $board_id
+					WHERE `board_id` IS NULL
+					OR `board_id` = 0
+				;";
 
-			$wpdb->query( $sql );
+				$wpdb->query( $sql );
+			}
 		}
 
 		// save db version to avoid updates
-		update_option( 'kanban_db_version', Kanban::get_instance()->settings->plugin_data['Version'] );
+		update_option( 'kanban_db_version', Kanban::get_instance()->settings->plugin_data['Version'], TRUE );
 	}
 
 
@@ -337,11 +350,31 @@ abstract class Kanban_Db
 
 		$board_id = $wpdb->get_var( $sql );
 
+
+
 		$allowed_users = kanban_Option::get_option( 'allowed_users', $board_id );
 
 		if ( empty( $allowed_users ) ) {
-			Kanban_Option::update_option( 'allowed_users', array( get_current_user_id() ), $board_id );
+
+			// Add current user, why not.
+			$allowed_users = array( get_current_user_id() );
+
+			// Make sure the site admin user is added.
+			if ( Kanban_Utils::is_network() ) {
+				$admin_email = get_option('admin_email');
+
+				$user = get_user_by('email', $admin_email);
+
+				if ( !empty($user) ) {
+					$allowed_users[] = $user->ID;
+					array_unique($allowed_users);
+				}
+			}
+
+			Kanban_Option::update_option( 'allowed_users', $allowed_users, $board_id );
 		}
+
+
 
 		$status_table = Kanban_Status::table_name();
 

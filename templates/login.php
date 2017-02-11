@@ -41,7 +41,7 @@ global $wp_query;
 <!--		<div class="panel panel-default">-->
 			<div class="panel-heading">
 <?php if ( ! is_user_logged_in() ) : ?>
-				<h2><?php echo __( 'Please Login', Kanban::$instance->settings->file ); ?></h2>
+				<h2><?php echo __( 'Please Login', 'kanban' ); ?></h2>
 				<div class="form-group">
 					<label for="email" class="sr-only">
 						<?php echo __( 'Email or username', 'kanban' ); ?>

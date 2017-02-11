@@ -13,6 +13,9 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
  */
 class Kanban_Utils
 {
+	private static $is_network;
+
+
 	/**
 	 * Get the Kanban-namespaced nonce.
 	 *
@@ -22,6 +25,15 @@ class Kanban_Utils
 		return sprintf( '%s_nonce', Kanban::get_instance()->settings->basename );
 	}
 
+
+
+	static function is_network () {
+		if ( ! isset( self::$is_network ) ) {
+			self::$is_network = is_plugin_active_for_network( Kanban::get_instance()->settings->plugin_basename ) ? true : false;
+		}
+
+		return self::$is_network;
+	}
 
 
 	/**

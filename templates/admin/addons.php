@@ -5,9 +5,14 @@
 <div class="wrap">
 	<h1>
 		<?php echo sprintf( __( 'Add-ons for %s', 'kanban' ), Kanban::get_instance()->settings->pretty_name ); ?>
+
+		<?php if ( !Kanban_Utils::is_network() ) : ?>
+
 		<a href="<?php echo Kanban_Template::get_uri() ?>" class="page-title-action" target="_blank" id="btn-go-to-board" onclick="window.open('<?php echo Kanban_Template::get_uri() ?>', 'kanbanboard'); return false;">
 			<?php echo __( 'Go to your board', 'kanban' ); ?>
 		</a>
+
+		<?php endif ?>
 	</h1>
 
 

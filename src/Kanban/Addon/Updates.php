@@ -235,11 +235,10 @@ class Kanban_Addon_Updates
 
 		$license_str = $license->get_license();
 
-//		if ( empty( $license_str ) ) return false;
 
 
 		// Add slug and to update path.
-		$this->update_path = add_query_arg(
+		$update_path = add_query_arg(
 			array(
 				'slug' => $parent::$slug,
 				'license' => $license_str,
@@ -248,6 +247,6 @@ class Kanban_Addon_Updates
 			$this->update_path
 		);
 
-		return $this->update_path;
+		return $update_path;
 	}
 }

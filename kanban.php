@@ -4,8 +4,8 @@
  * Plugin Name:        Kanban Boards for WordPress
  * Plugin URI:         http://kanbanwp.com/
  * Description:        Add Kanban boards to your WordPress sites and get organized! Project management, CRM, sales tracking...
- * Version:            2.3.5
- * Release Date:       January 31, 2017
+ * Version:            2.3.6
+ * Release Date:       February 11, 2017
  * Author:             Gelform Inc
  * Author URI:         http://gelwp.com
  * License:            GPL2
@@ -112,7 +112,7 @@ final class Kanban {
 		Kanban_Template::init();
 		Kanban_User::init();
 
-		register_activation_hook( __FILE__, array( __CLASS__, 'on_activation' ) );
+//		register_activation_hook( __FILE__, array( __CLASS__, 'on_activation' ) );
 		register_deactivation_hook( __FILE__, array( __CLASS__, 'on_deactivation' ) );
 //		add_action( 'wpmu_new_blog', array( __CLASS__, 'on_new_blog' ), 10, 6 );
 
@@ -127,13 +127,13 @@ final class Kanban {
 	 *
 	 * @param bool $network_wide If plugin is being used across the multisite.
 	 */
-	public static function on_activation( $networkwide ) {
-		global $wpdb;
-
-		if ( function_exists( 'is_multisite' ) && is_multisite() ) {
-
-			// Check if it is a network activation - if so, run the activation function for each blog id.
-			if ( $networkwide ) {
+//	public static function on_activation( $networkwide ) {
+//		global $wpdb;
+//
+//		if ( function_exists( 'is_multisite' ) && is_multisite() ) {
+//
+//			// Check if it is a network activation - if so, run the activation function for each blog id.
+//			if ( $networkwide ) {
 
 //				$old_blog = $wpdb->blogid;
 //
@@ -150,14 +150,14 @@ final class Kanban {
 //				// Switch back to previous.
 //				switch_to_blog( $old_blog );
 
-			} else {
-				self::single_activation();
-			}
-		} else {
-			self::single_activation();
-		}
-
-	}
+//			} else {
+//				self::single_activation();
+//			}
+//		} else {
+//			self::single_activation();
+//		}
+//
+//	}
 
 
 
@@ -250,9 +250,6 @@ final class Kanban {
 
 
 // Instantiate the plugin.
-//Kanban::init();
-
-
 function Kanban()
 {
 	return Kanban::init();

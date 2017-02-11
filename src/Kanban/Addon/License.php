@@ -45,7 +45,12 @@ class Kanban_Addon_License {
 		);
 
 		// Add the Kanban > Licenses page.
-		add_action( 'admin_menu', array( $this, 'is_licenses_page' ) );
+		if ( Kanban_Utils::is_network() ) {
+			add_action( 'network_admin_menu', array( $this, 'network_licenses_page' ) );
+		}
+		else {
+			add_action( 'admin_menu', array( $this, 'licenses_page' ) );
+		}
 
 		// Add the license inputs to the Kanban > Licenses page.
 		add_filter(
@@ -56,23 +61,13 @@ class Kanban_Addon_License {
 		// Run a check on the license before saving it.
 		add_action(
 			'kanban_license_save_settings_before',
-			array( $this, 'check_license' )
+			array( $this, 'check_license' ),
+			1
 		);
 
 //		$parent::$update_checker->addQueryArgFilter( array( $this, 'add_license_to_request' ) );
 //		$parent::$update_checker->addHttpRequestArgFilter( array( $this, 'add_license_to_request' ) );
 	}
-
-
-
-	/**
-	 * @return string The addon license option name.
-	 */
-//	public function get_license_name() {
-//		$parent = $this->parent;
-//
-//		return 'license_' . $parent::$slug;
-//	}
 
 
 
@@ -84,6 +79,7 @@ class Kanban_Addon_License {
 	 * @param $status The status of the addon.
 	 */
 	public function add_license_check_plugins_page( $plugin_file, $plugin_data, $status ) {
+
 		$parent  = $this->parent;
 		$license = $this->get_license();
 
@@ -91,11 +87,15 @@ class Kanban_Addon_License {
 			return;
 		}
 
+		if ( Kanban_Utils::is_network() && !is_network_admin() ) return;
+
 		$is_newer = false;
 		if ( isset( $plugin_data[ 'Version'] ) && isset( $plugin_data[ 'new_version'] ) ) {
 
 			$is_newer = version_compare( $plugin_data[ 'Version'], $plugin_data[ 'new_version'], '<' );
 		}
+
+		$url = network_admin_url( 'admin.php?page=kanban_licenses' ) . '#tab-licenses';
 
 		?>
 
@@ -104,7 +104,7 @@ class Kanban_Addon_License {
 				<div class="update-message notice inline notice-error notice-alt">
 					<p>
 						You have not entered a license yet. To get updates, please add your license to <a
-							href="<?php echo admin_url( 'admin.php?page=kanban_licenses' ) ?>#tab-licenses">Kanban &gt;
+							href="<?php echo $url ?>">Kanban &gt;
 							Licenses</a>!
 					</p>
 				</div>
@@ -127,7 +127,7 @@ class Kanban_Addon_License {
 	/**
 	 * Add the Kanban > Licenses page.
 	 */
-	public function is_licenses_page() {
+	public function licenses_page() {
 		if ( ! isset( $GLOBALS[ 'submenu'][ 'kanban'] ) ) {
 			return;
 		}
@@ -144,6 +144,7 @@ class Kanban_Addon_License {
 		}
 
 		if ( ! $is_licenses_page ) {
+
 			add_submenu_page(
 				'kanban',
 				'Licenses',
@@ -154,6 +155,43 @@ class Kanban_Addon_License {
 			);
 		}
 	}
+
+
+
+
+	/**
+	 * Add the Kanban > Licenses page.
+	 */
+	public function network_licenses_page() {
+
+		if ( ! isset( $GLOBALS[ 'submenu'][ 'kanban_network'] ) ) {
+			return;
+		}
+
+		$is_licenses_page = false;
+		foreach ( $GLOBALS[ 'submenu'][ 'kanban_network'] as $subpage ) {
+
+			foreach ( $subpage as $option ) {
+				if ( $option == 'kanban_licenses' ) {
+					$is_licenses_page = true;
+					break 2;
+				}
+			}
+		}
+
+		if ( ! $is_licenses_page ) {
+
+			add_submenu_page(
+				'kanban_network',
+				'Licenses',
+				'Licenses',
+				'manage_options',
+				'kanban_licenses',
+				array( 'Kanban_Admin', 'licenses_page' )
+			);
+		}
+	}
+
 
 
 
@@ -174,12 +212,12 @@ class Kanban_Addon_License {
 		?>
 		<tr>
 			<th width="33%" scope="row">
-				<label for="license_<?php echo $parent::$slug ?>">
+				<label for="<?php echo $parent ?>_license">
 					<?php echo $parent::$friendlyname ?>
 				</label>
 			</th>
 			<td>
-				<input name="settings[license_<?php echo $parent::$slug ?>]" id="license_<?php echo $parent::$slug ?>"
+				<input name="licenses[<?php echo $parent ?>]" id="<?php echo $parent ?>"
 				       type="text" value="<?php echo $license ?>" class="large-text">
 			</td>
 		</tr>
@@ -201,21 +239,21 @@ class Kanban_Addon_License {
 	 * @return mixed License or null.
 	 */
 	public function get_license() {
-		global $wpdb;
+
+		if ( Kanban_Utils::is_network() ) {
+			$licenses = get_site_option('kanban_addon_licenses');
+		}
+		else {
+			$licenses = get_option('kanban_addon_licenses');
+		}
 
 		$parent = $this->parent;
 
-		$option_table = Kanban_Option::table_name();
+		if ( isset($licenses[$parent]) ) {
+			return $licenses[$parent];
+		}
 
-		// get this way, without board
-		$license = $wpdb->get_var(
-			$wpdb->prepare(
-				"SELECT `value` FROM $option_table WHERE name = %s ORDER BY `board_id` DESC;",
-				'license_' . $parent::$slug
-			)
-		);
-
-		return $license;
+		return FALSE;
 	}
 
 
@@ -223,38 +261,31 @@ class Kanban_Addon_License {
 	/**
 	 * Check the license when Kanban > licenses admin page is submitted.
 	 */
-	public function check_license() {
+	public function check_license($licenses) {
 		$parent = $this->parent;
 
-		// Check nonce.
-		if ( ! isset( $_POST[ Kanban_Utils::get_nonce() ] ) || ! wp_verify_nonce( $_POST[ Kanban_Utils::get_nonce() ], 'kanban-licenses' ) || ! is_user_logged_in() ) {
-			return;
-		}
-
-		// Make sure the license is set.
-		if ( ! isset( $_POST['settings'][ 'license_' . $parent::$slug ] ) || empty( $_POST['settings'][ 'license_' . $parent::$slug ] ) ) {
+		if ( ! isset( $licenses[ $parent ] ) ) {
 			return;
 		}
 
 		// Get current license.
-		$license = $this->get_license();
+		$old_license = $this->get_license();
 
 		// Don't send if the same.
-		if ( $license == $_POST['settings'][ 'license_' . $parent::$slug ] ) {
+		if ( $old_license == $licenses[ $parent ] || empty($licenses[ $parent ]) ) {
 			return;
 		}
 
 		try {
 			$returned = wp_remote_get( sprintf(
 				'https://kanbanwp.com/?action=license-check&license=%s&url=%s&addon=%s',
-				$_POST['settings'][ 'license_' . $parent::$slug ],
+				$licenses[ $parent ],
 				site_url(),
 				$parent::$slug
 			) );
 
 			// @todo show current license status
 //			$response = json_decode($returned['body']);
-
 
 		} catch ( Exception $e ) {
 		}

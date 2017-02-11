@@ -439,8 +439,8 @@ class Kanban_Option extends Kanban_Db {
 				continue;
 			}
 
-			// If empty and not license, use default.
-			if ( ! isset( $_POST[ 'settings' ][ $key ] ) && substr( $key, 0, 7 ) != 'license' ) {
+			// If empty, use default.
+			if ( ! isset( $_POST[ 'settings' ][ $key ] ) ) {
 				$_POST[ 'settings' ][ $key ] = self::get_default( $key );
 			}
 

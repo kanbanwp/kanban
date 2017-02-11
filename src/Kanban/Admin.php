@@ -40,6 +40,10 @@ class Kanban_Admin
 		// add custom pages to admin
 		add_action( 'admin_menu', array( __CLASS__, 'admin_menu' ) );
 
+		if ( Kanban_Utils::is_network() ) {
+			add_action( 'network_admin_menu', array( __CLASS__, 'network_admin_menu' ) );
+		}
+
 		// if migrating from older version, show upgrade notice with progress bar
 		// add_action( 'admin_notices', array( __CLASS__, 'render_upgrade_notice' ) );
 		add_action( 'admin_bar_menu', array( __CLASS__, 'add_admin_bar_link_to_board' ), 999 );
@@ -153,6 +157,19 @@ class Kanban_Admin
 	/**
 	 * render the welcome page
 	 */
+//	static function network_page() {
+//		$template = Kanban_Template::find_template( 'admin/welcome' );
+//
+//		include_once $template;
+
+
+//	}
+
+
+
+	/**
+	 * render the welcome page
+	 */
 	static function addons_page() {
 
 		wp_enqueue_script(
@@ -161,13 +178,20 @@ class Kanban_Admin
 			array( 'jquery', 'masonry' )
 		);
 
-		global $wpdb;
 
-		$current_user_id = get_current_user_id();
-		$lastRun = (int)Kanban_Option::get_option( 'admin-addons-check' );
 
-		if ( time() - $lastRun >= 60 * 60 * 24 ) {
-			Kanban_Option::update_option( 'admin-addons-check', time() );
+		// Get stored add-ons.
+		if ( Kanban_Utils::is_network() ) {
+			$addons = get_site_transient( 'kanban-admin-addons' );
+		}
+		else {
+			$addons = get_transient( 'kanban-admin-addons' );
+		}
+
+
+
+		// $addons is false if not set
+		if ( empty($addons) || !$addons ) {
 
 			$response = wp_remote_get( 'https://kanbanwp.com?feed=addons' );
 
@@ -177,10 +201,16 @@ class Kanban_Admin
 				$addons = array();
 			}
 
-			Kanban_Option::update_option( 'admin-addons', $addons );
-		} else {
-			$addons = Kanban_Option::get_option( 'admin-addons' );
+			if ( Kanban_Utils::is_network() ) {
+				set_site_transient( 'kanban-admin-addons', $addons, 24 * HOUR_IN_SECONDS );
+			}
+			else {
+				set_transient( 'kanban-admin-addons', $addons, 24 * HOUR_IN_SECONDS );
+			}
+
 		}
+
+
 
 		// get the template data
 		global $wp_query;
@@ -189,6 +219,8 @@ class Kanban_Admin
 		$wp_query->query_vars[ 'addons' ] = $addons;
 
 		$template = Kanban_Template::find_template( 'admin/addons' );
+
+
 
 		include_once $template;
 	}
@@ -323,6 +355,11 @@ class Kanban_Admin
 	}
 
 
+	static function icon_svg () {
+		$svg      = '<svg id="Layer_2" data-name="Layer 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 63.84"><defs><style>.cls-1{fill:#82878c;}</style></defs><title>kanban</title><ellipse class="cls-1" cx="50.52" cy="13.51" rx="13.48" ry="13.51"/><ellipse class="cls-1" cx="13.48" cy="13.51" rx="13.48" ry="13.51"/><ellipse class="cls-1" cx="50.52" cy="50.33" rx="13.48" ry="13.51"/><ellipse class="cls-1" cx="13.48" cy="50.33" rx="13.48" ry="13.51"/></svg>';
+		return 'data:image/svg+xml;base64,' . base64_encode( $svg );
+	}
+
 
 	/**
 	 * add pages to admin menu, including custom icon
@@ -330,8 +367,8 @@ class Kanban_Admin
 	 * @return   [type] [description]
 	 */
 	static function admin_menu() {
-		$svg = '<svg id="Layer_2" data-name="Layer 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 63.84"><defs><style>.cls-1{fill:#82878c;}</style></defs><title>kanban</title><ellipse class="cls-1" cx="50.52" cy="13.51" rx="13.48" ry="13.51"/><ellipse class="cls-1" cx="13.48" cy="13.51" rx="13.48" ry="13.51"/><ellipse class="cls-1" cx="50.52" cy="50.33" rx="13.48" ry="13.51"/><ellipse class="cls-1" cx="13.48" cy="50.33" rx="13.48" ry="13.51"/></svg>';
-		$icon_svg = 'data:image/svg+xml;base64,' . base64_encode( $svg );
+//		$svg = '<svg id="Layer_2" data-name="Layer 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 63.84"><defs><style>.cls-1{fill:#82878c;}</style></defs><title>kanban</title><ellipse class="cls-1" cx="50.52" cy="13.51" rx="13.48" ry="13.51"/><ellipse class="cls-1" cx="13.48" cy="13.51" rx="13.48" ry="13.51"/><ellipse class="cls-1" cx="50.52" cy="50.33" rx="13.48" ry="13.51"/><ellipse class="cls-1" cx="13.48" cy="50.33" rx="13.48" ry="13.51"/></svg>';
+//		$icon_svg = 'data:image/svg+xml;base64,' . base64_encode( $svg );
 
 
 		// add the base slug and page
@@ -341,15 +378,15 @@ class Kanban_Admin
 			'manage_options',
 			Kanban::get_instance()->settings->basename,
 			null,
-			$icon_svg
+			self::icon_svg()
 		);
 
 		// redeclare same page to change name to settings
 		// @link https://codex.wordpress.org/Function_Reference/add_submenu_page#Inside_menu_created_with_add_menu_page.28.29
 		add_submenu_page(
 			Kanban::get_instance()->settings->basename,
-			'Welcome',
-			'Welcome',
+			__('Welcome'),
+			__('Welcome'),
 			'manage_options',
 			Kanban::get_instance()->settings->basename,
 			array( __CLASS__, 'welcome_page' )
@@ -358,8 +395,8 @@ class Kanban_Admin
 		// add the settings admin page
 		add_submenu_page(
 			Kanban::get_instance()->settings->basename,
-			'Settings',
-			'Settings',
+			__('Settings'),
+			__('Settings'),
 			'manage_options',
 			'kanban_settings',
 			array( 'Kanban_Option', 'settings_page' )
@@ -367,8 +404,8 @@ class Kanban_Admin
 
 		add_submenu_page(
 			Kanban::get_instance()->settings->basename,
-			'Add-ons',
-			'Add-ons',
+			__('Add-ons'),
+			__('Add-ons'),
 			'manage_options',
 			'kanban_addons',
 			array( __CLASS__, 'addons_page' )
@@ -376,8 +413,8 @@ class Kanban_Admin
 
 		add_submenu_page(
 			Kanban::get_instance()->settings->basename,
-			'Contact Us',
-			'Contact Us',
+			__('Contact Us'),
+			__('Contact Us'),
 			'manage_options',
 			'kanban_contact',
 			array( __CLASS__, 'contact_page' )
@@ -385,6 +422,78 @@ class Kanban_Admin
 
 	} // admin_menu
 
+
+
+
+
+
+	/**
+	 * add pages to admin menu, including custom icon
+	 *
+	 * @return   [type] [description]
+	 */
+	static function network_admin_menu() {
+
+
+		add_menu_page(
+			'kanban_network',
+			Kanban::get_instance()->settings->pretty_name,
+			'manage_options',
+			'kanban_network',
+			array( __CLASS__, 'addons_page' ),
+			self::icon_svg()
+		);
+
+		add_submenu_page(
+			'kanban_network',
+			__('Add-ons'),
+			__('Add-ons'),
+			'manage_options',
+			'kanban_network',
+			array( __CLASS__, 'addons_page' )
+		);
+
+//		add_submenu_page(
+//				'kanban_network',
+//			'Licenses',
+//			'Licenses',
+//			'manage_options',
+//			'kanban_network_licenses',
+//			array( __CLASS__, 'licenses_page' )
+//		);
+
+
+		// add the base slug and page
+//		add_menu_page(
+//			'kanban_network',
+//			Kanban::get_instance()->settings->pretty_name,
+//			'manage_options',
+//			Kanban::get_instance()->settings->basename . '_network',
+//			null,
+//			$icon_svg
+//		);
+//
+//		// redeclare same page to change name to settings
+//		// @link https://codex.wordpress.org/Function_Reference/add_submenu_page#Inside_menu_created_with_add_menu_page.28.29
+////		add_submenu_page(
+////			Kanban::get_instance()->settings->basename . '_network',
+////			'Network',
+////			'Network',
+////			'manage_options',
+////			Kanban::get_instance()->settings->basename . '_network',
+////			array( __CLASS__, 'network_page' )
+////		);
+//
+//		add_submenu_page(
+//			'Add-ons',
+//			'Add-ons',
+//			'Add-ons',
+//			'manage_options',
+//			Kanban::get_instance()->settings->basename . '_network',
+//			array( __CLASS__, 'addons_page' )
+//		);
+
+	}
 
 
 	static function add_admin_bar_link_to_board( $wp_admin_bar ) {

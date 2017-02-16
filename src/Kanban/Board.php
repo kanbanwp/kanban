@@ -221,6 +221,14 @@ class Kanban_Board extends Kanban_Db
 
 
 
+	static function get_current_id ( ) {
+		$board = self::get_current();
+
+		return is_object($board) ? $board->id : FALSE;
+	}
+
+
+
 	static function get_current_by( $method = 'GET' ) {
 		$board_id = null;
 

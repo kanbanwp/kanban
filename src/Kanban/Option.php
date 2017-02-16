@@ -425,26 +425,13 @@ class Kanban_Option extends Kanban_Db {
 
 		$board = Kanban_Board::get_current_by( 'POST' );
 
-		// Get current settings.
-		$settings = Kanban_Option::get_all( $board->id );
-
 		// Get defaults.
 		$defaults = self::get_defaults();
 
 		// Save all single settings.
-		foreach ( $settings as $key => $value ) {
-
-			// Don't save if no default is set.
-			if ( ! isset( $defaults[ $key ] ) ) {
-				continue;
-			}
+		foreach ( $defaults as $key => $value ) {
 
 			// If empty, use default.
-			if ( ! isset( $_POST[ 'settings' ][ $key ] ) ) {
-				$_POST[ 'settings' ][ $key ] = self::get_default( $key );
-			}
-
-			// If not in the post (most likely a license), skip it.
 			if ( ! isset( $_POST[ 'settings' ][ $key ] ) ) {
 				continue;
 			}

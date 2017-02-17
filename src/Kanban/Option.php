@@ -130,7 +130,7 @@ class Kanban_Option extends Kanban_Db {
 				self::$records[ $key ]->value = maybe_unserialize( $record->value );
 			}
 
-			$boards = Kanban_Board::get_all();
+			$boards                 = Kanban_Board::get_all();
 			self::$records_by_board = array_fill_keys( array_keys( $boards ), array() );
 
 			foreach ( self::$records as $key => $record ) {
@@ -431,9 +431,15 @@ class Kanban_Option extends Kanban_Db {
 		// Save all single settings.
 		foreach ( $defaults as $key => $value ) {
 
-			// If empty, use default.
+			// If empty.
 			if ( ! isset( $_POST[ 'settings' ][ $key ] ) ) {
-				continue;
+
+				// Try to use default.
+				if ( isset( $defaults[ $key ] ) ) {
+					$_POST[ 'settings' ][ $key ] = $defaults[ $key ];
+				} else {
+					continue;
+				}
 			}
 
 			// Update the option.

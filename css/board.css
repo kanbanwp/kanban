@@ -231,6 +231,9 @@ sub {
       z-index: 2; }
     .task .task-project [contenteditable="true"] {
       color: #888; }
+      .task .task-project [contenteditable="true"]:empty:before {
+        color: #dfdfdf;
+        content: attr(placeholder); }
   .task .task-title {
     font-size: 1.382em;
     margin-bottom: 3px;

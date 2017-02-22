@@ -67,6 +67,7 @@ Task.prototype.dom = function () {
 	);
 
 
+
 	self.$el
 	.on(
 		'shown.bs.dropdown',
@@ -83,6 +84,7 @@ Task.prototype.dom = function () {
 			self.$el.removeClass( 'active' );
 		}
 	);
+
 
 
 	self.$el
@@ -244,6 +246,7 @@ Task.prototype.dom = function () {
 			$div.data( 'orig', $div.text() );
 		}
 	); // task-project;
+
 
 
 	self.$el.on(
@@ -1001,45 +1004,46 @@ Task.prototype.project_update_title = function ( title ) {
 
 
 Task.prototype.project_save = function ( project_id ) {
-	// set project id (can't hurt)
+
+	// Make sure we have a project id.
+	if ( isNaN(project_id) ) {
+		project_id = 0;
+	}
+
+	// Set project id attribute.
 	this.$el.attr( 'data-project-id', project_id );
 
-	// get project
+	// Get project.
 	var project = this.board().record.project_records[project_id];
 
 
-	// update title (can't hurt)
+	// Set project title.
 	if ( typeof project === 'undefined' ) {
-		// set project title
 		this.project_update_title( '' );
 	}
 	else {
-		// set project title
 		this.project_update_title( project.title );
 	}
 
-
-	// don't save if not change
+	// Don't save if not changed.
 	if ( project_id == this.record.project_id ) {
 		return;
 	}
 
-
+	// Build comment.
 	if ( typeof project === 'undefined' ) {
-		// build comment
 		var comment = kanban.text['task_removed_from_project'].sprintf(
 			this.board().current_user().record().short_name
 		);
 	}
 	else {
-		// build comment
 		var comment = kanban.text['task_added_to_project'].sprintf(
 			this.board().current_user().record().short_name,
 			project.title
 		);
 	}
 
-
+	// Get the previous project id.
 	var prev_id = this.record.project_id;
 	var prev_project = this.board().record.project_records[prev_id];
 
@@ -1049,34 +1053,40 @@ Task.prototype.project_save = function ( project_id ) {
 		);
 	}
 
-
-	// update task record and save it
+	// Update task record and save it.
 	this.record.project_id = project_id;
 	this.save( comment );
 };
 
 
+
 Task.prototype.parse_project = function () {
+
 	var self = this;
 
 	var $div = $( '.task-project [contenteditable]', this.$el );
 
 	// clean up html
 	sanitize( $div );
-	strip_tags( $div, [] ); // strip all tags
-	var project_title = $div.html().replace( /\\/gi, '&#92;' ).replace( /&nbsp;/gi, ' ' );
 
+	// strip all tags
+	strip_tags( $div, [] );
 
+	// Get the title.
+	var project_title = $.trim($div.html());
+
+	// Replace backslashes and spaces.
+	project_title.replace( /\\/gi, '&#92;' ).replace( /&nbsp;/gi, ' ' );
+
+	// Sanity check.
 	if ( typeof project_title === 'undefined' || project_title === null ) {
 		return;
 	}
-
 
 	if ( '' === project_title ) {
 		this.project_save( 0 );
 		return;
 	}
-
 
 	// see if typed value matches existing project
 	var project_id = null;
@@ -1090,7 +1100,7 @@ Task.prototype.parse_project = function () {
 		}
 	}
 
-
+	// If we found a project, save it to the task and return.
 	if ( project_id !== null ) {
 		this.project_save( project_id );
 		return;

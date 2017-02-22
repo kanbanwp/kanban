@@ -39,8 +39,7 @@
 
 	<div class="task-project dropdown">
 		<div contenteditable="{{current_user_can_write}}true{{:current_user_can_write}}false{{/current_user_can_write}}"
-			 data-toggle="dropdown" placeholder="<?php echo __( 'Add a project', 'kanban' ) ?>">{{=task.project.title}}
-		</div>
+			 data-toggle="dropdown" placeholder="<?php echo __( 'Add a project', 'kanban' ) ?>">{{=task.project.title}}</div>
 		{{current_user_can_write}}
 		<ul class="dropdown-menu">
 		</ul>

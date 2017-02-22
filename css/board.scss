@@ -368,6 +368,11 @@ sub {
 
 		[contenteditable="true"] {
 			color: #888;
+
+			&:empty:before {
+				color: lighten($color-grey-wp, 60);;
+				content: attr(placeholder);
+			}
 		}
 	}
 

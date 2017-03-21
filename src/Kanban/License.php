@@ -89,6 +89,15 @@ class Kanban_License {
 	 * to WordPress options table.
 	 */
 	static function migrate_licenses() {
+
+		// See if licenses are already stored.
+		$kanban_addon_licenses = get_site_option( 'kanban_addon_licenses' );
+
+		// If already stored, skip it.
+		if ( !empty($kanban_addon_licenses) ) return;
+
+
+
 		global $wpdb;
 
 		$options_table = Kanban_Option::table_name();

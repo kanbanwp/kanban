@@ -414,6 +414,10 @@ body.board-view-all-cols .row-tasks {
       .modal-task-move .list-group-item .task-handle {
         cursor: default; } }
 
+#modal-projects #modal-projects-sort-filter input {
+  display: inline;
+  width: auto; }
+
 #page-footer {
   background: #AAB1BA;
   border: 0;

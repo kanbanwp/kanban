@@ -8,6 +8,14 @@
 					<?php echo __( 'Projects', 'kanban' ); ?>
 				</p>
 
+				<p id="modal-projects-sort-filter">
+					<input type="text" class="form-control input-sm pull-right" id="modal-projects-filter" placeholder="filter">
+					<span class="btn btn-default btn-sm" id="modal-projects-sort" data-reverse="false">
+						<?php echo __( 'Sort', 'kanban' ); ?>
+						<span class="glyphicon glyphicon-arrow-up" data-class="glyphicon glyphicon-arrow-down" style="display: none;"></span>
+					</span>
+				</p>
+
 				<div class="panel-group" id="accordion-projects">
 				</div><!-- panel-group -->
 

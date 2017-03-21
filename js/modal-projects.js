@@ -47,6 +47,19 @@ Modal_Projects.prototype.dom = function () {
 
 
 	self.$el.on(
+		'hide.bs.modal',
+		function () {
+
+			// Reset the filters and sort when modal is closed.
+			$('#modal-projects-filter').val('');
+			$('#modal-projects-sort').attr('data-reverse', "false");
+			$('#modal-projects-sort .glyphicon').hide().attr('class', 'glyphicon glyphicon-arrow-up').attr('data-class', 'glyphicon glyphicon-arrow-down');
+		}
+	);
+
+
+
+	self.$el.on(
 		'click',
 		'.btn-project-delete',
 		function () {
@@ -234,6 +247,104 @@ Modal_Projects.prototype.dom = function () {
 		}
 	);
 
+
+
+	self.$el.on(
+		'keyup',
+		'#modal-projects-filter',
+		function()
+		{
+			// Get the input.
+			var $input = $(this);
+
+			// Format the input value.
+			var value = $input.val();
+			var valueLower = $.trim( value.toLowerCase() );
+
+			// Get the wrapper.
+			var $accordion = $('#accordion-projects');
+
+			// If the input is empty, show all projects.
+			if ( valueLower == '' )
+			{
+				$('.panel-project:hidden', $accordion).slideDown('fast');
+				return false;
+			}
+
+			// Otherwise, filter the projects.
+			$('.panel-project', $accordion).each(function()
+			{
+				// This project.
+				var $project = $(this);
+
+				// Format the project title.
+				var text = $('.label-project-title', $project).text();
+				var textLower = $.trim(text.toLowerCase() );
+
+				// Show/hide if it's a match.
+				if ( textLower.search(valueLower) > -1 )
+				{
+					$project.slideDown('fast');
+				}
+				else if ( $project.is(':visible') )
+				{
+					$project.slideUp('fast');
+				}
+			});
+
+			return false;
+		}
+	);
+
+	self.$el.on(
+		'click',
+		'#modal-projects-sort',
+		function () {
+
+			// Get the button.
+			var $btn = $( this );
+
+			// Determine whether to reverse it.
+			var reverse = $btn.attr( 'data-reverse' ) === 'true' ? true : false;
+
+			// projects wrapper.
+			var $accordion = $( '#accordion-projects' );
+
+			// Get project divs (not jQuery objects) to apply sort.
+			var projects = $accordion.find( '.panel-project' ).get();
+
+			// Sort the project divs based on title.
+			projects.sort( function ( a, b ) {
+				var a_text = $( a ).find( '.label-project-title' ).text().toUpperCase();
+				var b_text = $( b ).find( '.label-project-title' ).text().toUpperCase();
+				return a_text.localeCompare( b_text );
+			} );
+
+			// Reapply the projects in order.
+			$.each( projects, function ( idx, itm ) {
+				$accordion.append( itm );
+			} );
+
+			// If reverse, switch divs around.
+			if ( reverse ) {
+				$( projects ).each( function ( i, li ) {
+						$accordion.prepend( li );
+					}
+				);
+			}
+
+			// Reverse the order.
+			$btn.attr( 'data-reverse', reverse ? 'false' : 'true' );
+
+			// Reverse the arrows
+			var $arrow = $('.glyphicon', $btn);
+			var classes_old = $arrow.attr('class');
+			var classes_new = $arrow.attr('data-class');
+			$arrow.attr('class', classes_new).attr('data-class', classes_old).show();
+
+			return false;
+		}
+	);
 
 }; // dom
 

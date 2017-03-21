@@ -509,13 +509,13 @@ sub {
 			cursor: default;
 		}
 	}
-}  // task
+}
 
+// task
 
 .alert-task-restore {
 	cursor: pointer;
 }
-
 
 .task-placeholder {
 	border: 1px dashed #999;
@@ -651,6 +651,15 @@ body.board-view-all-cols {
 			@media screen and (max-width: $screen-sm-max) {
 				cursor: default;
 			}
+		}
+	}
+}
+
+#modal-projects {
+	#modal-projects-sort-filter {
+		input {
+			display: inline;
+			width: auto;
 		}
 	}
 }

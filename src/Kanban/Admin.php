@@ -357,7 +357,7 @@ class Kanban_Admin
 
 	static function icon_svg () {
 		$svg      = '<svg id="Layer_2" data-name="Layer 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 63.84"><defs><style>.cls-1{fill:#82878c;}</style></defs><title>kanban</title><ellipse class="cls-1" cx="50.52" cy="13.51" rx="13.48" ry="13.51"/><ellipse class="cls-1" cx="13.48" cy="13.51" rx="13.48" ry="13.51"/><ellipse class="cls-1" cx="50.52" cy="50.33" rx="13.48" ry="13.51"/><ellipse class="cls-1" cx="13.48" cy="50.33" rx="13.48" ry="13.51"/></svg>';
-		return apply_filter(
+		return apply_filters(
 			'kanban_admin_icon_svg_return',
 			'data:image/svg+xml;base64,' . base64_encode( $svg )
 		);

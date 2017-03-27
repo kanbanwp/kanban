@@ -178,6 +178,10 @@ sub {
   z-index: 0; }
   .task:hover, .task.active {
     z-index: 1; }
+  .task.ui-sortable-helper {
+    height: auto !important; }
+    .task.ui-sortable-helper .task-fields {
+      display: none; }
   .task [contenteditable],
   .task [data-contenteditable] {
     overflow-x: hidden;

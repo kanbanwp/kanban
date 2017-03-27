@@ -289,6 +289,13 @@ sub {
 		z-index: 1;
 	}
 
+	&.ui-sortable-helper {
+		height: auto !important;
+		.task-fields {
+			display: none;
+		}
+	}
+
 	[contenteditable],
 	[data-contenteditable] {
 		overflow-x: hidden;

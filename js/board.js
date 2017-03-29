@@ -770,3 +770,15 @@ Board.prototype.status_cols_toggle = function ( col_index ) {
 Board.prototype.get_current_board_id = function () {
 	return parseInt( current_board_id );
 };
+
+
+
+Board.prototype.get_current_board = function () {
+	var board_id = Board.prototype.get_current_board_id();
+
+	if ( typeof boards[board_id] !== 'undefined') {
+		return boards[board_id];
+	}
+
+	return false;
+};

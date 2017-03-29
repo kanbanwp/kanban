@@ -44,7 +44,8 @@ class Kanban_Option extends Kanban_Db {
 		'status_auto_archive_days'    => 30, // days
 		'hide_time_tracking'          => 0,
 		'show_task_ids'               => 0,
-		'board_css'                   => 0,
+		'board_css'                   => '',
+		'disable_sync_notifications'  => 0
 	);
 
 	// Store the options on first load, to prevent mulitple db calls.

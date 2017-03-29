@@ -579,7 +579,7 @@ $( function () {
 						}
 					}
 
-					if ( Object.size( response.data.projects ) > 0 ) {
+					if ( Object.size( response.data.projects ) > 0 && Board.prototype.get_current_board().record.settings().disable_sync_notifications != 1 ) {
 						notify( kanban.text.project_updates, 'success' );
 					}
 				}
@@ -627,7 +627,7 @@ $( function () {
 						}
 					}
 
-					if ( Object.size( response.data.tasks ) > 0 ) {
+					if ( Object.size( response.data.tasks ) > 0 && Board.prototype.get_current_board().record.settings().disable_sync_notifications != 1 ) {
 						notify( kanban.text.task_updates, 'success' );
 					}
 				}

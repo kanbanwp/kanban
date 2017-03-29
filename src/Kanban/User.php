@@ -233,9 +233,24 @@ class Kanban_User
 				self::$records[ $user_id ]->caps = array( 'write' );
 
 				// Get gravatar.
-				if ( self::validate_gravatar( $user->user_email ) ) {
+				if ( get_avatar( $user->user_email ) ) {
 					// Make sure it uses double quotes.
-					self::$records[ $user_id ]->avatar = addslashes( str_replace( "'", '"', get_avatar( $user->user_email ) ) );
+					self::$records[ $user_id ]->avatar = addslashes(
+						str_replace(
+							"'",
+							'"',
+							get_avatar(
+								$user->user_email,
+								256,
+								'kanbanblank',
+								Kanban_User::get_username_long( $user )
+							)
+						)
+					);
+
+					if ( strpos( self::$records[ $user_id ]->avatar, 'kanbanblank') !== FALSE ) {
+						unset(self::$records[ $user_id ]->avatar);
+					}
 				}
 
 				// Fancy name formating.

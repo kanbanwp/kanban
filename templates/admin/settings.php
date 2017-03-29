@@ -188,6 +188,23 @@
 									  rows="4"><?php echo isset( $settings[ 'board_css' ] ) ? $settings[ 'board_css' ] : '' ?></textarea>
 						</td>
 					</tr>
+
+					<tr>
+						<th width="33%" scope="row">
+							<?php echo __( 'Disable sync notifications', 'kanban' ); ?>
+						</th>
+						<td>
+							<div class="switch-field">
+								<input type="radio" id="disable_sync_notifications_1" name="settings[disable_sync_notifications]"
+									   value="1" <?php echo (bool) $settings[ 'disable_sync_notifications' ] ? 'checked' : ''; ?>>
+								<label for="disable_sync_notifications_1">Yes</label>
+								<input type="radio" id="disable_sync_notifications_0" name="settings[disable_sync_notifications]"
+									   value="0" <?php echo ! (bool) $settings[ 'disable_sync_notifications' ] ? 'checked' : ''; ?>>
+								<label for="disable_sync_notifications_0">No</label>
+							</div>
+						</td>
+					</tr>
+
 					</tbody>
 				</table>
 			</div>

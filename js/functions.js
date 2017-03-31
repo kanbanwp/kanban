@@ -77,7 +77,34 @@ function get_screen_size() {
 function on_window_resize() {
 	window_w = $( 'body' ).width();
 	window_h = $( 'body' ).height();
+
+	// Get the previous screen size for comparing, to skip unnecessary calls below.
+	var prev_screen_size = screen_size + '';
+
+	// Get maybe nwe screen size.
 	screen_size = get_screen_size();
+
+	// Mobile view fix.
+	if ( screen_size != 'xs' && screen_size != prev_screen_size ) {
+
+		// Remove the col to show, since we want to see them all.
+		delete kanban.url_params.col_index;
+		update_url();
+
+		// Show all cols.
+		Board.prototype.get_current_board().status_cols_show_all();
+	}
+	else if ( screen_size != prev_screen_size ) {
+
+		// If no col to show is set, set it to the first and add it to the url.
+		if ( typeof kanban.url_params.col_index === 'undefined' ) {
+			kanban.url_params.col_index = 0;
+			update_url();
+		}
+
+		// Show the col.
+		Board.prototype.get_current_board().status_cols_toggle(kanban.url_params.col_index);
+	}
 
 	all_match_col_h();
 }

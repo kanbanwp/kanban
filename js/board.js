@@ -742,14 +742,14 @@ Board.prototype.project_update_counts = function () {
 			this.record.project_records[project_id].task_count = 0;
 		}
 	}
-};
+}; // project_update_counts
 
 
 
 Board.prototype.update_UI = function () {
 	this.updates_status_counts();
 	this.match_col_h();
-};
+}; // update_UI
 
 
 
@@ -767,9 +767,20 @@ Board.prototype.status_cols_toggle = function ( col_index ) {
 
 
 
+
+Board.prototype.status_cols_show_all = function ( ) {
+	$( '.row-statuses, .row-tasks', this.$el ).each( function () {
+		var $row = $( this );
+		var $cols = $( '> .col', $row );
+		$cols.show();
+	} );
+}; // status_cols_toggle
+
+
 Board.prototype.get_current_board_id = function () {
 	return parseInt( current_board_id );
-};
+}; // get_current_board_id
+
 
 
 
@@ -781,4 +792,4 @@ Board.prototype.get_current_board = function () {
 	}
 
 	return false;
-};
+}; // get_current_board

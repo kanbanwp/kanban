@@ -249,7 +249,9 @@ abstract class Kanban_Db
 
 
 		// If installed version is empty, then new install.
-		if ( empty(self::installed_ver()) ) {
+		$installed_ver = self::installed_ver();
+
+		if ( empty($installed_ver) ) {
 
 			set_transient(
 				sprintf( '_%s_welcome_screen_activation_redirect', Kanban::get_instance()->settings->basename ),

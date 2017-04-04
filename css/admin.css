@@ -1,3 +1,6 @@
+/**
+ * Common mixins
+ */
 .video-wrapper {
   position: relative;
   padding-bottom: 56.25%;
@@ -62,7 +65,7 @@ button.delete {
 .switch-field label:hover {
   cursor: pointer; }
 .switch-field input:checked + label {
-  background-color: #A5DC86;
+  background-color: rgba(144, 199, 69, 0.618);
   -webkit-box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3), 0 1px rgba(255, 255, 255, 0.1);
   box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3), 0 1px rgba(255, 255, 255, 0.1); }
 .switch-field label:first-of-type {
@@ -80,13 +83,9 @@ button.delete {
 #row-addons .addon {
   margin: 0 1% 15px 0;
   width: 30%; }
-  #row-addons .addon .addon-header {
-    background: #21759b;
-    color: white;
-    min-height: 2em; }
-    #row-addons .addon .addon-header img {
-      display: block;
-      max-width: 100%; }
+  #row-addons .addon .addon-header img {
+    display: block;
+    max-width: 100%; }
   #row-addons .addon .addon-body {
     background: white;
     padding: 15px; }
@@ -102,5 +101,68 @@ button.delete {
 @media only screen and (max-width: 960px) {
   .form-table label {
     color: black !important; } }
+#kanban-modal-wrapper {
+  display: none; }
+
+#kanban-modal-background {
+  background: rgba(0, 0, 0, 0.382);
+  bottom: 0px;
+  left: 0px;
+  position: fixed;
+  right: 0px;
+  top: 0px;
+  z-index: 100; }
+
+#kanban-modal {
+  background: white;
+  bottom: 20px;
+  left: 20px;
+  margin-left: 160px;
+  padding: 0;
+  position: fixed;
+  right: 20px;
+  top: 52px;
+  z-index: 101; }
+  #kanban-modal #kanban-modal-nav {
+    background: white;
+    border-bottom: 1px solid #b3b3b3;
+    height: 39px;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 100%; }
+    #kanban-modal #kanban-modal-nav #kanban-modal-close-button {
+      background: white;
+      border-left: 1px solid #b3b3b3;
+      bottom: 0;
+      color: black;
+      cursor: pointer;
+      padding: 10px 20px 0;
+      position: absolute;
+      right: 0px;
+      text-decoration: none;
+      top: 0px; }
+  #kanban-modal #kanban-modal-body-wrapper {
+    position: absolute;
+    top: 40px;
+    right: 0;
+    bottom: 0px;
+    left: 0;
+    overflow: auto;
+    padding: 25px 50px; }
+  #kanban-modal .kanban-modal-button-wrapper {
+    margin-top: 20px;
+    text-align: center; }
+  @media only screen and (max-width: 960px) {
+    #kanban-modal {
+      margin-left: 36px; } }
+  @media (max-width: 782px) {
+    #kanban-modal {
+      margin-left: 0px;
+      top: 0px;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 100000; } }
 
 /*# sourceMappingURL=admin.css.map */

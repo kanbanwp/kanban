@@ -7,7 +7,7 @@
 
 
 // Exit if accessed directly.
-if ( !defined( 'ABSPATH' ) ) {
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
@@ -15,8 +15,7 @@ if ( !defined( 'ABSPATH' ) ) {
 
 // instantiate the class
 // Kanban_Admin::init();
-class Kanban_Admin
-{
+class Kanban_Admin {
 	// the instance of this object
 	private static $instance;
 
@@ -49,6 +48,8 @@ class Kanban_Admin
 		add_action( 'admin_bar_menu', array( __CLASS__, 'add_admin_bar_link_to_board' ), 999 );
 
 		add_action( 'init', array( __CLASS__, 'contact_support' ) );
+
+		add_action( 'admin_init', array( __CLASS__, 'add_preset' ) );
 
 		add_action( 'wp_ajax_kanban_register_user', array( __CLASS__, 'ajax_register_user' ) );
 
@@ -133,8 +134,8 @@ class Kanban_Admin
 		// Localize the script with new data
 		$translation_array = array(
 			'form_deactivate' => $html_output,
-			'url_contact' => admin_url(),
-			'url_plugins' => admin_url( 'plugins.php' ),
+			'url_contact'     => admin_url(),
+			'url_plugins'     => admin_url( 'plugins.php' ),
 		);
 		wp_localize_script( 'kanban-deactivate', 'kanban', $translation_array );
 
@@ -147,6 +148,40 @@ class Kanban_Admin
 	 * render the welcome page
 	 */
 	static function welcome_page() {
+
+		global $wpdb;
+
+		// Get status table.
+		$status_table = Kanban_Status::table_name();
+
+		// See if there are any statuses yet.
+		$sql = "SELECT count(`id`)
+				FROM `{$status_table}`
+		;";
+
+		// Passed to template.
+		$status_count = $wpdb->get_var( $sql );
+
+
+
+		wp_enqueue_style(
+			'kanban',
+			sprintf( '%s/css/admin.css', Kanban::get_instance()->settings->uri )
+		);
+
+
+		wp_enqueue_style(
+			'kanban-welcome',
+			sprintf( '%s/css/admin-welcome.css', Kanban::get_instance()->settings->uri ),
+			array( 'kanban' )
+		);
+
+		wp_enqueue_script(
+			'kanban-admin',
+			sprintf( '%s/js/min/admin-min.js', Kanban::get_instance()->settings->uri ),
+			array( 'jquery' )
+		);
+
 		$template = Kanban_Template::find_template( 'admin/welcome' );
 
 		include_once $template;
@@ -155,26 +190,13 @@ class Kanban_Admin
 
 
 	/**
-	 * render the welcome page
-	 */
-//	static function network_page() {
-//		$template = Kanban_Template::find_template( 'admin/welcome' );
-//
-//		include_once $template;
-
-
-//	}
-
-
-
-	/**
-	 * render the welcome page
+	 * render the Add-ons page
 	 */
 	static function addons_page() {
 
 		wp_enqueue_script(
 			'addon',
-			get_stylesheet_directory_uri() . '/js/addon.js',
+			sprintf( '%s/js/min/admin-addons-min.js', Kanban::get_instance()->settings->uri ),
 			array( 'jquery', 'masonry' )
 		);
 
@@ -183,15 +205,14 @@ class Kanban_Admin
 		// Get stored add-ons.
 		if ( Kanban_Utils::is_network() ) {
 			$addons = get_site_transient( 'kanban-admin-addons' );
-		}
-		else {
+		} else {
 			$addons = get_transient( 'kanban-admin-addons' );
 		}
 
 
 
 		// $addons is false if not set
-		if ( empty($addons) || !$addons ) {
+		if ( empty( $addons ) || ! $addons ) {
 
 			$response = wp_remote_get( 'https://kanbanwp.com?feed=addons' );
 
@@ -203,8 +224,7 @@ class Kanban_Admin
 
 			if ( Kanban_Utils::is_network() ) {
 				set_site_transient( 'kanban-admin-addons', $addons, 24 * HOUR_IN_SECONDS );
-			}
-			else {
+			} else {
 				set_transient( 'kanban-admin-addons', $addons, 24 * HOUR_IN_SECONDS );
 			}
 
@@ -243,8 +263,179 @@ class Kanban_Admin
 
 
 
+	static function add_preset() {
+		if ( ! isset( $_POST[ Kanban_Utils::get_nonce() ] ) || ! wp_verify_nonce( $_POST[ Kanban_Utils::get_nonce() ], 'kanban-add-preset' ) || ! isset( $_POST[ 'kanban_preset' ] ) ) {
+			return false;
+		}
+
+		// See if preset file exists.
+		$file = sprintf(
+			'%s/includes/inc-preset-%s.php',
+			Kanban::get_instance()->settings->path,
+			$_POST[ 'kanban_preset' ]
+		);
+
+		if ( ! is_file( $file ) ) {
+			return;
+		}
+
+
+
+		// Include the preset.
+		include $file;
+
+
+
+		// Get board
+		$board_id = Kanban_Board::get_current_id();
+
+
+
+		global $wpdb;
+
+
+
+		// Get status table.
+		$status_table = Kanban_Status::table_name();
+
+		// Load existing.
+		$sql = "SELECT count(`id`)
+				FROM `{$status_table}`
+		;";
+
+		$status_count = $wpdb->get_var( $sql );
+
+		// If there are none in the db.
+		if ( $status_count == 0 && isset( $statuses ) ) {
+
+			$i = 0;
+
+			// Insert each from preset.
+			foreach ( $statuses as $status => $color ) {
+				$data = array(
+					'title'     => $status,
+					'color_hex' => $color,
+					'position'  => $i,
+					'board_id'  => $board_id,
+				);
+
+				Kanban_Status::replace( $data );
+
+				$i ++;
+			}
+		}
+
+		// Get first status for task.
+		$sql = "SELECT `id`
+				FROM `{$status_table}`
+				ORDER BY id
+				LIMIT 1
+		;";
+
+		$status_id = $wpdb->get_var( $sql );
+
+
+
+		// Get estimates table.
+		$estimate_table = Kanban_Estimate::table_name();
+
+		// Load existing.
+		$sql = "SELECT count(`id`)
+				FROM `{$estimate_table}`
+		;";
+
+		$estimate_count = $wpdb->get_var( $sql );
+
+		// If there are none in the db.
+		if ( $estimate_count == 0 && isset( $estimates ) ) {
+
+			$i = 0;
+
+			// Insert each from preset.
+			foreach ( $estimates as $hours => $title ) {
+				$data = array(
+					'title'    => $title,
+					'hours'    => $hours,
+					'position' => $i,
+					'board_id' => $board_id,
+				);
+
+				Kanban_Estimate::replace( $data );
+
+				$i ++;
+			}
+		}
+
+
+
+		// Get tasks table.
+		$tasks_table = Kanban_Task::table_name();
+
+		// Load existing.
+		$sql = "SELECT count(`id`)
+				FROM `{$tasks_table}`
+		;";
+
+		$tasks_count = $wpdb->get_var( $sql );
+
+		// If there are none in the db.
+		if ( $tasks_count == 0 && isset( $tasks ) ) {
+
+			// Insert each from preset.
+			foreach ( $tasks as $position => $data ) {
+
+				$data = array_merge(
+					array(
+						'title'           => '',
+						'position'        => $position,
+						'board_id'        => $board_id,
+						'status_id'       => $status_id,
+						'created_dt_gmt'  => Kanban_Utils::mysql_now_gmt(),
+						'modified_dt_gmt' => Kanban_Utils::mysql_now_gmt(),
+						'user_id_author'  => get_current_user_id(),
+						'is_active'       => 1
+					),
+					$data
+				);
+
+				Kanban_Task::replace( $data );
+			}
+		}
+
+
+
+		// Update settings.
+		if ( isset( $settings ) ) {
+
+			// Insert each from preset.
+			foreach ( $settings as $key => $value ) {
+
+				Kanban_Option::update_option( $key, $value, $board_id );
+			}
+		}
+
+
+
+		wp_safe_redirect( add_query_arg(
+			array(
+				'page'    => Kanban::get_instance()->settings->basename,
+				'message' => urlencode(
+					sprintf(
+						__( 'Your board is all set up! <a href=%s>Go to your board</a> to check it out.' ),
+						Kanban_Template::get_uri()
+					)
+				)
+			),
+			admin_url( 'admin.php' )
+		) );
+
+		exit;
+	}
+
+
+
 	static function contact_support() {
-		if ( !isset( $_POST[ Kanban_Utils::get_nonce() ] ) || !wp_verify_nonce( $_POST[ Kanban_Utils::get_nonce() ], 'kanban-admin-comment' ) || !is_user_logged_in() ) {
+		if ( ! isset( $_POST[ Kanban_Utils::get_nonce() ] ) || ! wp_verify_nonce( $_POST[ Kanban_Utils::get_nonce() ], 'kanban-admin-comment' ) || ! is_user_logged_in() ) {
 			return false;
 		}
 
@@ -283,15 +474,15 @@ class Kanban_Admin
 
 
 	static function ajax_register_user() {
-		if ( !wp_verify_nonce( $_POST[ Kanban_Utils::get_nonce() ], 'kanban-new-user' ) ) {
+		if ( ! wp_verify_nonce( $_POST[ Kanban_Utils::get_nonce() ], 'kanban-new-user' ) ) {
 			return;
 		}
 
 		$user_login = $_POST[ 'new-user-login' ];
 		$user_email = $_POST[ 'new-user-email' ];
 		$user_first = $_POST[ 'new-user-first' ];
-		$user_last = $_POST[ 'new-user-last' ];
-		$board_id = $_POST[ 'board_id' ];
+		$user_last  = $_POST[ 'new-user-last' ];
+		$board_id   = $_POST[ 'board_id' ];
 
 		$errors = array();
 
@@ -299,7 +490,7 @@ class Kanban_Admin
 			$errors[] = __( 'Username already taken' );
 		}
 
-		if ( !validate_username( $user_login ) ) {
+		if ( ! validate_username( $user_login ) ) {
 			$errors[] = __( 'Invalid username' );
 		}
 
@@ -307,7 +498,7 @@ class Kanban_Admin
 			$errors[] = __( 'Please enter a username' );
 		}
 
-		if ( !is_email( $user_email ) ) {
+		if ( ! is_email( $user_email ) ) {
 
 			$errors[] = __( 'Invalid email' );
 		}
@@ -316,14 +507,15 @@ class Kanban_Admin
 			$errors[] = __( 'Email already registered' );
 		}
 
-		if ( !empty( $errors ) ) {
+		if ( ! empty( $errors ) ) {
 			wp_send_json_error( array( 'error' => implode( '<br>', $errors ) ) );
+
 			return;
 		}
 
 		$boards = Kanban_Board::get_all();
 
-		if ( !in_array( $board_id, array_keys( $boards ) ) ) {
+		if ( ! in_array( $board_id, array_keys( $boards ) ) ) {
 			$board_id = Kanban_Board::get_current();
 		}
 
@@ -331,19 +523,20 @@ class Kanban_Admin
 			'user_login' => $user_login,
 			'user_email' => $user_email,
 			'first_name' => $user_first,
-			'last_name' => $user_last,
-			'user_pass' => null,// When creating an user, `user_pass` is expected.
+			'last_name'  => $user_last,
+			'user_pass'  => null,// When creating an user, `user_pass` is expected.
 		);
 
 		$user_id = wp_insert_user( $userdata );
 
 		if ( is_wp_error( $user_id ) ) {
 			wp_send_json_error( array( 'error' => __( 'User could not be created. Please use the User > Add New page', 'kanban' ) ) );
+
 			return;
 		}
 
 		// add new user to allowed users
-		$allowed_users = Kanban_Option::get_option( 'allowed_users' );
+		$allowed_users   = Kanban_Option::get_option( 'allowed_users' );
 		$allowed_users[] = $user_id;
 
 		Kanban_Option::update_option( 'allowed_users', $allowed_users, $board_id );
@@ -355,8 +548,9 @@ class Kanban_Admin
 	}
 
 
-	static function icon_svg () {
-		$svg      = '<svg id="Layer_2" data-name="Layer 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 63.84"><defs><style>.cls-1{fill:#82878c;}</style></defs><title>kanban</title><ellipse class="cls-1" cx="50.52" cy="13.51" rx="13.48" ry="13.51"/><ellipse class="cls-1" cx="13.48" cy="13.51" rx="13.48" ry="13.51"/><ellipse class="cls-1" cx="50.52" cy="50.33" rx="13.48" ry="13.51"/><ellipse class="cls-1" cx="13.48" cy="50.33" rx="13.48" ry="13.51"/></svg>';
+	static function icon_svg() {
+		$svg = '<svg id="Layer_2" data-name="Layer 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 63.84"><defs><style>.cls-1{fill:#82878c;}</style></defs><title>kanban</title><ellipse class="cls-1" cx="50.52" cy="13.51" rx="13.48" ry="13.51"/><ellipse class="cls-1" cx="13.48" cy="13.51" rx="13.48" ry="13.51"/><ellipse class="cls-1" cx="50.52" cy="50.33" rx="13.48" ry="13.51"/><ellipse class="cls-1" cx="13.48" cy="50.33" rx="13.48" ry="13.51"/></svg>';
+
 		return apply_filters(
 			'kanban_admin_icon_svg_return',
 			'data:image/svg+xml;base64,' . base64_encode( $svg )
@@ -370,9 +564,6 @@ class Kanban_Admin
 	 * @return   [type] [description]
 	 */
 	static function admin_menu() {
-//		$svg = '<svg id="Layer_2" data-name="Layer 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 63.84"><defs><style>.cls-1{fill:#82878c;}</style></defs><title>kanban</title><ellipse class="cls-1" cx="50.52" cy="13.51" rx="13.48" ry="13.51"/><ellipse class="cls-1" cx="13.48" cy="13.51" rx="13.48" ry="13.51"/><ellipse class="cls-1" cx="50.52" cy="50.33" rx="13.48" ry="13.51"/><ellipse class="cls-1" cx="13.48" cy="50.33" rx="13.48" ry="13.51"/></svg>';
-//		$icon_svg = 'data:image/svg+xml;base64,' . base64_encode( $svg );
-
 
 		// add the base slug and page
 		add_menu_page(
@@ -388,8 +579,8 @@ class Kanban_Admin
 		// @link https://codex.wordpress.org/Function_Reference/add_submenu_page#Inside_menu_created_with_add_menu_page.28.29
 		add_submenu_page(
 			Kanban::get_instance()->settings->basename,
-			__('Welcome'),
-			__('Welcome'),
+			__( 'Welcome' ),
+			__( 'Welcome' ),
 			'manage_options',
 			Kanban::get_instance()->settings->basename,
 			array( __CLASS__, 'welcome_page' )
@@ -398,8 +589,8 @@ class Kanban_Admin
 		// add the settings admin page
 		add_submenu_page(
 			Kanban::get_instance()->settings->basename,
-			__('Settings'),
-			__('Settings'),
+			__( 'Settings' ),
+			__( 'Settings' ),
 			'manage_options',
 			'kanban_settings',
 			array( 'Kanban_Option', 'settings_page' )
@@ -407,8 +598,8 @@ class Kanban_Admin
 
 		add_submenu_page(
 			Kanban::get_instance()->settings->basename,
-			__('Add-ons'),
-			__('Add-ons'),
+			__( 'Add-ons' ),
+			__( 'Add-ons' ),
 			'manage_options',
 			'kanban_addons',
 			array( __CLASS__, 'addons_page' )
@@ -416,17 +607,14 @@ class Kanban_Admin
 
 		add_submenu_page(
 			Kanban::get_instance()->settings->basename,
-			__('Contact Us'),
-			__('Contact Us'),
+			__( 'Contact Us' ),
+			__( 'Contact Us' ),
 			'manage_options',
 			'kanban_contact',
 			array( __CLASS__, 'contact_page' )
 		);
 
 	} // admin_menu
-
-
-
 
 
 
@@ -449,8 +637,8 @@ class Kanban_Admin
 
 		add_submenu_page(
 			'kanban_network',
-			__('Add-ons'),
-			__('Add-ons'),
+			__( 'Add-ons' ),
+			__( 'Add-ons' ),
 			'manage_options',
 			'kanban_network',
 			array( __CLASS__, 'addons_page' )
@@ -499,15 +687,18 @@ class Kanban_Admin
 	}
 
 
+
 	static function add_admin_bar_link_to_board( $wp_admin_bar ) {
 
-		if ( is_network_admin() ) return;
+		if ( is_network_admin() ) {
+			return;
+		}
 
 		$args = array(
-			'id' => 'kanban_board',
+			'id'    => 'kanban_board',
 			'title' => 'Kanban Board',
-			'href' => Kanban_Template::get_uri(),
-			'meta' => array( 'class' => 'kanban-board' ),
+			'href'  => Kanban_Template::get_uri(),
+			'meta'  => array( 'class' => 'kanban-board' ),
 		);
 		$wp_admin_bar->add_node( $args );
 	}
@@ -543,7 +734,7 @@ class Kanban_Admin
 	// @link http://premium.wpmudev.org/blog/tabbed-interface/
 	static function screen_do_activation_redirect() {
 		// Bail if no activation redirect
-		if ( !get_transient( sprintf( '_%s_welcome_screen_activation_redirect', Kanban::get_instance()->settings->basename ) ) ) {
+		if ( ! get_transient( sprintf( '_%s_welcome_screen_activation_redirect', Kanban::get_instance()->settings->basename ) ) ) {
 			return;
 		}
 
@@ -559,8 +750,9 @@ class Kanban_Admin
 		wp_safe_redirect(
 			add_query_arg(
 				array(
-					'page' => Kanban::get_instance()->settings->basename,
-					'activation' => '1',
+					'page'         => Kanban::get_instance()->settings->basename,
+					'activation'   => '1',
+					'kanban-modal' => 'presets'
 				),
 				admin_url( 'admin.php' )
 			)
@@ -605,7 +797,7 @@ class Kanban_Admin
 		echo Kanban::get_instance()->settings->plugin_data[ 'Version' ] . "\r\n";
 
 		echo 'Web Server: ';
-		echo esc_html( !empty( $_SERVER[ 'SERVER_SOFTWARE' ] ) ? $_SERVER[ 'SERVER_SOFTWARE' ] : '' );
+		echo esc_html( ! empty( $_SERVER[ 'SERVER_SOFTWARE' ] ) ? $_SERVER[ 'SERVER_SOFTWARE' ] : '' );
 		echo "\r\n";
 
 		echo 'PHP: ';
@@ -622,9 +814,9 @@ class Kanban_Admin
 		echo empty( $wpdb->use_mysqli ) ? 'no' : 'yes';
 		echo "\r\n";
 
-		 echo 'WP Memory Limit: ';
-		 echo esc_html( WP_MEMORY_LIMIT );
-		 echo "\r\n";
+		echo 'WP Memory Limit: ';
+		echo esc_html( WP_MEMORY_LIMIT );
+		echo "\r\n";
 		//
 		// echo 'Blocked External HTTP Requests: ';
 		// if ( ! defined( 'WP_HTTP_BLOCK_EXTERNAL' ) || ! WP_HTTP_BLOCK_EXTERNAL ) {
@@ -662,16 +854,16 @@ class Kanban_Admin
 		echo esc_html( ( defined( 'WP_DEBUG' ) && WP_DEBUG ) ? 'Yes' : 'No' );
 		echo "\r\n";
 
-		 echo 'WP Max Upload Size: ';
-		 echo esc_html( size_format( wp_max_upload_size() ) );
-		 echo "\r\n";
+		echo 'WP Max Upload Size: ';
+		echo esc_html( size_format( wp_max_upload_size() ) );
+		echo "\r\n";
 
 
-		 echo 'PHP Time Limit: ';
-		 if ( function_exists( 'ini_get' ) ) {
-		 echo esc_html( ini_get( 'max_execution_time' ) );
-		 }
-		 echo "\r\n";
+		echo 'PHP Time Limit: ';
+		if ( function_exists( 'ini_get' ) ) {
+			echo esc_html( ini_get( 'max_execution_time' ) );
+		}
+		echo "\r\n";
 
 		echo 'PHP Error Log: ';
 		if ( function_exists( 'ini_get' ) ) {
@@ -732,7 +924,7 @@ class Kanban_Admin
 		// echo "\r\n";
 		echo "Active Plugins:\r\n";
 
-		$active_plugins = (array)get_option( 'active_plugins', array() );
+		$active_plugins = (array) get_option( 'active_plugins', array() );
 
 		// if ( is_multisite() ) {
 		// $network_active_plugins = wp_get_active_network_plugins();

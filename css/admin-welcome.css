@@ -1,0 +1,47 @@
+/**
+ * Common mixins
+ */
+#kanban-onboard-use-cases .kanban-onboard-use-case {
+  border-radius: 20px;
+  border: 2px solid;
+  border-color: rgba(0, 0, 0, 0.382);
+  color: black;
+  display: block;
+  margin-bottom: 10px;
+  padding: 20px 20px 20px 100px;
+  position: relative;
+  text-decoration: none; }
+  #kanban-onboard-use-cases .kanban-onboard-use-case:hover, #kanban-onboard-use-cases .kanban-onboard-use-case:active, #kanban-onboard-use-cases .kanban-onboard-use-case:focus {
+    border-color: rgba(0, 0, 0, 0.618); }
+    #kanban-onboard-use-cases .kanban-onboard-use-case:hover svg, #kanban-onboard-use-cases .kanban-onboard-use-case:active svg, #kanban-onboard-use-cases .kanban-onboard-use-case:focus svg {
+      opacity: .618; }
+  #kanban-onboard-use-cases .kanban-onboard-use-case svg {
+    left: 30px;
+    position: absolute;
+    opacity: .382;
+    top: 30px; }
+    @media (max-width: 782px) {
+      #kanban-onboard-use-cases .kanban-onboard-use-case svg {
+        display: block;
+        margin: 10px auto;
+        position: static; } }
+  #kanban-onboard-use-cases .kanban-onboard-use-case h3 {
+    font-size: 1.618em;
+    margin: 0 0 10px; }
+    @media (max-width: 782px) {
+      #kanban-onboard-use-cases .kanban-onboard-use-case h3 {
+        text-align: center; } }
+  #kanban-onboard-use-cases .kanban-onboard-use-case p {
+    margin: 0; }
+  @media (max-width: 782px) {
+    #kanban-onboard-use-cases .kanban-onboard-use-case {
+      padding-left: 20px; } }
+#kanban-onboard-use-cases input[type=radio] {
+  display: none; }
+  #kanban-onboard-use-cases input[type=radio]:checked + label {
+    background: rgba(144, 199, 69, 0.236);
+    border-color: #90c745; }
+    #kanban-onboard-use-cases input[type=radio]:checked + label svg {
+      opacity: .92; }
+
+/*# sourceMappingURL=admin-welcome.css.map */

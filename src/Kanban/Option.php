@@ -382,8 +382,15 @@ class Kanban_Option extends Kanban_Db {
 	 */
 	static function settings_page() {
 
+		wp_enqueue_style(
+			'kanban',
+			sprintf( '%s/css/admin.css', Kanban::get_instance()->settings->uri )
+		);
+
 		// Add thickbox for extra options.
 		add_thickbox();
+
+
 
 		// Get the current board.
 		$board = Kanban_Board::get_current_by( 'GET' );

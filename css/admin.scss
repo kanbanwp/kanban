@@ -1,3 +1,5 @@
+@import './mixins';
+
 .video-wrapper {
 	position: relative;
 	padding-bottom: 56.25%;
@@ -16,8 +18,6 @@
 	}
 
 }
-
-
 
 .sortable {
 	li {
@@ -41,80 +41,76 @@
 			}
 		}
 
-
-
 		label {
-		  	display: inline-block;
+			display: inline-block;
 			margin: 0 2em 0 0;
-		  	text-align: left;
+			text-align: left;
 			white-space: nowrap;
 		}
 	}
 }
 
 button.delete {
-  background: red;
-  border-radius: .5em;
-  border-width: 0;
-  color: white;
-  cursor: pointer;
-  display: inline-block;
-  float: right;
-  opacity: .5;
-  padding: .236em .618em;
+	background: red;
+	border-radius: .5em;
+	border-width: 0;
+	color: white;
+	cursor: pointer;
+	display: inline-block;
+	float: right;
+	opacity: .5;
+	padding: .236em .618em;
 
-  &:hover {
-	opacity: 1;
-  }
+	&:hover {
+		opacity: 1;
+	}
 }
 
 .switch-field {
 
-  .switch-title {
-    margin-bottom: 6px;
-  }
+	.switch-title {
+		margin-bottom: 6px;
+	}
 
-  input {
-    display: none;
-  }
+	input {
+		display: none;
+	}
 
-  label {
-    display: inline-block;
-    background-color: transparent;
-    float: left;
-    text-align: center;
-    padding: 6px 14px;
-    border: 1px solid rgba(0, 0, 0, 0.2);
-  }
+	label {
+		display: inline-block;
+		background-color: transparent;
+		float: left;
+		text-align: center;
+		padding: 6px 14px;
+		border: 1px solid rgba(0, 0, 0, 0.2);
+	}
 
-  label:hover {
-    cursor: pointer;
-  }
+	label:hover {
+		cursor: pointer;
+	}
 
-  input:checked + label {
-    background-color: #A5DC86;
-    -webkit-box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3), 0 1px rgba(255, 255, 255, 0.1);
-    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3), 0 1px rgba(255, 255, 255, 0.1);
-  }
+	input:checked + label {
+		background-color: rgba($color-kb-green, .618);
+		-webkit-box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3), 0 1px rgba(255, 255, 255, 0.1);
+		box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3), 0 1px rgba(255, 255, 255, 0.1);
+	}
 
-  label:first-of-type {
-    border-radius: 4px 0 0 4px;
-  }
+	label:first-of-type {
+		border-radius: 4px 0 0 4px;
+	}
 
-  label:last-of-type {
-    border-radius: 0 4px 4px 0;
-  }
+	label:last-of-type {
+		border-radius: 0 4px 4px 0;
+	}
 
-  &.vertical {
-    label {
-      border-radius: 0;
-      clear: left;
-    }
-  }
+	&.vertical {
+		label {
+			border-radius: 0;
+			clear: left;
+		}
+	}
 
 }
-
-
 
 #default_assigned_switch {
 	label {
@@ -123,18 +119,16 @@ button.delete {
 	}
 }
 
-
-
 #row-addons {
 	.addon {
 		margin: 0 1% 15px 0;
 		width: 30%;
 
 		.addon-header {
-			background: #21759b;
-			color: white;
-			min-height: 2em;
-	
+			//background: $color-kb-green;
+			//color: white;
+			//min-height: 2em;
+
 			img {
 				display: block;
 				max-width: 100%;
@@ -154,7 +148,6 @@ button.delete {
 	}
 }
 
-
 #tab-help-tab {
 	opacity: .382;
 	&:hover {
@@ -162,11 +155,91 @@ button.delete {
 	}
 }
 
-
-
-@media only screen and (max-width: 960px)
-{
+@media only screen and (max-width: 960px) {
 	.form-table label {
 		color: black !important;
 	}
 }
+
+#kanban-modal-wrapper {
+	display: none;
+}
+
+#kanban-modal-background {
+	background: rgba(black, .382);
+	bottom: 0px;
+	left: 0px;
+	position: fixed;
+	right: 0px;
+	top: 0px;
+	z-index: 100;
+}
+
+#kanban-modal {
+	background: white;
+	bottom: 20px;
+	left: 20px;
+	margin-left: 160px;
+	padding: 0;
+	position: fixed;
+	right: 20px;
+	top: 52px;
+	z-index: 101;
+
+	#kanban-modal-nav {
+		background: white;
+		border-bottom: 1px solid lighten(black, 70);
+		height: 39px;
+		left: 0;
+		position: absolute;
+		top: 0;
+		width: 100%;
+
+		#kanban-modal-close-button {
+			background: white;
+			border-left: 1px solid lighten(black, 70);
+			bottom: 0;
+			color: black;
+			cursor: pointer;
+			padding: 10px 20px 0;
+			position: absolute;
+			right: 0px;
+			text-decoration: none;
+			top: 0px;
+		}
+	}
+
+	#kanban-modal-body-wrapper {
+		position: absolute;
+		top: 40px;
+		right: 0;
+		bottom: 0px;
+		left: 0;
+		overflow: auto;
+		padding: 25px 50px;
+
+		#kanban-modal-body {
+		}
+	}
+
+	.kanban-modal-button-wrapper {
+		margin-top: 20px;
+		text-align: center;
+	}
+
+	@media only screen and (max-width: 960px) {
+		margin-left: 36px;
+	}
+
+	@media (max-width: 782px) {
+		margin-left: 0px;
+		top: 0px;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		z-index: 100000;
+	}
+}
+
+
+

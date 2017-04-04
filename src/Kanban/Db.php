@@ -246,6 +246,20 @@ abstract class Kanban_Db
 		// See if we're out of sync.
 		if ( version_compare( self::installed_ver(), Kanban::get_instance()->settings->plugin_data['Version'] ) === 0 ) { return false; }
 
+
+
+		// If installed version is empty, then new install.
+		if ( empty(self::installed_ver()) ) {
+
+			set_transient(
+				sprintf( '_%s_welcome_screen_activation_redirect', Kanban::get_instance()->settings->basename ),
+				true,
+				30
+			);
+		}
+
+
+
 		global $charset_collate, $wpdb;
 
 		require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
@@ -277,7 +291,12 @@ abstract class Kanban_Db
 		// Now that we know we have tables, populate them.
 		Kanban_Db::add_defaults();
 
+
+
+		// House cleaning: move all licenses to the options table.
 		Kanban_License::migrate_licenses();
+
+
 
 		// Make sure every task has a board.
 		$boards_table = Kanban_Board::table_name();
@@ -311,6 +330,8 @@ abstract class Kanban_Db
 				$wpdb->query( $sql );
 			}
 		}
+
+
 
 		// save db version to avoid updates
 		update_option( 'kanban_db_version', Kanban::get_instance()->settings->plugin_data['Version'], TRUE );
@@ -374,124 +395,136 @@ abstract class Kanban_Db
 			Kanban_Option::update_option( 'allowed_users', $allowed_users, $board_id );
 		}
 
+//
+//
+//		$status_table = Kanban_Status::table_name();
+//
+//		$sql = "SELECT count(`id`)
+//				FROM `{$status_table}`
+//		;";
+//
+//		$status_count = $wpdb->get_var( $sql );
+//
+//		if ( $status_count == 0 ) {
+//			$statuses = array(
+//				'Backlog'     => '#8224e3',
+//				'Ready'       => '#eeee22',
+//				'In progress' => '#81d742',
+//				'QA'          => '#f7a738',
+//				'Done'        => '#1e73be',
+//				'Archive'     => '#333333',
+//			);
+//
+//			$i = 0;
+//			foreach ( $statuses as $status => $color ) {
+//				$data = array(
+//					'title'     => $status,
+//					'color_hex' => $color,
+//					'position'  => $i,
+//					'board_id'  => $board_id,
+//				);
+//
+//				Kanban_Status::replace( $data );
+//
+//				$i++;
+//			}
+//		}
+//
+//		// get second status for task
+//		$sql = "SELECT `id`
+//				FROM `{$status_table}`
+//				ORDER BY id
+//				LIMIT 1, 1
+//		;";
+//
+//		$status_id = $wpdb->get_var( $sql );
+//
+//		$estimate_table = Kanban_Estimate::table_name();
+//
+//		$sql = "SELECT count(`id`)
+//				FROM `{$estimate_table}`
+//		;";
+//
+//		$estimate_count = $wpdb->get_var( $sql );
+//
+//		if ( $estimate_count == 0 ) {
+//			$estimates = array(
+//					'2'  => '2h',
+//					'4'  => '4h',
+//					'8'  => '1d',
+//					'16' => '2d',
+//					'32' => '4d',
+//				);
+//
+//			$i = 0;
+//			foreach ( $estimates as $hours => $title ) {
+//				$data = array(
+//					'title'    => $title,
+//					'hours'    => $hours,
+//					'position' => $i,
+//					'board_id'  => $board_id,
+//				);
+//
+//				Kanban_Estimate::replace( $data );
+//
+//				$i++;
+//			}
+//		}
+//
+//		$tasks_table = Kanban_Task::table_name();
+//
+//		$sql = "SELECT count(`id`)
+//				FROM `{$tasks_table}`
+//		;";
+//
+//		$tasks_count = $wpdb->get_var( $sql );
+//
+//		if ( $tasks_count == 0 ) {
+//			$data = array(
+//				'title'           => 'Your first task',
+//				'board_id'        => $board_id,
+//				'status_id'		  => $status_id,
+//				'created_dt_gmt'  => Kanban_Utils::mysql_now_gmt(),
+//				'modified_dt_gmt' => Kanban_Utils::mysql_now_gmt(),
+//				'user_id_author'  => get_current_user_id(),
+//				'is_active'       => 1,
+//			);
+//
+//			Kanban_Task::replace( $data );
+//		}
 
 
-		$status_table = Kanban_Status::table_name();
 
-		$sql = "SELECT count(`id`)
-				FROM `{$status_table}`
-		;";
-
-		$status_count = $wpdb->get_var( $sql );
-
-		if ( $status_count == 0 ) {
-			$statuses = array(
-				'Backlog'     => '#8224e3',
-				'Ready'       => '#eeee22',
-				'In progress' => '#81d742',
-				'QA'          => '#f7a738',
-				'Done'        => '#1e73be',
-				'Archive'     => '#333333',
-			);
-
-			$i = 0;
-			foreach ( $statuses as $status => $color ) {
-				$data = array(
-					'title'     => $status,
-					'color_hex' => $color,
-					'position'  => $i,
-					'board_id'  => $board_id,
-				);
-
-				Kanban_Status::replace( $data );
-
-				$i++;
-			}
-		}
-
-		// get second status for task
-		$sql = "SELECT `id`
-				FROM `{$status_table}`
-				ORDER BY id
-				LIMIT 1, 1
-		;";
-
-		$status_id = $wpdb->get_var( $sql );
-
-		$estimate_table = Kanban_Estimate::table_name();
-
-		$sql = "SELECT count(`id`)
-				FROM `{$estimate_table}`
-		;";
-
-		$estimate_count = $wpdb->get_var( $sql );
-
-		if ( $estimate_count == 0 ) {
-			$estimates = array(
-					'2'  => '2h',
-					'4'  => '4h',
-					'8'  => '1d',
-					'16' => '2d',
-					'32' => '4d',
-				);
-
-			$i = 0;
-			foreach ( $estimates as $hours => $title ) {
-				$data = array(
-					'title'    => $title,
-					'hours'    => $hours,
-					'position' => $i,
-					'board_id'  => $board_id,
-				);
-
-				Kanban_Estimate::replace( $data );
-
-				$i++;
-			}
-		}
-
-		$tasks_table = Kanban_Task::table_name();
-
-		$sql = "SELECT count(`id`)
-				FROM `{$tasks_table}`
-		;";
-
-		$tasks_count = $wpdb->get_var( $sql );
-
-		if ( $tasks_count == 0 ) {
-			$data = array(
-				'title'           => 'Your first task',
-				'board_id'        => $board_id,
-				'status_id'		  => $status_id,
-				'created_dt_gmt'  => Kanban_Utils::mysql_now_gmt(),
-				'modified_dt_gmt' => Kanban_Utils::mysql_now_gmt(),
-				'user_id_author'  => get_current_user_id(),
-				'is_active'       => 1,
-			);
-
-			Kanban_Task::replace( $data );
-		}
-
+		// Make sure all options are in the db.
 		$options_table = Kanban_Option::table_name();
 
+		// Get all existing options.
 		$sql = "SELECT *
 				FROM `{$options_table}`
 		;";
 
 		$options = $wpdb->get_results( $sql );
 
+		// Build an array of existing options.
 		$options_arr = array();
 		foreach ( $options as $option ) {
 			$options_arr[ $option->name ] = $option->value;
 		}
 
+		// Get all defaults.
 		$defaults = Kanban_Option::get_defaults();
 
+		// Loop over the defaults.
 		foreach ( $defaults as $key => $value ) {
+
+			// If default is already a stored option, skip it.
 			if ( isset( $options_arr[ $key ] ) ) { continue; }
 
+			// Otherwise, store it.
 			Kanban_Option::update_option( $key, $value );
 		}
+
+
 
 		return true;
 	}

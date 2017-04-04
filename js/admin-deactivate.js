@@ -1,67 +1,60 @@
-jQuery(function($)
-{
-	$(kanban.form_deactivate).appendTo('body');
+jQuery( function ( $ ) {
+	$( kanban.form_deactivate ).appendTo( 'body' );
 
-	var $a = $('[data-slug="kanban"] .deactivate a');
+	var $a = $( '[data-slug="kanban"] .deactivate a' );
 
-	var url = $a.attr('href') + '';
-	$a.attr('href', kanban.url_plugins + '#TB_inline?inlineId=kanban-deactivate-modal&modal=true').addClass('thickbox');
+	var url = $a.attr( 'href' ) + '';
+	$a.attr( 'href', kanban.url_plugins + '#TB_inline?inlineId=kanban-deactivate-modal&modal=true' ).addClass( 'thickbox' );
 
-	$a.on('click', function ()
-	{
-		setTimeout(function ()
-		{
-			$('#TB_ajaxContent').css({
+	$a.on( 'click', function () {
+		setTimeout( function () {
+			$( '#TB_ajaxContent' ).css( {
 				height: 'auto',
 				width: 'auto'
-			});
-			$('#TB_window').css({
+			} );
+			$( '#TB_window' ).css( {
 				height: 'auto'
-			});
+			} );
 
-		}, 500);
-	});
-
-
+		}, 500 );
+	} );
 
 
 
-	$('body').on(
+	$( 'body' ).on(
 		'click',
 		'.kanban-deactivate-remove',
-		function ()
-		{
+		function () {
 			tb_remove();
 		}
 	);
 
 
-	$('body').on(
+
+	$( 'body' ).on(
 		'click',
 		'.kanban-deactivate-submit',
-		function ()
-		{
-			var data = $('#kanban-deactivate-form').serialize();
+		function () {
+			var data = $( '#kanban-deactivate-form' ).serialize();
 
-			$.ajax({
+			$.ajax( {
 				method: "POST",
 				url: kanban.url_contact,
 				data: data
-			})
-			.always(function(response)
-			{
+			} )
+			.always( function ( response ) {
 				window.location = url;
-			});
+			} );
 		}
 	);
 
 
-	$('[name="request"]').on('change', function()
-	{
-		$('.kanban-deactivate-submit').text('Deactivate');
-		$(this).closest('form').find('textarea').removeAttr('name').hide();
-		$(this).closest('p').find('textarea').attr('name', 'message').show().focus();
-	});
 
-});
+	$( '[name="request"]' ).on( 'change', function () {
+		$( '.kanban-deactivate-submit' ).text( 'Deactivate' );
+		$( this ).closest( 'form' ).find( 'textarea' ).removeAttr( 'name' ).hide();
+		$( this ).closest( 'p' ).find( 'textarea' ).attr( 'name', 'message' ).show().focus();
+	} );
+
+} );
 

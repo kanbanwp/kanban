@@ -1,6 +1,3 @@
-<link rel="stylesheet" href="<?php echo Kanban::get_instance()->settings->uri ?>/css/admin.css">
-
-
 <div class="wrap">
 	<?php echo apply_filters( 'kanban_settings_h1_before', '' ); ?>
 
@@ -14,6 +11,23 @@
 	</h1>
 
 	<?php echo apply_filters( 'kanban_settings_h1_after', '' ); ?>
+
+
+
+	<?php if ( empty($statuses) ) : ?>
+		<div class="updated kanban-welcome-notice">
+			<form action="" method="get">
+			<p>
+				<?php echo __( 'Customize your Kanban board below or get started by using a preset:', 'kanban' ) ?>
+				<button type="button button-primary" class="button kanban-modal-show">
+					<?php echo __( 'Choose a preset', 'kanban' ) ?>
+				</button>
+				<input type="hidden" name="page" value="kanban">
+				<input type="hidden" name="kanban-modal" value="presets">
+			</p>
+			</form>
+		</div>
+	<?php endif // $statuses ?>
 
 
 

@@ -1,0 +1,68 @@
+@import './mixins';
+
+#kanban-onboard-use-cases {
+	.kanban-onboard-use-case {
+		//background: rgba($color-kb-green, .142);
+		border-radius: 20px;
+		border: 2px solid;
+		border-color: rgba(black, .382);
+		color: black;
+		display: block;
+		margin-bottom: 10px;
+		padding: 20px 20px 20px 100px;
+		position: relative;
+		text-decoration: none;
+
+		&:hover,
+		&:active,
+		&:focus {
+			border-color: rgba(black, .618);
+
+			svg {
+				opacity: .618;
+			}
+		}
+
+		svg {
+			left: 30px;
+			position: absolute;
+			opacity: .382;
+			top: 30px;
+
+			@media (max-width: 782px) {
+				display: block;
+				margin: 10px auto;
+				position: static;
+			}
+		}
+
+		h3 {
+			font-size: 1.618em;
+			margin: 0 0 10px;
+
+			@media (max-width: 782px) {
+				text-align: center;
+			}
+		}
+		p {
+			margin: 0;
+		}
+
+		@media (max-width: 782px) {
+			padding-left: 20px;
+		}
+	}
+
+	input[type=radio] {
+		display: none;
+
+		&:checked + label {
+			background: rgba($color-kb-green, .236);
+			border-color: $color-kb-green;
+
+			svg {
+				opacity: .92;
+			}
+		}
+	}
+}

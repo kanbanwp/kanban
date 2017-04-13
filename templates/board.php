@@ -32,7 +32,7 @@ kanban.ajaxurl = '<?php echo admin_url('admin-ajax.php'); ?>';
 kanban.favicon = '<?php echo Kanban::get_instance()->settings->uri ?>img/notify-favicon-250.png';
 
 
-kanban.alert = "<?php echo addslashes($wp_query->query_vars['kanban']->alert); ?>";
+kanban.alert = "<?php echo esc_js($wp_query->query_vars['kanban']->alert); ?>";
 kanban.text = <?php echo json_encode( apply_filters( 'kanban_board_text', $wp_query->query_vars['kanban']->text) ); ?>;
 
 kanban.templates = {};
@@ -51,9 +51,9 @@ kanban.url_params = {
 
 <?php if ( !empty($_GET) ) : foreach ($_GET as $key => $value) : ?>
 <?php if ( is_array($value) ) : ?>
-kanban.url_params['<?php echo str_replace(array('\'', '"'), '', $key) ?>'] = <?php echo json_encode( $value ) ?>;
+kanban.url_params['<?php echo esc_js($key) ?>'] = <?php echo json_encode( $value ) ?>;
 <?php else : ?>
-kanban.url_params['<?php echo str_replace(array('\'', '"'), '', $key) ?>'] = '<?php echo $value ?>';
+kanban.url_params['<?php echo esc_js($key) ?>'] = '<?php echo esc_js($value) ?>';
 <?php endif ?>
 <?php endforeach; endif ?>
 

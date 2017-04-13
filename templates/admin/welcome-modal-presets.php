@@ -95,6 +95,10 @@
 					</button>
 				</p>
 
+				<?php if ( isset($_GET['board_id']) ) : ?>
+					<input type="hidden" name="board_id" value="<?php echo (int) sanitize_text_field($_GET[ 'board_id' ]) ?>">
+				<?php endif // $_GET['board_id'] ?>
+
 				<?php wp_nonce_field('kanban-add-preset', Kanban_Utils::get_nonce()) ?>
 
 			</form>

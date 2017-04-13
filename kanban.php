@@ -39,7 +39,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @param    string $class_name Name of class to load.
  */
 function kanban_autoloader( $class_name ) {
-	if ( false !== strpos( $class_name, 'Kanban' ) && ! class_exists( $class_name ) ) {
+	if ( false !== strpos( $class_name, 'Kanban_' ) && ! class_exists( $class_name ) ) {
 		$classes_dir = realpath( plugin_dir_path( __FILE__ ) ) . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR;
 		$class_file  = str_replace( '_', DIRECTORY_SEPARATOR, $class_name ) . '.php';
 		require_once $classes_dir . $class_file;

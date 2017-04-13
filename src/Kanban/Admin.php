@@ -301,6 +301,7 @@ class Kanban_Admin {
 		// Load existing.
 		$sql = "SELECT count(`id`)
 				FROM `{$status_table}`
+				WHERE `board_id` = $board_id
 		;";
 
 		$status_count = $wpdb->get_var( $sql );
@@ -328,6 +329,7 @@ class Kanban_Admin {
 		// Get first status for task.
 		$sql = "SELECT `id`
 				FROM `{$status_table}`
+				WHERE `board_id` = $board_id
 				ORDER BY id
 				LIMIT 1
 		;";
@@ -342,6 +344,7 @@ class Kanban_Admin {
 		// Load existing.
 		$sql = "SELECT count(`id`)
 				FROM `{$estimate_table}`
+				WHERE `board_id` = $board_id
 		;";
 
 		$estimate_count = $wpdb->get_var( $sql );
@@ -374,6 +377,7 @@ class Kanban_Admin {
 		// Load existing.
 		$sql = "SELECT count(`id`)
 				FROM `{$tasks_table}`
+				WHERE `board_id` = $board_id
 		;";
 
 		$tasks_count = $wpdb->get_var( $sql );
@@ -404,7 +408,7 @@ class Kanban_Admin {
 
 
 
-		// Update settings.
+		// Update settings (if $settings is definied in the preset).
 		if ( isset( $settings ) ) {
 
 			// Insert each from preset.

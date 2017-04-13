@@ -3,9 +3,9 @@
 
 	<h1>
 		<?php echo __( sprintf( '%s Settings', Kanban::get_instance()->settings->pretty_name ), 'kanban' ); ?>
-		<a href="<?php echo Kanban_Template::get_uri() ?><?php echo isset( $_GET[ 'board_id' ] ) ? '?board_id=' . $_GET[ 'board_id' ] : '' ?>"
+		<a href="<?php echo Kanban_Template::get_uri() ?><?php echo isset( $_GET[ 'board_id' ] ) ? '?board_id=' . (int) sanitize_text_field($_GET[ 'board_id' ]) : '' ?>"
 		   class="page-title-action" target="_blank" id="btn-go-to-board"
-		   onclick="window.open('<?php echo Kanban_Template::get_uri() ?><?php echo isset( $_GET[ 'board_id' ] ) ? '?board_id=' . $_GET[ 'board_id' ] : '' ?>', 'kanbanboard'); return false;">
+		   onclick="window.open('<?php echo Kanban_Template::get_uri() ?><?php echo isset( $_GET[ 'board_id' ] ) ? '?board_id=' . (int) sanitize_text_field($_GET[ 'board_id' ]) : '' ?>', 'kanbanboard'); return false;">
 			<?php echo __( 'Go to your board', 'kanban' ); ?>
 		</a>
 	</h1>
@@ -22,6 +22,9 @@
 				<button type="button button-primary" class="button kanban-modal-show">
 					<?php echo __( 'Choose a preset', 'kanban' ) ?>
 				</button>
+				<?php if ( isset($_GET['board_id']) ) : ?>
+				<input type="hidden" name="board_id" value="<?php echo (int) sanitize_text_field($_GET[ 'board_id' ]) ?>">
+			<?php endif // $_GET['board_id'] ?>
 				<input type="hidden" name="page" value="kanban">
 				<input type="hidden" name="kanban-modal" value="presets">
 			</p>
@@ -33,7 +36,7 @@
 
 	<?php if ( isset( $_GET[ 'message' ] ) ) : ?>
 		<div class="updated">
-			<p><?php echo $_GET[ 'message' ]; ?></p>
+			<p><?php echo sanitize_text_field($_GET[ 'message' ]); ?></p>
 		</div>
 	<?php endif // message ?>
 

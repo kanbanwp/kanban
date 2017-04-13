@@ -13,7 +13,7 @@
 <?php if ( isset( $_GET['alert'] ) ) : ?>
 	<div class="notice notice-success">
 		<p>
-			<?php echo $_GET['alert']; ?>
+			<?php echo sanitize_text_field($_GET['alert']); ?>
 		</p>
 	</div>
 <?php endif // alert ?>

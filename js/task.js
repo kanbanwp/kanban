@@ -668,8 +668,11 @@ Task.prototype.save = function ( comment, do_growl ) {
 
 	var self = this;
 
+	var record = JSON.parse(JSON.stringify(this.record));
+	delete record.comments;
+
 	var task_data = {
-		task: this.record,
+		task: record,
 		action: 'save_task',
 		kanban_nonce: $( '#kanban_nonce' ).val()
 	};

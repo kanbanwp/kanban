@@ -600,14 +600,14 @@ class Kanban_Admin {
 			array( 'Kanban_Option', 'settings_page' )
 		);
 
-		add_submenu_page(
-			Kanban::get_instance()->settings->basename,
-			__( 'Add-ons' ),
-			__( 'Add-ons' ),
-			'manage_options',
-			'kanban_addons',
-			array( __CLASS__, 'addons_page' )
-		);
+//		add_submenu_page(
+//			Kanban::get_instance()->settings->basename,
+//			__( 'Add-ons' ),
+//			__( 'Add-ons' ),
+//			'manage_options',
+//			'kanban_addons',
+//			array( __CLASS__, 'addons_page' )
+//		);
 
 		add_submenu_page(
 			Kanban::get_instance()->settings->basename,

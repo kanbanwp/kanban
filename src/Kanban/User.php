@@ -121,7 +121,7 @@ class Kanban_User
 
 		$creds = array();
 		$creds['user_login'] = $user->user_login;
-		$creds['user_password'] = wp_unslash( sanitize_text_field( $_POST['password'] ) );
+		$creds['user_password'] = wp_unslash( $_POST['password'] );
 		$creds['remember'] = true;
 
 		$user = wp_signon( $creds, false );

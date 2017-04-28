@@ -359,7 +359,7 @@ var Notify = window.Notify.default;
 
 function notify( message ) {
 
-	if ( 'undefined' === typeof message || '' === message || null === message ) {
+	if ( 'undefined' === typeof message || '' === message || null === message || false == message ) {
 		return false;
 	}
 

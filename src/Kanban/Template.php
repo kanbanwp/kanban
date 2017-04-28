@@ -303,8 +303,17 @@ class Kanban_Template
 	 * @return string Url with /kanban/slug or ?kanban=slug
 	 */
 	static function get_uri( $page = 'board' ) {
+
+		// Set ugly version.
+		$board_uri = add_query_arg(
+			array(
+				Kanban::$slug => $page,
+			),
+			site_url() );
+
+		// Use the pretty version instead.
 		if ( ! self::is_plain_permalink() ) {
-			return sprintf(
+			$board_uri = sprintf(
 				'%s/%s/%s',
 				site_url(),
 				Kanban::$slug,
@@ -312,11 +321,17 @@ class Kanban_Template
 			);
 		}
 
-		return add_query_arg(
-			array(
-				Kanban::$slug => $page,
-			),
-		site_url());
+		// Add the current board.
+		if ( isset( $_GET[ 'board_id' ] ) ) {
+			$board_uri = add_query_arg(
+				array(
+					'board_id' => (int) sanitize_text_field( $_GET[ 'board_id' ] )
+				),
+				$board_uri
+			);
+		}
+
+		return $board_uri;
 	}
 
 

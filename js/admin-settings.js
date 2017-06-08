@@ -162,40 +162,55 @@ jQuery(function($)
 
 
 
-	$('.users-filter').on(
-		'keyup',
-		function()
-		{
-			var $input = $(this);
 
-			var value = $input.val();
-			var valueLower = $.trim( value.toLowerCase() );
-
-			var $fieldset = $input.closest('fieldset');
-
-			if ( valueLower == '' )
-			{
-				$('label:hidden', $fieldset).slideDown('fast');
-				return false;
-			}
-
-			$('label', $fieldset).each(function()
-			{
-				var $label = $(this);
-				var text = $label.text();
-				var textLower = $.trim(text.toLowerCase() );
-
-				if ( textLower.search(valueLower) > -1 ) //  && $label.is(':hidden')
-				{
-					$label.slideDown('fast');
-				}
-				else if ( $label.is(':visible') )
-				{
-					$label.slideUp('fast');
-				}
-			});
+	new List('td-allowed_users', {
+		valueNames: ['user_name'],
+		page: 20,
+		pagination: {
+			name: "list-pagination",
+			paginationClass: "list-pagination",
+			innerWindow: 3
 		}
-	);
+	});
+
+
+
+	//
+	//
+	// $('.users-filter').on(
+	// 	'keyup',
+	// 	function()
+	// 	{
+	// 		var $input = $(this);
+	//
+	// 		var value = $input.val();
+	// 		var valueLower = $.trim( value.toLowerCase() );
+	//
+	// 		var $fieldset = $input.closest('fieldset');
+	//
+	// 		if ( valueLower == '' )
+	// 		{
+	// 			$('label:hidden', $fieldset).slideDown('fast');
+	// 			return false;
+	// 		}
+	//
+	// 		$('label', $fieldset).each(function()
+	// 		{
+	// 			var $label = $(this);
+	// 			var text = $label.text();
+	// 			var textLower = $.trim(text.toLowerCase() );
+	//
+	// 			if ( textLower.search(valueLower) > -1 ) //  && $label.is(':hidden')
+	// 			{
+	// 				$label.slideDown('fast');
+	// 			}
+	// 			else if ( $label.is(':visible') )
+	// 			{
+	// 				$label.slideUp('fast');
+	// 			}
+	// 		});
+	// 	}
+	// );
 
 
 

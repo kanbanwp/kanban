@@ -45,7 +45,8 @@ class Kanban_Option extends Kanban_Db {
 		'hide_time_tracking'          => 0,
 		'show_task_ids'               => 0,
 		'board_css'                   => '',
-		'disable_sync_notifications'  => 0
+		'disable_sync_notifications'  => 0,
+		'updates_check_interval_sec'  => 5,
 	);
 
 	// Store the options on first load, to prevent mulitple db calls.
@@ -339,7 +340,7 @@ class Kanban_Option extends Kanban_Db {
 	 * @param $hook string The necessary hook.
 	 */
 	static function enqueue_js( $hook ) {
-		if ( ! is_admin() || ! isset( $_GET[ 'page' ] ) || $_GET[ 'page' ] != 'kanban_settings' ) {
+		if ( ! is_admin() || ! isset( $_GET[ 'page' ] ) || substr($_GET[ 'page' ], 0, 6) != 'kanban' ) {
 			return;
 		}
 
@@ -357,9 +358,17 @@ class Kanban_Option extends Kanban_Db {
 			array()
 		);
 
+		wp_enqueue_script(
+			'list',
+			sprintf( '%s/js/list.min.js', Kanban::get_instance()->settings->uri )
+		);
+
+		// Add thickbox for extra options.
+		add_thickbox();
+
 		wp_register_script(
 			'kanban-settings',
-			sprintf( '%s/js/min/admin-settings-min.js', Kanban::get_instance()->settings->uri ),
+			sprintf( '%s/js/admin-settings.min.js', Kanban::get_instance()->settings->uri ),
 			array( 'wp-color-picker' ),
 			false,
 			true
@@ -386,9 +395,6 @@ class Kanban_Option extends Kanban_Db {
 			'kanban',
 			sprintf( '%s/css/admin.css', Kanban::get_instance()->settings->uri )
 		);
-
-		// Add thickbox for extra options.
-		add_thickbox();
 
 
 

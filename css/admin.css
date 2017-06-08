@@ -63,6 +63,7 @@ button.delete {
   padding: 6px 14px;
   border: 1px solid rgba(0, 0, 0, 0.2); }
 .switch-field label:hover {
+  background-color: rgba(144, 199, 69, 0.236);
   cursor: pointer; }
 .switch-field input:checked + label {
   background-color: rgba(144, 199, 69, 0.618);
@@ -75,6 +76,28 @@ button.delete {
 .switch-field.vertical label {
   border-radius: 0;
   clear: left; }
+
+.list-pagination li {
+  display: inline; }
+  .list-pagination li a {
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    color: black;
+    display: inline-block;
+    margin-right: 5px;
+    padding: 5px 10px;
+    text-decoration: none; }
+    .list-pagination li a:hover {
+      background-color: rgba(144, 199, 69, 0.236); }
+  .list-pagination li.active a {
+    background-color: rgba(144, 199, 69, 0.618);
+    -webkit-box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3), 0 1px rgba(255, 255, 255, 0.1);
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3), 0 1px rgba(255, 255, 255, 0.1); }
+  .list-pagination li.disabled a {
+    cursor: default;
+    border-color: transparent;
+    outline: none; }
+    .list-pagination li.disabled a:hover {
+      background-color: transparent; }
 
 #default_assigned_switch label {
   min-width: 12em;

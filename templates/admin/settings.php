@@ -68,7 +68,7 @@
 						</label>
 					</th>
 					<td>
-						<input name="settings[hour_interval]" type="text" id="hour_increment"
+						<input name="settings[hour_interval]" type="number" id="hour_increment"
 							   value="<?php echo isset( $settings[ 'hour_interval' ] ) ? $settings[ 'hour_interval' ] : 1 ?>"
 							   class="regular-text">
 						<p class="description">
@@ -222,6 +222,20 @@
 						</td>
 					</tr>
 
+					<tr>
+						<th width="33%" scope="row">
+							<?php echo __( 'Sync check interval', 'kanban' ); ?>
+						</th>
+						<td>
+							<input name="settings[updates_check_interval_sec]" type="number" step="1" id="updates_check_interval_sec"
+							       value="<?php echo isset( $settings[ 'updates_check_interval_sec' ] ) ? $settings[ 'updates_check_interval_sec' ] : 1 ?>"
+							       class="regular-text">
+							<p class="description">
+								<?php echo __( 'How many seconds between checks.', 'kanban' ); ?>
+							</p>
+						</td>
+					</tr>
+
 					</tbody>
 				</table>
 			</div>
@@ -250,23 +264,24 @@
 												</small>
 											</label>
 										</th>
-										<td>
-											<fieldset>
-												<?php if ( count( $all_users_arr ) > 10 ) : ?>
-													<p>
-														<?php echo __( 'Filter:', 'kanban' ); ?> <input type="text"
-																										class="users-filter">
-													</p>
-												<?php endif // count $all_users_arr ?>
+										<td id="td-allowed_users">
+											<label style="display: <?php echo count($all_users_arr) < 10 ? 'none' : 'block' ?>">
+												<?php echo __('Filter:') ?>
+												<input type="text" class="search" />
+											</label>
+											<ul class="list">
 												<?php foreach ( $all_users_arr as $user_id => $user_name ) : ?>
-													<label style="display: block;">
+													<li>
+													<label>
 														<input name="settings[allowed_users][]" type="checkbox"
 															   value="<?php echo $user_id; ?>" class="tab-users-user"
 															   id="tab-users-user-<?php echo $user_id; ?>" <?php echo is_array( $settings[ 'allowed_users' ] ) ? in_array( $user_id, $settings[ 'allowed_users' ] ) ? 'checked' : '' : ''; ?>>
-														<?php echo $user_name; ?>
+														<span class="user_name"><?php echo $user_name; ?></span>
 													</label>
+													</li>
 												<?php endforeach // $all_users_arr; ?>
-											</fieldset>
+											</ul>
+											<ul class="list-pagination" style="display: <?php echo count($all_users_arr) < 21 ? 'none' : 'block' ?>"></ul>
 										</td>
 									</tr>
 

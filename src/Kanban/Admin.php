@@ -67,7 +67,7 @@ class Kanban_Admin {
 
 		wp_register_script(
 			'kanban-deactivate',
-			sprintf( '%s/js/min/admin-deactivate-min.js', Kanban::get_instance()->settings->uri ),
+			sprintf( '%s/js/admin-deactivate.min.js', Kanban::get_instance()->settings->uri ),
 			array( 'jquery' )
 		);
 
@@ -192,58 +192,58 @@ class Kanban_Admin {
 	/**
 	 * render the Add-ons page
 	 */
-	static function addons_page() {
-
-		wp_enqueue_script(
-			'addon',
-			sprintf( '%s/js/min/admin-addons-min.js', Kanban::get_instance()->settings->uri ),
-			array( 'jquery', 'masonry' )
-		);
-
-
-
-		// Get stored add-ons.
-		if ( Kanban_Utils::is_network() ) {
-			$addons = get_site_transient( 'kanban-admin-addons' );
-		} else {
-			$addons = get_transient( 'kanban-admin-addons' );
-		}
-
-
-
-		// $addons is false if not set
-		if ( empty( $addons ) || ! $addons ) {
-
-			$response = wp_remote_get( 'https://kanbanwp.com?feed=addons' );
-
-			try {
-				$addons = @json_decode( $response[ 'body' ] );
-			} catch ( Exception $e ) {
-				$addons = array();
-			}
-
-			if ( Kanban_Utils::is_network() ) {
-				set_site_transient( 'kanban-admin-addons', $addons, 24 * HOUR_IN_SECONDS );
-			} else {
-				set_transient( 'kanban-admin-addons', $addons, 24 * HOUR_IN_SECONDS );
-			}
-
-		}
-
-
-
-		// get the template data
-		global $wp_query;
-
-		// attach our object to the template data
-		$wp_query->query_vars[ 'addons' ] = $addons;
-
-		$template = Kanban_Template::find_template( 'admin/addons' );
-
-
-
-		include_once $template;
-	}
+//	static function addons_page() {
+//
+//		wp_enqueue_script(
+//			'addon',
+//			sprintf( '%s/js/min/admin-addons-min.js', Kanban::get_instance()->settings->uri ),
+//			array( 'jquery', 'masonry' )
+//		);
+//
+//
+//
+//		// Get stored add-ons.
+//		if ( Kanban_Utils::is_network() ) {
+//			$addons = get_site_transient( 'kanban-admin-addons' );
+//		} else {
+//			$addons = get_transient( 'kanban-admin-addons' );
+//		}
+//
+//
+//
+//		// $addons is false if not set
+//		if ( empty( $addons ) || ! $addons ) {
+//
+//			$response = wp_remote_get( 'https://kanbanwp.com?feed=addons' );
+//
+//			try {
+//				$addons = @json_decode( $response[ 'body' ] );
+//			} catch ( Exception $e ) {
+//				$addons = array();
+//			}
+//
+//			if ( Kanban_Utils::is_network() ) {
+//				set_site_transient( 'kanban-admin-addons', $addons, 24 * HOUR_IN_SECONDS );
+//			} else {
+//				set_transient( 'kanban-admin-addons', $addons, 24 * HOUR_IN_SECONDS );
+//			}
+//
+//		}
+//
+//
+//
+//		// get the template data
+//		global $wp_query;
+//
+//		// attach our object to the template data
+//		$wp_query->query_vars[ 'addons' ] = $addons;
+//
+//		$template = Kanban_Template::find_template( 'admin/addons' );
+//
+//
+//
+//		include_once $template;
+//	}
 
 
 
@@ -255,10 +255,18 @@ class Kanban_Admin {
 
 
 
-	static function licenses_page() {
-		$template = Kanban_Template::find_template( 'admin/licenses' );
+	static function render_kanbanpro_page() {
+		$template = Kanban_Template::find_template( 'admin/kanbanpro' );
 
+		ob_start();
 		include_once $template;
+		$html_output = ob_get_contents();
+		ob_end_clean();
+
+		echo apply_filters(
+			'kanban_admin_render_kanbanpro_page_return',
+			$html_output
+		);
 	}
 
 
@@ -600,14 +608,14 @@ class Kanban_Admin {
 			array( 'Kanban_Option', 'settings_page' )
 		);
 
-//		add_submenu_page(
-//			Kanban::get_instance()->settings->basename,
-//			__( 'Add-ons' ),
-//			__( 'Add-ons' ),
-//			'manage_options',
-//			'kanban_addons',
-//			array( __CLASS__, 'addons_page' )
-//		);
+		add_submenu_page(
+			'kanban',
+			'Kanban Pro',
+			'Kanban Pro',
+			'manage_options',
+			'kanban_pro',
+			array( __CLASS__, 'render_kanbanpro_page' )
+		);
 
 		add_submenu_page(
 			Kanban::get_instance()->settings->basename,
@@ -632,62 +640,30 @@ class Kanban_Admin {
 
 		add_menu_page(
 			'kanban_network',
-			Kanban::get_instance()->settings->pretty_name,
+			'Kanban',
 			'manage_options',
 			'kanban_network',
-			array( __CLASS__, 'addons_page' ),
+			array( __CLASS__, 'render_kanbanpro_page' ),
 			self::icon_svg()
 		);
 
 		add_submenu_page(
 			'kanban_network',
-			__( 'Add-ons' ),
-			__( 'Add-ons' ),
+			__( 'Kanban Pro' ),
+			__( 'Kanban Pro' ),
 			'manage_options',
 			'kanban_network',
-			array( __CLASS__, 'addons_page' )
+			array( __CLASS__, 'render_kanbanpro_page' )
 		);
 
-//		add_submenu_page(
-//				'kanban_network',
-//			'Licenses',
-//			'Licenses',
-//			'manage_options',
-//			'kanban_network_licenses',
-//			array( __CLASS__, 'licenses_page' )
-//		);
-
-
-		// add the base slug and page
-//		add_menu_page(
-//			'kanban_network',
-//			Kanban::get_instance()->settings->pretty_name,
-//			'manage_options',
-//			Kanban::get_instance()->settings->basename . '_network',
-//			null,
-//			$icon_svg
-//		);
-//
-//		// redeclare same page to change name to settings
-//		// @link https://codex.wordpress.org/Function_Reference/add_submenu_page#Inside_menu_created_with_add_menu_page.28.29
-////		add_submenu_page(
-////			Kanban::get_instance()->settings->basename . '_network',
-////			'Network',
-////			'Network',
-////			'manage_options',
-////			Kanban::get_instance()->settings->basename . '_network',
-////			array( __CLASS__, 'network_page' )
-////		);
-//
-//		add_submenu_page(
-//			'Add-ons',
-//			'Add-ons',
-//			'Add-ons',
-//			'manage_options',
-//			Kanban::get_instance()->settings->basename . '_network',
-//			array( __CLASS__, 'addons_page' )
-//		);
-
+		add_submenu_page(
+			'kanban_network',
+			__( 'Contact Us' ),
+			__( 'Contact Us' ),
+			'manage_options',
+			'kanban_contact',
+			array( __CLASS__, 'contact_page' )
+		);
 	}
 
 

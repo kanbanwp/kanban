@@ -641,7 +641,10 @@ $( function () {
 
 
 	// Check for updates by other users every 5 seconds.
-	setInterval( kanban.updates_task, 5000 );
+	setInterval(
+		kanban.updates_task,
+		boards[current_board_id].record.settings().updates_check_interval_sec * 1000
+	);
 
 
 

@@ -161,17 +161,44 @@ jQuery(function($)
 	// .disableSelection();
 
 
-
-
-	new List('td-allowed_users', {
-		valueNames: ['user_name'],
-		page: 20,
-		pagination: {
-			name: "list-pagination",
-			paginationClass: "list-pagination",
-			innerWindow: 3
-		}
+	$('.check-list-wrapper').each(function () {
+		new List(this, {
+			valueNames: ['user_name'],
+			page: 20,
+			pagination: {
+				name: "list-pagination",
+				paginationClass: "list-pagination",
+				innerWindow: 3
+			}
+		})
 	});
+
+	$('.check-list').on(
+		'change',
+		'.check-list-input',
+		function(e) {
+			var $input = $(this);
+			var $list = $(e.delegateTarget);
+			var target = $list.attr('data-target');
+			var name = $list.attr('data-name');
+			var $target = $(target);
+
+			var id = $input.val();
+
+			if ( $input.is(':checked') ) {
+				var html = $('<div>').append($input.clone()).html();
+
+				$( html )
+					.attr('name', name)
+					.prop('type', 'hidden')
+					.prop('checked', true)
+					.appendTo($target);
+			}
+			else {
+				$('[value="' + id + '"]', $target).remove();
+			}
+		}
+	);
 
 
 

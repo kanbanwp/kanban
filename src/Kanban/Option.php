@@ -292,6 +292,18 @@ class Kanban_Option extends Kanban_Db {
 
 
 
+	static function delete_option ($key) {
+		global $wpdb;
+		$success = $wpdb->delete(
+			self::table_name(),
+			array('name' => $key)
+		);
+
+		return $success;
+	}
+
+
+
 	/**
 	 * Get an option by some other property instead of name.
 	 *

@@ -264,24 +264,33 @@
 												</small>
 											</label>
 										</th>
-										<td id="td-allowed_users">
+										<td id="td-allowed_users" class="check-list-wrapper">
 											<label style="display: <?php echo count($all_users_arr) < 10 ? 'none' : 'block' ?>">
 												<?php echo __('Filter:') ?>
 												<input type="text" class="search" />
 											</label>
-											<ul class="list">
+											<ul class="list check-list" data-target="#allowed_users-values" data-name="settings[allowed_users][]">
 												<?php foreach ( $all_users_arr as $user_id => $user_name ) : ?>
 													<li>
 													<label>
-														<input name="settings[allowed_users][]" type="checkbox"
-															   value="<?php echo $user_id; ?>" class="tab-users-user"
-															   id="tab-users-user-<?php echo $user_id; ?>" <?php echo is_array( $settings[ 'allowed_users' ] ) ? in_array( $user_id, $settings[ 'allowed_users' ] ) ? 'checked' : '' : ''; ?>>
+														<input type="checkbox"
+															   value="<?php echo $user_id; ?>" class="check-list-input" <?php echo is_array( $settings[ 'allowed_users' ] ) ? in_array( $user_id, $settings[ 'allowed_users' ] ) ? 'checked' : '' : ''; ?> autocomplete="off">
 														<span class="user_name"><?php echo $user_name; ?></span>
 													</label>
 													</li>
 												<?php endforeach // $all_users_arr; ?>
 											</ul>
 											<ul class="list-pagination" style="display: <?php echo count($all_users_arr) < 21 ? 'none' : 'block' ?>"></ul>
+											<div id="allowed_users-values">
+												<?php foreach ( $all_users_arr as $user_id => $user_name ) :
+													if ( is_array( $settings[ 'allowed_users' ] ) ) :
+														if ( in_array( $user_id, $settings[ 'allowed_users' ] ) ) :
+													?>
+															<input type="hidden"
+															       name="settings[allowed_users][]"
+															       value="<?php echo $user_id; ?>" class="check-list-item">
+												<?php endif; endif; endforeach // $all_users_arr; ?>
+											</div>
 										</td>
 									</tr>
 

@@ -202,7 +202,7 @@
 						</th>
 						<td>
 							<textarea name="settings[board_css]" id="board_css" class="large-text"
-									  rows="4"><?php echo isset( $settings[ 'board_css' ] ) ? $settings[ 'board_css' ] : '' ?></textarea>
+									  rows="4"><?php echo isset( $settings[ 'board_css' ] ) ? stripslashes($settings[ 'board_css' ]) : '' ?></textarea>
 						</td>
 					</tr>
 

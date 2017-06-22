@@ -125,7 +125,7 @@ var updates_dt = new Date(<?php echo time() ?>000);
 
 
 <?php if ( !empty($board->settings['board_css']) ) : ?>
-<?php echo $board->settings['board_css'] ?>
+<?php echo stripslashes($board->settings['board_css']) ?>
 <?php endif ?>
 
 <?php endforeach // boards ?>

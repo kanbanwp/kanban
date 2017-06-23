@@ -181,17 +181,17 @@ jQuery(function($)
 			var $list = $(e.delegateTarget);
 			var target = $list.attr('data-target');
 			var name = $list.attr('data-name');
+			var value = $input.val();
 			var $target = $(target);
 
 			var id = $input.val();
 
 			if ( $input.is(':checked') ) {
-				var html = $('<div>').append($input.clone()).html();
+				var html = $('<input type="hidden">');
 
 				$( html )
 					.attr('name', name)
-					.prop('type', 'hidden')
-					.prop('checked', true)
+					.val(value)
 					.appendTo($target);
 			}
 			else {

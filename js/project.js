@@ -40,8 +40,10 @@ Project.prototype.add = function(board_id, project_title, callback)
 	} )
 	.done( function ( response ) {
 
-		// add project to available projects
-		boards[board_id].record.project_records[response.data.project.id] = response.data.project;
+		try {
+			// add project to available projects
+			boards[board_id].record.project_records[response.data.project.id] = response.data.project;
+		} catch (err) {}
 
 		// add project to task
 		callback.call( response );

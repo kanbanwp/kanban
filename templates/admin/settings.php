@@ -68,7 +68,7 @@
 						</label>
 					</th>
 					<td>
-						<input name="settings[hour_interval]" type="number" id="hour_increment"
+						<input name="settings[hour_interval]" type="number" id="hour_increment" step="0.0001"
 							   value="<?php echo isset( $settings[ 'hour_interval' ] ) ? $settings[ 'hour_interval' ] : 1 ?>"
 							   class="regular-text">
 						<p class="description">

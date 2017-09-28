@@ -87,10 +87,10 @@
 						<div class="switch-field">
 							<input type="radio" id="hide_time_tracking_1" name="settings[hide_time_tracking]"
 								   value="1" <?php echo (bool) $settings[ 'hide_time_tracking' ] ? 'checked' : ''; ?>>
-							<label for="hide_time_tracking_1">Yes</label>
+							<label for="hide_time_tracking_1"><?php echo __( 'Yes', 'kanban' ); ?></label>
 							<input type="radio" id="hide_time_tracking_0" name="settings[hide_time_tracking]"
 								   value="0" <?php echo ! (bool) $settings[ 'hide_time_tracking' ] ? 'checked' : ''; ?>>
-							<label for="hide_time_tracking_0">No</label>
+							<label for="hide_time_tracking_0"><?php echo __( 'No', 'kanban' ); ?></label>
 						</div>
 
 					</td>
@@ -106,10 +106,10 @@
 						<div class="switch-field">
 							<input type="radio" id="show_task_ids_1" name="settings[show_task_ids]"
 								   value="1" <?php echo (bool) $settings[ 'show_task_ids' ] ? 'checked' : ''; ?>>
-							<label for="show_task_ids_1">Yes</label>
+							<label for="show_task_ids_1"><?php echo __( 'Yes', 'kanban' ); ?></label>
 							<input type="radio" id="show_task_ids_0" name="settings[show_task_ids]"
 								   value="0" <?php echo ! (bool) $settings[ 'show_task_ids' ] ? 'checked' : ''; ?>>
-							<label for="show_task_ids_0">No</label>
+							<label for="show_task_ids_0"><?php echo __( 'No', 'kanban' ); ?></label>
 						</div>
 
 					</td>
@@ -124,10 +124,10 @@
 						<div class="switch-field">
 							<input type="radio" id="show_all_cols_1" name="settings[show_all_cols]"
 								   value="1" <?php echo (bool) $settings[ 'show_all_cols' ] ? 'checked' : ''; ?>>
-							<label for="show_all_cols_1">Yes</label>
+							<label for="show_all_cols_1"><?php echo __( 'Yes', 'kanban' ); ?></label>
 							<input type="radio" id="show_all_cols_0" name="settings[show_all_cols]"
 								   value="0" <?php echo ! (bool) $settings[ 'show_all_cols' ] ? 'checked' : ''; ?>>
-							<label for="show_all_cols_0">No</label>
+							<label for="show_all_cols_0"><?php echo __( 'No', 'kanban' ); ?></label>
 						</div>
 					</td>
 				</tr>
@@ -170,10 +170,10 @@
 						<div class="switch-field">
 							<input type="radio" id="use_default_login_page_1" name="settings[use_default_login_page]"
 								   value="1" <?php echo (bool) $settings[ 'use_default_login_page' ] ? 'checked' : ''; ?>>
-							<label for="use_default_login_page_1">Yes</label>
+							<label for="use_default_login_page_1"><?php echo __( 'Yes', 'kanban' ); ?></label>
 							<input type="radio" id="use_default_login_page_0" name="settings[use_default_login_page]"
 								   value="0" <?php echo ! (bool) $settings[ 'use_default_login_page' ] ? 'checked' : ''; ?>>
-							<label for="use_default_login_page_0">No</label>
+							<label for="use_default_login_page_0"><?php echo __( 'No', 'kanban' ); ?></label>
 						</div>
 					</td>
 				</tr>
@@ -214,10 +214,10 @@
 							<div class="switch-field">
 								<input type="radio" id="disable_sync_notifications_1" name="settings[disable_sync_notifications]"
 									   value="1" <?php echo (bool) $settings[ 'disable_sync_notifications' ] ? 'checked' : ''; ?>>
-								<label for="disable_sync_notifications_1">Yes</label>
+								<label for="disable_sync_notifications_1"><?php echo __( 'Yes', 'kanban' ); ?></label>
 								<input type="radio" id="disable_sync_notifications_0" name="settings[disable_sync_notifications]"
 									   value="0" <?php echo ! (bool) $settings[ 'disable_sync_notifications' ] ? 'checked' : ''; ?>>
-								<label for="disable_sync_notifications_0">No</label>
+								<label for="disable_sync_notifications_0"><?php echo __( 'No', 'kanban' ); ?></label>
 							</div>
 						</td>
 					</tr>

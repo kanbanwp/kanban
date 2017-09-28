@@ -2,10 +2,11 @@
 
 Contributors: 		gelform
 Tags:				kanban, boards, agile, scrum, project management, tasks, productivity, Trello, GTD, manage, planning, todo
+Version:            2.4.7
+Release Date:       September 28, 2017
 Requires at least:	4.0
 Tested up to:		4.8.1
-Version:            2.4.6
-Release Date:       August 18, 2017
+Requires PHP:       5.3
 License: 			GPLv2 or later
 License URI:		http://www.gnu.org/licenses/gpl-2.0.html
 

@@ -1,288 +1,300 @@
-# Copyright (C) 2017 Kanban Boards for WordPress
-# This file is distributed under the same license as the Kanban Boards for WordPress package.
+# Copyright (C) 2015 Kanban for WordPress
+# This file is distributed under the same license as the Kanban for WordPress package.
 msgid ""
 msgstr ""
-"Project-Id-Version: Kanban Boards for WordPress 2.4.6\n"
+"Project-Id-Version: Kanban for WordPress\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/kanban\n"
 "POT-Creation-Date: 2017-09-27 17:03:25+00:00\n"
+"PO-Revision-Date: 2017-09-27 22:15+0200\n"
+"Last-Translator: Bodin Ludovic <contact@shopdeluxe.fr>\n"
+"Language-Team: \n"
+"Language: fr_FR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"PO-Revision-Date: 2017-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"X-Generator: Poedit 2.0.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 #: includes/inc-board-text.php:5 kanban.php:94
 msgid "Kanban"
-msgstr ""
+msgstr "Kanban"
 
 #: includes/inc-board-text.php:6
 msgid "{0} deleted the task"
-msgstr ""
+msgstr "{0} a supprimé cette tâche"
 
 #: includes/inc-board-text.php:7
 msgid "Task deleted. <u>Undo</u>?"
-msgstr ""
+msgstr "Tâche supprimée. <u>Annuler</ u> ?"
 
 #: includes/inc-board-text.php:8
 msgid "{0} restored the deleted task"
-msgstr ""
+msgstr "{0} a restauré la tâche supprimée"
 
 #: includes/inc-board-text.php:9
 msgid "Your tasks have been synced."
-msgstr ""
+msgstr "Vos tâches ont été synchronisées."
 
 #: includes/inc-board-text.php:10
 msgid "{0} added the task to the project \"{1}\""
-msgstr ""
+msgstr "{0} a ajouté la tâche au projet \"{1}\""
 
 #: includes/inc-board-text.php:11
 msgid "{0} removed the task project"
-msgstr ""
+msgstr "{0} supprimé la tâche du projet"
 
 #: includes/inc-board-text.php:12
 msgid "There was an error adding a task"
-msgstr ""
+msgstr "Une erreur s'est produite lors de l'ajout d'une tâche"
 
 #: includes/inc-board-text.php:13
 msgid "There was an error saving that task"
-msgstr ""
+msgstr "Une erreur s'est produite lors de l'enregistrement de cette tâche"
 
 #: includes/inc-board-text.php:14
 msgid "There was an error deleting that task"
-msgstr ""
+msgstr "Une erreur s'est produite lors de la suppression de cette tâche"
 
 #: includes/inc-board-text.php:15 includes/inc-board-text.php:17
 #: includes/inc-board-text.php:19 includes/inc-board-text.php:21
 #: includes/inc-board-text.php:23 includes/inc-board-text.php:25
 msgid " (previously \"{0}\")"
-msgstr ""
+msgstr " (précédemment \"{0}\")"
 
 #: includes/inc-board-text.php:16
 msgid "{0} moved the task to \"{1}\""
-msgstr ""
+msgstr "{0} a déplacé la tâche vers \"{1}\""
 
 #: includes/inc-board-text.php:18
 msgid "{0} reordered the task to \"{1}\""
-msgstr ""
+msgstr "{0} a re-ordonné la tâche vers \"{1}\""
 
 #: includes/inc-board-text.php:20
 msgid "{0} updated the task title to \"{1}\""
-msgstr ""
+msgstr "{0} a mis à jour le titre de la tâche : \"{1}\""
 
 #: includes/inc-board-text.php:22
 msgid "{0} assigned the task to {1}"
-msgstr ""
+msgstr "{0} a attribué la tâche à \"{1}\""
 
 #: includes/inc-board-text.php:24
 msgid "{0} set the task estimate to \"{1}\""
-msgstr ""
+msgstr "{0} a estimé la tâche à \"{1}\""
 
 #: includes/inc-board-text.php:26
 msgid "{0} added the project \"{1}\""
-msgstr ""
+msgstr "{0} a ajouté le projet \"{1}\""
 
 #: includes/inc-board-text.php:27
 msgid "{0} updated the project title \"{1}\""
-msgstr ""
+msgstr "{0} a mis à jour le titre du projet \"{1}\""
 
 #: includes/inc-board-text.php:28
 msgid "Your projects have been synced."
-msgstr ""
+msgstr "Vos projets ont été synchronisés."
 
 #: includes/inc-board-text.php:29
 msgid "{0} deleted the project \"{1}\""
-msgstr ""
+msgstr "{0} a supprimé le projet \"{1}\""
 
 #: includes/inc-board-text.php:30
 msgid "Are you sure you want to delete this project?"
-msgstr ""
+msgstr "Voulez-vous vraiment supprimer ce projet ?"
 
 #: includes/inc-board-text.php:31
 msgid "Are you sure you want to delete all tasks in this column?"
 msgstr ""
+"Êtes-vous sûr de vouloir supprimer toutes les taches de cette colonne ?"
 
 #: includes/inc-board-text.php:32
 msgid "The WIP (Work In Progress) limit has been reached."
-msgstr ""
+msgstr "La limite WIP (Work In Progress) a été atteinte."
 
 #: includes/inc-preset-none.php:7
 msgid "Customize your board here."
-msgstr ""
+msgstr "Personnalisez votre tableau ici."
 
 #: kanban.php:99
 msgid ""
 "The %s plugin requires at least PHP 5.3. You have %s. Please upgrade and "
 "then re-install the plugin."
 msgstr ""
+"Le plugin %s requiert au moins PHP 5.3. Vous avez %s. Veuillez mettre à jour "
+"et puis ré-installer le plugin."
 
 #: src/Kanban/Admin.php:79
 msgid "OPTIONAL: Please Let us know why you are deactivating Kanban."
-msgstr ""
+msgstr "OPTION : Merci de nous expliquer pourquoi vous désactivez Kanban."
 
 #: src/Kanban/Admin.php:83
 msgid "I decided to use something else"
-msgstr ""
+msgstr "J'ai décidé d'utiliser quelque chose de différent"
 
 #: src/Kanban/Admin.php:86
 msgid "What else did you decide to use?"
-msgstr ""
+msgstr "Que décidez-vous de faire d'autre ?"
 
 #: src/Kanban/Admin.php:91
 msgid "The plugin is not what I was looking for"
-msgstr ""
+msgstr "Le plugin n'était pas ce que je cherchais"
 
 #: src/Kanban/Admin.php:94
 msgid "What were you looking for?"
-msgstr ""
+msgstr "Qu'est-ce que vous cherchez ?"
 
 #: src/Kanban/Admin.php:98
 msgid "The plugin didn't have the features I wanted"
-msgstr ""
+msgstr "Le plugin n'avait pas les fonctionnalités que je voulais"
 
 #: src/Kanban/Admin.php:101
 msgid "What features did you want?"
-msgstr ""
+msgstr "De quelles fonctions avez-vous envie ?"
 
 #: src/Kanban/Admin.php:105
 msgid "The plugin didn't work as expected"
-msgstr ""
+msgstr "Le plugin n'a pas fonctionné comme prévu"
 
 #: src/Kanban/Admin.php:107
 msgid "What were you expecting?"
-msgstr ""
+msgstr "A quoi vous attendiez vous ?"
 
 #: src/Kanban/Admin.php:111
 msgid "The plugin is not working"
-msgstr ""
+msgstr "Le plugin ne fonctionne pas"
 
 #: src/Kanban/Admin.php:113
 msgid "What didn't work?"
-msgstr ""
+msgstr "Qu'est-ce qui ne fonctionnait pas?"
 
 #: src/Kanban/Admin.php:118
 msgid "Skip &amp; Deactivate"
-msgstr ""
+msgstr "Passer &amp; Désactiver"
 
 #: src/Kanban/Admin.php:121
 msgid "Cancel"
-msgstr ""
+msgstr "Annuler"
 
 #: src/Kanban/Admin.php:436
 msgid ""
 "Your board is all set up! <a href=%s>Go to your board</a> to check it out."
 msgstr ""
+"Votre tableau est en place ! <a href=\"%s\">Allez à votre tableau</a> pour "
+"le vérifier."
 
 #: src/Kanban/Admin.php:480
 msgid "Email sent! We'll get back to you as soon as we can."
-msgstr ""
+msgstr "Email envoyé ! Nous vous répondrons dans les plus brefs délais."
 
 #: src/Kanban/Admin.php:482
 msgid ""
 "Email could not be sent. Please contact us through <a href=\"http://kanbanwp."
 "com\" target=\"_blank\">https://kanbanwp.com</a>."
 msgstr ""
+"Le message n'a pas pu être envoyé. Contactez-nous via <a href=\"http://"
+"kanbanwp.com\" target=\"_blank\">https://kanbanwp.com</a> ."
 
 #: src/Kanban/Admin.php:502
 msgid "Username already taken"
-msgstr ""
+msgstr "Nom d'utilisateur déjà pris"
 
 #: src/Kanban/Admin.php:506
 msgid "Invalid username"
-msgstr ""
+msgstr "Nom d'utilisateur invalide"
 
 #: src/Kanban/Admin.php:510
 msgid "Please enter a username"
-msgstr ""
+msgstr "Merci d'indiquer un nom d'utilisateur"
 
 #: src/Kanban/Admin.php:515
 msgid "Invalid email"
-msgstr ""
+msgstr "Adresse email non valide"
 
 #: src/Kanban/Admin.php:519
 msgid "Email already registered"
-msgstr ""
+msgstr "E-mail déjà enregistré"
 
 #: src/Kanban/Admin.php:545
 msgid "User could not be created. Please use the User > Add New page"
 msgstr ""
+"L'utilisateur n'a pas pu être créé. Utilisez Utilisateur > Ajouter une "
+"nouvelle page"
 
 #: src/Kanban/Admin.php:594 src/Kanban/Admin.php:595
 msgid "Welcome"
-msgstr ""
+msgstr "Bienvenue"
 
 #: src/Kanban/Admin.php:604 src/Kanban/Admin.php:605 src/Kanban/Admin.php:704
 #: templates/admin/welcome.php:65 templates/board/footer.php:38
 msgid "Settings"
-msgstr ""
+msgstr "Paramètres"
 
 #: src/Kanban/Admin.php:622 src/Kanban/Admin.php:623 src/Kanban/Admin.php:661
 #: src/Kanban/Admin.php:662
 msgid "Contact Us"
-msgstr ""
+msgstr "Contactez-nous"
 
 #: src/Kanban/Admin.php:652 src/Kanban/Admin.php:653
 #: templates/admin/kanbanpro.php:4
 msgid "Kanban Pro"
-msgstr ""
+msgstr "Kanban Pro"
 
 #: src/Kanban/License.php:76
 msgid "Licenses saved"
-msgstr ""
+msgstr "Licences enregistrés"
 
 #: src/Kanban/Option.php:482
 msgid "Settings saved"
-msgstr ""
+msgstr "Paramètres enregistrés"
 
 #: src/Kanban/Project.php:99 src/Kanban/Task/Hour.php:87
 #: src/Kanban/Task.php:177
 msgid "%s saved"
-msgstr ""
+msgstr "%s enregistrés"
 
 #: src/Kanban/Project.php:104 src/Kanban/Task/Hour.php:91
 #: src/Kanban/Task.php:182
 msgid "Error saving %s"
-msgstr ""
+msgstr "Erreur lors de l'enregistrement. %s"
 
 #: src/Kanban/Project.php:126 src/Kanban/Task.php:224
 msgid "%s deleted"
-msgstr ""
+msgstr "%s supprimés"
 
 #: src/Kanban/Project.php:130 src/Kanban/Task.php:230
 msgid "Error deleting %s"
-msgstr ""
+msgstr "﻿Erreur lors de la suppression %s"
 
 #: src/Kanban/Project.php:177
 msgid "%s reset"
-msgstr ""
+msgstr "%s réinitialisés"
 
 #: src/Kanban/Status/Change.php:77
 msgid "Task %s scheduled to be archived in %s days."
-msgstr ""
+msgstr "La tâche %s doit être archivée dans %s jours."
 
 #: src/Kanban/Task.php:93
 msgid "%sm"
-msgstr ""
+msgstr "%sm"
 
 #: src/Kanban/Task.php:95
 msgid "%sh"
-msgstr ""
+msgstr "%sh"
 
 #: src/Kanban/Task.php:97
 msgid "%sd %sh"
-msgstr ""
+msgstr "%sj %sh"
 
 #: src/Kanban/Task.php:273
 msgid "%s restored"
-msgstr ""
+msgstr "%s restaurés"
 
 #: src/Kanban/Task.php:279
 msgid "Error restoring %s"
-msgstr ""
+msgstr "Erreur lors de la restoration %s"
 
 #: src/Kanban/User.php:57
 msgid "%s: %s has requested access"
-msgstr ""
+msgstr "%s: %s a demandé un accès"
 
 #: src/Kanban/User.php:65
 msgid ""
@@ -297,552 +309,646 @@ msgid ""
 "\n"
 "\t\t\t\t\tAnd select them as an allowed user."
 msgstr ""
+"L'utilisateur suivant a demandé l'accès. \n"
+"\n"
+"\t\t\t\t\t%s \n"
+"\n"
+"\n"
+"\t\t\t\t\tPour leur donner accès, visitez ce lien : \n"
+"\n"
+"\t\t\t\t\t%s \n"
+"\n"
+"\t\t\t\t\tEt sélectionnez-les comme un utilisateur autorisé."
 
 #: src/Kanban/User.php:80
 msgid "Your request has been sent."
-msgstr ""
+msgstr "Votre demande a été envoyée."
 
 #: src/Kanban/User.php:101
 msgid "Whoops! We can't find an account for that email address."
-msgstr ""
+msgstr "Oups ! Nous ne trouvons aucin compte pour cette adresse email."
 
 #: src/Kanban/User.php:113
 msgid "Whoops! We can't find an account for that username."
-msgstr ""
+msgstr "Oups ! Nous ne trouvons aucun compte pour cette adresse email."
 
 #: src/Kanban/User.php:131
 msgid "Whoops! That password is incorrect for this email address."
-msgstr ""
+msgstr "Oups ! Ce mot de passe est incorrect pour cette adresse email."
 
 #: src/Kanban/Utils.php:66
 msgid "%ses"
-msgstr ""
+msgstr "%ses"
 
 #: src/Kanban/Utils.php:66
 msgid "%ss"
-msgstr ""
+msgstr "%ss"
 
 #: templates/admin/contact.php:5 templates/admin/welcome.php:67
 msgid "Contact us"
-msgstr ""
+msgstr "Contactez-nous"
 
 #: templates/admin/contact.php:7 templates/admin/settings.php:9
 #: templates/admin/welcome.php:58
 msgid "Go to your board"
-msgstr ""
+msgstr "Aller sur votre tableau"
 
 #: templates/admin/contact.php:41
 msgid "Request technical support"
-msgstr ""
+msgstr "Demander un support technique"
 
 #: templates/admin/contact.php:45
 msgid "Report a bug"
-msgstr ""
+msgstr "Signaler un bug"
 
 #: templates/admin/contact.php:49
 msgid "Make a suggestion"
-msgstr ""
+msgstr "Faire une suggestion"
 
 #: templates/admin/contact.php:53
 msgid "Something else"
-msgstr ""
+msgstr "Autre chose"
 
 #: templates/admin/contact.php:62
 msgid "Add your comments here..."
-msgstr ""
+msgstr "Ajouter vos commentaires ici..."
 
 #: templates/admin/contact.php:70
 msgid "Email away!"
-msgstr ""
+msgstr "E-mail envoyé !"
 
 #: templates/admin/kanbanpro.php:23
 msgid "Learn more about Kanban Pro"
-msgstr ""
+msgstr "En savoir plus sur Kanban Pro"
 
 #: templates/admin/settings.php:21
 msgid "Customize your Kanban board below or get started by using a preset:"
 msgstr ""
+"Personnalisez votre tableau ci-dessous ou commencez en utilisant un preset :"
 
 #: templates/admin/settings.php:23 templates/admin/welcome.php:39
 msgid "Choose a preset"
-msgstr ""
+msgstr "Choisissez un preset"
 
 #: templates/admin/settings.php:46
 msgid "General"
-msgstr ""
+msgstr "Général"
 
 #: templates/admin/settings.php:47
 msgid "Users"
-msgstr ""
+msgstr "Utilisateurs"
 
 #: templates/admin/settings.php:48
 msgid "Statuses"
-msgstr ""
+msgstr "Statuts"
 
 #: templates/admin/settings.php:49
 msgid "Estimates"
-msgstr ""
+msgstr "Estimations"
 
 #: templates/admin/settings.php:53
 msgid "Diagnostics"
-msgstr ""
+msgstr "Diagnostic"
 
 #: templates/admin/settings.php:66
 msgid "Work hour interval"
-msgstr ""
+msgstr "Intervalle d'heures de travail"
 
 #: templates/admin/settings.php:67
 msgid "in hours"
-msgstr ""
+msgstr "en heures"
 
 #: templates/admin/settings.php:75
 msgid ""
 "Example: If you want to track work in 10 minute increments, enter \".1667\" "
 "here."
 msgstr ""
+"Exemple : Si vous souhaitez effectuer le suivi par tranches de 10 minutes, "
+"indiquez \".1667\""
 
 #: templates/admin/settings.php:82
 msgid "Hide time tracking"
-msgstr ""
+msgstr "Masquer le suivi du temps"
 
 #: templates/admin/settings.php:83
 msgid "Estimates, hours"
-msgstr ""
+msgstr "Estimations, heures"
 
 #: templates/admin/settings.php:90 templates/admin/settings.php:109
 #: templates/admin/settings.php:127 templates/admin/settings.php:173
 #: templates/admin/settings.php:217
 msgid "Yes"
-msgstr ""
+msgstr "Oui"
 
 #: templates/admin/settings.php:93 templates/admin/settings.php:112
 #: templates/admin/settings.php:130 templates/admin/settings.php:176
 #: templates/admin/settings.php:220
 msgid "No"
-msgstr ""
+msgstr "Non"
 
 #: templates/admin/settings.php:102
 msgid "Show task IDs"
-msgstr ""
+msgstr "Afficher ID des tâches"
 
 #: templates/admin/settings.php:120 templates/board/footer.php:44
 msgid "Show all columns"
-msgstr ""
+msgstr "Montrer toutes les colonnes"
 
 #: templates/admin/settings.php:121
 msgid "(Users can still choose their own preference)"
-msgstr ""
+msgstr "(Les utilisateurs peuvent choisir leurs préférences)"
 
 #: templates/admin/settings.php:167
 msgid "Use default login screen"
-msgstr ""
+msgstr "Utiliser l'écran de connexion par défaut"
 
 #: templates/admin/settings.php:184 templates/admin/settings.php:353
 #: templates/admin/settings.php:414 templates/admin/settings.php:463
 #: templates/admin/settings.php:484
 msgid "Save your Settings"
-msgstr ""
+msgstr "Sauver vos parametrages"
 
 #: templates/admin/settings.php:191
 msgid "Advanced settings"
-msgstr ""
+msgstr "Paramètres avancés"
 
 #: templates/admin/settings.php:199
 msgid "Board CSS"
-msgstr ""
+msgstr "Tableau CSS"
 
 #: templates/admin/settings.php:200
 msgid "Extra CSS that will applied to all boards"
-msgstr ""
+msgstr "La feuille CSS supplémentaire qui s'appliquera à tous les tableaux"
 
 #: templates/admin/settings.php:211
 msgid "Disable sync notifications"
-msgstr ""
+msgstr "Désactiver les notifications de synchronisation"
 
 #: templates/admin/settings.php:227
 msgid "Sync check interval"
-msgstr ""
+msgstr "Intervalle de vérification de synchronisation"
 
 #: templates/admin/settings.php:234
 msgid "How many seconds between checks."
-msgstr ""
+msgstr "Combien de secondes entre les verifications."
 
 #: templates/admin/settings.php:261
 msgid "Allowed users"
-msgstr ""
+msgstr "Utilisateurs autorisés"
 
 #: templates/admin/settings.php:263
 msgid "(Users who can make changes to the board)"
-msgstr ""
+msgstr "(Les utilisateurs peuvent apporter des modifications au tableau)"
 
 #: templates/admin/settings.php:269
 msgid "Filter:"
-msgstr ""
+msgstr "Filtre :"
 
 #: templates/admin/settings.php:299 templates/admin/settings.php:329
 msgid "Assign new tasks to"
-msgstr ""
+msgstr "Attribuer de nouvelles tâches à"
 
 #: templates/admin/settings.php:307
 msgid "The user who created it"
-msgstr ""
+msgstr "L'utilisateur qui l'a créé"
 
 #: templates/admin/settings.php:314
 msgid "The first user to move it"
-msgstr ""
+msgstr "Le premier utilisateur à le déplacer"
 
 #: templates/admin/settings.php:319
 msgid "A single user"
-msgstr ""
+msgstr "Un utilisateur unique"
 
 #: templates/admin/settings.php:341
 msgid "No one"
-msgstr ""
+msgstr "Personne"
 
 #: templates/admin/settings.php:369
 #: templates/admin/users-form-registration.php:21
 msgid "Add a user"
-msgstr ""
+msgstr "Ajouter un utilisateur"
 
 #: templates/admin/settings.php:376
 msgid "Note: user will immediately be added to the Kanban board."
-msgstr ""
+msgstr "Remarque : l'utilisateur sera immédiatement ajouté au tableau Kanban."
 
 #: templates/admin/settings.php:404 templates/admin/t-status.php:18
 msgid "Auto-archive"
-msgstr ""
+msgstr "Auto-archive"
 
 #: templates/admin/settings.php:405
 msgid "Tasks will be automatically deleted after %s days"
-msgstr ""
+msgstr "Les tâches seront supprimées automatiquement après %s jours"
 
 #: templates/admin/settings.php:409
 msgid "Add another status"
-msgstr ""
+msgstr "Ajouter un autre statut"
 
 #: templates/admin/settings.php:430
 msgid "Add another estimate"
-msgstr ""
+msgstr "Ajouter une autre estimation"
 
 #: templates/admin/settings.php:440
 msgid "Default estimate"
-msgstr ""
+msgstr "Estimation"
 
 #: templates/admin/settings.php:451
 msgid "None"
-msgstr ""
+msgstr "Aucun"
 
 #: templates/admin/settings.php:475
 msgid "Add your purchased add-on licenses below."
-msgstr ""
+msgstr "Ajouter vos licences achetées le module ci-dessous."
 
 #: templates/admin/settings.php:497
 msgid "Send diagnostic info to support"
-msgstr ""
+msgstr "Envoyer des informations de diagnostic au support"
 
 #: templates/admin/settings.php:501
 msgid "Please click the button above."
-msgstr ""
+msgstr "Veuillez cliquer sur le bouton ci-dessus."
 
 #: templates/admin/t-estimate.php:3 templates/admin/t-status.php:3
 msgid "Reorder"
-msgstr ""
+msgstr "Réordonner"
 
 #: templates/admin/t-estimate.php:6 templates/admin/t-status.php:6
 msgid "Name"
-msgstr ""
+msgstr "Nom"
 
 #: templates/admin/t-estimate.php:10 templates/board/t-task.php:60
 msgid "Hours"
-msgstr ""
+msgstr "Heures"
 
 #: templates/admin/t-estimate.php:15 templates/admin/t-status.php:24
 msgid "Delete"
-msgstr ""
+msgstr "Supprimer"
 
 #: templates/admin/t-status.php:13 templates/admin/t-status.php:14
 msgid "WIP"
-msgstr ""
+msgstr "WIP"
 
 #: templates/admin/users-form-registration.php:3
 msgid "Username"
-msgstr ""
+msgstr "Utilisateur"
 
 #: templates/admin/users-form-registration.php:7
 msgid "Email"
-msgstr ""
+msgstr "Email"
 
 #: templates/admin/users-form-registration.php:11
 msgid "First Name"
-msgstr ""
+msgstr "Prénom"
 
 #: templates/admin/users-form-registration.php:15
 msgid "Last Name"
-msgstr ""
+msgstr "Nom"
 
 #: templates/admin/welcome-modal-presets.php:18 templates/admin/welcome.php:34
 msgid "Welcome to Kanban for WordPress!"
-msgstr ""
+msgstr "Bienvenu sur Kanban pour WordPress !"
 
 #: templates/admin/welcome.php:18
 msgid "About %s"
-msgstr ""
+msgstr "A propos de %s"
 
 #: templates/admin/welcome.php:37
 msgid ""
 "Customize your Kanban board by visiting the <a href=\"%s\">Settings page</a> "
 "or get started by using a preset:"
 msgstr ""
+"Personnalisez votre tableau Kanban en visitant la <a href=\"%s\">page "
+"Paramètres</a> ou commencez par utiliser un preset :"
 
 #: templates/admin/welcome.php:61
 msgid "Documentation"
-msgstr ""
+msgstr "Documentation"
 
 #: templates/admin/welcome.php:62
 msgid "(On kanbanwp.com)"
-msgstr ""
+msgstr "(Sur kanbanwp.com)"
 
 #: templates/admin/welcome.php:72
 msgid "Intro to Kanban for WordPress"
-msgstr ""
+msgstr "Presentation de Kanban pour Wordpress"
 
 #: templates/admin/welcome.php:76
 msgid "Get started with the plugin in 60 seconds."
-msgstr ""
+msgstr "Commencez avec le plugin en 60 secondes."
 
 #: templates/admin/welcome.php:95
 msgid "Become a Kanban master!"
-msgstr ""
+msgstr "Devenez un maitre Kanban !"
 
 #: templates/admin/welcome.php:101
 msgid ""
 "Sign up to receive our guide to \"Project Management in WordPress\" "
 "delivered to your inbox over the next week."
 msgstr ""
+"Inscrivez-vous pour recevoir notre guide sur \"Gestion de projet dans "
+"WordPress\" envoyé dés la semaine prochaine."
 
 #: templates/board/board.php:40
 msgid "Move \"%s\" to:"
-msgstr ""
+msgstr "Déplacer \"%s\" vers :"
 
 #: templates/board/board.php:70
 msgid "Filters:"
-msgstr ""
+msgstr "Filtres :"
 
 #: templates/board/board.php:74
 msgid "Project"
-msgstr ""
+msgstr "Projet"
 
 #: templates/board/board.php:75
 msgid "(No project assigned)"
-msgstr ""
+msgstr "(Aucun projet assigné)"
 
 #: templates/board/board.php:80
 msgid "User"
-msgstr ""
+msgstr "Utilisateur"
 
 #: templates/board/board.php:84
 msgid "(No user assigned)"
-msgstr ""
+msgstr "(Aucun utilisateur affecté)"
 
 #: templates/board/board.php:91 templates/board/t-modal-project.php:40
 msgid "Reset"
-msgstr ""
+msgstr "Réinitialiser"
 
 #: templates/board/board.php:132
 msgid "Please visit the Kanban settings page to setup this board."
 msgstr ""
+"Merci de visiter la page de paramètres de Kanban pour paramétrer ce tableau."
 
 #: templates/board/footer.php:6
 msgid "Toggle navigation"
-msgstr ""
+msgstr "Activez la navigation"
 
 #: templates/board/footer.php:16
 msgid "Search"
-msgstr ""
+msgstr "Recherche"
 
 #: templates/board/footer.php:25
 msgid "Filter"
-msgstr ""
+msgstr "Filtre"
 
 #: templates/board/footer.php:51
 msgid "Compact View"
-msgstr ""
+msgstr "Vue compacte"
 
 #: templates/board/footer.php:57
 msgid "Full Screen"
-msgstr ""
+msgstr "Plein écran"
 
 #: templates/board/footer.php:65
 msgid "Edit projects"
-msgstr ""
+msgstr "Editer les projets"
 
 #: templates/board/footer.php:71 templates/board/modal-keyboard-shortcuts.php:8
 msgid "Keyboard shortcuts"
-msgstr ""
+msgstr "Raccourcis clavier"
 
 #: templates/board/footer.php:77
 msgid "Admin"
-msgstr ""
+msgstr "Admin"
 
 #: templates/board/footer.php:84
 msgid "Login"
-msgstr ""
+msgstr "Connexion"
 
 #: templates/board/header.php:10 templates/login.php:14
 msgid "Kanban for WordPress"
-msgstr ""
+msgstr "Kanban pour Wordpress"
 
 #: templates/board/modal-boards.php:8
 msgid "Boards"
-msgstr ""
+msgstr "Tableaux"
 
 #: templates/board/modal-keyboard-shortcuts.php:18
 msgid "Toggle keyboard shortcuts modal."
-msgstr ""
+msgstr "Activez mode raccourcis clavier."
 
 #: templates/board/modal-keyboard-shortcuts.php:24
 msgid "Toggle compact view mode."
-msgstr ""
+msgstr "Activez le mode de vue compact."
 
 #: templates/board/modal-keyboard-shortcuts.php:30
 msgid "Toggle full screen mode."
-msgstr ""
+msgstr "Activez le mode plein écran."
 
 #: templates/board/modal-keyboard-shortcuts.php:36
 msgid ""
 "Slide the current board columns to the left (if all columns are not shown)."
 msgstr ""
+"Passer les colonnes du tableau à gauche (si toutes les colonnes sont "
+"cachées)."
 
 #: templates/board/modal-keyboard-shortcuts.php:42
 msgid ""
 "Slide the current board columns to the right (if all columns are not shown)."
 msgstr ""
+"Passer les colonnes du tableau à droite (si toutes les colonnes sont "
+"cachées)."
 
 #: templates/board/modal-keyboard-shortcuts.php:48
 msgid "Toggle projects modal."
-msgstr ""
+msgstr "Activez le mode projet."
 
 #: templates/board/modal-keyboard-shortcuts.php:54
 msgid "Toggle showing all columns."
-msgstr ""
+msgstr "Activez l'affichage de toutes les colonnes."
 
 #: templates/board/modal-keyboard-shortcuts.php:60
 msgid "Jump to the search bar."
-msgstr ""
+msgstr "Aller à la barre de recherche."
 
 #: templates/board/modal-keyboard-shortcuts.php:66
 msgid "Toggle filter modal."
-msgstr ""
+msgstr "Activez le mode filtre."
 
 #: templates/board/modal-keyboard-shortcuts.php:72
 msgid ""
 "Add a new line in the task title field (enter without shift will save your "
 "changes)."
 msgstr ""
+"Ajouter une nouvelle ligne dans le titre du champs de la tâche ( entrée sans "
+"shift va sauvegarder)"
 
 #: templates/board/modal-projects.php:8
 msgid "Projects"
-msgstr ""
+msgstr "Projets"
 
 #: templates/board/modal-projects.php:14
 msgid "Sort"
-msgstr ""
+msgstr "Trier"
 
 #: templates/board/modal-projects.php:25 templates/board/modal-projects.php:28
 #: templates/board/modal-projects.php:31 templates/board/t-task.php:42
 msgid "Add a project"
-msgstr ""
+msgstr "Ajouter un projet"
 
 #: templates/board/t-modal-project.php:13
 msgid "There are %s tasks assigned to this project."
-msgstr ""
+msgstr "Il y a %s tâches assignées à ce projet."
 
 #: templates/board/t-modal-project.php:17
 msgid "Rename the project"
-msgstr ""
+msgstr "Renommer le projet"
 
 #: templates/board/t-modal-project.php:23
 msgid "Save"
-msgstr ""
+msgstr "Sauver"
 
 #: templates/board/t-modal-project.php:30
 msgid "Reset all tasks in this project to"
-msgstr ""
+msgstr "Convertir toutes les tâches de ce projet vers"
 
 #: templates/board/t-modal-project.php:34
 msgid "Choose a status"
-msgstr ""
+msgstr "Choisissez un statut"
 
 #: templates/board/t-modal-project.php:44
 msgid ""
 "All tasks in this project will be moved back to the selected status, and "
 "work time reset to 0."
 msgstr ""
+"Toutes les tâches de ce projet seront déplacés vers le statut sélectionné et "
+"le temps consacré sur chaque tâche sera remis à zéro."
 
 #: templates/board/t-modal-project.php:50
 msgid "Delete this project"
-msgstr ""
+msgstr "Supprimer ce projet"
 
 #: templates/board/t-task.php:21
 msgid "Move this task"
-msgstr ""
+msgstr "Déplacer cette tâche"
 
 #: templates/board/t-task.php:26
 msgid "Delete this task"
-msgstr ""
+msgstr "Supprimer cette tâche"
 
 #: templates/board/t-task.php:51
 msgid "Add a title"
-msgstr ""
+msgstr "Ajouter un titre"
 
 #: templates/board/t-task.php:84
 msgid "Estimate"
-msgstr ""
+msgstr "Estimation"
 
 #: templates/login.php:44
 msgid "Please Login"
-msgstr ""
+msgstr "Merci de vous connecter"
 
 #: templates/login.php:47 templates/login.php:49
 msgid "Email or username"
-msgstr ""
+msgstr "E-mail ou nom d’utilisateur"
 
 #: templates/login.php:53 templates/login.php:55
 msgid "Password"
-msgstr ""
+msgstr "Mot de passe"
 
 #: templates/login.php:59
 msgid "Log in"
-msgstr ""
+msgstr "Se connecter"
 
 #: templates/login.php:66
 msgid ""
 "Whoops, looks like you haven't been granted access yet. Click below to "
 "request access."
 msgstr ""
+"Oups ! On dirait que vous n’avez pas encore obtenu l’accès. Cliquez ci-"
+"dessous pour demander l’accès."
 
 #: templates/login.php:70
 msgid "Request access"
-msgstr ""
+msgstr "Demande d'accés"
 
 #. Plugin Name of the plugin/theme
 msgid "Kanban Boards for WordPress"
-msgstr ""
+msgstr "Tableau Kanban pour Wordpress"
 
 #. Plugin URI of the plugin/theme
 msgid "https://kanbanwp.com/"
-msgstr ""
+msgstr "https://kanbanwp.com/"
 
 #. Description of the plugin/theme
 msgid ""
 "Add Kanban boards to your WordPress sites and get organized! Project "
 "management, CRM, sales tracking..."
 msgstr ""
+"Ajouter les tableaux Kanban à vos sites WordPress et organisez-vous ! Suivi "
+"de vente projet gestion, CRM..."
 
 #. Author of the plugin/theme
 msgid "Gelform Inc"
-msgstr ""
+msgstr "Gelform Inc"
 
 #. Author URI of the plugin/theme
 msgid "http://gelform.com"
-msgstr ""
+msgstr "http://gelform.com"
+
+#~ msgid "Warning!"
+#~ msgstr "Attention !"
+
+#~ msgid ""
+#~ "We've found %s kanban records that need to be migrated for the latest "
+#~ "version of Kanban for WordPress!"
+#~ msgstr ""
+#~ "Nous avons trouvé %s enregistrements kanban qui doivent être migrés pour "
+#~ "la dernière version de Kanban pour WordPress !"
+
+#~ msgid "Please click \"migrate\" below and we'll move them for you."
+#~ msgstr ""
+#~ "Veuillez cliquer sur « migrer » ci-dessous et nous allons les passer pour "
+#~ "vous."
+
+#~ msgid "Migrate"
+#~ msgstr "Migrer"
+
+#~ msgid "Migration Progress"
+#~ msgstr "Progression de la migration"
+
+#~ msgid ""
+#~ "(Please do not browse away from the page until migration is complete)"
+#~ msgstr ""
+#~ "(Veuillez ne pas actualiser la page jusqu'à ce que la migration soit "
+#~ "terminée)"
+
+#~ msgid "Thanks for using Kanban for WordPress!"
+#~ msgstr "Merci d'utiliser  Kanban pour WordPress !"
+
+#~ msgid "Dismiss this notice."
+#~ msgstr "Ignorer cet avertissement."
+
+#~ msgid "Filter by"
+#~ msgstr "Filtré par"
+
+#~ msgid "Show All"
+#~ msgstr "Montrer tout"
+
+#~ msgid "Close"
+#~ msgstr "Fermer"
+
+#~ msgid "Estimate:"
+#~ msgstr "Estimation :"
+
+#~ msgid "Edit"
+#~ msgstr "Modifier"
+
+#~ msgid "Worked:"
+#~ msgstr "Travaillé :"
+
+#~ msgid "Task name"
+#~ msgstr "Nom de la tache"
+
+#~ msgid "password"
+#~ msgstr "mot de passe"
+
+#~ msgid ""
+#~ "A complete kanban board for WordPress. Use agile project management to "
+#~ "get more done, right inside your WordPress site!"
+#~ msgstr ""
+#~ "Un tableau kanban complet pour WordPress. Utiliser la gestion un projet "
+#~ "agile pour etre plus productif dans votre site WordPress !"

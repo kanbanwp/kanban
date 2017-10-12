@@ -2,8 +2,9 @@
 
 Contributors: 		gelform
 Tags:				kanban, boards, agile, scrum, project management, tasks, productivity, Trello, GTD, manage, planning, todo
-Version:            2.4.7
-Release Date:       September 28, 2017
+Version:            2.4.8
+Stable tag:         2.4.8
+Release Date:       October 12, 2017
 Requires at least:	4.0
 Tested up to:		4.8.1
 Requires PHP:       5.3
@@ -43,13 +44,23 @@ Here's a 60-second intro to how to use the board, once you have it installed:
 
 "I've used lot of commercial project management tools but was never overjoyed on data security. These guys have done it. You Own All Your Data." - wpsupport.io
 
-= Add-ons available at KanbanWP.com =
-* [Multiple boards](https://kanbanwp.com/addons/multiple-boards/?utm_medium=documentation&utm_source=wordpress.org&utc_campaign=documentation)
-* [Advanced User Management](https://kanbanwp.com/addons/advanced-user-management/?utm_medium=documentation&utm_source=wordpress.org&utc_campaign=documentation)
-* [Task Comments](https://kanbanwp.com/addons/task-comments/?utm_medium=documentation&utm_source=wordpress.org&utc_campaign=documentation)
-* [Task colors](https://kanbanwp.com/addons/task-colors/?utm_medium=documentation&utm_source=wordpress.org&utc_campaign=documentation)
-* [Task Details and Attachments](https://kanbanwp.com/addons/task-details/?utm_medium=documentation&utm_source=wordpress.org&utc_campaign=documentation)
-* [Notifications](https://kanbanwp.com/addons/notifications/?utm_medium=documentation&utm_source=wordpress.org&utc_campaign=documentation)
+= Common Uses =
+While most our users are covered by the applications below, there are endless ways you can use Kanban – just get creative!
+
+* Project management and collaboration – just like Trello for Wordpress. Kanban lets project managers make task and to-do lists and move them between various boards to show progress.
+* Editorial calendar – use Kanban to plan your content calendar over time, assign articles and blog posts, lead discussions, and meet your deadlines.
+* Customer Relationship Management (CRM) – collate customer information to analyze interactions and improve business relationships. You can easily use boards to track the status of customers and see when you should reach out to them.
+* Sales tracking – plan every activity between "now" and "sold" to make sure your funnel keeps flowing smoothly. Tracking and analysis let you see what’s working and who’s performing."
+
+= Check out Kanban Pro for additional features =
+[https://kanbanwp.com/addon/kanban-pro/](https://kanbanwp.com/addon/kanban-pro/?utm_medium=documentation&utm_source=wordpress.org&utc_campaign=documentation)
+
+* Comments: Boost communication through task comments. Now everyone can discuss a task as you work on it. Comments update live as people discuss a task. View “system” comments along side user comments, to track the progress of tasks as they’re worked on.
+* User management: Take more control over your Kanban boards. Work more closely with clients and team members. Control exactly who has access to what on your kanban board.
+* Fields & Attachments: Get granular with info and files attached to your tasks. Add custom fields, details and attach files to each task. Customize the data associated with each field, to add new uses to your Kanban board. Add to-do lists for sub-tasks, dates for tracking deadlines or text fields to add notes.
+* Colors: Improve clarity by color coding your tasks. Add a colored flag to the corner of your tasks for further organization. Color-code tasks for priority, work type (development, design, writing), or whatever.
+* Notifications: Keep everyone on the same page, even if they're not on the site. Get notified when changes are made to your kanban board. Users of your choice will receive an email updating them that changes have been made.
+* Multiple boards: Extend your work flow with multiple Kanban boards. Run multiple boards on the same site. Teams or individuals can have their own boards to manage different projects.
 
 While using this plugin if you find any bugs, please submit an issue at [Github](https://github.com/gelform/kanban/) or use the "Contact us" form included in the plugin.
 

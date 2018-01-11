@@ -10,6 +10,8 @@
 		</a>
 	</h1>
 
+	<?php include __DIR__ . '/notice-v3.php'?>
+
 	<?php echo apply_filters( 'kanban_settings_h1_after', '' ); ?>
 
 

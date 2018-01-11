@@ -609,14 +609,18 @@ $( function () {
 							}
 
 							// update existing
-							if ( $task.length > 0 ) {
-								$( '#task-{0}'.sprintf( task_record.id ) ).replaceWith( task.$el );
-							}
-							else {
-								// add new to the board
-								task.add_to_board();
-								board.update_UI();
-							}
+							// if ( $task.length > 0 ) {
+							// 	$( '#task-{0}'.sprintf( task_record.id ) ).replaceWith( task.$el );
+							// }
+							// else {
+							// 	// add new to the board
+							// 	task.add_to_board();
+							// 	board.update_UI();
+							// }
+
+							$task.remove();
+							task.add_to_board();
+							board.update_UI();
 
 							// Remove restore alert
 							$('#task-{0}-restore'.sprintf(task_record.id)).remove();

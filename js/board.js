@@ -630,6 +630,33 @@ Board.prototype.updates_status_counts = function () {
 }; // updates_status_counts
 
 
+/**
+ * @link http://www.onemoretake.com/2009/02/25/sorting-elements-with-jquery/
+ */
+Board.prototype.update_card_order = function () {
+	var self = this;
+
+	$( '.col-tasks', this.$el ).each( function () {
+
+		var mylist = $( this );
+		var listitems = mylist.children('.task').get();
+		listitems.sort(function(a, b) {
+			var a_id = $(a).attr('data-id');
+			var a_task = self.record.tasks[a_id];
+			var a_pos = parseInt(a_task.record.position);
+
+			var b_id = $(b).attr('data-id');
+			var b_task = self.record.tasks[b_id];
+			var b_pos = parseInt(b_task.record.position);
+
+			return (a_pos < b_pos) ? -1 : (a_pos > b_pos) ? 1 : 0;
+		})
+		$.each(listitems, function(idx, itm) { mylist.append(itm); });
+
+	} );
+}; // updates_status_counts
+
+
 
 Board.prototype.update_task_positions = function ( $el_moved ) {
 	var self = this;
@@ -747,6 +774,8 @@ Board.prototype.project_update_counts = function () {
 
 
 Board.prototype.update_UI = function () {
+	this.update_card_order();
+	this.update_card_order();
 	this.updates_status_counts();
 	this.match_col_h();
 }; // update_UI

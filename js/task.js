@@ -1079,7 +1079,7 @@ Task.prototype.parse_project = function () {
 	var project_title = $.trim($div.html());
 
 	// Replace backslashes and spaces.
-	project_title.replace( /\\/gi, '&#92;' ).replace( /&nbsp;/gi, ' ' );
+	project_title = project_title.replace( /\\/gi, '|' ).replace( /&nbsp;/gi, ' ' );
 
 	// Sanity check.
 	if ( typeof project_title === 'undefined' || project_title === null ) {

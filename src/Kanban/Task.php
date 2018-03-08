@@ -70,6 +70,7 @@ class Kanban_Task extends Kanban_Db {
 	 */
 	static function init() {
 		add_action( sprintf( 'wp_ajax_save_%s', self::$slug ), array( __CLASS__, 'ajax_save' ) );
+		add_action( sprintf( 'wp_ajax_copy_%s', self::$slug ), array( __CLASS__, 'ajax_copy' ) );
 		add_action( sprintf( 'wp_ajax_delete_%s', self::$slug ), array( __CLASS__, 'ajax_delete' ) );
 		add_action( sprintf( 'wp_ajax_undelete_%s', self::$slug ), array( __CLASS__, 'ajax_undelete' ) );
 		add_action( sprintf( 'wp_ajax_updates_%s', self::$slug ), array( __CLASS__, 'ajax_get_updates' ) );
@@ -184,6 +185,64 @@ class Kanban_Task extends Kanban_Db {
 		}
 	}
 
+
+	/**
+	 * Handle the Ajax call for copying a task.
+	 */
+	static function ajax_copy() {
+		if ( ! isset( $_POST[ Kanban_Utils::get_nonce() ] ) || ! wp_verify_nonce( $_POST[ Kanban_Utils::get_nonce() ], 'kanban-save' ) || ! is_user_logged_in() ) {
+			wp_send_json_error();
+		}
+
+		if ( ! Kanban_User::current_user_has_cap( 'write' ) ) {
+			wp_send_json_error();
+		}
+
+		do_action( 'kanban_task_ajax_copy_before', $_POST['task']['id'] );
+
+		$record = self::get_one($_POST['task']['id']);
+
+		if ( !$record ) {
+			wp_send_json_error( array(
+				'message' => sprintf( __( 'Error copying %s', 'kanban' ), self::$slug ),
+			) );
+		}
+
+		$record->title .= ' COPY';
+
+		$new_record = self::duplicate(
+			$_POST['task']['id'],
+			(array) $record
+		);
+
+		do_action( 'kanban_task_ajax_copy_after', $new_record );
+
+		if ( ! empty( $_POST['comment'] ) ) {
+			do_action( 'kanban_task_ajax_copy_before_comment' );
+
+			Kanban_Comment::add(
+				$_POST['comment'],
+				'system',
+				$_POST['task']['id']
+			);
+
+			do_action( 'kanban_task_ajax_copy_after_comment' );
+		}
+
+		if ( $new_record ) {
+			wp_send_json_success( array(
+				'message' => sprintf(
+					__( '%s copied', 'kanban' ),
+					self::$slug
+				),
+				'task' => $new_record
+			) );
+		} else {
+			wp_send_json_error( array(
+				'message' => sprintf( __( 'Error copying %s', 'kanban' ), self::$slug ),
+			) );
+		}
+	}
 
 
 	/**
@@ -510,7 +569,9 @@ class Kanban_Task extends Kanban_Db {
 	 * @return bool Success.
 	 */
 	static function duplicate( $task_id, $data = array() ) {
-
+		ini_set('display_errors', 1);
+		ini_set('display_startup_errors', 1);
+		error_reporting(E_ERROR | E_WARNING | E_PARSE | E_NOTICE);
 		// Reset.
 		unset( $data['id'] );
 		$data['created_dt_gmt']  = Kanban_Utils::mysql_now_gmt();
@@ -549,6 +610,13 @@ class Kanban_Task extends Kanban_Db {
 		foreach ( $meta as $meta_id ) {
 			Kanban_Taskmeta::duplicate( $meta_id, $data );
 		}
+
+		self::$records = array();
+		self::get_all();
+
+		$new_record = self::get_one($new_task_id);
+
+		return $new_record;
 	}
 
 

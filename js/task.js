@@ -68,6 +68,76 @@ Task.prototype.dom = function () {
 
 
 
+	self.$el.on(
+		'click',
+		'.btn-task-copy',
+		function () {
+			var $btn = $( this );
+
+			$btn.closest('.dropdown').removeClass('open');
+
+			// get status we're going to add it to
+			var status_id = self.record.status_id;
+
+			var status = self.board().record.status_records()[status_id];
+
+			// just in case, use 0
+			var wip_task_limit = 0;
+			if ( 'undefined' !== typeof status.wip_task_limit ) {
+				wip_task_limit = status.wip_task_limit;
+			}
+
+			if ( wip_task_limit > 0 ) {
+				var status_task_count = $( '#status-' + status_id + ' .status-task-count' ).text();
+				if ( status_task_count >= wip_task_limit ) {
+					notify( kanban.text.status_wip_task_limit_error, 'warning' );
+					return false;
+				}
+			}
+
+			var task_data = {
+				task: self.record,
+				action: 'copy_task',
+				kanban_nonce: $( '#kanban_nonce' ).val()
+			};
+
+			$.ajax( {
+				method: "POST",
+				url: kanban.ajaxurl,
+				data: task_data
+			} )
+			.done( function ( response ) {
+				// just in case
+				try {
+					if ( !response.success ) {
+						notify( kanban.text.task_added_error );
+						return false;
+					}
+
+					if ( Object.keys( self.board().record.tasks ).length === 0 ) {
+						self.board().record.tasks = {};
+					}
+
+					// add the task
+					var task = self.board().record.tasks[response.data.task.id] = new Task( response.data.task );
+
+					task.add_to_board();
+					task.board().update_UI();
+					task.board().update_task_positions();
+				}
+				catch ( err ) {
+				}
+
+			} ); // done
+
+
+
+			return false;
+		}
+	); // task_copy
+
+
+
 	self.$el
 	.on(
 		'shown.bs.dropdown',
@@ -741,9 +811,9 @@ Task.prototype.delete = function () {
 		}
 
 		$( document ).trigger( '/task/deleted/', self );
-
-		self.delete_el();
 	} );
+
+	self.delete_el();
 
 }; // delete
 

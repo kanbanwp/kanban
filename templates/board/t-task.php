@@ -22,6 +22,13 @@
 					</a>
 				</li>
 				<li>
+					<a href="#" class="btn-task-copy" data-task-id="{{=task.id}}">
+						<?php echo __( 'Copy this task', 'kanban' ); ?>
+						<span class="hidden-xs glyphicon glyphicon-refresh glyphicon-refresh-animate"
+						      style="display: none;"></span>
+					</a>
+				</li>
+				<li>
 					<a href="#" class="btn-task-delete" data-task-id="{{=task.id}}">
 						<?php echo __( 'Delete this task', 'kanban' ); ?>
 						<span class="hidden-xs glyphicon glyphicon-refresh glyphicon-refresh-animate"

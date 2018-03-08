@@ -17,6 +17,7 @@ function Board( board, delay ) {
 		return board_current_user;
 	};
 
+	this.update_UI_done = true;
 
 	// Set up dom elements.
 	this.dom();
@@ -673,7 +674,13 @@ Board.prototype.update_task_positions = function ( $el_moved ) {
 
 			var task_id = $task.attr( 'data-id' );
 			var task = self.record.tasks[task_id];
-			task.update_position( ("00000" + i).slice( -5 ), do_comment );
+
+			// Stagger the requests.
+			setTimeout(function () {
+				task.update_position( ("00000" + i).slice( -5 ), do_comment );
+				},
+				i * 100
+			);
 		} );
 	} );
 
@@ -774,10 +781,19 @@ Board.prototype.project_update_counts = function () {
 
 
 Board.prototype.update_UI = function () {
-	this.update_card_order();
-	this.update_card_order();
-	this.updates_status_counts();
-	this.match_col_h();
+	var self = this;
+
+	if ( self.update_UI_done ) {
+		self.update_UI_done = false;
+
+		this.update_card_order();
+		this.updates_status_counts();
+		this.match_col_h();
+
+		setTimeout(function() {
+			self.update_UI_done = true;
+		}, 5000);
+	};
 }; // update_UI
 
 

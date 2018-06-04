@@ -33,133 +33,103 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-function kanban_check_kanban2_to_3 () {
-	if ( ! function_exists( 'wp_verify_nonce' ) ) {
-		require_once( ABSPATH . 'wp-includes/pluggable.php' );
-	}
 
-	if ( is_admin() && wp_verify_nonce( $_GET['_wpnonce'], 'kanban2_to_3' ) ) {
-
-		$kanban_installed_ver = update_option( 'kanban_db_version', '3.0.0' );
-
-		wp_redirect(
-			add_query_arg(array(
-				'page' => 'kanban'
-			), admin_url('admin.php'))
-		);
-		exit;
+/**
+ * Load Kanban-specific classes
+ *
+ * @param    string $class_name Name of class to load.
+ */
+function kanban_autoloader( $class_name ) {
+	if ( false !== strpos( $class_name, 'Kanban_' ) && ! class_exists( $class_name ) ) {
+		$classes_dir = realpath( plugin_dir_path( __FILE__ ) ) . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR;
+		$class_file  = str_replace( '_', DIRECTORY_SEPARATOR, $class_name ) . '.php';
+		require_once $classes_dir . $class_file;
 	}
 }
-add_action( 'plugins_loaded', 'kanban_check_kanban2_to_3', 10);
+
+spl_autoload_register( 'kanban_autoloader' );
 
 
 
-$kanban_installed_ver = get_option( 'kanban_db_version' );
-
-if ( version_compare( $kanban_installed_ver, '3.0.0' ) >= 0 ) {
-	include plugin_dir_path( __FILE__ ) . '/v3/kanban.php';
-	return;
-}
-
-
-
-
-if ( !class_exists('Kanban') ) :
+/**
+ * Class Kanban
+ */
+final class Kanban {
 	/**
-	 * Load Kanban-specific classes
+	 * The singleton instance of Kanban.
 	 *
-	 * @param    string $class_name Name of class to load.
+	 * @var object @instance The singleton instance of Kanban.
 	 */
-	function kanban_autoloader( $class_name ) {
-		if ( false !== strpos( $class_name, 'Kanban_' ) && ! class_exists( $class_name ) ) {
-			$classes_dir = realpath( plugin_dir_path( __FILE__ ) ) . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR;
-			$class_file  = str_replace( '_', DIRECTORY_SEPARATOR, $class_name ) . '.php';
-			require_once $classes_dir . $class_file;
-		}
-	}
+	static $instance = false;
 
-	spl_autoload_register( 'kanban_autoloader' );
+	/**
+	 * The slug used everywhere.
+	 *
+	 * @var string @slug The slug used everywhere.
+	 */
+	static $slug = 'kanban';
+
 
 
 	/**
-	 * Class Kanban
+	 * Setup the core plugin.
 	 */
-	final class Kanban {
-		/**
-		 * The singleton instance of Kanban.
-		 *
-		 * @var object @instance The singleton instance of Kanban.
-		 */
-		static $instance = false;
+	public static function init() {
 
-		/**
-		 * The slug used everywhere.
-		 *
-		 * @var string @slug The slug used everywhere.
-		 */
-		static $slug = 'kanban';
+		// Get instance.
+		self::$instance = self::get_instance();
 
+		// Build settings used throughout the plugin and add-ons.
+		Kanban::get_instance()->settings = (object)array();
+		Kanban::get_instance()->settings->path = dirname( __FILE__ );
+		Kanban::get_instance()->settings->file = basename( __FILE__, '.php' );
 
-		/**
-		 * Setup the core plugin.
-		 */
-		public static function init() {
+		if ( !function_exists( 'get_plugin_data' ) ) {
+			require_once( ABSPATH . 'wp-admin/includes/plugin.php' );
+		}
 
-			// Get instance.
-			self::$instance = self::get_instance();
+		Kanban::get_instance()->settings->plugin_data = get_plugin_data( __FILE__ );
+		Kanban::get_instance()->settings->basename = strtolower( __CLASS__ );
+		Kanban::get_instance()->settings->plugin_basename = plugin_basename( __FILE__ );
+		Kanban::get_instance()->settings->uri = plugin_dir_url( __FILE__ );
+		Kanban::get_instance()->settings->pretty_name = __( 'Kanban', Kanban::get_instance()->settings->file );
+		Kanban::get_instance()->settings->admin_notice = '';
 
-			// Build settings used throughout the plugin and add-ons.
-			Kanban::get_instance()->settings       = (object) array();
-			Kanban::get_instance()->settings->path = dirname( __FILE__ );
-			Kanban::get_instance()->settings->file = basename( __FILE__, '.php' );
+		// Require at least PHP 5.3.
+		if ( version_compare( PHP_VERSION, '5.3', '<' ) ) {
+			Kanban::get_instance()->settings->admin_notice = __( 'The %s plugin requires at least PHP 5.3. You have %s. Please upgrade and then re-install the plugin.', 'kanban' );
+			add_action( 'admin_notices', array( __CLASS__, 'notify_php_version' ) );
+			return;
+		}
 
-			if ( ! function_exists( 'get_plugin_data' ) ) {
-				require_once( ABSPATH . 'wp-admin/includes/plugin.php' );
-			}
-
-			Kanban::get_instance()->settings->plugin_data     = get_plugin_data( __FILE__ );
-			Kanban::get_instance()->settings->basename        = strtolower( __CLASS__ );
-			Kanban::get_instance()->settings->plugin_basename = plugin_basename( __FILE__ );
-			Kanban::get_instance()->settings->uri             = plugin_dir_url( __FILE__ );
-			Kanban::get_instance()->settings->pretty_name     = __( 'Kanban', Kanban::get_instance()->settings->file );
-			Kanban::get_instance()->settings->admin_notice    = '';
-
-			// Require at least PHP 5.3.
-			if ( version_compare( PHP_VERSION, '5.3', '<' ) ) {
-				Kanban::get_instance()->settings->admin_notice = __( 'The %s plugin requires at least PHP 5.3. You have %s. Please upgrade and then re-install the plugin.', 'kanban' );
-				add_action( 'admin_notices', array( __CLASS__, 'notify_php_version' ) );
-
-				return;
-			}
-
-			Kanban_Admin::init();
-			Kanban_Board::init();
-			Kanban_Db::init();
-			Kanban_Estimate::init();
-			Kanban_License::init();
-			Kanban_Option::init();
-			Kanban_Project::init();
-			Kanban_Status::init();
-			Kanban_Task::init();
-			Kanban_Task_Hour::init();
-			Kanban_Template::init();
-			Kanban_User::init();
+		Kanban_Admin::init();
+		Kanban_Board::init();
+		Kanban_Db::init();
+		Kanban_Estimate::init();
+		Kanban_License::init();
+		Kanban_Option::init();
+		Kanban_Project::init();
+		Kanban_Status::init();
+		Kanban_Task::init();
+		Kanban_Task_Hour::init();
+		Kanban_Template::init();
+		Kanban_User::init();
 
 //		register_activation_hook( __FILE__, array( __CLASS__, 'on_activation' ) );
-			register_deactivation_hook( __FILE__, array( __CLASS__, 'on_deactivation' ) );
+		register_deactivation_hook( __FILE__, array( __CLASS__, 'on_deactivation' ) );
 //		add_action( 'wpmu_new_blog', array( __CLASS__, 'on_new_blog' ), 10, 6 );
 
-			do_action( 'kanban_loaded' );
-		}
+		do_action( 'kanban_loaded' );
+	}
 
 
 
-		/**
-		 * On activation, run the single activation across all blogs.
-		 * @link http://shibashake.com/wordpress-theme/write-a-plugin-for-wordpress-multi-site
-		 *
-		 * @param bool $network_wide If plugin is being used across the multisite.
-		 */
+	/**
+	 * On activation, run the single activation across all blogs.
+	 * @link http://shibashake.com/wordpress-theme/write-a-plugin-for-wordpress-multi-site
+	 *
+	 * @param bool $network_wide If plugin is being used across the multisite.
+	 */
 //	public static function on_activation( $networkwide ) {
 //		global $wpdb;
 //
@@ -193,27 +163,29 @@ if ( !class_exists('Kanban') ) :
 //	}
 
 
-		/**
-		 * Functions to do on single blog activation, like update db.
-		 */
-		static function single_activation() {
+
+	/**
+	 * Functions to do on single blog activation, like update db.
+	 */
+	static function single_activation() {
 
 //		Kanban_Db::check_for_updates();
 
-			set_transient(
-				sprintf( '_%s_welcome_screen_activation_redirect', Kanban::get_instance()->settings->basename ),
-				true,
-				30
-			);
-		}
+		set_transient(
+			sprintf( '_%s_welcome_screen_activation_redirect', Kanban::get_instance()->settings->basename ),
+			true,
+			30
+		);
+	}
 
 
-		/**
-		 * Functions to do on single blog activation, like remove db option.
-		 */
-		static function on_deactivation() {
-			delete_option( 'kanban_db_version' );
-		}
+
+	/**
+	 * Functions to do on single blog activation, like remove db option.
+	 */
+	static function on_deactivation() {
+		delete_option( 'kanban_db_version' );
+	}
 
 
 
@@ -231,56 +203,60 @@ if ( !class_exists('Kanban') ) :
 //	}
 
 
-		/**
-		 * Friendly notice about php version requirement
-		 */
-		static function notify_php_version() {
-			if ( ! is_admin() ) {
-				return;
-			}
-			?>
-			<div class="error below-h2">
-				<p>
-					<?php
-					echo sprintf(
-						Kanban::get_instance()->settings->admin_notice,
-						Kanban::get_instance()->settings->pretty_name,
-						PHP_VERSION
-					);
-					?>
-				</p>
-			</div>
-			<?php
+
+	/**
+	 * Friendly notice about php version requirement
+	 */
+	static function notify_php_version() {
+		if ( ! is_admin() ) {
+			return;
+		}
+		?>
+		<div class="error below-h2">
+			<p>
+				<?php
+				echo sprintf(
+					Kanban::get_instance()->settings->admin_notice,
+					Kanban::get_instance()->settings->pretty_name,
+					PHP_VERSION
+				);
+				?>
+			</p>
+		</div>
+		<?php
+	}
+
+
+
+	/**
+	 * Get the instance of this class
+	 *
+	 * @return object the instance
+	 */
+	public static function get_instance() {
+		if ( ! self::$instance ) {
+			self::$instance = new self();
 		}
 
-
-		/**
-		 * Get the instance of this class
-		 *
-		 * @return object the instance
-		 */
-		public static function get_instance() {
-			if ( ! self::$instance ) {
-				self::$instance = new self();
-			}
-
-			return self::$instance;
-		}
+		return self::$instance;
+	}
 
 
-		/**
-		 * Construct that can't be overwritten
-		 */
-		private function __construct() {
-		}
-	} // Kanban
+
+	/**
+	 * Construct that can't be overwritten
+	 */
+	private function __construct() {
+	}
+} // Kanban
+
 
 
 // Instantiate the plugin.
-	function Kanban() {
-		return Kanban::init();
-	}
+function Kanban()
+{
+	return Kanban::init();
+}
 
-	Kanban();
+Kanban();
 
-endif; // class_exists

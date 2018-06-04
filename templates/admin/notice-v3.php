@@ -7,8 +7,8 @@
 
 
 	<form method="POST" action="https://kanbanforwordpress.activehosted.com/proc.php">
-		<input type="hidden" name="u" value="13" />
-		<input type="hidden" name="f" value="13" />
+		<input type="hidden" name="u" value="1" />
+		<input type="hidden" name="f" value="1" />
 		<input type="hidden" name="s" />
 		<input type="hidden" name="c" value="0" />
 		<input type="hidden" name="m" value="0" />
@@ -58,6 +58,7 @@
 			'click',
 			'.notice-dismiss',
 			function () {
+				console.log('test');
 				var d = new Date();
 				d.setTime(d.getTime() + (30*24*60*60*1000)); // 30 days
 				var expires = "expires="+ d.toUTCString();

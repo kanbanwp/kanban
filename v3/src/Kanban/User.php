@@ -105,6 +105,8 @@ class Kanban_User extends Kanban_Abstract {
 
 	public function get_users( $user_ids, $with_boards = false ) {
 
+		if ( empty($user_ids) ) return array();
+
 		$user_ids = array_map( 'intval', $user_ids );
 
 		$args = array(

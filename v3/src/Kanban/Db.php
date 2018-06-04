@@ -70,14 +70,19 @@ class Kanban_Db {
 		}
 
 		// New install functionality.
-		if ( empty( $installed_ver ) ) {
+		$users_table = Kanban_Db::instance()->prefix() . Kanban_User_Cap::instance()->get_table();
+
+		$user_count = $wpdb->get_var("
+			SELECT count(id)
+			FROM $users_table
+		;");
+
+		if ( $user_count == 0 ) {
 
 			// Set current user as admin.
-
-			$user = get_user_by( 'id',  get_current_user_id() );
-
-
-			Kanban_User_Cap::instance()->add_admin($user, array('admin'));
+			$user = get_user_by( 'id', get_current_user_id() );
+			Kanban_User_Cap::instance()->add_admin( $user, array( 'admin' ) );
+		}
 
 			// @todo welcome page
 //			set_transient(
@@ -85,7 +90,7 @@ class Kanban_Db {
 //				true,
 //				30
 //			);
-		}
+//		}
 
 		// save db version to avoid updates
 		update_option(

@@ -237,7 +237,7 @@
 							</p>
 						</td>
 					</tr>
-<?php /*
+
 					<tr>
 						<th width="33%" scope="row">
 							&nbsp;
@@ -249,7 +249,7 @@
 							</a>
 						</td>
 					</tr>
-*/ ?>
+
 					</tbody>
 				</table>
 			</div>

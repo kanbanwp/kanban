@@ -1,0 +1,38 @@
+.form-group-dropdown {
+	//label {
+	//	margin-bottom: 0;
+	//}
+
+
+	.btn {
+	//	border-bottom: 2px solid transparent;
+	//	border-radius: 0;
+	//	font-size: 14px;
+		padding-bottom: 0;
+		padding-left: 0;
+		padding-right: 0;
+	}
+
+	&.open .btn {
+		border-bottom-color: $color-text;
+	}
+
+	.dropdown-menu {
+		border-color: $color-core-full;
+		border-width: 0 1px 1px;
+		border-radius: 0;
+		left: $margin;
+		padding: 0;
+
+		a {
+			border-bottom: 1px solid $color-core-200;
+			padding: $margin/2;
+		}
+
+		li:last-child {
+			a {
+				border: 0;
+			}
+		}
+	}
+}

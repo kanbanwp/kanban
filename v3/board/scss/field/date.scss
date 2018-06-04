@@ -1,0 +1,16 @@
+.form-group-date {
+	.form-control {
+		background: transparent;
+	}
+	
+	.horizContainer {
+		position: relative;
+	}
+	
+	.horizContainer span.datetimeago {
+		position: absolute;
+		right: 0;
+		top: 0;
+	}
+}
+

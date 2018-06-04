@@ -1,0 +1,64 @@
+.form-group-todo {
+	//> label {
+	//	margin-bottom: $label-margin-bottom;
+	//}
+
+	ul {
+		margin: 0;
+	}
+
+	li {
+		clear: both;
+	}
+
+	.todo-checkbox {
+		display: inline-block;
+		float: left;
+		margin-left: -.618em;
+		margin-top: -.236em;
+	}
+
+	.ei {
+		color: $color-core-800;
+		font-size: 2em;
+	}
+
+	[type="checkbox"] {
+		display: none;
+
+		~ .btn {
+			.form-group-todo-unchecked {
+				display: inline-block;
+			}
+
+			.form-group-todo-checked {
+				display: none;
+			}
+		}
+
+
+		&:checked {
+			~ .btn { // checkbox followed by btn
+				.form-group-todo-unchecked {
+					display: none;
+				}
+
+				.form-group-todo-checked {
+					display: inline-block;
+				}
+
+				~ [contenteditable] { // checkbox followed by btn followed by contenteditable
+						border: 0;
+						opacity: .618;
+						text-decoration: line-through;
+					}
+			}
+		}
+
+	}
+
+	.form-control {
+		border: 0;
+		margin-left: 2em;
+	}
+}

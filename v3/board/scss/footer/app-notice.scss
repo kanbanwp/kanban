@@ -1,0 +1,14 @@
+.app-notice {
+	background: $color-core-800;
+	bottom: 100%;
+	color: white;
+	left: 0;
+	padding: $margin*2 0;
+	position: absolute;
+	text-align: center;
+	width: 100%;
+	
+	&:hover {
+		text-decoration: none;
+	}
+}

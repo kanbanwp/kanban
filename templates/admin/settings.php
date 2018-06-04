@@ -237,7 +237,19 @@
 							</p>
 						</td>
 					</tr>
-
+<?php /*
+					<tr>
+						<th width="33%" scope="row">
+							&nbsp;
+						</th>
+						<td>
+							<a href="<?php echo add_query_arg(array('_wpnonce' => wp_create_nonce( 'kanban2_to_3' ))) ?>" class="button">
+								Switch to version 3
+								(Extremely experimental)
+							</a>
+						</td>
+					</tr>
+*/ ?>
 					</tbody>
 				</table>
 			</div>

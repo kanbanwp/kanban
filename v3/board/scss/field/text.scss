@@ -1,0 +1,6 @@
+.form-group-text {
+	.form-control {
+		min-height: calc(1em + #{$margin/3*2});
+
+	}
+}

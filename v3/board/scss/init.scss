@@ -1,0 +1,44 @@
+@import "../../scss/mixins";
+
+* {
+	//color: $color-text;
+	//font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif;//font-family: 'Open Sans', sans-serif;
+	outline: 0 !important;
+
+	&:focus,
+	&:active,
+	&:hover {
+		outline: 0 !important;
+	}
+}
+
+body {
+	background: white;
+	//color: $color-text;
+	overflow-x: hidden;
+}
+
+a {
+	color: $color-core-800;
+}
+
+@import "./../node_modules/selectize/dist/css/selectize.bootstrap3.css";
+//@import "./../node_modules/medium-editor/dist/css/medium-editor.min.css";
+//@import "./../node_modules/medium-editor/dist/css/themes/bootstrap.min.css";
+@import "./../node_modules/at.js/dist/css/jquery.atwho.min.css";
+@import "./../node_modules/dropzone/dist/dropzone.css";
+@import "./../node_modules/bootstrap-datepicker/dist/css/bootstrap-datepicker3.standalone.min.css";
+
+@import './classes';
+@import '../../scss/buttons';
+@import './medium-editor';
+@import './app';
+@import './header';
+@import './board';
+@import './lane';
+@import './card';
+@import './field';
+@import './comment';
+@import './footer';
+@import './modal';
+

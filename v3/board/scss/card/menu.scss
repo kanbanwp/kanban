@@ -1,0 +1,102 @@
+.card-menu {
+	position: absolute;
+	right: 0; // $margin/5;
+	top: 0;
+	z-index: 0;
+
+	> * {
+		display: block;
+		line-height: 1;
+	}
+
+	> .btn {
+		width: $margin*3;
+	}
+
+
+	.card-edit {
+		font-size: 1em;
+		position: relative;
+
+		i {
+			padding: 2px 0;
+		}
+
+		&:hover {
+			.card-edit-menu {
+				display: block;
+
+				//max-height: 500px;
+				//transition-delay: .82s;
+
+			}
+		}
+
+		.card-edit-menu {
+			display: none;
+			left: 100%;
+			//margin-left: -$margin/2;
+			//overflow: hidden;
+			padding-left: $margin/2;
+			position: absolute;
+			top: 0;
+			z-index: 1;
+
+			//max-height: 0;
+			//transition-property: max-height;
+
+			&:before {
+				content: '';
+				display: block;
+				width: 0;
+				height: 0;
+				border: 0 solid transparent;
+				border-width: $margin/2 $margin/2 $margin/2 0;
+				border-right-color: $color-core-300;
+				left: 0;
+				position: absolute;
+				top: $margin/3;
+			}
+
+			.btn {
+				background: white;
+
+				margin-bottom: $margin/3;
+			}
+		}
+	}
+
+	.card-move-handle {
+		cursor: move;
+		font-size: 1.618em;
+		letter-spacing: -5px;
+		padding-bottom: 2px;
+
+		i {
+			-ms-transform: rotate(90deg); /* IE 9 */
+			-webkit-transform: rotate(90deg); /* Chrome, Safari, Opera */
+			transform: rotate(90deg);
+		}
+	}
+
+	.card-comments {
+		font-size: 1em;
+		position: relative;
+
+		i {
+			padding: 2px 0;
+		}
+
+		.card-comments-count {
+			background: $color-core-600;
+			border-radius: .5em;
+			color: white;
+			font-size: .82em;
+			padding: 2px;
+			position: absolute;
+			right: -5px;
+			top: 0px;
+		}
+	}
+
+}

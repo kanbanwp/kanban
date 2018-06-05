@@ -85,7 +85,7 @@ class Kanban {
 		$this->settings->uri             = plugin_dir_url( __FILE__ );
 		$this->settings->path            = plugin_dir_path( __FILE__ );
 		$this->settings->pretty_name     = __( 'Kanban', 'kanban' );
-		$this->settings->is_network      = is_plugin_active_for_network( $this->settings->plugin_basename ) ? true : false;
+		$this->settings->is_network      = is_plugin_active_for_network( $this->settings->basename . '/' . basename(__FILE__) ) ? true : false;
 		$this->settings->admin_notice    = '';
 
 

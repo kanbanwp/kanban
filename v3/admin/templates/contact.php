@@ -1,6 +1,6 @@
 <div class="wrap">
 
-	<?php $h2 ='Contact us'; include_once Kanban::instance()->settings()->path . 'admin/templates/header.php'; ?>
+	<?php $h2 ='Contact us'; include Kanban::instance()->settings()->path . 'admin/templates/header.php'; ?>
 
 
 

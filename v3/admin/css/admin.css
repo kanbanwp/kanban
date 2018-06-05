@@ -21,14 +21,17 @@
 .wrap {
   position: relative; }
   .wrap #kanban-header {
-    min-height: 120px; }
+    min-height: 120px;
+    margin-bottom: 15px; }
     .wrap #kanban-header #kanban-app-open {
-      background: white; }
+      background: white;
+      text-align: center; }
     .wrap #kanban-header h2 {
       font-size: 3.82em;
       font-weight: normal;
-      line-height: 1em; }
-    .wrap #kanban-header #kanban-logo-white {
+      line-height: 1em;
+      margin: 45px 0 0; }
+    .wrap #kanban-header #kanban-logo {
       height: 120px;
       pointer-events: none;
       position: absolute;
@@ -36,5 +39,24 @@
       right: 15px;
       width: 120px;
       z-index: 0; }
+    @media screen and (max-width: 767px) {
+      .wrap #kanban-header {
+        min-height: auto; }
+        .wrap #kanban-header #kanban-app-open {
+          display: block; }
+        .wrap #kanban-header h2 {
+          margin-top: 15px; }
+        .wrap #kanban-header #kanban-logo {
+          display: block;
+          margin: 15px auto;
+          position: static; } }
+
+.kanban-notice {
+  background: rgba(255, 255, 0, 0.5);
+  display: inline-block;
+  padding: 5px; }
+  @media screen and (max-width: 767px) {
+    .kanban-notice {
+      display: block; } }
 
 /*# sourceMappingURL=admin.css.map */

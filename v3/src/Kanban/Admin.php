@@ -62,7 +62,18 @@ class Kanban_Admin {
 			sprintf( '%sadmin/css/admin.css', Kanban::instance()->settings()->uri )
 		);
 
+		$status  = get_site_option( 'kanbanpro_license_status' );
+
+		ob_start();
 		include_once Kanban::instance()->settings()->path . 'admin/templates/kanbanpro.php';
+		$html_output = ob_get_contents();
+		ob_end_clean();
+
+		echo apply_filters(
+			'kanban_admin_render_kanbanpro_page_return',
+			$html_output
+		);
+
 	} // admin_menu
 
 	static function contact_post() {
@@ -246,6 +257,7 @@ class Kanban_Admin {
 	 * @return object the instance
 	 */
 	public static function instance() {
+
 		if ( ! self::$instance ) {
 			self::$instance = new self();
 

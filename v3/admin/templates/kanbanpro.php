@@ -1,9 +1,15 @@
 <div class="wrap">
 
-	<?php $h2 ='Kanban Pro'; include_once Kanban::instance()->settings()->path . 'admin/templates/header.php'; ?>
+	<?php $h2 ='Kanban Pro'; include Kanban::instance()->settings()->path . 'admin/templates/header.php'; ?>
 
 
-
+	<?php
+	if ( ! is_network_admin() && Kanban::instance()->settings()->is_network && $status != 'valid' ) : ?>
+	<div class="kanban-notice">
+		<?php _e('Kanban is network activated.', 'kanban'); ?>
+		<?php _e('Contact your network administrator to activate your Pro license.', 'kanban'); ?>
+	</div>
+	<?php endif ?>
 
 
 

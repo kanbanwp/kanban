@@ -1,7 +1,6 @@
 <div class="wrap">
 
-	<?php $h2 = 'Kanban Boards for WordPress';
-	include_once Kanban::instance()->settings()->path . 'admin/templates/header.php'; ?>
+	<?php $h2 = 'Kanban Boards for WordPress'; include Kanban::instance()->settings()->path . 'admin/templates/header.php'; ?>
 
 
 	<div id="poststuff">

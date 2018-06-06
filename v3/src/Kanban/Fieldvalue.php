@@ -68,8 +68,8 @@ class Kanban_Fieldvalue extends Kanban_Abstract {
 		}
 
 		$prev_content = '';
-		if ( isset( $row['content'] ) ) {
-			$prev_content = $row['content'];
+		if ( isset( $row->content ) ) {
+			$prev_content = $row->content;
 		}
 
 		$row = parent::set_row( $data );
@@ -78,10 +78,10 @@ class Kanban_Fieldvalue extends Kanban_Abstract {
 
 		$class = Kanban_Field::instance()->get_fieldtype_class( $field->field_type );
 
-		$value = $class::instance()->format_content_for_app( $value );
+		$value = $class::instance()->format_content_for_app( $row->content );
 
 
-		if ( isset( $data['content'] ) && !empty($data['content']) && $row['content'] != $prev_content )  {
+		if ( isset( $data['content'] ) && !empty($data['content']) && $row->content != $prev_content )  {
 
 			preg_match_all( '/data-mention=\"([0-9]*)\"/',
 				$data['content'],

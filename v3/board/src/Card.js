@@ -184,7 +184,7 @@ function Card(record) {
 			}
 		}
 
-		var showCardIdClass = self.board().record().options.show_task_id === "true" ? "show-card-id" : ""; 
+		var showCardIdClass = kanban.app.current_user().optionsBoard().show_task_id === true ? "show-card-id" : "";
 
 		return kanban.templates['card'].render({
 			fields: fieldHtml,

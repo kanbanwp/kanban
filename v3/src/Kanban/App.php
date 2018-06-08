@@ -305,24 +305,28 @@ public function get_app_data( $since_dt = null ) {
 
 	public function get_strings() {
 		return array(
-			'kanban' => __( 'Kanban' ),
+			'kanban' => __( 'Kanban for WordPress', 'kanban' ),
+			'notify' => array(
+				'title' => __( 'Kanban for WordPress', 'kanban' ),
+				'icon' => Kanban::instance()->settings()->uri . 'img/notify-favicon-250.png'
+			),
 			'app'    => array(
-				'settings_updated' => __( '{0} updated the settings' ),
+				'settings_updated' => __( '{0} updated the settings', 'kanban' ),
 			),
 			'card'   => array(
-				'added'                     => __( 'Added the card' ),
+				'added'                     => __( 'Added the card', 'kanban' ),
 //				'deleted'                   => __( 'Deleted the card' ),
-				'restore'                   => __( 'Card deleted. <u>Undo</u>?' ),
-				'undeleted'                 => __( 'Restored the deleted card' ),
-				'updates'                   => __( 'Your cards have been synced.' ),
-				'added_error'               => __( 'There was an error adding a card' ),
-				'save_error'                => __( 'There was an error saving that card' ),
-				'delete_error'              => __( 'There was an error deleting that card' ),
+				'restore'                   => __( 'Card deleted. <u>Undo</u>?', 'kanban' ),
+				'undeleted'                 => __( 'Restored the deleted card', 'kanban' ),
+				'updates'                   => __( 'Your cards have been synced.', 'kanban' ),
+				'added_error'               => __( 'There was an error adding a card', 'kanban' ),
+				'save_error'                => __( 'There was an error saving that card', 'kanban' ),
+				'delete_error'              => __( 'There was an error deleting that card', 'kanban' ),
 //				'moved_to_lane'             => __( 'Moved the card to "{0}"' ),
 //				'moved_to_lane_previous'    => __( ' (previously "{0}")' ),
 //				'moved_to_position'         => __( 'Reordered the card' ),
-				'lane_empty_confirm'        => __( 'Are you sure you want to delete all cards in this lane?' ),
-				'lane_wip_card_limit_error' => __( 'The WIP (Work In Progress) limit has been reached.' ),
+				'lane_empty_confirm'        => __( 'Are you sure you want to delete all cards in this lane?', 'kanban' ),
+				'lane_wip_card_limit_error' => __( 'The WIP (Work In Progress) limit has been reached.', 'kanban' ),
 			),
 			'field'  => array(
 //				'updated'              => __( 'Updated "{0}"' ),

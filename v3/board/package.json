@@ -29,6 +29,7 @@
     "dropzone": "^5.3.0",
     "jquery": "^1.12.4",
     "medium-editor": "^5.23.3",
+    "notifyjs": "^3.0.0",
     "selectize": "^0.12.4",
     "timeago.js": "^3.0.2"
   }

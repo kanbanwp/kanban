@@ -12,6 +12,7 @@ var functions = require('./functions')
 require('at.js')
 var Dropzone = require('dropzone')
 var MediumEditor = require('medium-editor')
+var Notify = require('notifyjs')
 
 Dropzone.autoDiscover = false;
 
@@ -921,51 +922,31 @@ function App(record) {
 		}, wordCount * 500);
 	}; // addGrowl
 
+	this.notifyDo = function (message) {
 
-	this.onErrorNotification = function (message) {
-		// console.error( 'Error showing notification. You may need to request permission.' );
+		new Notify(
+			kanban.strings.notify.title,
+			{
+				body: message,
+				icon: kanban.strings.notify.icon,
+				tag: new Date().valueOf() + (Math.floor((1 + Math.random()) * 0x10000))
+				// notifyShow: onNotifyShow
+			}
+		).show();
+	}; // notifyDo
 
+	this.notifyOnPermissionGranted = function(message, type) {
+		// console.log('Permission has been granted by the user');
 		var self = this;
+		self.notifyDo(message);
+	}; // notifyOnPermissionGranted
 
-		self.growl(message);
-	}
-
-
-	this.onPermissionGranted = function (message) {
-		// console.log( 'Permission has been granted by the user' );
+	this.notifyOnPermissionDenied = function(message, type) {
+		// console.warn('Permission has been denied by the user');
 		var self = this;
-		self.doNotification(message);
-	}
+		self.addGrowl(message, type);
+	}; // notifyOnPermissionDenied
 
-
-	this.onPermissionDenied = function (message) {
-		// console.warn( 'Permission has been denied by the user' );
-		var self = this;
-		self.growl(message);
-	}
-
-
-	this.doNotification = function (message) {
-		var self = this;
-
-		var myNotification = new Notification('Kanban for WordPress', {
-			body: message,
-			tag: 'kanban notification',
-			icon: kanban.favicon,
-			// notifyShow: onShowNotification,
-			// notifyClose: onCloseNotification,
-			// notifyClick: onClickNotification,
-			notifyError: function () {
-				self.onErrorNotification(message);
-			},
-			timeout: 5
-		});
-
-		myNotification.show();
-	}
-
-
-	// var Notify = window.Notify.default;
 
 	this.notify = function (message, type) {
 		var self = this;
@@ -974,34 +955,18 @@ function App(record) {
 			return false;
 		}
 
-		if (!("Notification" in window)) {
-			self.addGrowl(message, type);
-			return false;
-		}
-
-		if (Notification.permission === "granted") {
-			// If it's okay let's create a notification
-			self.doNotification(message);
-			return true;
-		}
-
-		if (Notification.permission !== "denied") {
-			Notification.requestPermission(function (permission) {
-				// If the user accepts, let's create a notification
-				if (permission === "granted") {
-					self.doNotification(message);
-				}
-				else {
-					self.onPermissionDenied(message);
-				}
-
-				return false;
-			});
+		if (!Notify.needsPermission) {
+			return self.notifyDo(message);
+		} else if (Notify.isSupported()) {
+			return Notify.requestPermission(
+				self.notifyOnPermissionGranted.bind(self, message, type),
+				self.notifyOnPermissionDenied.bind(self, message, type)
+			);
 		}
 
 		self.addGrowl(message, type);
 
-	}
+	}; // notify
 
 	this.growl_response_message = function (response) {
 		var self = this;
@@ -1011,28 +976,7 @@ function App(record) {
 		}
 		catch (err) {
 		}
-	}
-
-	//
-	// this.growl = function ( message, type ) {
-	// 	if ( 'undefined' === typeof message || '' === message ) {
-	// 		return false;
-	// 	}
-	//
-	// 	if ( 'undefined' === typeof type ) {
-	// 		type = 'info';
-	// 	}
-	//
-	// 	// https://github.com/ifightcrime/bootstrap-growl/
-	// 	$.bootstrapGrowl(
-	// 		message,
-	// 		{
-	// 			type: type,
-	// 			allow_dismiss: true
-	// 		}
-	// 	);
-	// }
-
+	}; // growl_response_message
 
 	this.getUsers = function (format, rebuild) {
 

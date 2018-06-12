@@ -45,13 +45,13 @@ function User(record) {
 
 	this.currentBoardId = function () {
 
-		// if ( 'undefined' === typeof _self.record.options ) {
-		// 	return null;
-		// }
-		//
-		// if ( 'undefined' === typeof _self.record.options.app.current_board ) {
-		// 	return null;
-		// }
+		if ( 'undefined' === typeof _self.record.options.app.current_board ) {
+			return null;
+		}
+
+		if ( 'undefined' === typeof kanban.boards[_self.record.options.app.current_board] ) {
+			return null;
+		}
 
 		return _self.record.options.app.current_board;
 	}; // currentBoardId

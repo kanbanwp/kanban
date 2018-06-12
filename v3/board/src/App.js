@@ -1373,9 +1373,82 @@ function App(record) {
 				keyboard: false,
 				show: true
 			});
-
 		}
 	}; // toggleKeyboardShortcutsModal
+
+	this.togglePresetsModal = function () {
+
+		var self = this;
+
+		if ( !self.current_user().hasCap('admin-board-create') ) {
+			return false;
+		}
+
+		var html = kanban.templates['presets-modal'].render();
+
+		$('#modal').html(html);
+
+		$('#modal').modal({
+			backdrop: 'static',
+			keyboard: false,
+			show: true
+		});
+
+		$.ajax({
+			data: {
+				type: 'board_preset',
+				action: 'get_presets_data'
+			}
+		})
+		.done(function (response) {
+
+			var presetsHtml = '';
+			for (var i in response.data) {
+
+				var preset = response.data[i];
+				presetsHtml += kanban.templates['presets-modal-preset'].render({
+					preset: preset
+				});
+			}
+
+			$('#presets-modal-accordion').html(presetsHtml);
+		}); // done
+
+	}; // togglePresetsModal
+
+	this.presetAdd = function (className) {
+		var self = this;
+
+		if ( !self.current_user().hasCap('admin-board-create') ) {
+			return false;
+		}
+
+		$.ajax({
+			data: {
+				type: className,
+				action: 'add',
+				board_id: 'undefined' !== typeof self.current_board_id() ? self.current_board_id() : ''
+			}
+		})
+		.done(function (response) {
+
+			// Add boards to app.
+			var boardId = response.data.id;
+			var boardRecord = response.data;
+			var board = kanban.boards[boardId] = new Board(boardRecord);
+
+			var headerTabsHtml = kanban.templates['header-board-tab'].render({
+				board: board.record()
+			});
+
+			$(headerTabsHtml).appendTo('#header-board-tabs');
+
+			board.show();
+
+			kanban.app.modal.close();
+		});
+
+	}; // presetAdd
 
 	this.getColorPicker = function () {
 		if ( $('#app-color-picker').length == 0 ) {

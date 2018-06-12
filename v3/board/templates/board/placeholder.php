@@ -8,6 +8,12 @@
 			'<i class="ei ei-plus" style="vertical-align: baseline;"></i>'
 		), 'kanban' ); ?>
 	</p>
+	<p>
+		<?php _e('Or', 'kanban') ?>
+		<a href="javascript:void(0); kanban.app.togglePresetsModal(this);" class="btn btn-primary">
+			<?php _e('Choose from a preset', 'kanban') ?>
+		</a>
+	</p>
 	{{:isCreateBoards}}
 	{{isAdmin}}
 

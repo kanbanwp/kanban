@@ -215,7 +215,7 @@ class Kanban_App {
 		return $data;
 	} // get_app_data
 
-public function get_app_data( $since_dt = null ) {
+	public function get_app_data( $since_dt = null ) {
 
 		$data = (object) array();
 

@@ -208,6 +208,10 @@ function Card(record) {
 		for (var i in fieldsOrder) {
 			var fieldId = fieldsOrder[i];
 
+			if ( 'undefined' === typeof kanban.fields[fieldId] ) {
+				continue;
+			}
+
 			var $field = $('.field-' + fieldId, $el);
 
 			kanban.fields[fieldId].addFunctionality($field);

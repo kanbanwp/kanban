@@ -313,6 +313,12 @@ class Kanban_App {
 			'app'    => array(
 				'settings_updated' => __( '{0} updated the settings', 'kanban' ),
 			),
+			'board' => array(
+				'added_error'               => __( 'There was an error adding the board', 'kanban' ),
+			),
+			'preset' => array(
+				'added_error'               => __( 'There was an error adding the preset', 'kanban' ),
+			),
 			'card'   => array(
 				'added'                     => __( 'Added the card', 'kanban' ),
 //				'deleted'                   => __( 'Deleted the card' ),

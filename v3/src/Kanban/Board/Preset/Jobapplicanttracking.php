@@ -9,9 +9,8 @@ class Kanban_Board_Preset_Jobapplicanttracking extends Kanban_Board_Preset {
 
 	public function info () {
 		return array(
-			'label' => 'Job applicant tracking',
-			'description' => 'Collect job applicants, move them through the interview process, and decide who gets the job.',
-			'lanes' => 'Applied, Interview 1, Interview 2, Offer made, Rejected',
+			'label' => __('Job applicant tracking', 'kanban'),
+			'description' => __('Collect job applicants, move them through the interview process, and decide who gets the job.', 'kanban'),
 			'icon' => 'ei ei-briefcase'
 		);
 	}
@@ -20,19 +19,19 @@ class Kanban_Board_Preset_Jobapplicanttracking extends Kanban_Board_Preset {
 
 		return array (
 			array (
-				'label' => 'Applied',
+				'label' => __('Applied', 'kanban'),
 			),
 			array (
-				'label' => 'Interview 1',
+				'label' => __('Interview 1', 'kanban'),
 			),
 			array (
-				'label' => 'Interview 2',
+				'label' => __('Interview 2', 'kanban'),
 			),
 			array (
-				'label' => 'Offer made',
+				'label' => __('Offer made', 'kanban'),
 			),
 			array (
-				'label' => 'Rejected',
+				'label' => __('Rejected', 'kanban'),
 			)
 		);
 	}
@@ -42,16 +41,16 @@ class Kanban_Board_Preset_Jobapplicanttracking extends Kanban_Board_Preset {
 		return array (
 			array (
 				'field_type' => 'title',
+				'label' => __('Title', 'kanban'),
 				'options' => array(
-					'label' => 'Title',
-					'placeholder' => 'Add a title'
+					'placeholder' => __('Add a title', 'kanban')
 				)
 			),
 			array (
 				'field_type' => 'text',
+				'label' => __('Description', 'kanban'),
 				'options' => array(
-					'label' => 'Description',
-					'placeholder' => 'Add a description'
+					'placeholder' => __('Add a description', 'kanban')
 				)
 			)
 		);

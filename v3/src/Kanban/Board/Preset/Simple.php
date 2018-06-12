@@ -9,9 +9,8 @@ class Kanban_Board_Preset_Simple extends Kanban_Board_Preset {
 
 	public function info () {
 		return array(
-			'label' => 'Simple',
-			'description' => 'A simple 3-lane board TO Track basic tasks as you do them.',
-			'lanes' => 'To do, Doing, Done',
+			'label' => __('Simple', 'kanban'),
+			'description' => __('A simple 3-lane board to track basic tasks as you do them.', 'kanban'),
 			'icon' => 'ei ei-check_alt2'
 		);
 	}
@@ -20,13 +19,22 @@ class Kanban_Board_Preset_Simple extends Kanban_Board_Preset {
 
 		return array (
 			array (
-				'label' => 'To do',
+				'label' => __('To do', 'kanban'),
+				'options' => array(
+					'color' => '#fdd037'
+				)
 			),
 			array (
-				'label' => 'Doing',
+				'label' => __('Doing', 'kanban'),
+				'options' => array(
+					'color' => '#55aa55'
+				)
 			),
 			array (
-				'label' => 'Done',
+				'label' => __('Done', 'kanban'),
+				'options' => array(
+					'color' => '#2a7fd4'
+				)
 			)
 		);
 	}
@@ -36,16 +44,16 @@ class Kanban_Board_Preset_Simple extends Kanban_Board_Preset {
 		return array (
 			array (
 				'field_type' => 'title',
+				'label' => __('Title', 'kanban'),
 				'options' => array(
-					'label' => 'Title',
-					'placeholder' => 'Add a title'
+					'placeholder' => __('Add a title', 'kanban')
 				)
 			),
 			array (
 				'field_type' => 'text',
+				'label' => __('Description', 'kanban'),
 				'options' => array(
-					'label' => 'Description',
-					'placeholder' => 'Add a description'
+					'placeholder' => __('Add a description', 'kanban')
 				)
 			)
 		);

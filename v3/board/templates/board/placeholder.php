@@ -10,9 +10,12 @@
 	</p>
 	<p>
 		<?php _e('Or', 'kanban') ?>
-		<a href="javascript:void(0); kanban.app.togglePresetsModal(this);" class="btn btn-primary">
+		<button type="button"
+		   onclick="kanban.app.presetsToggleModal(this);"
+		   data-add="board, lanes and fields"
+		   class="btn btn-primary">
 			<?php _e('Choose from a preset', 'kanban') ?>
-		</a>
+		</button>
 	</p>
 	{{:isCreateBoards}}
 	{{isAdmin}}

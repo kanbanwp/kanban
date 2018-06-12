@@ -9,9 +9,8 @@ class Kanban_Board_Preset_Editorialcalendar extends Kanban_Board_Preset {
 
 	public function info () {
 		return array(
-			'label' => 'Editorial Calendar',
-			'description' => 'Use Kanban to track blog posts or articles, the authors who write them, and when they\'re published.',
-			'lanes' => 'Ideas, Assigned, In progress, Edit, To publish, Published',
+			'label' => __('Editorial Calendar', 'kanban'),
+			'description' => __('Use Kanban to track blog posts or articles, the authors who write them, and when they\'re published.', 'kanban'),
 			'icon' => 'ei ei-calendar'
 		);
 	}
@@ -20,22 +19,22 @@ class Kanban_Board_Preset_Editorialcalendar extends Kanban_Board_Preset {
 
 		return array (
 			array (
-				'label' => 'Ideas',
+				'label' => __('Ideas', 'kanban'),
 			),
 			array (
-				'label' => 'Assigned',
+				'label' => __('Assigned', 'kanban'),
 			),
 			array (
-				'label' => 'In progress',
+				'label' => __('In progress', 'kanban'),
 			),
 			array (
-				'label' => 'Edit',
+				'label' => __('Edit', 'kanban'),
 			),
 			array (
-				'label' => 'Publish',
+				'label' => __('Publish', 'kanban'),
 			),
 			array (
-				'label' => 'Published'
+				'label' => __('Published', 'kanban')
 			)
 		);
 	}
@@ -45,16 +44,16 @@ class Kanban_Board_Preset_Editorialcalendar extends Kanban_Board_Preset {
 		return array (
 			array (
 				'field_type' => 'title',
+				'label' => __('Title', 'kanban'),
 				'options' => array(
-					'label' => 'Title',
-					'placeholder' => 'Add a title'
+					'placeholder' => __('Add a title', 'kanban')
 				)
 			),
 			array (
 				'field_type' => 'text',
+				'label' => __('Description', 'kanban'),
 				'options' => array(
-					'label' => 'Description',
-					'placeholder' => 'Add a description'
+					'placeholder' => __('Add a description', 'kanban')
 				)
 			)
 		);

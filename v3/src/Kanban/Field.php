@@ -255,6 +255,8 @@ class Kanban_Field extends Kanban_Abstract {
 
 		$row = parent::format_data_for_app($row);
 
+		if ( empty($row) ) return array();
+
 		foreach ( $row as $key => &$value ) {
 			switch ( $key ) {
 				case 'board_id':
@@ -286,6 +288,8 @@ class Kanban_Field extends Kanban_Abstract {
 	public function format_data_for_db( $row ) {
 
 		$row = parent::format_data_for_db($row);
+
+		if ( empty($row) ) return array();
 
 		foreach ( $row as $key => &$value ) {
 			switch ( $key ) {

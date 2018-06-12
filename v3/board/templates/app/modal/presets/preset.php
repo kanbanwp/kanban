@@ -18,15 +18,30 @@
 				<p>
 					{{=preset.description}}
 				</p>
+				
+				<dl>
+				{{preset.lane_labels}}
 
-				<p>
-					<i>Lanes: {{=preset.lanes}}</i>
-				</p>
+					<dt>Lanes:</dt>
+					<dd style="margin-bottom: .618em;">
+						{{=preset.lane_labels}}
+					</dd>
+				{{/preset.lane_labels}}
+
+				{{preset.field_labels}}
+					<dt>Fields:</dt>
+					<dd>
+						{{=preset.field_labels}}
+					</dd>
+				{{/preset.field_labels}}
+				</dl>
 
 				<p>
 					<button type="button"
 					        class="btn btn-primary"
-					        onclick="kanban.app.presetAdd('{{%preset.class}}');">
+					        data-class="{{%preset.class}}"
+					        data-add="{{%add}}"
+					        onclick="kanban.app.presetAdd(this);">
 						<?php _e('Add this preset') ?>
 					</button>
 				</p>

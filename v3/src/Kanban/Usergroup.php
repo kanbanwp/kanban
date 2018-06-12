@@ -77,6 +77,8 @@ class Kanban_Usergroup extends Kanban_Abstract {
 		$row = array_intersect_key( $row, $this->get_fields() );
 		ksort( $row );
 
+		if ( empty($row) ) return array();
+
 		foreach ( $row as $key => &$value ) {
 			switch ( $key ) {
 				case 'capabilities':

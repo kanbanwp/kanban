@@ -11,7 +11,10 @@
 						<span class="icon-bar"></span>
 					</button>
 
-					<span class="navbar-brand visible-xs visible-sm"><?php _e( 'Edit the app', 'kanban'); ?></span>
+					<span class="navbar-brand visible-xs visible-sm">
+						<?php _e( 'Add preset', 'kanban'); ?>
+						{{=add}}
+					</span>
 				</div>
 				<div id="modal-navbar" class="collapse navbar-collapse">
 					<ul class="nav navbar-nav">
@@ -30,7 +33,8 @@
 			<div class="modal-body">
 
 				<p class="h3">
-					<?php echo __( 'Presets', 'kanban' ); ?>
+					<?php _e( 'Add preset', 'kanban'); ?>
+					{{=add}}
 				</p>
 
 				<div class="panel-group" id="presets-modal-accordion">

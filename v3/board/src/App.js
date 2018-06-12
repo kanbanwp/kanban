@@ -1376,15 +1376,25 @@ function App(record) {
 		}
 	}; // toggleKeyboardShortcutsModal
 
-	this.togglePresetsModal = function () {
+	this.presetsToggleModal = function (el) {
 
 		var self = this;
+
+		var $el = $(el);
+		var className = $el.attr('data-class');
+		var add = $el.attr('data-add');
+
+		if ( 'undefined' === typeof add || '' == add ) {
+			add = 'board, lanes and fields';
+		}
 
 		if ( !self.current_user().hasCap('admin-board-create') ) {
 			return false;
 		}
 
-		var html = kanban.templates['presets-modal'].render();
+		var html = kanban.templates['presets-modal'].render({
+			add: add
+		});
 
 		$('#modal').html(html);
 
@@ -1407,41 +1417,57 @@ function App(record) {
 
 				var preset = response.data[i];
 				presetsHtml += kanban.templates['presets-modal-preset'].render({
-					preset: preset
+					preset: preset,
+					add: add
 				});
 			}
 
 			$('#presets-modal-accordion').html(presetsHtml);
 		}); // done
 
-	}; // togglePresetsModal
+	}; // presetsToggleModal
 
-	this.presetAdd = function (className) {
+	this.presetAdd = function (el) {
 		var self = this;
 
 		if ( !self.current_user().hasCap('admin-board-create') ) {
 			return false;
 		}
 
+		var $el = $(el);
+		var className = $el.attr('data-class');
+		var add = $el.attr('data-add');
+
 		$.ajax({
 			data: {
 				type: className,
 				action: 'add',
-				board_id: 'undefined' !== typeof self.current_board_id() ? self.current_board_id() : ''
+				board_id: 'undefined' !== typeof self.current_board_id() ? self.current_board_id() : '',
+				add: add
 			}
 		})
 		.done(function (response) {
 
+			if ( 'undefined' === typeof response.data ||'undefined' === typeof response.data.id ) {
+				kanban.app.notify(kanban.strings.preset.added_error);
+				return false;
+			}
+
 			// Add boards to app.
 			var boardId = response.data.id;
+
+			var boardExists = 'undefined' === typeof kanban.boards[boardId] ? false : true;
+
 			var boardRecord = response.data;
 			var board = kanban.boards[boardId] = new Board(boardRecord);
 
-			var headerTabsHtml = kanban.templates['header-board-tab'].render({
-				board: board.record()
-			});
+			if ( !boardExists ) {
+				var headerTabsHtml = kanban.templates['header-board-tab'].render({
+					board: board.record()
+				});
 
-			$(headerTabsHtml).appendTo('#header-board-tabs');
+				$(headerTabsHtml).appendTo('#header-board-tabs');
+			}
 
 			board.show();
 

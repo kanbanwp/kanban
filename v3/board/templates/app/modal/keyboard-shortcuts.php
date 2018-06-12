@@ -16,11 +16,11 @@
 				<div id="modal-navbar" class="collapse navbar-collapse">
 					<ul class="nav navbar-nav">
 						<li class="pull-right">
-							<a href="javascript:void(0);"
+							<button type="button"
 							   onclick="kanban.app.modal.close(this);">
 								<span class="visible-xs-inline-block"><?php _e( 'Close this window', 'kanban'); ?></span>
 								<i class="ei ei-close hidden-xs"></i>
-							</a>
+							</button>
 						</li>
 					</ul>
 				</div><!--/.nav-collapse -->

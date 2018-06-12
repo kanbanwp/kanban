@@ -397,6 +397,9 @@ Board_Modal = function (board) {
 
 		var self = this;
 
+		var $el = $(el);
+		var $tabPane = $el.closest('.tab-pane');
+
 		var ajaxDate = {
 			type: 'lane',
 			action: 'add',
@@ -408,6 +411,8 @@ Board_Modal = function (board) {
 		})
 		.done(function (response) {
 
+			$tabPane.removeClass('loading');
+
 			var laneId = response.data.id;
 			var laneRecord = response.data;
 			var lane = kanban.lanes[laneId] = new Lane(laneRecord);
@@ -418,7 +423,10 @@ Board_Modal = function (board) {
 				colors: kanban.app.colors
 			});
 
-			$(laneModalHtml).appendTo('#board-modal-lanes-accordion').find('.panel-title').trigger('click');
+			$(laneModalHtml)
+			.appendTo('#board-modal-lanes-accordion')
+			.find('.panel-title')
+			.trigger('click');
 
 			var lanesOrder = self.board().lanesOrder();
 
@@ -493,6 +501,7 @@ Board_Modal = function (board) {
 
 		var $el = $(el);
 		var type = $el.attr('data-field-type');
+		var $tabPane = $el.closest('.tab-pane');
 
 		var ajaxDate = {
 			type: 'field',
@@ -506,6 +515,8 @@ Board_Modal = function (board) {
 			data: ajaxDate
 		})
 		.done(function (response) {
+
+			$tabPane.removeClass('loading');
 
 			var fieldId = response.data.id;
 			var fieldRecord = response.data;

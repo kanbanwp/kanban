@@ -240,7 +240,7 @@
 
 
 						{{isBoardAdmin}}
-						<div class="tab-pane" id="modal-tab-pane-lanes">
+						<div class="tab-pane loading" id="modal-tab-pane-lanes">
 
 							<div class="panel-group" id="board-modal-lanes-accordion">
 								{{=lanesHtml}}
@@ -251,21 +251,31 @@
 								        onclick="kanban.boards[{{%board.id}}].modal.laneAdd(this);">
 									<?php _e( 'Add a lane', 'kanban'); ?>
 								</button>
+								{{lanesHtml}}
+								{{:lanesHtml}}
+								<span class="show-on-loading">
+								<?php _e('Or', 'kanban') ?>
+								<button type="button"
+								        onclick="kanban.app.presetsToggleModal(this);"
+								        data-add="lanes and fields"
+								        class="btn btn-sm btn-primary">
+									<?php _e('Choose from a preset', 'kanban') ?>
+								</button>
+								</span>
+								{{/lanesHtml}}
 							</p>
 
 						</div><!--tab-lanes-->
 						{{/isBoardAdmin}}
 
 						{{isBoardAdmin}}
-						<div class="tab-pane" id="modal-tab-pane-fields">
-
+						<div class="tab-pane loading" id="modal-tab-pane-fields">
 
 							<div class="panel-group" id="board-modal-fields-accordion">
 								{{=fieldsHtml}}
 							</div>
 
-
-							<div class="dropdown">
+							<div class="dropdown" style="display: inline-block">
 								<button class="btn btn-default btn-sm dropdown-toggle"
 								        data-toggle="dropdown">
 									<?php _e( 'Add a field', 'kanban'); ?>
@@ -286,6 +296,19 @@
 									       data-field-type="tags"><?php _e( 'Tags', 'kanban'); ?></a></li>
 								</ul>
 							</div>
+							{{fieldsHtml}}
+							{{:fieldsHtml}}
+							<span class="show-on-loading">
+							<?php _e('Or', 'kanban') ?>
+							<button type="button"
+							        onclick="kanban.app.presetsToggleModal(this);"
+							        data-add="fields"
+							        class="btn btn-sm btn-primary">
+								<?php _e('Choose from a preset', 'kanban') ?>
+							</button>
+							</span>
+							{{/fieldsHtml}}
+
 
 						</div><!--tab-fields-->
 						{{/isBoardAdmin}}

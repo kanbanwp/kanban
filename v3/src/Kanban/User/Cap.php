@@ -642,6 +642,8 @@ class Kanban_User_Cap extends Kanban_User {
 
 		$row = parent::format_data_for_app( $row );
 
+		if ( empty($row) ) return array();
+
 		foreach ( $row as $key => &$value ) {
 			switch ( $key ) {
 				case 'capabilities':
@@ -661,6 +663,8 @@ class Kanban_User_Cap extends Kanban_User {
 		// Filter the data based on allowed fields.
 		$row = array_intersect_key( $row, $this->get_fields() );
 		ksort( $row );
+
+		if ( empty($row) ) return array();
 
 		foreach ( $row as $key => &$value ) {
 			switch ( $key ) {

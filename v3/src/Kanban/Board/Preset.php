@@ -23,48 +23,111 @@ class Kanban_Board_Preset {
 			return false;
 		}
 
+		if ( !isset($data['add']) ) {
+			$data['add'] = 'board, lanes and fields';
+		}
+
+		// Get the child preset.
 		$class = get_class( $this );
 
-		if ( isset($data['board_id']) && !empty($data['board_id']) && is_numeric($data['board_id']) ) {
-//			$board = Kanban_Board::instance()->get_row($data['board_id']);
-		} else {
+		// If board_id is no good, add a new board.
+		if ( !isset($data['board_id']) || empty($data['board_id']) || !is_numeric($data['board_id']) ) {
 
-			$board = Kanban_Board::instance()->set_row(array(
-				'label' => $class::instance()->info()['label']
-			));
+			// If "add" doesn't include "board", then don't add it.
+			if ( strpos($data['add'], 'board') === -1 ) {
+				return false;
+			}
 
+			// Get preset data.
+			$preset_data = $class::instance()->info();
+
+			// Create ne wboard.
+			$board = Kanban_Board::instance()->set_row( array(
+				'label' => $preset_data['label']
+			) );
+
+			// Add the new board id to data for saving.
 			$data['board_id'] = $board->id;
 		}
 
-		$lanes_order = array();
-		foreach ( $class::instance()->lanes() as $class_lane) {
-			$lane = Kanban_Lane::instance()->set_row( array(
-				'label' => $class_lane['label'],
-				'board_id' => $data['board_id']
-			) );
-
-			$lanes_order[] = $lane->id;
+		// If board_id is no good, return.
+		if ( !isset($data['board_id']) || empty($data['board_id']) || !is_numeric($data['board_id']) ) {
+			return false;
 		}
 
-		$fields_order = array();
-		foreach ( $class::instance()->fields() as $class_field) {
-			$field = Kanban_Field::instance()->set_row( array(
-				'field_type' => $class_field['field_type'],
-				'label' => $class_field['label'],
-				'options' => $class_field['options'],
-				'board_id' => $data['board_id']
-			) );
+		// If "add" includes "lane", then add fields.
+		if ( strpos($data['add'], 'lane') !== false ) {
 
-			$fields_order[] = $field->id;
+			// Add preset lanes.
+			$lanes_order = array();
+			foreach ( $class::instance()->lanes() as $class_lane ) {
+
+				// Add board to new lane.
+				$class_lane['board_id'] = $data['board_id'];
+
+				// Save lane.
+				$lane = Kanban_Lane::instance()->set_row( $class_lane );
+
+				// Add it to the list to be added to the board.
+				$lanes_order[] = $lane->id;
+			}
+
+			// Update the board with new lanes and fields.
+			$board = Kanban_Board::instance()->set_row(array(
+				'id' => $data['board_id'],
+				'lanes_order' => $lanes_order
+			));
 		}
 
-		$board = Kanban_Board::instance()->set_row(array(
-			'id' => $data['board_id'],
-			'lanes_order' => $lanes_order,
-			'fields_order' => $fields_order
-		));
+		// If "add" includes "field", then add fields.
+		if ( strpos($data['add'], 'field') !== false ) {
+
+			// Add preset fields.
+			$fields_order = array();
+			foreach ( $class::instance()->fields() as $class_field ) {
+
+				// Add board to new field.
+				$class_field['board_id'] = $data['board_id'];
+
+				// Save field.
+				$field = Kanban_Field::instance()->set_row( $class_field );
+
+				// Add it to the list to be added to the board.
+				$fields_order[] = $field->id;
+			}
+
+			// Update the board with new lanes and fields.
+			$board = Kanban_Board::instance()->set_row(array(
+				'id' => $data['board_id'],
+				'fields_order' => $fields_order
+			));
+		}
 
 		return $board;
+	}
+
+	public function get_info () {
+		// Get the child preset.
+		$class = get_class( $this );
+
+		$info = $class::instance()->info();
+		$info['class'] = str_replace('Kanban_', '', $class);
+
+		$info['lane_labels'] = '';
+		$lane_labels = array();
+		foreach ( $class::instance()->lanes() as $lane) {
+			$lane_labels[]= $lane['label'];
+		}
+		$info['lane_labels'] = implode(', ', $lane_labels);
+
+		$info['field_labels'] = '';
+		$field_labels = array();
+		foreach ( $class::instance()->fields() as $field) {
+			$field_labels[]= $field['label'];
+		}
+		$info['field_labels'] = implode(', ', $field_labels);
+
+		return $info;
 	}
 
 
@@ -77,8 +140,7 @@ class Kanban_Board_Preset {
 		$preset_classes = array();
 		foreach (get_declared_classes() as $class) {
 			if (is_subclass_of($class, __CLASS__)) {
-				$preset_classes[$class] = $class::instance()->info();
-				$preset_classes[$class]['class'] = str_replace('Kanban_', '', $class);
+				$preset_classes[$class] = $class::instance()->get_info();
 			}
 		}
 

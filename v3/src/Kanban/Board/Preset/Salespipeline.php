@@ -9,9 +9,8 @@ class Kanban_Board_Preset_Salespipeline extends Kanban_Board_Preset {
 
 	public function info () {
 		return array(
-			'label' => 'Sales Pipeline',
-			'description' => 'Collect leads, Follow-up with proposals, close more deals.',
-			'lanes' => 'New lead, 1st contact, Proposal out, Proposal accepted, Rejected',
+			'label' => __('Sales Pipeline', 'kanban'),
+			'description' => __('Collect leads, Follow-up with proposals, close more deals.', 'kanban'),
 			'icon' => 'ei ei-currency'
 		);
 	}
@@ -20,19 +19,19 @@ class Kanban_Board_Preset_Salespipeline extends Kanban_Board_Preset {
 
 		return array (
 			array (
-				'label' => 'New lead',
+				'label' => __('New lead', 'kanban'),
 			),
 			array (
-				'label' => '1st contact',
+				'label' => __('1st contact', 'kanban'),
 			),
 			array (
-				'label' => 'Proposal out',
+				'label' => __('Proposal out', 'kanban'),
 			),
 			array (
-				'label' => 'Proposal accepted',
+				'label' => __('Proposal accepted', 'kanban'),
 			),
 			array (
-				'label' => 'Rejected',
+				'label' => __('Rejected', 'kanban')
 			)
 		);
 	}
@@ -42,16 +41,16 @@ class Kanban_Board_Preset_Salespipeline extends Kanban_Board_Preset {
 		return array (
 			array (
 				'field_type' => 'title',
+				'label' => __('Title', 'kanban'),
 				'options' => array(
-					'label' => 'Title',
-					'placeholder' => 'Add a title'
+					'placeholder' => __('Add a title', 'kanban')
 				)
 			),
 			array (
 				'field_type' => 'text',
+				'label' => __('Description', 'kanban'),
 				'options' => array(
-					'label' => 'Description',
-					'placeholder' => 'Add a description'
+					'placeholder' => __('Add a description', 'kanban')
 				)
 			)
 		);

@@ -11,7 +11,6 @@ class Kanban_Board_Preset_Projectmanagement extends Kanban_Board_Preset {
 		return array(
 			'label' => 'Project Management',
 			'description' => 'Track tasks across projects, assign tasks to users, see who\'s working on what.',
-			'lanes' => 'Backlog, Ready, In progress, QA, Done, Archive',
 			'icon' => 'ei ei-easel'
 		);
 	}
@@ -20,22 +19,22 @@ class Kanban_Board_Preset_Projectmanagement extends Kanban_Board_Preset {
 
 		return array (
 			array (
-				'label' => 'Backlog',
+				'label' => __('Backlog', 'kanban'),
 			),
 			array (
-				'label' => 'Ready',
+				'label' => __('Ready', 'kanban'),
 			),
 			array (
-				'label' => 'In progress',
+				'label' => __('In progress', 'kanban'),
 			),
 			array (
-				'label' => 'QA',
+				'label' => __('QA', 'kanban'),
 			),
 			array (
-				'label' => 'Done',
+				'label' => __('Done', 'kanban'),
 			),
 			array (
-				'label' => 'Archive',
+				'label' => __('Archive', 'kanban'),
 			)
 		);
 	}
@@ -45,16 +44,16 @@ class Kanban_Board_Preset_Projectmanagement extends Kanban_Board_Preset {
 		return array (
 			array (
 				'field_type' => 'title',
+				'label' => __('Title', 'kanban'),
 				'options' => array(
-					'label' => 'Title',
-					'placeholder' => 'Add a title'
+					'placeholder' => __('Add a title', 'kanban')
 				)
 			),
 			array (
 				'field_type' => 'text',
+				'label' => __('Description', 'kanban'),
 				'options' => array(
-					'label' => 'Description',
-					'placeholder' => 'Add a description'
+					'placeholder' => __('Add a description', 'kanban')
 				)
 			)
 		);

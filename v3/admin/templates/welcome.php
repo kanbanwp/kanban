@@ -2,6 +2,12 @@
 
 	<?php $h2 = 'Kanban Boards for WordPress'; include Kanban::instance()->settings()->path . 'admin/templates/header.php'; ?>
 
+	<p style="text-align: center;">
+	<a href="<?php print wp_nonce_url(admin_url('options.php?page=kanban'), 'kanban3_to_2');?>" class="button">
+		Switch back version 2
+	</a>
+	</p>
+
 
 	<div id="poststuff">
 

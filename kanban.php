@@ -33,6 +33,38 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+function kanban_check_kanban2_to_3 () {
+	if ( ! function_exists( 'wp_verify_nonce' ) ) {
+		require_once( ABSPATH . 'wp-includes/pluggable.php' );
+	}
+
+	if ( is_admin() && wp_verify_nonce( $_GET['_wpnonce'], 'kanban2_to_3' ) ) {
+
+		$kanban_installed_ver = update_option( 'kanban_db_version', '3.0.0' );
+
+		wp_redirect(
+			add_query_arg(array(
+				'page' => 'kanban'
+			), admin_url('admin.php'))
+		);
+		exit;
+	}
+}
+add_action( 'plugins_loaded', 'kanban_check_kanban2_to_3', 10);
+
+
+
+$kanban_installed_ver = get_option( 'kanban_db_version' );
+
+if ( version_compare( $kanban_installed_ver, '3.0.0' ) >= 0 ) {
+	include plugin_dir_path( __FILE__ ) . '/v3/kanban.php';
+	return;
+}
+
+
+
+
+if ( !class_exists('Kanban') ) :
 
 /**
  * Load Kanban-specific classes
@@ -260,3 +292,4 @@ function Kanban()
 
 Kanban();
 
+endif; // class_exists

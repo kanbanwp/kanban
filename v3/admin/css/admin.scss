@@ -1,0 +1,82 @@
+@import '../../scss/mixins';
+
+#wpcontent {
+	position: relative;
+	&:before {
+		content: '';
+		display: block;
+		height: $margin*10;
+		left: 0;
+		position: absolute;
+		top: 0;
+		width: 100%;
+
+		/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#90c745+0,90c745+100&1+0,0+100 */
+		background: -moz-linear-gradient(top, rgba($color-kanban-green, .5) 0%, rgba($color-kanban-green, 0) 100%); /* FF3.6-15 */
+		background: -webkit-linear-gradient(top, rgba($color-kanban-green, .5) 0%, rgba($color-kanban-green, 0) 100%); /* Chrome10-25,Safari5.1-6 */
+		background: linear-gradient(to bottom, rgba($color-kanban-green, .5) 0%, rgba($color-kanban-green, 0) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+		filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='$color-kanban-green', endColorstr='#0090c745', GradientType=0); /* IE6-9 */
+	}
+}
+
+.wrap {
+	position: relative;
+
+	#kanban-header {
+		min-height: $margin*8;
+		margin-bottom: $margin;
+
+		#kanban-app-open {
+			background: white;
+			text-align: center;
+		}
+
+
+		h2 {
+			font-size: 3.82em;
+			font-weight: normal;
+			line-height: 1em;
+			margin: $margin*3 0 0;
+		}
+
+		#kanban-logo {
+			height: $margin*8;
+			pointer-events: none;
+			position: absolute;
+			top: 0;
+			right: $margin;
+			width: $margin*8;
+			z-index: 0;
+		}
+
+		@media screen and (max-width: $screen-sm-max) {
+			min-height: auto;
+
+			#kanban-app-open {
+				display: block;
+			}
+
+			h2 {
+				margin-top: $margin*1;
+			}
+
+			#kanban-logo {
+				display: block;
+				margin: $margin auto;
+				position: static;
+			}
+		}
+	}
+
+}
+
+.kanban-notice {
+	background: rgba(yellow, .5);
+	display: inline-block;
+	padding: $margin/3;
+
+	@media screen and (max-width: $screen-sm-max) {
+		display: block;
+	}
+}
+

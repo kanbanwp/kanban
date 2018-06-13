@@ -1,0 +1,62 @@
+#wpcontent {
+  position: relative; }
+  #wpcontent:before {
+    content: '';
+    display: block;
+    height: 150px;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#90c745+0,90c745+100&1+0,0+100 */
+    background: -moz-linear-gradient(top, rgba(144, 199, 69, 0.5) 0%, rgba(144, 199, 69, 0) 100%);
+    /* FF3.6-15 */
+    background: -webkit-linear-gradient(top, rgba(144, 199, 69, 0.5) 0%, rgba(144, 199, 69, 0) 100%);
+    /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(to bottom, rgba(144, 199, 69, 0.5) 0%, rgba(144, 199, 69, 0) 100%);
+    /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='$color-kanban-green', endColorstr='#0090c745', GradientType=0);
+    /* IE6-9 */ }
+
+.wrap {
+  position: relative; }
+  .wrap #kanban-header {
+    min-height: 120px;
+    margin-bottom: 15px; }
+    .wrap #kanban-header #kanban-app-open {
+      background: white;
+      text-align: center; }
+    .wrap #kanban-header h2 {
+      font-size: 3.82em;
+      font-weight: normal;
+      line-height: 1em;
+      margin: 45px 0 0; }
+    .wrap #kanban-header #kanban-logo {
+      height: 120px;
+      pointer-events: none;
+      position: absolute;
+      top: 0;
+      right: 15px;
+      width: 120px;
+      z-index: 0; }
+    @media screen and (max-width: 767px) {
+      .wrap #kanban-header {
+        min-height: auto; }
+        .wrap #kanban-header #kanban-app-open {
+          display: block; }
+        .wrap #kanban-header h2 {
+          margin-top: 15px; }
+        .wrap #kanban-header #kanban-logo {
+          display: block;
+          margin: 15px auto;
+          position: static; } }
+
+.kanban-notice {
+  background: rgba(255, 255, 0, 0.5);
+  display: inline-block;
+  padding: 5px; }
+  @media screen and (max-width: 767px) {
+    .kanban-notice {
+      display: block; } }
+
+/*# sourceMappingURL=admin.css.map */

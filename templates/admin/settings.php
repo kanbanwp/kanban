@@ -243,7 +243,7 @@
 							&nbsp;
 						</th>
 						<td>
-							<a href="<?php echo add_query_arg(array('_wpnonce' => wp_create_nonce( 'kanban2_to_3' ))) ?>" class="button">
+							<a href="<?php print wp_nonce_url(admin_url('options.php?page=kanban'), 'kanban2_to_3');?>" class="button">
 								Switch to version 3
 								(Extremely experimental)
 							</a>

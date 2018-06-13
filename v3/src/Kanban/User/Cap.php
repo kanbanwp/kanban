@@ -378,6 +378,11 @@ class Kanban_User_Cap extends Kanban_User {
 			return true;
 		}
 
+		// Check for admin cap.
+		if ( in_array( $cap, $user->capabilities->admin ) ) {
+			return true;
+		}
+
 		if ( (empty($board_id) || is_null( $board_id )) && isset($user->options->app['current_board']) ) {
 			$board_id = $user->options->app['current_board'];
 		}

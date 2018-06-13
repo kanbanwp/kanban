@@ -1,5 +1,34 @@
 <?php
+/*
+Plugin Name:        Kanban Boards for WordPress
+Plugin URI:         https://kanbanwp.com/
+Description:        Add Kanban boards to your WordPress sites and get organized! Project management, CRM, sales tracking...
+Version:            3.0.1
+Stable tag:         3.0.0
+Release Date:       October 12, 2017
+Requires at least:  4.0
+Tested up to:	    4.9
+Requires PHP:       5.3
+Author:             Gelform Inc
+Author URI:         http://gelform.com
+License:            GPL2
+Text Domain:        kanban
+Domain Path:        /languages/
+*/
 
+// Kanban is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 2 of the License, or
+// any later version.
+//
+// Kanban is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Kanban. If not, see <http://www.gnu.org/licenses/>.
+// Exit if accessed directly.
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }

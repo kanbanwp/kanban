@@ -1,5 +1,5 @@
 <div class="form-group form-group-title col col-sm-12">
-	<label><?php _e( 'Title:', 'kanban'); ?></label>
+	<label><?php _e( 'Field title:', 'kanban'); ?></label>
 	<input type="text"
 	       class="form-control"
 	       onfocus="kanban.fields[{{%field.id}}].titleOnfocus(this);"

@@ -16,7 +16,7 @@
 			<div class="panel-body">
 				<div class="wrapper-form-group row">
 					<div class="form-group form-group-title col col-sm-12">
-						<label><?php _e( 'Title:', 'kanban'); ?></label>
+						<label><?php _e( 'Lane title:', 'kanban'); ?></label>
 						<input type="text"
 						       class="form-control"
 						       onfocus="kanban.lanes[{{%lane.id}}].titleOnfocus(this);"

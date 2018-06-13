@@ -1,0 +1,15 @@
+.form-group-colorpicker {
+	.btn-color,
+	.btn-color-select {
+		background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAJElEQVQYV2NkwARpjGhiaQwMDLOQBcECIEUwQbgATBBFACQIAMPiBGx4mk1FAAAAAElFTkSuQmCC) repeat;
+		height: 2em;
+		width: 2em;
+	}
+
+	.dropdown-menu {
+		.col {
+			padding-bottom: $margin/2;
+			padding-top: $margin/2;
+		}
+	}
+}

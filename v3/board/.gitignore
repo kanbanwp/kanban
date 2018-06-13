@@ -1,0 +1,7 @@
+**/*.DS_Store
+config.codekit3
+node_modules/
+scss/*.css
+scss/*.css.map
+css/app.css
+js/app.js

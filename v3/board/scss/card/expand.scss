@@ -1,0 +1,15 @@
+.card-expand {
+	background: $color-core-50;
+
+	&:hover,
+	&:focus,
+	&:active {
+		background: $color-core-100;
+	}
+
+	i {
+		font-size: 2.618em;
+		line-height: .82;
+		vertical-align: middle;
+	}
+}

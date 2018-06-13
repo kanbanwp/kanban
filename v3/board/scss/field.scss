@@ -1,0 +1,112 @@
+.form-group {
+	margin-bottom: $margin;
+	position: relative;
+	z-index: 0;
+
+	&.is-editing,
+	&.is-active {
+		z-index: 1;
+	}
+
+	label {
+		color: $color-core-700;
+	}
+
+	select {
+		background: transparent;
+		border: 0;
+		border-radius: 0;
+		border-bottom: 2px solid $color-core-100;
+		height: $margin*2;
+		width: 100% !important;
+	}
+
+	.wrapper-contenteditable {
+		display: block;
+	}
+
+	.contenteditable-prevent-click {
+		background: transparent;
+		height: 1px;
+		margin-top: -1px;
+	}
+
+	//.btn-action,
+	.form-control,
+	.selectize-input {
+		border: 0;
+		border-bottom: 2px solid $color-core-100;
+		border-radius: 0;
+		color: $color-text;
+		height: auto;
+		padding: $margin/3 $margin/3 $margin/3 0;
+		transition: none;
+
+		-webkit-box-shadow: -$margin/5 0px 0px 0px transparent;
+		-moz-box-shadow: -$margin/5 0px 0px 0px transparent;
+		box-shadow: -$margin/5 0px 0px 0px transparent;
+
+		&:hover,
+		&:active,
+		&:focus {
+			background: $color-core-25;
+			border-bottom: 2px solid $color-core-200;
+
+			-webkit-box-shadow: -$margin/5 0px 0px 0px $color-core-25;
+			-moz-box-shadow: -$margin/5 0px 0px 0px $color-core-25;
+			box-shadow: -$margin/5 0px 0px 0px $color-core-25;
+
+		}
+
+		p {
+			margin-bottom: 0;
+		}
+
+
+		&[contenteditable="true"] {
+			display: inline-block; // chrome hack
+			width: 100%;
+
+			a {
+				text-decoration: underline;
+			}
+
+			&:empty {
+
+				color: $color-core-300;
+
+				&:before {
+					content: attr(placeholder);
+					cursor: text;
+					font-size: .82em;
+					//display: block; /* For Firefox */
+				}
+			}
+		}
+	} // form-control
+
+	.btn.ei {
+		padding-left: 0;
+	}
+
+}
+
+
+//$label-margin-bottom: 10px;
+//$margin-bottom: 10px;
+
+@import "./field/tags";
+@import "./field/title";
+@import "./field/comments";
+@import "./field/date";
+@import "./field/users";
+@import "./field/todo";
+@import "./field/estimate";
+@import "./field/img";
+@import "./field/text";
+@import "./field/file";
+@import "./field/toggle";
+@import "./field/radio";
+@import "./field/dropdown";
+@import "./field/colorpicker";
+

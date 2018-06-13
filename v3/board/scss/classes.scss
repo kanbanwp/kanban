@@ -1,0 +1,486 @@
+.text-muted {
+	color: $color-text;
+	opacity: .5;
+}
+
+//.well {
+//	background: $color-core-50;
+//	border: 0;
+//	border-radius: 0;
+//	box-shadow: none;
+//	padding: $margin;
+//}
+
+.emoji {
+	height: 24px;
+	margin-top: -$margin/2;
+	vertical-align: middle;
+}
+
+.mention {
+	color: $color-core-800;
+}
+
+.sortable-placeholder {
+	background: transparent;
+	border: 2px dashed $color-core-200 !important;
+	border-radius: $margin/5;
+	display: block;
+	margin-bottom: 10px !important;
+	min-height: $margin*2;
+
+	-webkit-box-shadow: inset 0 0 $margin/2 $margin/2 rgba($color-core-full, .236);
+	-moz-box-shadow: inset 0 0 $margin/2 $margin/2 rgba($color-core-full, .236);
+	box-shadow: inset 0 0 $margin/2 $margin/2 rgba($color-core-full, .236);
+
+	* {
+		visibility: hidden;
+	}
+}
+
+.gu-mirror {
+	position: fixed !important;
+	margin: 0 !important;
+	z-index: 9999 !important;
+	opacity: 0.8;
+	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=80)";
+	filter: alpha(opacity=80);
+}
+
+.gu-hide {
+	display: none !important;
+}
+
+.gu-unselectable {
+	-webkit-user-select: none !important;
+	-moz-user-select: none !important;
+	-ms-user-select: none !important;
+	user-select: none !important;
+}
+
+.gu-transit {
+	opacity: 0.2;
+	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=20)";
+	filter: alpha(opacity=20);
+}
+
+
+.selectize-control {
+
+	&.multi,
+	&.single {
+		.selectize-input {
+			background: transparent;
+			border: 0;
+			border-bottom: 2px solid $color-core-100;
+			border-radius: 0;
+			color: $color-text;
+			height: auto;
+			padding: $margin/3 $margin/3 $margin/3 0;
+			transition: none;
+
+			> div.selectize-item {
+				background: $color-core-200;
+				padding: 1px $margin/3;
+			}
+		}
+	}
+
+	.selectize-dropdown {
+		z-index: 1;
+	}
+}
+
+.dropzone {
+	min-height: auto;
+	border: 0;
+	padding: 0;
+	position: relative;
+
+	&.dz-drag-hover {
+		&:after {
+			background: rgba($color-core-500, .382);
+			border: 2px dashed $color-core-500;
+			bottom: 0;
+			content: 'Drop file here';
+			display: block;
+			font-size: 2em;
+			left: 0;
+			padding-top: 1em;
+			position: absolute;
+			right: 0; // -$margin/2;
+			text-align: center;
+			top: 0;
+			z-index: 1;
+		}
+	}
+
+	.dz-preview {
+		position: relative;
+		display: inline-block;
+		vertical-align: top;
+		margin: $margin $margin 0 0;
+		min-height: $margin;
+
+		.dz-image {
+			border-radius: 0;
+			display: inline-block;
+			height: $margin;
+			width: $margin;
+		}
+
+		.dz-details {
+			display: inline;
+			position: relative;
+			//top: 0;
+			//left: 0;
+			opacity: 1;
+			//font-size: 13px;
+			min-width: auto;
+			max-width: none;
+			padding: 0;
+			text-align: left;
+			color: $color-text;
+			line-height: 1;
+
+			.dz-size {
+				display: none;
+			}
+
+			.dz-filename {
+				display: inline-block;
+				overflow: hidden;
+				text-overflow: ellipsis;
+
+				&:hover span,
+				span {
+					background: transparent;
+					border: 0;
+					padding: 0;
+				}
+			}
+
+			.dz-success-mark {
+				//display: none;
+			}
+		}
+
+		.dz-progress {
+			background: $color-core-100;
+			bottom: 0;
+			border-radius: 0;
+			height: $margin/5;
+			top: auto;
+
+			.dz-upload {
+				background: $color-green;
+			}
+		}
+	}
+
+	&.dz-started .dz-message {
+		display: inline-block;
+	}
+
+	.dz-message {
+		margin: 0;
+		position: absolute;
+		right: 0;
+		top: 0;
+
+		// Copied from icons.
+		font-family: 'elegant-icons' !important;
+		-webkit-font-smoothing: antialiased;
+
+		// Copied from icons.
+		&:before {
+			content: "\e691";
+			padding-right: 5px;
+			font-size: 28px;
+			float: left;
+		}
+
+		span {
+			display: none;
+		}
+	}
+}
+
+.dropdown,
+.dropup {
+	.dropdown-menu {
+
+		li {
+			box-shadow: none;
+		}
+
+		a {
+			&.active {
+				-webkit-box-shadow: inset $margin/3 0px 0px 0px $color-green;
+				-moz-box-shadow: inset $margin/3 0px 0px 0px $color-green;
+				box-shadow: inset $margin/3 0px 0px 0px $color-green;
+			}
+
+			&:hover:not(.active) {
+				-webkit-box-shadow: inset $margin/3 0px 0px 0px rgba($color-core-300, .382);
+				-moz-box-shadow: inset $margin/3 0px 0px 0px rgba($color-core-300, .382);
+				box-shadow: inset $margin/3 0px 0px 0px rgba($color-core-300, .382);
+			}
+		}
+	}
+}
+
+.dropdown-menu > .active > a, .dropdown-menu > .active > a:focus, .dropdown-menu > .active > a:hover {
+	color: $color-text;
+	text-decoration: none;
+	background-color: $color-core-200;
+	outline: 0;
+}
+
+.collapsing { // speed up card expansion
+	-webkit-transition: height .35s ease;
+	-o-transition: height .35s ease;
+	transition: height .35s ease;
+}
+
+.ei-2x {
+	font-size: 2em;
+}
+
+.ei-loading {
+	-animation: spin .7s infinite linear;
+	-webkit-animation: spin2 .7s infinite linear;
+}
+
+@-webkit-keyframes spin2 {
+	from {
+		-webkit-transform: rotate(0deg);
+	}
+	to {
+		-webkit-transform: rotate(360deg);
+	}
+}
+
+@keyframes spin {
+	from {
+		transform: scale(1) rotate(0deg);
+	}
+	to {
+		transform: scale(1) rotate(360deg);
+	}
+}
+
+.loading {
+	.hide-on-loading {
+		display: none;
+	}
+
+	.show-on-loading {
+		display: inline-block;
+	}
+}
+
+.show-on-loading {
+	display: none;
+}
+
+.ei-circle {
+	background: $color-core-full;
+	border-radius: 50%;
+	display: inline-block;
+	height: 1em;
+	width: 1em;
+}
+
+
+body > #app-color-picker {
+	display: none;
+}
+
+#app-color-picker {
+	margin: $margin/3 $margin/2;
+}
+
+.navbar-collapse {
+	@media screen and (max-width: $screen-sm-max) {
+		padding: 0 0 $margin/3; // leave room for the shadow at the bottom.
+
+		-webkit-box-shadow: inset 0px $margin/3 0px 0px $color-core-500;
+		-moz-box-shadow: inset 0px $margin/3 0px 0px $color-core-500;
+		box-shadow: inset 0px (-$margin/3) 0px 0px $color-core-500;
+	}
+}
+
+.nav {
+	background: $color-core-100;
+	margin: 0;
+
+	> li {
+		a {
+			color: $color-text;
+		}
+
+		&.active {
+			> a {
+				background: white; // $color-core-50;
+
+				-webkit-box-shadow: inset 0px $margin/3 0px 0px $color-core-500;
+				-moz-box-shadow: inset 0px $margin/3 0px 0px $color-core-500;
+				box-shadow: inset 0px $margin/3 0px 0px $color-core-500;
+
+			}
+		}
+
+		&:focus:not(.active),
+		&:hover:not(.active) {
+			> a {
+				background: $color-core-200;
+
+				-webkit-box-shadow: inset 0px $margin/3 0px 0px $color-core-400;
+				-moz-box-shadow: inset 0px $margin/3 0px 0px $color-core-400;
+				box-shadow: inset 0px $margin/3 0px 0px $color-core-400;
+
+			}
+		}
+	}
+
+	@media screen and (max-width: $screen-sm-max) {
+		background: white;
+
+		> li {
+			&.active {
+				> a {
+					background: white; // $color-core-50;
+
+					-webkit-box-shadow: inset $margin/3 0px 0px 0px $color-core-500;
+					-moz-box-shadow: inset $margin/3 0px 0px 0px $color-core-500;
+					box-shadow: inset $margin/3 0px 0px 0px $color-core-500;
+
+				}
+			}
+
+			&:focus:not(.active),
+			&:hover:not(.active) {
+				> a {
+					background: $color-core-100;
+
+					-webkit-box-shadow: inset $margin/3 0px 0px 0px $color-core-400;
+					-moz-box-shadow: inset $margin/3 0px 0px 0px $color-core-400;
+					box-shadow: inset $margin/3 0px 0px 0px $color-core-400;
+
+				}
+			}
+
+			&.pull-left,
+			&.pull-right {
+				float: none !important;
+			}
+		}
+	}
+}
+
+//.modal {
+.panel-group {
+	.panel {
+		z-index: 0;
+
+		.panel-collapse {
+			z-index: 0;
+
+			&.in {
+				z-index: 1;
+			}
+		}
+	}
+}
+
+.panel {
+
+	.panel-title {
+		color: $color-text;
+		cursor: pointer;
+	}
+	//&:nth-child(odd) {
+	//	.panel-heading {
+	//		background: $color-core-25;
+	//	}
+	//}
+
+	.panel-heading {
+		background: rgba($color-core-25, .618);
+		//position: relative;
+	}
+}
+	//}
+//}
+
+.tab-pane {
+	padding-top: $margin;
+}
+
+@keyframes yellowfade {
+	from {
+		background: rgba($color-core-200, .382);
+	}
+	to {
+		background: transparent;
+	}
+}
+
+.highlight {
+	animation: yellowfade 1s;
+}
+
+.wrapper-avatar {
+	background: $color-core-600;
+	border-radius: 50%;
+	display: inline-block;
+	height: $margin*2;
+	margin-top: -1px;
+	width: $margin*2;
+	position: relative;
+	vertical-align: middle;
+
+	img {
+		border-radius: $margin;
+		display: inline-block;
+		left: 0;
+		max-height: $margin*2;
+		max-width: $margin*2;
+		position: absolute;
+		top: 0;
+		z-index: 0;
+
+		-webkit-box-shadow: 0px 0px 1px 3px white;
+		-moz-box-shadow: 0px 0px 1px 3px white;
+		box-shadow: 0px 0px 1px 3px white;
+	}
+
+	&:before {
+		color: white;
+		content: attr(data-initials);
+		font-size: $margin;
+		line-height: $margin*2;
+		position: absolute;
+		text-align: center;
+		width: 100%;
+		z-index: 0;
+	}
+}
+
+button.ei-close {
+	background: $color-red;
+	border: 0;
+	border-radius: 50%;
+	color: white;
+	display: none;
+	height: 2em;
+	line-height: 2em;
+	position: absolute;
+	top: -1em;
+	text-align: center;
+	right: -1em;
+	width: 2em;
+}
+
+@import './datepicker';

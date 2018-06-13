@@ -55,6 +55,22 @@ class Kanban_Board extends Kanban_Abstract {
 
 		$row = $this->set_row( array() );
 
+		// Add a title field.
+		$field = Kanban_Field::instance()->set_row( array (
+			'board_id' => $row->id,
+			'field_type' => 'title',
+			'label' => __('Title', 'kanban'),
+			'options' => array(
+				'placeholder' => __('Add a title', 'kanban')
+			)
+		) );
+
+		// Update the board with the new field.
+		$row = Kanban_Board::instance()->set_row(array(
+			'id' => $row->id,
+			'fields_order' => array($field->id)
+		));
+
 		return $row;
 	}
 

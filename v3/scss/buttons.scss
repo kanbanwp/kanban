@@ -1,0 +1,132 @@
+.btn {
+	box-shadow: none;
+
+	&:hover,
+	&:focus,
+	&:active,
+	&.active {
+		box-shadow: none;
+	}
+
+	&.btn-default {
+		background: $color-core-100;
+		border-color: $color-core-100;
+		cursor: pointer;
+
+		&:hover,
+		&:focus,
+		&:active,
+		&.active {
+			background: $color-core-200;
+			border-color: $color-core-200;
+		}
+
+	//	> * {
+	//		color: white;
+	//	}
+	}
+
+	&.btn-primary {
+		border-color: $color-core-500;
+		background: $color-core-500;
+		cursor: pointer;
+
+		&:hover,
+		&:focus,
+		&:active {
+			border-color: $color-core-600;
+			background: $color-core-600;
+		}
+	//
+	//	&[disabled] {
+	//		background: rgba($color-core-800, .82);
+	//
+	//		&:hover,
+	//		&:focus,
+	//		&:active {
+	//			color: white;
+	//		}
+	//	}
+	//
+	//	> * {
+	//		color: white;
+	//	}
+	}
+
+	//&.btn-danger {
+	//	background: rgba($color-red, .92);
+	//
+	//	&:hover,
+	//	&:focus,
+	//	&:active {
+	//		background: rgba($color-red, .82);
+	//	}
+	//}
+	//
+	//&.btn-success {
+	//	background: rgba($color-green, .92);
+	//
+	//	&:hover,
+	//	&:focus,
+	//	&:active {
+	//		background: rgba($color-green, .82);
+	//	}
+	//}
+	//
+	//&.btn-warning {
+	//	background: rgba($color-orange, .92);
+	//
+	//	&:hover,
+	//	&:focus,
+	//	&:active {
+	//		background: rgba($color-orange, .82);
+	//	}
+	//}
+	//
+	//&.btn-info {
+	//	background: rgba($color-blue, .92);
+	//
+	//	&:hover,
+	//	&:focus,
+	//	&:active {
+	//		background: rgba($color-blue, .82);
+	//	}
+	//}
+
+	&.btn-empty,
+	&.btn-link {
+		background: transparent;
+		box-shadow: none;
+		color: $color-text;
+		cursor: pointer;
+
+		//-webkit-box-shadow: none;
+		//-moz-box-shadow: none;
+		//box-shadow: none;
+
+		&:hover,
+		&:focus,
+		&:active {
+			background: transparent;
+			box-shadow: none;
+			color: $color-text;
+
+			//-webkit-box-shadow: none;
+			//-moz-box-shadow: none;
+			//box-shadow: none;
+		}
+	}
+
+	&.btn-link {
+		text-decoration: underline;
+	}
+
+	&.btn-fade {
+		opacity: .5;
+
+		&:hover {
+			opacity: 1;
+		}
+	}
+
+}

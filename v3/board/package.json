@@ -8,11 +8,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://kanban@bitbucket.org/kanbanwp/v3-static.git"
+    "url": "git+https://github.com/gelform/kanban.git"
   },
   "author": "",
   "license": "ISC",
-  "homepage": "https://bitbucket.org/kanbanwp/v3-static#readme",
+  "homepage": "https://github.com/gelform/kanban",
   "devDependencies": {
     "bootstrap-datepicker": "^1.7.1",
     "css-loader": "^0.28.7",

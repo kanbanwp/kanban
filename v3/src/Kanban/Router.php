@@ -138,6 +138,9 @@ class Kanban_Router {
 		return self::$instance;
 	}
 
+	/**
+	 * If site_takeover option is enabled, redirect all non-kanban pages to board.
+	 */
 	public static function redirect_to_kanban_app () {
 		if ( is_admin() ) return;
 

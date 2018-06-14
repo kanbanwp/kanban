@@ -30,14 +30,6 @@ class Kanban_App_Option extends Kanban_Abstract {
 	 */
 	protected $table = 'app_options';
 
-	private $slugs = array(
-		'board',
-		'login',
-		'ajax',
-		'reports',
-		'test'
-	);
-
 	/**
 	 * construct that can't be overwritten
 	 */

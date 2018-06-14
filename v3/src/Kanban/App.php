@@ -12,16 +12,6 @@ class Kanban_App {
 	// the instance of this object
 	private static $instance;
 
-
-	private $slugs = array(
-		'board',
-		'login',
-		'ajax',
-		'reports',
-		'test'
-	);
-
-
 	/**
 	 * construct that can't be overwritten
 	 */

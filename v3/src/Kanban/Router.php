@@ -14,9 +14,9 @@ class Kanban_Router {
 
 
 	private $slugs = array(
+		'login', // Redirect old version 2 url.
 		'board',
-		'ajax',
-		'reports'
+		'ajax'
 	);
 
 
@@ -73,13 +73,17 @@ class Kanban_Router {
 		add_filter( 'option_active_plugins', array( self::$instance, 'filter_active_plugins' ) );
 		add_filter( 'after_setup_theme', array( self::$instance, 'disable_widgets' ) );
 
-		$template_file = sprintf(
-			'%s%s/index.php',
-			Kanban::instance()->settings()->path,
+		$app_file_path = apply_filters(
+			'kanban_maybe_load_page_app_file_path',
+			sprintf(
+				'%s%s/index.php',
+				Kanban::instance()->settings()->path,
+				$slug
+			),
 			$slug
 		);
 
-		if ( ! is_file( $template_file ) ) {
+		if ( ! is_file( $app_file_path ) ) {
 			return;
 		}
 
@@ -97,7 +101,7 @@ class Kanban_Router {
 //			return;
 //		}
 
-		require_once $template_file;
+		require_once $app_file_path;
 		exit;
 	}
 

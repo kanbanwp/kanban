@@ -25,7 +25,7 @@
 			</ul>
 			{{/isAddBoard}}
 
-			<ul class="nav navbar-nav navbar-right">
+			<ul class="nav navbar-nav navbar-right" id="header-user-nav">
 				{{isUserLoggedIn}}
 				<li class="dropdown">
 					<a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown">

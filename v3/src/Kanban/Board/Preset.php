@@ -9,7 +9,7 @@ class Kanban_Board_Preset {
 //	private $board_id = '';
 
 	public function ajax_get_presets_data () {
-		if ( !Kanban_User::instance()->current_user_has_cap('board') ) {
+		if ( !Kanban_User::instance()->current_user_has_cap('admin-board-create') ) {
 			header( 'HTTP/1.1 401 Current user does not have cap' );
 			return false;
 		}
@@ -18,7 +18,7 @@ class Kanban_Board_Preset {
 	}
 
 	public function ajax_add ($data) {
-		if ( !Kanban_User::instance()->current_user_has_cap('board') ) {
+		if ( !Kanban_User::instance()->current_user_has_cap('admin-board-create') ) {
 			header( 'HTTP/1.1 401 Current user does not have cap' );
 			return false;
 		}

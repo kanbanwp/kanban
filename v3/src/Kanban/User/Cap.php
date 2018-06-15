@@ -379,10 +379,11 @@ class Kanban_User_Cap extends Kanban_User {
 		}
 
 		// Check for admin cap.
-		if ( in_array( $cap, $user->capabilities->admin ) ) {
+		if ( isset($user->capabilities) && in_array( $cap, $user->capabilities->admin ) ) {
 			return true;
 		}
 
+		// If they got this far and no boardId, try to load it.
 		if ( (empty($board_id) || is_null( $board_id )) && isset($user->options->app['current_board']) ) {
 			$board_id = $user->options->app['current_board'];
 		}
@@ -392,26 +393,28 @@ class Kanban_User_Cap extends Kanban_User {
 			return false;
 		}
 
+		// Break it up.
+		$capArr = explode( '-', $cap );
+
+		// If user created the board, treat them like a board admin.
+		$board = Kanban_Board::instance()->get_row( $board_id );
+
+		if ( $board->created_user_id == $user->id && $capArr[0] == 'board' ) {
+			return true;
+		}
+
 		// If there's no record, they don't have the cap.
 		if ( ! isset( $user->capabilities->boards[ $board_id ] ) ) {
 			return false;
 		}
 
 		// Check for section admin.
-		$capArr = explode( '-', $cap );
 		if ( in_array( $capArr[0], $user->capabilities->boards[ $board_id ] ) ) {
 			return true;
 		}
 
 		// Check for cap.
 		if ( in_array( $cap, $user->capabilities->boards[ $board_id ] ) ) {
-			return true;
-		}
-
-		// If they created the board, they have total control.
-		$board = Kanban_Board::instance()->get_row( $board_id );
-
-		if ( $board->created_user_id == $user->id ) {
 			return true;
 		}
 

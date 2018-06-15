@@ -190,49 +190,47 @@ function User(record) {
 			return true;
 		}
 
-		// Break it up.
-		var capArr = cap.split('-');
-
-		// Check for section admin.
-		var capSection = capArr[0];
-		if ( userCaps.includes(capSection) ) {
-			return true;
-		}
-
 		// Check for cap.
 		if ( userCaps.includes(cap) ) {
 			return true;
 		}
 
-		// If they got this far and no boardId, false.
+		// If they got this far and no boardId, try to load it.
 		if ( 'undefined' === typeof boardId || isNaN(boardId) ) {
 			boardId = kanban.app.current_board_id();
+		}
+
+		// If they got this far and no boardId, false.
+		if ( 'undefined' === typeof boardId || isNaN(boardId) ) {
+			return false;
+		}
+
+		// Break it up.
+		var capArr = cap.split('-');
+
+		var capSection = capArr[0];
+
+		// If user created the board, treat them like a board admin.
+		if ( 'undefined' !== typeof kanban.app.current_board() && kanban.app.current_board() != null ) {
+			var board = kanban.app.current_board();
+
+			if ( board.record().created_user_id == self.id() && capSection == 'board' ) {
+				return true;
+			}
 		}
 
 		var userBoardCaps = self.capsBoard(boardId);
 
 		// Check for section admin.
-		var capSection = capArr[0];
-		if ( userBoardCaps.indexOf(capSection) !== -1 ) {
-			// console.log('capSection', capSection);
+		if ( userBoardCaps.includes(capSection) ) {
 			return true;
 		}
 
 		// Check for cap.
-		if ( userBoardCaps.indexOf(cap) !== -1 ) {
-			// console.log('cap', capSection);
+		if ( userBoardCaps.includes(cap) ) {
 			return true;
 		}
-
-		// If user created the board, treat them like an admin.
-		if ( 'undefined' !== typeof kanban.app.current_board() && kanban.app.current_board() != null ) {
-			var board = kanban.app.current_board();
-
-			if ( board == null || board.record().created_user_id == self.id()) {
-				return true;
-			}
-		}
-
+		
 		// Assume false.
 		return false;
 	}; // hasCap

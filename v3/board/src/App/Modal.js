@@ -15,8 +15,6 @@ App_Modal = function (app) {
 
 		var self = this;
 
-		// No cap check, because a user can change their own app settings.
-
 		if ( !kanban.app.current_user().hasCap('admin-users') ) {
 			kanban.app.urlParamRemove('modal');
 			kanban.app.urlReplace();

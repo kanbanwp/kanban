@@ -148,7 +148,7 @@ class Kanban_Admin {
 		// add the base slug and page
 		add_menu_page(
 			Kanban::instance()->settings()->pretty_name,
-			Kanban::instance()->settings()->pretty_name,
+			apply_filters('kanban_admin_admin_menu_page_title', Kanban::instance()->settings()->pretty_name),
 			'read',
 			Kanban::instance()->settings()->basename,
 			null,

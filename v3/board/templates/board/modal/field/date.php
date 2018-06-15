@@ -6,13 +6,13 @@
 			</a>
 
 			<a class="h4 panel-title" data-toggle="collapse" data-parent="#board-modal-fields-accordion"
-			   href="#board-modal-field-{{%field.id}}-settings">
+			   href="#board-modal-field-{{%field.id}}-options">
 				{{field.label}}{{=field.label}}{{:field.label}}<i><?php _e( 'Field name', 'kanban'); ?></i>{{/field.label}}
 			</a>
 
 			<small class="text-muted"><?php _e( 'Date', 'kanban'); ?></small>
 		</div>
-		<div id="board-modal-field-{{%field.id}}-settings" class="panel-collapse collapse {{open}}in{{/open}}">
+		<div id="board-modal-field-{{%field.id}}-options" class="panel-collapse collapse {{open}}in{{/open}}">
 			<div class="panel-body">
 				<div class="wrapper-form-group row">
 					<?php include DIR . '/inc/board/modal/field/title.php' ?>

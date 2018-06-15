@@ -79,7 +79,7 @@
 					</li>
 					{{isSeeBoardModal}}
 					<li>
-						<a href="javascript:void(0);" id="footer-menu-board-settings-button"
+						<a href="javascript:void(0);"
 						   title="shift + B"
 						   onclick="kanban.app.currentBoardModalShow(); return false;">
 							<?php echo __( 'Edit the board', 'kanban' ) ?>

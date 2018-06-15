@@ -292,6 +292,11 @@ function Board(record) {
 			})
 			.done(function (response) {
 
+				if ( 'undefined' === typeof response.data ||'undefined' === typeof response.data.id ) {
+					kanban.app.notify(kanban.strings.board.retrieve_error);
+					return false;
+				}
+
 				// kanban.new_data = $.extend(true, kanban.new_data, response.data);
 				kanban.app.processNewData(response.data);
 				self.setLanesLoaded();

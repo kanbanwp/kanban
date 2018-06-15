@@ -93,6 +93,11 @@ function Fieldvalue(record) {
 		})
 		.done(function (response) {
 
+			if ( 'undefined' === typeof response.data ||'undefined' === typeof response.data.id ) {
+				kanban.app.notify(kanban.strings.field.updated_error);
+				return false;
+			}
+
 			// Replace the whole record.
 			var fieldvalueId = response.data.id;
 			var fieldvalueRecord = response.data;

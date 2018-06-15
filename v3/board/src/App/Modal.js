@@ -233,6 +233,11 @@ App_Modal = function (app) {
 		})
 		.done(function (response) {
 
+			if ( 'undefined' === typeof response.data ||'undefined' === typeof response.data.id ) {
+				kanban.app.notify(kanban.strings.user.updated_error);
+				return false;
+			}
+
 			var userId = response.data.id;
 			var userRecord = response.data;
 			var user = kanban.users[userId] = new User(userRecord);

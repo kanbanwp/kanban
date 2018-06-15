@@ -411,6 +411,11 @@ Board_Modal = function (board) {
 		})
 		.done(function (response) {
 
+			if ( 'undefined' === typeof response.data ||'undefined' === typeof response.data.id ) {
+				kanban.app.notify(kanban.strings.lane.added_error);
+				return false;
+			}
+
 			$tabPane.removeClass('loading');
 
 			var laneId = response.data.id;
@@ -518,6 +523,11 @@ Board_Modal = function (board) {
 
 			$tabPane.removeClass('loading');
 
+			if ( 'undefined' === typeof response.data ||'undefined' === typeof response.data.id ) {
+				kanban.app.notify(kanban.strings.field.added_error);
+				return false;
+			}
+
 			var fieldId = response.data.id;
 			var fieldRecord = response.data;
 
@@ -614,6 +624,11 @@ Board_Modal = function (board) {
 			}
 		})
 		.done(function (response) {
+
+			if ( 'undefined' === typeof response.data ||'undefined' === typeof response.data.id ) {
+				kanban.app.notify(kanban.strings.user.updated_error);
+				return false;
+			}
 
 			var userId = response.data.id;
 			var userRecord = response.data;

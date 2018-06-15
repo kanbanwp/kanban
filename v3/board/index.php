@@ -63,10 +63,6 @@ foreach ( new RecursiveIteratorIterator( $di ) as $filename => $file ) {
 	var kanban = {};
 
 	kanban.templates = {};
-	kanban.notices = {
-		field_save_error: "Couldn't save field"
-	};
-
 	kanban.app = null;
 	kanban.users = {};
 	kanban.usergroups = {};

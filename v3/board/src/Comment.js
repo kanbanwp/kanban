@@ -189,6 +189,13 @@ function Comment(record) {
 			data: ajaxDate
 		})
 		.done(function (response) {
+
+			if ( 'undefined' === typeof response.data ) {
+				kanban.app.notify(kanban.strings.comment.updated_error);
+				return false;
+			}
+
+			// @todo replace comment record?
 			_self.record = response.data;
 
 			self.rerenderNotEditable();

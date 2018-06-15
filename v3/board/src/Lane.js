@@ -72,6 +72,11 @@ function Lane(record) {
 		})
 		.done(function() {
 
+			if ( 'undefined' === typeof response.data ||'undefined' === typeof response.data.id ) {
+				kanban.app.notify(kanban.strings.lane.updated_error);
+				return false;
+			}
+
 			self.rerender();
 		});
 
@@ -318,6 +323,11 @@ function Lane(record) {
 			data: ajaxDate
 		})
 		.done(function (response) {
+
+			if ( 'undefined' === typeof response.data ||'undefined' === typeof response.data.id ) {
+				kanban.app.notify(kanban.strings.card.added_error);
+				return false;
+			}
 
 			var cardId = response.data.id;
 			var cardRecord = response.data;

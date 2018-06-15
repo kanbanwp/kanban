@@ -96,6 +96,11 @@ Card_Modal = function (card) {
 			})
 				.done(function (response) {
 
+					if ( 'undefined' === typeof response.data ) {
+						kanban.app.notify(kanban.strings.comment.retrieve_error);
+						return false;
+					}
+
 					for (var commentId in response.data) {
 
 						var commentRecord = response.data[commentId];

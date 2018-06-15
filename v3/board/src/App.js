@@ -871,6 +871,11 @@ function App(record) {
 		})
 		.done(function (response) {
 
+			if ( 'undefined' === typeof response.data ||'undefined' === typeof response.data.id ) {
+				kanban.app.notify(kanban.strings.board.added_error);
+				return false;
+			}
+
 			// Add boards to app.
 			var boardId = response.data.id;
 			var boardRecord = response.data;

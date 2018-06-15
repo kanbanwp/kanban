@@ -344,6 +344,11 @@ function Card(record) {
 		})
 		.done(function (response) {
 
+			if ( 'undefined' === typeof response.data ||'undefined' === typeof response.data.id ) {
+				kanban.app.notify(kanban.strings.comment.added_error);
+				return false;
+			}
+
 			var commentId = response.data.id;
 			var commentRecord = response.data;
 			var comment = kanban.comments[commentId] = new Comment(commentRecord);
@@ -400,6 +405,11 @@ function Card(record) {
 			data: ajaxDate
 		})
 		.done(function (response) {
+
+			if ( 'undefined' === typeof response.data ) {
+				kanban.app.notify(kanban.strings.card.updated_error);
+				return false;
+			}
 
 			// Since it's a successful request, update the last time we checked.
 			kanban.app.updates().lastCheck = new Date().getTime();

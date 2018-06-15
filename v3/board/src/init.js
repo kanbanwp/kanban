@@ -65,8 +65,7 @@ $(function () {
 			growl_response_message( response );
 		}
 		catch ( err ) {
-			// @todo Load notice based on type and action.
-			// notify( kanban.notices.task_save_error );
+
 		}
 	} );
 

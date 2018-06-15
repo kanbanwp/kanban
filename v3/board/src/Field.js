@@ -184,6 +184,11 @@ function Field(record) {
 		})
 		.done(function (response) {
 
+			if ( 'undefined' === typeof response.data ||'undefined' === typeof response.data.id ) {
+				kanban.app.notify(kanban.strings.field.updated_error);
+				return false;
+			}
+
 			// Replace the whole record.
 			var fieldvalueId = response.data.id;
 			var fieldvalueRecord = response.data;
@@ -250,12 +255,17 @@ function Field(record) {
 		})
 		.done(function (response) {
 
+			if ( 'undefined' === typeof response.data ||'undefined' === typeof response.data.id ) {
+				kanban.app.notify(kanban.strings.field.updated_error);
+				return false;
+			}
+
 			var fieldId = response.data.id;
 			var fieldRecord = response.data;
 
-			self._self.record = fieldRecord;
+			var field = kanban.field[fieldId] = new Field(fieldRecord);
 
-			var board = kanban.boards[self.record().board_id];
+			var board = kanban.boards[fieldRecord.board_id];
 
 			board.show();
 		}); // done

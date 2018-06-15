@@ -292,7 +292,7 @@ function Board(record) {
 			})
 			.done(function (response) {
 
-				if ( 'undefined' === typeof response.data ||'undefined' === typeof response.data.id ) {
+				if ( 'undefined' === typeof response.data ) {
 					kanban.app.notify(kanban.strings.board.retrieve_error);
 					return false;
 				}

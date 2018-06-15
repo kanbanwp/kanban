@@ -125,6 +125,10 @@ class Kanban_Board extends Kanban_Abstract {
 				$user_can_view = true;
 			}
 
+			if ( ! $user_can_view && Kanban_User::current_user_has_cap('admin-board-view-all') ) {
+					$user_can_view = true;
+			}
+
 			if ( ! $user_can_view ) {
 				$current_user = Kanban_User::instance()->get_current();
 

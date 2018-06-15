@@ -300,24 +300,33 @@ class Kanban_App {
 				'title' => __( 'Kanban for WordPress', 'kanban' ),
 				'icon' => Kanban::instance()->settings()->uri . 'img/notify-favicon-250.png'
 			),
+			'user' => array(
+				'updated' => __( 'User updated', 'kanban' ),
+				'updated_error' => __( 'There was an error updating the user', 'kanban' ),
+			),
 			'app'    => array(
-				'settings_updated' => __( '{0} updated the settings', 'kanban' ),
+				// 'settings_updated' => __( '{0} updated the settings', 'kanban' ),
 			),
 			'board' => array(
 				'added_error'               => __( 'There was an error adding the board', 'kanban' ),
+				'retrieve_error' => __( 'There was an error retrieving the board', 'kanban' )
+			),
+			'lane' => array(
+				'updated_error' => __( 'There was an error updating the lane', 'kanban' ),
+				'added_error'               => __( 'There was an error adding the lane', 'kanban' ),
 			),
 			'preset' => array(
 				'added_error'               => __( 'There was an error adding the preset', 'kanban' ),
 			),
 			'card'   => array(
 				'added'                     => __( 'Added the card', 'kanban' ),
+				'added_error'               => __( 'There was an error adding the card', 'kanban' ),
 //				'deleted'                   => __( 'Deleted the card' ),
 				'restore'                   => __( 'Card deleted. <u>Undo</u>?', 'kanban' ),
 				'undeleted'                 => __( 'Restored the deleted card', 'kanban' ),
 				'updates'                   => __( 'Your cards have been synced.', 'kanban' ),
-				'added_error'               => __( 'There was an error adding a card', 'kanban' ),
-				'save_error'                => __( 'There was an error saving that card', 'kanban' ),
-				'delete_error'              => __( 'There was an error deleting that card', 'kanban' ),
+				'updated_error'                => __( 'There was an error saving the card', 'kanban' ),
+				'delete_error'              => __( 'There was an error deleting the card', 'kanban' ),
 //				'moved_to_lane'             => __( 'Moved the card to "{0}"' ),
 //				'moved_to_lane_previous'    => __( ' (previously "{0}")' ),
 //				'moved_to_position'         => __( 'Reordered the card' ),
@@ -325,9 +334,19 @@ class Kanban_App {
 				'lane_wip_card_limit_error' => __( 'The WIP (Work In Progress) limit has been reached.', 'kanban' ),
 			),
 			'field'  => array(
+				'added_error'               => __( 'There was an error adding the field', 'kanban' ),
+				'updated_error' => __( 'There was an error updating the field', 'kanban' ),
 //				'updated'              => __( 'Updated "{0}"' ),
 //				'updated_with_content' => __( ' to: {0}' ),
 //				'updated_previous'     => __( ' Previously: {0}' )
+			),
+			'comment' => array(
+				'updated_error' => __( 'There was an error updating the comment', 'kanban' ),
+				'added_error'               => __( 'There was an error adding the comment', 'kanban' ),
+				'retrieve_error' => __( 'There was an error retrieving the comments', 'kanban' )
+			),
+			'general' => array(
+				'error' => __( 'There was an error', 'kanban' )
 			)
 		);
 	}

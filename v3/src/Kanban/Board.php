@@ -128,7 +128,7 @@ class Kanban_Board extends Kanban_Abstract {
 			if ( ! $user_can_view ) {
 				$current_user = Kanban_User::instance()->get_current();
 
-				if ( isset( $current_user->capabilities->boarsd[ $board->id ] ) ) {
+				if ( isset( $current_user->capabilities->boards[ $board->id ] ) ) {
 					$user_can_view = true;
 				}
 			}

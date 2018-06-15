@@ -216,7 +216,7 @@ function Board(record) {
 			var laneId = boardRecord.lanes_order[i];
 
 			if ('undefined' === typeof kanban.lanes[laneId]) {
-				self.laneOrderRemove([laneId]);
+				// self.laneOrderRemove([laneId]);
 				continue;
 			}
 

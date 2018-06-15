@@ -3,7 +3,7 @@
 <div class="container-fluid">
 	<div class="navbar-header">
 
-		<button type="button" class="btn btn-default btn-toggle-lane visible-sm-inline visible-xs-inline"
+		<button type="button" class="btn btn-default btn-toggle-lane visible-xs-inline"
 		        data-direction="left"
 		        onclick="kanban.app.toggleLane(this);">
 			<span class="sr-only"><?php _e( 'Toggle lanes', 'kanban'); ?></span>
@@ -15,7 +15,7 @@
 			<i class="ei ei-menu ei-2x"></i>
 		</button>
 
-		<button type="button" class="btn btn-default btn-toggle-lane visible-sm-inline visible-xs-inline" data-direction="right" onclick="kanban.app.toggleLane(this);">
+		<button type="button" class="btn btn-default btn-toggle-lane visible-xs-inline" data-direction="right" onclick="kanban.app.toggleLane(this);">
 			<span class="sr-only"><?php _e( 'Toggle lanes', 'kanban'); ?></span>
 			<i class="ei ei-arrow_carrot-right ei-2x"></i>
 		</button>

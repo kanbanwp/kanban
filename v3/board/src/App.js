@@ -182,7 +182,9 @@ function App(record) {
 
 		// Add boards to app.
 		var boardTabsHtml = '';
+		var boardTabsDropdownHtml = '';
 
+		var boardsCount = 0;
 		for (var i in self.record().boards) {
 
 			var boardId = self.record().boards[i];
@@ -194,13 +196,22 @@ function App(record) {
 
 			var board = kanban.boards[boardId];
 
-			boardTabsHtml += kanban.templates['header-board-tab'].render({
-				board: board.record()
-			});
+			if ( boardsCount < 5 || boardId == self.current_board_id() ) {
+				boardTabsHtml += kanban.templates['header-board-tab'].render({
+					board: board.record()
+				});
+			} else {
+				boardTabsDropdownHtml += kanban.templates['header-board-tab'].render({
+					board: board.record()
+				});
+			}
+
+			boardsCount++;
 		}
 
 		var headerHtml = kanban.templates['header'].render({
 			boardTabsHtml: boardTabsHtml,
+			boardTabsDropdownHtml: boardTabsDropdownHtml,
 			isUserLoggedIn: self.current_user_id() > 0 ? true : false,
 			currentUser: 'undefined' === typeof self.current_user() ? null : self.current_user().record(),
 			isAddBoard: self.current_user().hasCap('admin-board-create')

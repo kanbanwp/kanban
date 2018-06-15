@@ -17,7 +17,7 @@
 	box-shadow: 0px (-$margin/3) 0px 0px white;
 
 	.container-fluid {
-		@media screen and (min-width: $screen-sm-min) {
+		@media screen and (min-width: $screen-xs-min) {
 			display: inline-block;
 		}
 	}

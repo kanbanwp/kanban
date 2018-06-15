@@ -12,13 +12,24 @@
 		</div>
 		<nav id="header-navbar" class="navbar-collapse collapse">
 			<ul class="nav navbar-nav" id="header-board-tabs">
-					{{=boardTabsHtml}}
+				{{=boardTabsHtml}}
+				{{boardTabsDropdownHtml}}
+				<li class="dropdown">
+					<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+						<?php _e('More boards', 'kanban') ?>
+						<span class="caret"></span>
+					</a>
+					<ul class="dropdown-menu">
+						{{=boardTabsDropdownHtml}}
+					</ul>
+				</li>
+				{{/boardTabsDropdownHtml}}
 			</ul>
 			{{isAddBoard}}
 			<ul class="nav navbar-nav">
 				<li class="">
 					<a href="javascript:void(0);"class="" id="header-board-tabs-add-new" onclick="kanban.app.addBoard(this); return false;">
-						<span class="visible-sm-inline visible-xs-inline"><?php _e( 'Add a board', 'kanban'); ?></span>
+						<span class="visible-xs-inline"><?php _e( 'Add a board', 'kanban'); ?></span>
 						<span class=" ei ei-plus hiden-sm hidden-xs"></span>
 					</a>
 				</li>

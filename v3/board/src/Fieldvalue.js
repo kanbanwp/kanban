@@ -41,8 +41,12 @@ function Fieldvalue(record) {
 			return false;
 		}
 
+		if ( 'undefined' === typeof kanban.cards[self.cardId()] ) {
+			return false;
+		}
+
 		var field = kanban.fields[self.fieldId()];
-		var card = kanban.fields[self.cardId()];
+		var card = kanban.cards[self.cardId()];
 
 		return field.rerender(self, card);
 

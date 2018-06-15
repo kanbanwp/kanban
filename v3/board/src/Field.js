@@ -24,7 +24,11 @@ function Field(record) {
 	}; // record
 
 	this.id = function () {
-		return this._self.record.id;
+		return this._self.record.id + 0;
+	}; // id
+
+	this.boardId = function () {
+		return this._self.record.board_id + 0;
 	}; // id
 
 	this.label = function () {
@@ -265,7 +269,7 @@ function Field(record) {
 
 			var field = kanban.field[fieldId] = new Field(fieldRecord);
 
-			var board = kanban.boards[fieldRecord.board_id];
+			var board = kanban.boards[self.boardId()];
 
 			board.show();
 		}); // done

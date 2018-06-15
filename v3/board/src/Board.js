@@ -255,14 +255,21 @@ function Board(record) {
 
 	}; // rerender
 
-	this.tabToBoard = function () {
+	this.tabToBoard = function (el) {
 		var self = this;
 
 		if (kanban.app.current_board_id() !== self.id()) {
-			return self.show(true);
+			self.show(true);
 		}
 
-		return false;
+		var $el = $(el);
+		var $dropdown = $el.closest('.dropdown');
+
+		// If board is in the "more boards" dropdown, move it out.
+		if ( $dropdown.length == 1 ) {
+			$el.closest('li').insertBefore($dropdown);
+		}
+
 	}; // tabToBoard
 
 	this.show = function (isBoardChange) {

@@ -162,6 +162,7 @@
 			width: 50%;
 
 			@media screen and (max-width: $screen-sm-max) {
+				left: 0;
 				margin-left: 0%;
 				width: 100%;
 			}

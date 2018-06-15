@@ -5,7 +5,7 @@
 		   id="header-board-tab-{{%board.id}}"
 		   data-id="{{%board.id}}"
 		   data-toggle="tab"
-		   onclick="return kanban.boards[{{%board.id}}].tabToBoard();">
+		   onclick="kanban.boards[{{%board.id}}].tabToBoard(this); return false;">
 			{{board.label}}{{=board.label}}{{:board.label}}<?php _e( 'New Board', 'kanban'); ?>{{/board.label}}
 		</a>
 	</li>

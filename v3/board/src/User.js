@@ -79,11 +79,11 @@ function User(record) {
 			boardId = kanban.app.current_board_id();
 		}
 
-		if ( 'undefined' === typeof _self.record.options.boards[boardId] ) {
-			_self.record.options.boards[boardId] = [];
-		}
-
-		_self.record.options.boards[boardId][option] = value;
+		// if ( 'undefined' === typeof _self.record.options.boards[boardId] ) {
+		// 	_self.record.options.boards[boardId] = [];
+		// }
+		//
+		// _self.record.options.boards[boardId][option] = value;
 
 		if ( Array.isArray(value) && value.length == 0 ) {
 			value = '';
@@ -97,6 +97,17 @@ function User(record) {
 				value: value,
 				board_id: boardId
 			}
+		})
+		.done(function (response) {
+			if ( 'undefined' === typeof response.data ) {
+				kanban.app.notify(kanban.strings.board.retrieve_error);
+				return false;
+			}
+
+			var boardId = response.data.board_id;
+			var options = response.data.options;
+
+			_self.record.options.boards[boardId] = options;
 		});
 	}; // optionsUpdate
 
@@ -107,7 +118,7 @@ function User(record) {
 			return false;
 		}
 
-		_self.record.options.app[option] = value;
+		// _self.record.options.app[option] = value;
 
 		if ( Array.isArray(value) && value.length == 0 ) {
 			value = '';
@@ -120,6 +131,16 @@ function User(record) {
 				option: option,
 				value: value
 			}
+		})
+		.done(function (response) {
+			if ( 'undefined' === typeof response.data ) {
+				kanban.app.notify(kanban.strings.board.retrieve_error);
+				return false;
+			}
+
+			var options = response.data.options;
+
+			_self.record.options.app = options;
 		});
 
 		kanban.app.current_board().rerender();

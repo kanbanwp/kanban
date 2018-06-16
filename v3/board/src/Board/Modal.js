@@ -303,6 +303,12 @@ Board_Modal = function (board) {
 
 		kanban.app.current_user().optionBoardUpdate(key, value);
 
+		// Give option time to save.
+		setTimeout(function () {
+			self.board().rerender();
+		}, 1000);
+
+
 	}; // optionUserUpdate
 
 	this.titleOnfocus = function (el) {

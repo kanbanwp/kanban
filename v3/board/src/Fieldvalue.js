@@ -84,9 +84,12 @@ function Fieldvalue(record) {
 
 		var ajaxDate = {
 			type: 'fieldvalue',
-			action: 'replace',
-			fieldvalue_id: self.id()
+			action: 'replace'
 		};
+
+		if ( !isNaN(self.id()) ) {
+			ajaxDate.fieldvalue_id = self.id()
+		}
 
 		// Ajax won't send empty array, so send empty string instead.
 		if ( 'undefined' !== typeof data.content && Array.isArray(data.content) && data.content.length == 0 ) {

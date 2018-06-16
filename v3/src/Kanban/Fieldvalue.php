@@ -36,7 +36,6 @@ class Kanban_Fieldvalue extends Kanban_Abstract {
 
 		if ( ! isset( $data['fieldvalue_id'] ) && ( ! isset( $data['card_id'] ) || ! isset( $data['field_id'] ) ) ) {
 			header( 'HTTP/1.1 401 Missing id' );
-
 			return false;
 		}
 

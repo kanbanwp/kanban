@@ -164,6 +164,11 @@ App_Modal = function (app) {
 
 		kanban.app.current_user().optionAppUpdate(key, value);
 
+		// Give option time to save.
+		setTimeout(function () {
+			kanban.app.current_board().rerender();
+		}, 1000);
+
 	}; // optionUserUpdate
 
 	this.optionOnfocus = function (el) {

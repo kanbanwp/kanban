@@ -215,6 +215,10 @@ function encode_urls(str) {
 
 module.exports = {
 	clone: function (v) {
+		if ( 'undefined' === typeof v ) {
+			return v;
+		}
+
 		var c = v.constructor.toString();
 
 		if (c.indexOf("Array") !== -1) {

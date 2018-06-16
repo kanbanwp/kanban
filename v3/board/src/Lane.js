@@ -219,14 +219,14 @@ function Lane(record) {
 
 		var sidebar = false;
 
-		var boardRecord = board.record();
+		var lanesOrder = board.lanesOrder();
 
-		if ( boardRecord.lanes_order.length > 2 ) {
+		if ( lanesOrder.length > 2 ) {
 
-			if (boardRecord.lanes_order[0] == self.id()) {
+			if (lanesOrder[0] == self.id()) {
 				sidebar = 'left';
 			}
-			else if (boardRecord.lanes_order[boardRecord.lanes_order.length - 1] == self.id()) {
+			else if (lanesOrder[lanesOrder.length - 1] == self.id()) {
 				sidebar = 'right';
 			}
 		}
@@ -239,7 +239,7 @@ function Lane(record) {
 
 		// Make first lane "active" for mobile.
 		var active = false;
-		if ( boardRecord.lanes_order[0] == self.id() ) {
+		if ( lanesOrder[0] == self.id() ) {
 			active = true;
 		}
 

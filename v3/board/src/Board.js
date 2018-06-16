@@ -136,13 +136,35 @@ function Board(record) {
 	}; // id
 
 	this.lanesOrder = function () {
-		return _self.record.lanes_order.slice();
-		;
+		var laneIds = [];
+		for (var i in _self.record.lanes_order) {
+
+			var laneId = _self.record.lanes_order[i];
+
+			if ('undefined' === typeof kanban.lanes[laneId]) {
+				continue;
+			}
+
+			laneIds.push(laneId);
+		}
+
+		return laneIds;
 	}; // lanesOrder
 
 	this.fieldsOrder = function () {
-		return _self.record.fields_order.slice();
-		;
+		var fieldIds = [];
+		for (var i in _self.record.fields_order) {
+
+			var fieldId = _self.record.fields_order[i];
+
+			if ('undefined' === typeof kanban.fields[fieldId]) {
+				continue;
+			}
+
+			fieldIds.push(fieldId);
+		}
+		
+		return fieldIds;
 	}; // fieldsOrder
 
 	this.label = function () {

@@ -305,6 +305,7 @@ class Kanban_App {
 				'updated_error' => __( 'There was an error updating the user', 'kanban' ),
 			),
 			'app'    => array(
+				'colorpicker' => Kanban::instance()->settings()->uri . 'img/colors.svg'
 				// 'settings_updated' => __( '{0} updated the settings', 'kanban' ),
 			),
 			'board' => array(

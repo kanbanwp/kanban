@@ -1507,7 +1507,8 @@ function App(record) {
 			image.onload = function () {
 				ctx.drawImage(image, 0, 0, 234, 477); // draw the image on the canvas
 			}
-			image.src = '/wp-content/plugins/kanban/img/colors.svg';
+
+			image.src = kanban.strings.app.colorpicker;
 		}
 
 		return $('#app-color-picker');

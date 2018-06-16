@@ -176,7 +176,7 @@ function Card(record) {
 				fieldvalue = kanban.fieldvalues[fieldvaluesByField[field_id]];
 			}
 
-			if (field.record().is_hidden == 1) {
+			if (field.isHidden()) {
 				fieldHiddenHtml += field.render(fieldvalue, self);
 			}
 			else {

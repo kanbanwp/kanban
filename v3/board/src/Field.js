@@ -31,6 +31,10 @@ function Field(record) {
 		return this._self.record.board_id + 0;
 	}; // id
 
+	this.isHidden = function () {
+		return this._self.record.options.is_hidden === true ? true : false;
+	}; // id
+
 	this.label = function () {
 
 		if ( '' !== this._self.record.label ) {
@@ -267,7 +271,7 @@ function Field(record) {
 			var fieldId = response.data.id;
 			var fieldRecord = response.data;
 
-			var field = kanban.field[fieldId] = new Field(fieldRecord);
+			var field = kanban.fields[fieldId] = new Field(fieldRecord);
 
 			var board = kanban.boards[self.boardId()];
 

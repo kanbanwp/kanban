@@ -72,10 +72,10 @@ function Lane(record) {
 		})
 		.done(function() {
 
-			if ( 'undefined' === typeof response.data ||'undefined' === typeof response.data.id ) {
-				kanban.app.notify(kanban.strings.lane.updated_error);
-				return false;
-			}
+			// if ( 'undefined' === typeof response.data ||'undefined' === typeof response.data.id ) {
+			// 	kanban.app.notify(kanban.strings.lane.updated_error);
+			// 	return false;
+			// }
 
 			self.rerender();
 		});

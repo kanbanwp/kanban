@@ -93,7 +93,7 @@ class Kanban_User_Option extends Kanban_User {
 
 		return $row;
 	}
-	
+
 	public function replace_app ($option, $value) {
 		$board = $this->get_app_by_user_id( get_current_user_id() );
 

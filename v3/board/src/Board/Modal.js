@@ -26,7 +26,7 @@ Board_Modal = function (board) {
 	}; // drake
 
 	this.show = function (el, tab) {
-
+		// console.log('Board.modal.show');
 		var self = this;
 
 		// board-users includes board, so we only need to test for the lowest cap, or board-users.
@@ -397,7 +397,7 @@ Board_Modal = function (board) {
 
 		var self = this;
 
-		var $el = $(el);
+		var $el = $(el).addClass('loading');
 		var $tabPane = $el.closest('.tab-pane');
 
 		var ajaxDate = {
@@ -442,6 +442,8 @@ Board_Modal = function (board) {
 			});
 
 			self.board().show();
+
+			$el.removeClass('loading');
 		});
 
 	}; // modalLaneAdd
@@ -505,8 +507,9 @@ Board_Modal = function (board) {
 		var self = this;
 
 		var $el = $(el);
+		var $dropdown = $el.closest('.dropdown').addClass('loading');
 		var type = $el.attr('data-field-type');
-		var $tabPane = $el.closest('.tab-pane');
+		// var $tabPane = $el.closest('.tab-pane');
 
 		var ajaxDate = {
 			type: 'field',
@@ -521,7 +524,7 @@ Board_Modal = function (board) {
 		})
 		.done(function (response) {
 
-			$tabPane.removeClass('loading');
+			// $tabPane.removeClass('loading');
 
 			if ( 'undefined' === typeof response.data ||'undefined' === typeof response.data.id ) {
 				kanban.app.notify(kanban.strings.field.added_error);
@@ -555,6 +558,8 @@ Board_Modal = function (board) {
 
 			// Add field to board.
 			self.fieldsSaveOrder();
+
+			$dropdown.removeClass('loading');
 		}); // done
 
 	}; // modalFieldAdd

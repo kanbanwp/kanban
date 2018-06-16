@@ -900,8 +900,12 @@ function App(record) {
 
 			board.show();
 
-			// Show the modal for editing.
-			kanban.boards[boardId].modal.show();
+			// Give it time to show, and update user.
+			setTimeout(function () {
+				// Show the modal for editing.
+				kanban.boards[boardId].modal.show();
+			}, 500);
+
 		});
 
 	}; // addBoard

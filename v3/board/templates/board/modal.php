@@ -240,7 +240,7 @@
 
 
 						{{isBoardAdmin}}
-						<div class="tab-pane loading" id="modal-tab-pane-lanes">
+						<div class="tab-pane" id="modal-tab-pane-lanes">
 
 							<div class="panel-group" id="board-modal-lanes-accordion">
 								{{=lanesHtml}}
@@ -250,6 +250,7 @@
 								<button type="button" class="btn btn-default btn-sm"
 								        onclick="kanban.boards[{{%board.id}}].modal.laneAdd(this);">
 									<?php _e( 'Add a lane', 'kanban'); ?>
+									<i class="ei ei-loading show-on-loading"></i>
 								</button>
 								{{lanesHtml}}
 								{{:lanesHtml}}
@@ -269,9 +270,9 @@
 						{{/isBoardAdmin}}
 
 						{{isBoardAdmin}}
-						<div class="tab-pane loading" id="modal-tab-pane-fields">
+						<div class="tab-pane " id="modal-tab-pane-fields">
 
-							<div class="panel-group" id="board-modal-fields-accordion">
+							<div class="panel-group loading" id="board-modal-fields-accordion">
 								{{=fieldsHtml}}
 							</div>
 
@@ -280,6 +281,7 @@
 								        data-toggle="dropdown">
 									<?php _e( 'Add a field', 'kanban'); ?>
 									<span class="caret"></span>
+									<i class="ei ei-loading show-on-loading"></i>
 								</button>
 								<ul class="dropdown-menu">
 									<li><a href="javascript:void(0);" onclick="kanban.boards[{{%board.id}}].modal.fieldAdd(this);"

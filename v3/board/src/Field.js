@@ -162,7 +162,9 @@ function Field(record) {
 		// var prevContent = '';
 		if ( 'undefined' !== typeof fieldvalueId && 'undefined' !== typeof kanban.fieldvalues[fieldvalueId]) {
 			var fieldvalue = kanban.fieldvalues[fieldvalueId];
-			var prevContent = self.formatContentForComment(fieldvalue.content());
+			// var prevContent = self.formatContentForComment(fieldvalue.content());
+		} else {
+			var fieldvalue = new Fieldvalue({});
 		}
 
 		var data = {
@@ -178,50 +180,52 @@ function Field(record) {
 			data.fieldvalue_id = fieldvalueId;
 		}
 
+		fieldvalue.replace(data);
+
 		// Build the data for the new fieldvalue.
-		var ajaxDate = {
-			type: 'fieldvalue',
-			action: 'replace'
-		};
+		// var ajaxDate = {
+		// 	type: 'fieldvalue',
+		// 	action: 'replace'
+		// };
 
 		// Only send the data that was updated.
-		ajaxDate = $.extend(true, data, ajaxDate);
+		// ajaxDate = $.extend(true, data, ajaxDate);
 
-		$.ajax({
-			data: ajaxDate
-		})
-		.done(function (response) {
+		// $.ajax({
+		// 	data: ajaxDate
+		// })
+		// .done(function (response) {
 
-			if ( 'undefined' === typeof response.data ||'undefined' === typeof response.data.id ) {
-				kanban.app.notify(kanban.strings.field.updated_error);
-				return false;
-			}
+			// if ( 'undefined' === typeof response.data ||'undefined' === typeof response.data.id ) {
+			// 	kanban.app.notify(kanban.strings.field.updated_error);
+			// 	return false;
+			// }
+			//
+			// // Replace the whole record.
+			// var fieldvalueId = response.data.id;
+			// var fieldvalueRecord = response.data;
+			//
+			// var fieldvalue = kanban.fieldvalues[fieldvalueId] = new Fieldvalue(fieldvalueRecord);
+			//
+			// // Just in case, add fieldvalue id to field.
+			// fieldvalue.addIdTo$field();
+			//
+			// var card = kanban.cards[fieldvalue.cardId()];
+			// card.fieldvalueAdd(fieldvalueId);
+			//
+			// var content = self.formatContentForComment(data.content);
+			//
+			// var comment = kanban.templates['field-comment-updated'].render({
+			// 	label: self.label(),
+			// 	content: content,
+			// 	prevContent: prevContent
+			// });
+			//
+			// card.commentAdd(
+			// 	comment
+			// );
 
-			// Replace the whole record.
-			var fieldvalueId = response.data.id;
-			var fieldvalueRecord = response.data;
-
-			var fieldvalue = kanban.fieldvalues[fieldvalueId] = new Fieldvalue(fieldvalueRecord);
-
-			// Just in case, add fieldvalue id to field.
-			fieldvalue.addIdTo$field();
-
-			var card = kanban.cards[fieldvalue.cardId()];
-			card.fieldvalueAdd(fieldvalueId);
-
-			var content = self.formatContentForComment(data.content);
-
-			var comment = kanban.templates['field-comment-updated'].render({
-				label: self.label(),
-				content: content,
-				prevContent: prevContent
-			});
-
-			card.commentAdd(
-				comment
-			);
-
-		});
+		// });
 
 	}; // updateValue
 

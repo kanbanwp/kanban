@@ -20,15 +20,19 @@ function Fieldvalue(record) {
 
 	this.fieldId = function () {
 		return _self.record.field_id;
-	}; // id
+	}; // fieldId
 
 	this.field = function () {
 		return kanban.fields[_self.record.field_id];
-	}; // id
+	}; // field
 
 	this.cardId = function () {
-		return _self.record.card_id;
-	}; // id
+		return _self.record.card_id + 0;
+	}; // cardId
+
+	this.card = function () {
+		return kanban.cards[_self.record.card_id];
+	}; // card
 
 	this.allowedFields = function () {
 		return functions.cloneArray(_self.allowedFields);
@@ -108,25 +112,25 @@ function Fieldvalue(record) {
 
 			var fieldvalue = kanban.fieldvalues[fieldvalueId] = new Fieldvalue(fieldvalueRecord);
 
-			var field = self.field();
+			self.field().rerender(self, self.card());
 
-			if ( data.content != prevContent ) {
-				var card = kanban.cards[fieldvalueRecord.card_id];
-				var comment = kanban.strings.fieldvalue.updated.sprintf(
-					field.label(),
-					data.content
-				);
+			// Just in case, add fieldvalue id to field.
+			fieldvalue.addIdTo$field();
 
-				if ('undefined' !== typeof prevContent) {
-					comment += kanban.strings.fieldvalue.updated_previous.sprintf(
-						prevContent
-					);
-				}
+			var card = kanban.cards[fieldvalue.cardId()];
+			card.fieldvalueAdd(fieldvalueId);
 
-				card.commentAdd(
-					comment
-				);
-			}
+			var content = self.field().formatContentForComment(fieldvalueRecord.content);
+
+			var comment = kanban.templates['field-comment-updated'].render({
+				label: self.field().label(),
+				content: content,
+				prevContent: prevContent
+			});
+
+			card.commentAdd(
+				comment
+			);
 
 		});
 

@@ -57,7 +57,12 @@
 							{{=fields}}
 						</div><!--row-->
 
+						<hr>
+
 						<div id="card-modal-lane-selector">
+							<small>
+								<?php _e('Move the card to another lane:', 'kanban') ?>
+							</small><br>
 							<div class="btn-group">
 								{{=lanesSelector}}
 							</div>

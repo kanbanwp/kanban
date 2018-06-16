@@ -4,6 +4,12 @@
 		background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAJElEQVQYV2NkwARpjGhiaQwMDLOQBcECIEUwQbgATBBFACQIAMPiBGx4mk1FAAAAAElFTkSuQmCC) repeat;
 		height: 2em;
 		width: 2em;
+
+		&:hover,
+		&:active,
+		&:focus {
+			background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAJElEQVQYV2NkwARpjGhiaQwMDLOQBcECIEUwQbgATBBFACQIAMPiBGx4mk1FAAAAAElFTkSuQmCC) repeat;
+		}
 	}
 
 	.dropdown-menu {

@@ -39,17 +39,12 @@ class Kanban_Lane extends Kanban_Abstract {
 			return false;
 		}
 
-//		$lane = $this->get_row($data['id']);
-
 		if ( !isset($data['cards_order']) || !isset($data['lane_id']) ) {
 			header( 'HTTP/1.1 400 Missing params' );
 			return false;
 		}
 
-		$row = $this->set_row(array(
-			'id' => $data['lane_id'],
-			'cards_order' => $data['cards_order']
-		));
+		$row = $this->update_cards_order($data['lane_id'], $data['cards_order'] );
 
 		return $row;
 	}
@@ -112,6 +107,15 @@ class Kanban_Lane extends Kanban_Abstract {
 		) );
 
 		$row = $this->get_row($data['lane_id']);
+
+		return $row;
+	}
+
+	public function update_cards_order ($lane_id, $cards_order) {
+		$row = $this->set_row(array(
+			'id' => $lane_id,
+			'cards_order' => $cards_order
+		));
 
 		return $row;
 	}

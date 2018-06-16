@@ -89,6 +89,12 @@ class Kanban_User_Option extends Kanban_User {
 			return false;
 		}
 
+		$row = $this->replace_app( $data['option'], $data['value'] );
+
+		return $row;
+	}
+	
+	public function replace_app ($option, $value) {
 		$board = $this->get_app_by_user_id( get_current_user_id() );
 
 		if ( empty( $board ) || $board->board_id != 0 ) {
@@ -99,8 +105,8 @@ class Kanban_User_Option extends Kanban_User {
 			$board->options = array();
 		}
 
-		$board->options[ $data['option'] ] = $data['value'];
-		$board->options                    = $this->format_app_options_for_db( $board->options );
+		$board->options[ $option ] = $value;
+		$board->options = $this->format_app_options_for_db( $board->options );
 
 		$row = $this->set_row( $board );
 

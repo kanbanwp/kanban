@@ -12,7 +12,9 @@
 						<span class="icon-bar"></span>
 					</button>
 
-					<span class="navbar-brand visible-xs visible-sm"><?php _e( 'Card', 'kanban'); ?> {{%card.id}}</span>
+					<span class="navbar-brand visible-xs visible-sm">
+						<?php echo sprintf(__( 'Card #%s', 'kanban'), '{{%card.id}}'); ?>
+					</span>
 				</div>
 				<div id="modal-navbar" class="collapse navbar-collapse">
 					<ul class="nav navbar-nav">
@@ -20,7 +22,9 @@
 							<a href="javascript:void(0);"
 							   data-target="options"
 							   id="modal-tab-options"
-							   onclick="kanban.app.modal.tabChange(this);"><?php _e( 'Options', 'kanban'); ?></a></li>
+							   onclick="kanban.app.modal.tabChange(this);">
+								<?php _e( 'Fields', 'kanban'); ?>
+							</a></li>
 						</li>
 						<li>
 							<a href="javascript:void(0);"

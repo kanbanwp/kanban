@@ -133,7 +133,7 @@ class Kanban_Card extends Kanban_Abstract {
 			array_slice( $lane->cards_order, $pos )
 		);
 
-		Kanban_Lane::instance()->ajax_cards_order( (array) $lane );
+		$lane = Kanban_Lane::instance()->update_cards_order( $row->lane_id, $lane->cards_order );
 
 		// Copy field values
 		$fieldvalues = Kanban_Fieldvalue::instance()->get_results_by_cards(array($data['card_id']));

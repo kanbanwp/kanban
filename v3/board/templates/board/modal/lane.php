@@ -56,7 +56,7 @@
 				<div class="collapse" id="board-modal-lane-{{%lane.id}}-delete">
 					<p>
 						<button type="button" class="btn btn-danger"
-						        onclick="kanban.boards[{{%board_id}}].modal.laneDelete(this);">
+						        onclick="kanban.boards[{{%lane.board_id}}].modal.laneDelete(this);">
 							<?php _e( 'Delete', 'kanban'); ?>
 						</button>
 					</p>

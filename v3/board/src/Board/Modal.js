@@ -429,7 +429,6 @@ Board_Modal = function (board) {
 			var lane = kanban.lanes[laneId] = new Lane(laneRecord);
 
 			var laneModalHtml = kanban.templates['board-modal-lane'].render({
-				board: self.board().record(),
 				lane: lane.record(),
 				colors: kanban.app.colors
 			});

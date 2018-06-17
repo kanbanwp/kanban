@@ -3,7 +3,7 @@ var dragula = require('dragula')
 var functions = require('../functions')
 var Field = require('../Field');
 var User = require('../User');
-var fieldTypes = require('../Field/index')
+// var fieldTypes = require('../Field/index')
 var dragula = require('dragula')
 
 
@@ -550,12 +550,12 @@ Board_Modal = function (board) {
 			var fieldType = 'Field_' + fieldRecord.field_type.charAt(0).toUpperCase() + fieldRecord.field_type.slice(1);
 
 			// See if "class" exists.
-			if (typeof fieldTypes[fieldType] === 'function') {
+			if (typeof kanban.fieldTypes[fieldType] === 'function') {
 				fieldClass = fieldType;
 			}
 
 			// Create field using "class" based on type.
-			var field = kanban.fields[fieldId] = new fieldTypes[fieldClass](fieldRecord);
+			var field = kanban.fields[fieldId] = new kanban.fieldTypes[fieldClass](fieldRecord);
 
 			var fieldHtml = field.optionsRender(self.board());
 

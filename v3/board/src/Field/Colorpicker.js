@@ -158,6 +158,17 @@ function Field_Colorpicker(record) {
 
 	}; // optionColorOnclick
 
+	this.getValue = function ($field) {
+		// console.log('getValue');
+
+		var self = this;
+
+		var $btn = $('.btn-color', $field);
+		var color = $btn.css('background-color');
+
+		return color;
+	}; // getValue
+
 	this.formatContentForComment = function (content) {
 		var self = this;
 

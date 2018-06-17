@@ -298,6 +298,10 @@ abstract class Kanban_Abstract {
 		return (int) intval ( $value );
 	}
 
+	public function format_float_for_app ($value) {
+		return (float) floatval ( $value );
+	}
+
 	public function format_string_for_app ($value) {
 		return (string) stripslashes_deep($value);
 	}
@@ -312,6 +316,10 @@ abstract class Kanban_Abstract {
 
 	public function format_int_for_db ($value) {
 		return (int) intval ( $value );
+	}
+
+	public function format_float_for_db ($value) {
+		return (float) floatval ( $value );
 	}
 
 	public function format_string_for_db ($value) {

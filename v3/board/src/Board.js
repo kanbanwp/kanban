@@ -2,7 +2,7 @@ var Board_Modal = require('./Board/Modal')
 var Lane = require('./Lane');
 var Field = require('./Field');
 var User = require('./User');
-var fieldTypes = require('./Field/index')
+// var fieldTypes = require('./Field/index')
 var dragula = require('dragula')
 var functions = require('./functions')
 require('selectize')

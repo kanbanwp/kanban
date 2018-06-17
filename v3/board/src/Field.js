@@ -1,4 +1,5 @@
 var Fieldvalue = require('./Fieldvalue')
+// var fieldTypes = require('./Field/index')
 var functions = require('./functions')
 
 function Field(record) {
@@ -275,11 +276,23 @@ function Field(record) {
 			var fieldId = response.data.id;
 			var fieldRecord = response.data;
 
-			var field = kanban.fields[fieldId] = new Field(fieldRecord);
+			// See if field type has it's own class.
+			var fieldClass = 'Field';
 
-			var board = kanban.boards[self.boardId()];
+			if ('undefined' !== typeof fieldRecord.field_type && fieldRecord.field_type !== null) {
+				// Build a "class" name to search for e.g. Field_Tags
+				var fieldType = 'Field_' + fieldRecord.field_type.charAt(0).toUpperCase() + fieldRecord.field_type.slice(1);
 
-			board.show();
+				// See if "class" exists.
+				if (typeof kanban.fieldTypes[fieldType] === 'function') {
+					fieldClass = fieldType;
+				}
+			}
+
+			// Create field using "class" based on type.
+			var field = kanban.fields[fieldId] = new kanban.fieldTypes[fieldClass](fieldRecord);
+
+			self.board().show();
 		}); // done
 
 		// $(document).trigger('/field/replace/', this.record());

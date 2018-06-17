@@ -1,5 +1,5 @@
 var Fieldvalue = require('./Fieldvalue')
-var fieldTypes = require('./Field/index')
+// var fieldTypes = require('./Field/index')
 var Comment = require('./Comment')
 var Card_Modal = require('./Card/Modal')
 var functions = require('./functions')

@@ -3,6 +3,7 @@ var Field_Colorpicker = require('./Colorpicker')
 var Field_Date = require('./Date')
 var Field_Tags = require('./Tags')
 var Field_Text = require('./Text')
+var Field_Time = require('./Time')
 var Field_Title = require('./Title')
 var Field_Users = require('./Users')
 
@@ -12,6 +13,7 @@ module.exports = {
 	Field_Date: Field_Date,
 	Field_Tags: Field_Tags,
 	Field_Text: Field_Text,
+	Field_Time: Field_Time,
 	Field_Title: Field_Title,
 	Field_Users: Field_Users,
 }

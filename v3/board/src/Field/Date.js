@@ -156,7 +156,7 @@ function Field_Date(record) {
 	}; // optionsRender
 
 	this.getValue = function ($field) {
-// console.log('getValue');
+		// console.log('getValue');
 
 		var self = this;
 

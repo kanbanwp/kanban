@@ -16,7 +16,7 @@ var Lane = require('./Lane')
 var Card = require('./Card')
 var Fieldvalue = require('./Fieldvalue')
 var Field = require('./Field')
-var fieldTypes = require('./Field/index')
+kanban.fieldTypes = require('./Field/index')
 var Comment = require('./Comment')
 var timeago = require('timeago.js')
 

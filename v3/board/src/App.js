@@ -2,7 +2,7 @@ var Board = require('./Board')
 var Lane = require('./Lane')
 var Card = require('./Card')
 var Field = require('./Field')
-var fieldTypes = require('./Field/index')
+// var fieldTypes = require('./Field/index')
 var Fieldvalue = require('./Fieldvalue')
 var User = require('./User')
 var Usergroup = require('./Usergroup')
@@ -449,13 +449,13 @@ function App(record) {
 					var fieldType = 'Field_' + fieldRecord.field_type.charAt(0).toUpperCase() + fieldRecord.field_type.slice(1);
 
 					// See if "class" exists.
-					if (typeof fieldTypes[fieldType] === 'function') {
+					if (typeof kanban.fieldTypes[fieldType] === 'function') {
 						fieldClass = fieldType;
 					}
 				}
 
 				// Create field using "class" based on type.
-				var field = kanban.fields[fieldId] = new fieldTypes[fieldClass](fieldRecord);
+				var field = kanban.fields[fieldId] = new kanban.fieldTypes[fieldClass](fieldRecord);
 
 				// If the record was deleted, remove it.
 				if ('undefined' !== typeof fieldRecord.is_active && fieldRecord.is_active !== true) {

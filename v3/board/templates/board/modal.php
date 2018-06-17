@@ -291,11 +291,11 @@
 									<li><a href="javascript:void(0);" onclick="kanban.boards[{{%board.id}}].modal.fieldAdd(this);"
 									       data-field-type="date"><?php _e( 'Date', 'kanban'); ?></a></li>
 									<li><a href="javascript:void(0);" onclick="kanban.boards[{{%board.id}}].modal.fieldAdd(this);"
-									       data-field-type="colorpicker"><?php _e( 'Color picker', 'kanban'); ?></a></li>
-									<li><a href="javascript:void(0);" onclick="kanban.boards[{{%board.id}}].modal.fieldAdd(this);"
 									       data-field-type="users"><?php _e( 'Users', 'kanban'); ?></a></li>
 									<li><a href="javascript:void(0);" onclick="kanban.boards[{{%board.id}}].modal.fieldAdd(this);"
 									       data-field-type="tags"><?php _e( 'Tags', 'kanban'); ?></a></li>
+									<li><a href="javascript:void(0);" onclick="kanban.boards[{{%board.id}}].modal.fieldAdd(this);"
+									       data-field-type="time"><?php _e( 'Time tracking', 'kanban'); ?></a></li>
 								</ul>
 							</div>
 							{{fieldsHtml}}

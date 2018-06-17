@@ -20,8 +20,8 @@
 					<ul class="nav navbar-nav">
 						<li class="active">
 							<a href="javascript:void(0);"
-							   data-target="options"
-							   id="modal-tab-options"
+							   data-target="fields"
+							   id="modal-tab-fields"
 							   onclick="kanban.app.modal.tabChange(this);">
 								<?php _e( 'Fields', 'kanban'); ?>
 							</a></li>
@@ -56,7 +56,7 @@
 
 				<div class="tab-content">
 
-					<div class="tab-pane active" id="modal-tab-pane-options">
+					<div class="tab-pane active" id="modal-tab-pane-fields">
 						<div class="row wrapper-form-group">
 							{{=fields}}
 						</div><!--row-->
@@ -72,7 +72,7 @@
 							</div>
 						</div>
 
-					</div><!--tab-options-->
+					</div><!--tab-fields-->
 
 					<div class="tab-pane" id="modal-tab-pane-comments">
 

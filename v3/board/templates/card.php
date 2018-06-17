@@ -24,9 +24,11 @@
 					<button type="button" class="btn btn-default btn-sm" onclick="event.stopPropagation(); kanban.cards[{{%card.id}}].copy(this); return false;">
 						<?php _e( 'Copy', 'kanban'); ?>
 					</button>
+<?php /*
 					<button type="button" class="btn btn-default btn-sm" onclick="event.stopPropagation(); kanban.cards[{{%card.id}}].move(this); return false;">
 						<?php _e( 'Move', 'kanban'); ?>
 					</button>
+ */ ?>
 					<button class="btn btn-default btn-sm" onclick="event.stopPropagation(); kanban.cards[{{%card.id}}].delete(this);">
 						<?php _e( 'Archive', 'kanban'); ?>
 						<i class="ei ei-loading show-on-loading" style="color: {{%lane.color}}"></i>

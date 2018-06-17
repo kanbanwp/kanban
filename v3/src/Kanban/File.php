@@ -16,6 +16,18 @@ class Kanban_File {
 			return false;
 		}
 
+		$file_data = upload_from_post ($card_id);
+
+		if ( !$file_data ) {
+			header( 'HTTP/1.1 401 Error uploading file' );
+			return false;
+		}
+
+		return $file_data;
+	}
+
+	public function upload_from_post ($card_id) {
+
 		$dir = $this->get_files_dir();
 
 		$file = $_FILES[ 'kanban-file' ];
@@ -36,7 +48,6 @@ class Kanban_File {
 			);
 
 		} else {
-			header( 'HTTP/1.1 401 Error uploading file' );
 			return false;
 		}
 

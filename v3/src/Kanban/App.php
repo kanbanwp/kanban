@@ -234,7 +234,7 @@ class Kanban_App {
 				$current_user->options->app['current_board'] = key( $data->boards );
 
 				// Save it.
-				Kanban_User_Option::instance()->ajax_replace_app( array(
+				Kanban_User_Option::instance()->set_row( array(
 					'option' => 'current_board',
 					'value'  => $current_user->options->app['current_board']
 				) );

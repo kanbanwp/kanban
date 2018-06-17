@@ -30,11 +30,11 @@ function Field(record) {
 
 	this.boardId = function () {
 		return this._self.record.board_id + 0;
-	}; // id
+	}; // boardId
 
 	this.isHidden = function () {
 		return this._self.record.options.is_hidden === true ? true : false;
-	}; // id
+	}; // isHidden
 
 	this.label = function () {
 
@@ -43,7 +43,7 @@ function Field(record) {
 		}
 
 		return this.fieldType();
-	} ; // fieldType
+	} ; // label
 
 	this.fieldType = function () {
 		return this._self.record.field_type;
@@ -51,7 +51,7 @@ function Field(record) {
 
 	this.fieldClass = function () {
 		return this.constructor.name;
-	}
+	}; // fieldClass
 
 	this.allowedFields = function () {
 		return this._self.allowedFields.slice();

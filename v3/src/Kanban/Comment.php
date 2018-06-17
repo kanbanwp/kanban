@@ -114,7 +114,7 @@ class Kanban_Comment extends Kanban_Abstract {
 			return false;
 		}
 
-		$file_data = Kanban_File::instance()->ajax_upload($data['card_id']);
+		$file_data = Kanban_File::instance()->upload_from_post($data['card_id']);
 
 		return $file_data;
 	}

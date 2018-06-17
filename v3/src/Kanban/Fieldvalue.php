@@ -77,10 +77,9 @@ class Kanban_Fieldvalue extends Kanban_Abstract {
 
 		$class = Kanban_Field::instance()->get_fieldtype_class( $field->field_type );
 
-		$value = $class::instance()->format_content_for_app( $row->content );
+		$data['content'] = $class::instance()->format_content_for_app( $data['content'] );
 
-
-		if ( isset( $data['content'] ) && !empty($data['content']) && is_string($data['content']) && $row->content != $prev_content )  {
+		if ( isset( $data['content'] ) && !empty($data['content']) && is_string($data['content']) && $data['content'] != $prev_content )  {
 
 			preg_match_all( '/data-mention=\"([0-9]*)\"/',
 				$data['content'],

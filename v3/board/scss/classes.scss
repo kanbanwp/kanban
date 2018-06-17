@@ -21,6 +21,18 @@
 	color: $color-core-800;
 }
 
+.progress {
+	background-color: $color-core-100;
+	box-shadow: none;
+	height: $margin/3;
+	margin-top: $margin;
+
+	.progress-bar {
+		background-color: $color-core-300;
+		box-shadow: none;
+	}
+}
+
 .sortable-placeholder {
 	background: transparent;
 	border: 2px dashed $color-core-200 !important;

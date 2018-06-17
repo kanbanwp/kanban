@@ -1,0 +1,18 @@
+.form-group-time {
+	.col {
+		position: relative;
+
+		&:hover .btn-group {
+			display: block;
+		}
+	}
+
+	.btn-group {
+		display: none;
+		left: $margin;
+		position: absolute;
+		top: 100%;
+		min-width: 50%;
+		width: auto;
+	}
+}

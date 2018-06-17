@@ -13,54 +13,68 @@
 
 				<input class="form-control form-control-hours" type="number" step="{{%fieldOptions.step}}"
 				       min="0"
-				       onfocus="kanban.fields[{{%field.id}}].onFocus(this);"
-				       onkeydown="kanban.fields[{{%field.id}}].onKeydown(this);"
-				       onblur="kanban.fields[{{%field.id}}].onBlur(this);"
+				       onfocus="kanban.fields[{{%field.id}}].onFocus(this, event);"
+				       onkeydown="kanban.fields[{{%field.id}}].onKeydown(this, event);"
+				       onblur="kanban.fields[{{%field.id}}].onBlur(this, event);"
 				       value="{{%fieldvalue.content.hours}}"></input>
-				<div class="btn-group">
-					<button class="btn btn-default btn-sm"
-					        data-input="hours"
-					        data-operator="1"
-					        onclick="kanban.fields[{{%field.id}}].onClickbutton(this);">
+				<div class="btn-group btn-group-justified">
+					<a class="btn btn-default btn-sm"
+					   href="javascript:void(0);"
+					   data-input="hours"
+					   data-operator="1"
+					   onclick="kanban.fields[{{%field.id}}].onClickbutton(this);">
 						<i class=" ei ei-plus"></i>
-					</button>
-					<button class="btn btn-default btn-sm"
-					        data-input="hours"
-					        data-operator="-1"
-					        onclick="kanban.fields[{{%field.id}}].onClickbutton(this);">
+					</a>
+					<a class="btn btn-default btn-sm"
+					   href="javascript:void(0);"
+					   data-input="hours"
+					   data-operator="-1"
+					   onclick="kanban.fields[{{%field.id}}].onClickbutton(this);">
 						<i class=" ei ei-minus-06"></i>
-					</button>
+					</a>
 				</div>
 
 			</div>
+
+			{{fieldOptions.show_estimate}}
 
 			<div class="col col-sm-6">
 
-				{{fieldOptions.show_estimate}}
 				<input class="form-control form-control-estimate" type="number" step="{{%fieldOptions.step}}"
 				       min="0"
-				       onfocus="kanban.fields[{{%field.id}}].onFocus(this);"
-				       onkeydown="kanban.fields[{{%field.id}}].onKeydown(this);"
-				       onblur="kanban.fields[{{%field.id}}].onBlur(this);"
+				       onfocus="kanban.fields[{{%field.id}}].onFocus(this, event);"
+				       onkeydown="kanban.fields[{{%field.id}}].onKeydown(this, event);"
+				       onblur="kanban.fields[{{%field.id}}].onBlur(this, event);"
 				       value="{{%fieldvalue.content.estimate}}"></input>
-				<div class="btn-group">
-					<button class="btn btn-default btn-sm"
-					        data-input="estimate"
-					        data-operator="1"
-					        onclick="kanban.fields[{{%field.id}}].onClickbutton(this);">
+				<div class="btn-group btn-group-justified">
+					<a class="btn btn-default btn-sm"
+					   href="javascript:void(0);"
+					   data-input="estimate"
+					   data-operator="1"
+					   onclick="kanban.fields[{{%field.id}}].onClickbutton(this);">
 						<i class=" ei ei-plus"></i>
-					</button>
-					<button class="btn btn-default btn-sm"
-					        data-input="estimate"
-					        data-operator="-1"
-					        onclick="kanban.fields[{{%field.id}}].onClickbutton(this);">
+					</a>
+					<a class="btn btn-default btn-sm"
+					   href="javascript:void(0);"
+					   data-input="estimate"
+					   data-operator="-1"
+					   onclick="kanban.fields[{{%field.id}}].onClickbutton(this);">
 						<i class=" ei ei-minus-06"></i>
-					</button>
+					</a>
 				</div>
 			</div>
+
 			{{/fieldOptions.show_estimate}}
 
 		</div><!--row-->
+
+		{{fieldOptions.show_estimate}}
+		<div class="progress">
+			<div class="progress-bar" style="width: {{%percentage}}%;">
+			</div>
+		</div>
+		{{/fieldOptions.show_estimate}}
+
 	</div>
 
 </script>

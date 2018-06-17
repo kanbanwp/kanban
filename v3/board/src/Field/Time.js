@@ -45,6 +45,7 @@ function Field_Time(record) {
 			field: self.record(),
 			fieldvalue: fieldvalueRecord,
 			fieldOptions: fieldOptions,
+			percentage: self.getPercentage(fieldvalueRecord.content.hours, fieldvalueRecord.content.estimate),
 			card: 'undefined' === typeof card.record ? {} : card.record(),
 			isCardWrite: kanban.app.current_user().hasCap('card-write')
 		});
@@ -167,6 +168,8 @@ function Field_Time(record) {
 
 		$input.val(val);
 
+		self.updateProgressBar($field);
+
 		self.timerSave = setTimeout(function () {
 			self.updateValue($field);
 		}, 1000);
@@ -200,6 +203,7 @@ function Field_Time(record) {
 		var $lane = $field.closest('.lane').removeClass('is-editing');
 
 		self.updateValue($field);
+		self.updateProgressBar($field);
 
 	}; // onBlur
 
@@ -227,60 +231,36 @@ function Field_Time(record) {
 		}
 	}; // onKeydown
 
-	// this.onChange = function (el, e) {
-	// 	// console.log('Field_Title.onBlur');
-	//
-	// 	var self = this;
-	//
-	// 	var $el = $(el);
-	// 	var $field = $el.closest('.field').addClass('is-editing');
-	// 	var isEstimate = $el.parent('.horizContainer').hasClass('is-estimate');
-	// 	self.delayedUpdateValue($field, isEstimate);
-	// }; // onChange
-	//
-	// this.onFocus = function (el) {
-	// 	// console.log('Field_Title.prototype.onFocus');
-	//
-	// 	var self = this;
-	//
-	// 	clearTimeout(self.timerSave);
-	//
-	// 	var $el = $(el);
-	// 	var $field = $el.closest('.field').addClass('is-editing');
-	// 	var $card = $el.closest('.card').addClass('is-editing');
-	// 	var $lane = $field.closest('.lane').addClass('is-editing');
-	//
-	// 	// Save the current value for restoring.
-	// 	var isEstimate = $el.parent('.horizContainer').hasClass('is-estimate');
-	// 	var value = self.getValue($field, isEstimate);
-	// 	$el.data('prevValue', value);
-	// }; // onFocus
-	//
-	// this.onKeydown = function (el, e) {
-	// 	// console.log('Field_Title.onKeydown');
-	//
-	// 	var self = this;
-	//
-	// 	switch (e.keyCode) {
-	// 		case 13: // enter
-	//
-	// 			// If not shift + enter, save it.
-	// 			if ( !e.shiftKey ) {
-	// 				el.blur();
-	// 				return false;
-	// 			}
-	//
-	// 			// If just enter, save it.
-	// 			break;
-	//
-	// 		case 27: // escape
-	// 			var prevValue = $(el).data('prevValue');
-	// 			$(el).val( prevValue );
-	// 			el.blur();
-	//
-	// 			break;
-	// 	}
-	// }; // onKeydown
+	this.updateProgressBar = function ($field) {
+		var self = this;
+
+		if ( !self.options().show_estimate ) {
+			return false;
+		}
+
+		var val = self.getValue($field);
+
+		var percentage = self.getPercentage(val.hours, val.estimate);
+
+		$('.progress-bar').css('width', percentage + '%');
+
+	}; // updateProgressBar
+
+	this.getPercentage = function (hours, estimate) {
+		var percentage = 0;
+
+		if ( isNaN(hours) ) {
+			hours = 0;
+		}
+
+		if ( isNaN(estimate) ) {
+			estimate = 0;
+		}
+
+		if ( estimate > 0 ) {
+			return (hours*100)/estimate;
+		}
+	}; // getPercentage
 
 	this.getValue = function ($field) {
 

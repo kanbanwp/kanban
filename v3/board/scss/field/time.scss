@@ -1,18 +1,36 @@
 .form-group-time {
 	.col {
+		float: left;
+		line-height: 2.5;
+		margin-right: $margin;
 		position: relative;
 
 		&:hover .btn-group {
 			display: block;
 		}
+
+		&:after {
+			color: $color-core-300;
+			content: attr(data-label);
+			display: block;
+			line-height: 2.5;
+			pointer-events: none;
+			position: absolute;
+			right: 0;
+			top: 0;
+		}
+	}
+
+	.form-control {
+		width: 4em;
 	}
 
 	.btn-group {
 		display: none;
-		left: $margin;
+		left: 0;
 		position: absolute;
 		top: 100%;
-		min-width: 50%;
+		min-width: 6em;
 		width: auto;
 	}
 }

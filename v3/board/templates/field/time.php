@@ -8,8 +8,8 @@
 		<label>{{=field.label}}:</label>
 		{{/field.label}}
 
-		<div class="row">
-			<div class="col col-sm-6">
+		<div class="clearfix">
+			<div class="col xxcol-sm-6 col-hours" data-label="<?php _e('h', 'kanban') ?>">
 
 				<input class="form-control form-control-hours" type="number" step="{{%fieldOptions.step}}"
 				       min="0"
@@ -37,8 +37,12 @@
 			</div>
 
 			{{fieldOptions.show_estimate}}
+			
+			<div class="col">
+				/
+			</div>
 
-			<div class="col col-sm-6">
+			<div class="col xxcol-sm-6 col-estimate" data-label="<?php _e('h', 'estimate') ?>">
 
 				<input class="form-control form-control-estimate" type="number" step="{{%fieldOptions.step}}"
 				       min="0"

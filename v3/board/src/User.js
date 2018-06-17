@@ -62,7 +62,7 @@ function User(record) {
 		var boardId = self.currentBoardId();
 
 		if ( boardId == null ) {
-			return null;
+			return undefined;
 		}
 
 		return kanban.boards[boardId];
@@ -143,7 +143,12 @@ function User(record) {
 			_self.record.options.app = options;
 		});
 
-		kanban.app.current_board().rerender();
+		var board = kanban.app.current_board();
+
+		if ( 'undefined' !== typeof board ) {
+			board.rerender();
+		}
+
 
 	}; // optionAppUpdate
 

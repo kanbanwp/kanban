@@ -37,7 +37,7 @@
 			</div>
 
 			{{fieldOptions.show_estimate}}
-			
+
 			<div class="col">
 				/
 			</div>

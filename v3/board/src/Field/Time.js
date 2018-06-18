@@ -37,7 +37,18 @@ function Field_Time(record) {
 			return false;
 		}
 
-		var fieldvalueRecord = 'undefined' === typeof fieldvalue.record ? {} : fieldvalue.record();
+		var fieldvalueRecord = 'undefined' === typeof fieldvalue.record ? {content: {
+				hours: 0,
+				estimate: 0
+			}} : fieldvalue.record();
+
+		fieldvalueRecord.content = $.extend(
+			{
+				hours: 0,
+				estimate: 0
+			},
+			fieldvalueRecord.content
+		);
 
 		var fieldOptions = self.options();
 

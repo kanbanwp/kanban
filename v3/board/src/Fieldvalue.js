@@ -70,7 +70,13 @@ function Fieldvalue(record) {
 			return false;
 		}
 
-		var prevContent = self.content();
+		var prevContent;
+		if (self.field() != undefined) {
+			prevContent = self.field().formatContentForComment(self.content());
+		} else {
+			prevContent = self.content();
+		}
+
 
 		// Removed fields that aren't allowed.
 		for (var field in data ) {

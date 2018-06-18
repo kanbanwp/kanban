@@ -1327,20 +1327,47 @@ function App(record) {
 			var val = $searchField.val().toLowerCase();
 
 			if ('' != val) {
-				var fieldControls = $("#board-" + self.current_board_id()).find('.card .field .form-control');
-
 				var showCards = [];
-				//find and store all matching cards id based on current search text
-				fieldControls.each(function () {
-					if (showCards.indexOf($(this).closest('.card').attr('data-id')) == -1
-						&& $(this).text().toLowerCase().indexOf(val) > -1) {
-						showCards.push($(this).closest('.card').attr('data-id'));
+
+				//check all the fieldvalues from all the cards of the current board's lanes for possible match
+				var currentBoard = kanban.boards[self.current_board_id()];
+				var currentLanes = currentBoard.lanesOrder();
+				for(var i = 0; i < currentLanes.length; i++) {
+					var laneId = currentLanes[i];
+
+					// Make sure there's a corresponding lane record.
+					if ('undefined' === typeof kanban.lanes[laneId]) {						
+						continue;
 					}
-				});
+		
+					var lane = kanban.lanes[laneId];
+					var laneCards = lane.cardsOrder();
+					for (var j = 0; j < laneCards.length; j++) {
+						var cardId = laneCards[j];
+
+						// Make sure there's a corresponding card record.
+						if ( 'undefined' === typeof kanban.cards[cardId] ) {
+							continue;
+						}
+						
+						var card = kanban.cards[cardId];
+
+						var fieldValues = card.fieldvalues();
+						var fieldvaluesByField = card.fieldvaluesByField();
+						for(var k = 0; k < fieldValues.length; k++) {							
+							var fieldvalue = kanban.fieldvalues[fieldValues[k]];
+							var fieldContent = fieldvalue.field().formatContentForComment(fieldvalue.content());
+							if (fieldContent.toLowerCase().indexOf(val) !== -1) {
+								showCards.push(card.id());
+								break;
+							}
+						}
+					}
+				}
 
 				//hide cards that are visible and not in the array of matching cards 
 				$("#board-" + self.current_board_id() + ' .card:visible').each(function () {
-					if (showCards.indexOf($(this).attr('data-id')) == -1) {
+					if (showCards.indexOf(Number($(this).attr('data-id'))) == -1) {
 						$(this)
 						.stop(true, false)
 						.animate({

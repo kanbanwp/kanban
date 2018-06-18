@@ -158,8 +158,8 @@ function Field_Text(record) {
 
 	this.formatContentForComment = function (content) {
 		var self = this;
-
-		return content.formatForApp();
+		
+		return $("<p>").html(content.formatForApp()).text();
 	}; // formatContentForComment
 
 } // Field_Text

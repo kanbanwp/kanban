@@ -135,7 +135,7 @@ function Field_Title(record) {
 	this.formatContentForComment = function (content) {
 		var self = this;
 
-		return $("<p>").html(content.formatForApp()).text();
+		return $("<div>").html(content.formatForApp()).text();
 	}; // formatContentForComment
 
 } // Field_Title

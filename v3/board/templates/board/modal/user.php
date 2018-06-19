@@ -60,6 +60,7 @@
 
 				</div><!--wrapper-form-group -->
 
+				{{allowDelete}}
 				<p class="text-center">
 					<a data-toggle="collapse" class="btn btn-default btn-block" href="#board-modal-user-{{%user.id}}-delete">
 						<?php _e( 'More options', 'kanban'); ?>
@@ -75,6 +76,7 @@
 						</button>
 					</p>
 				</div><!--collapse-->
+				{{/allowDelete}}
 
 			</div><!--panel-body-->
 		</div><!--panel-collapse -->

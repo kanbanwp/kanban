@@ -310,11 +310,12 @@ function Field_Tags(record) {
 		var tags = self.getTags();
 
 		var toReturn = [];
-		for (var i in content ) {
-			var tagId = content[i];
-			toReturn.push(tags[tagId].content);
+		for(var i = 0; i < tags.length; i++){
+			if (content.indexOf(tags[i].id) !== -1 ) {
+				toReturn.push(tags[i].content);
+			}
 		}
-
+		
 		return toReturn.join(', ');
 	}; // formatContentForComment
 

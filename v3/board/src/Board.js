@@ -76,8 +76,8 @@ function Board(record) {
 			'label': 'Board',
 			'description': 'Change anything on a board',
 			'is_title': true,
-			'is_public': false,
-			'options': {show_task_id: 0},
+			// 'is_public': false,
+			// 'options': {show_task_id: 0},
 		},
 		'board-users': {
 			'label': 'Edit users',
@@ -499,23 +499,35 @@ function Board(record) {
 		// Copy caps (Use jQuery for deep copy)
 		var caps = self.caps();
 
+		var boardRecord = self.record();
+		var isBoardCreator = boardRecord.created_user_id == user.id() ? true : false;
+
+		if (isBoardCreator) {
+			userRecord.capabilities.boards[self.id()] = ['board'];
+		}
+
 		var isAdmin = false;
 		var titleAdmin = false;
 
 		for (var capName in caps) {
 			var cap = caps[capName];
 
+			if ( 'undefined' === typeof userRecord.capabilities.boards[self.id()] ) {
+				continue;
+			}
+
 			var isChecked = userRecord.capabilities.boards[self.id()].indexOf(capName);
 			cap.is_checked = isChecked === -1 ? false : true;
-			cap.is_self_admin = false;
+			cap.is_readonly = false;
 
 			cap.classes = '';
 
 			if (capName == 'board' && cap.is_checked) {
 				isAdmin = true;
 
-				if (userRecord.id == kanban.app.current_user_id()) {
-					cap.is_self_admin = true;
+				if (isBoardCreator) {
+					cap.is_readonly = true;
+					cap.label += ' (Creator)';
 				}
 
 				continue; // Don't apply the rest of the logic to the admin cap.

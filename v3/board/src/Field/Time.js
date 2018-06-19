@@ -296,6 +296,12 @@ function Field_Time(record) {
 
 	}; // getValue
 
+	this.formatContentForComment = function (content) {
+		var self = this;		
+
+		return content.hours + 'h / ' + content.estimate + 'h';
+	}; // formatContentForComment
+
 } // Field_Time
 
 // inherit Field

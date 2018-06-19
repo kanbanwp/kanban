@@ -267,13 +267,17 @@ class Kanban_User_Cap extends Kanban_User {
 
 		$board_id = intval( $data['board_id'] );
 
-		$boards = $this->get_boards_by_board_id( $board_id );
+		$board = Kanban_Board::instance()->get_row($board_id);
 
-		if ( empty( $boards ) ) {
+		if ( empty( $board ) ) {
 			return array();
 		}
 
+		$boards = $this->get_boards_by_board_id( $board_id );
+
 		$user_ids = array_keys( $boards );
+
+		$user_ids[] = $board->created_user_id;
 
 		$users = $this->get_users( $user_ids, true );
 

@@ -716,7 +716,8 @@ Board_Modal = function (board) {
 		return kanban.templates['board-modal-user'].render({
 			caps: caps,
 			user: user.record(),
-			board: self.board().record()
+			board: self.board().record(),
+			allowDelete: caps.board.is_readonly && user.id() == kanban.app.current_user_id() ? false : true
 		});
 
 	}; // userRender

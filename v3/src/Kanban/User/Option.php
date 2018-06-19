@@ -113,9 +113,9 @@ class Kanban_User_Option extends Kanban_User {
 		return $row;
 	}
 
-	public function set_row( $data ) {
-		return parent::set_row( $data );
-	}
+//	public function set_row( $data ) {
+//		return parent::set_row( $data );
+//	}
 
 //	public function ajax_replace_app_all ( $data ) {
 //

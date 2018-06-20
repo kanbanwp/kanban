@@ -89,27 +89,6 @@
 		}
 	}
 
-	.panel-group .panel,
-	.panel {
-		border-radius: 0;
-		border: 0;
-		border-top: $margin/5 solid $color-core-400;
-		box-shadow: none;
-
-		.panel-heading {
-			border-radius: 0;
-			border: 0;
-		}
-
-		.panel-body {
-			border: 0 !important;
-		}
-
-		&:last-child {
-			border-bottom: $margin/5 solid $color-core-400;
-		}
-	}
-
 	.close {
 		position: absolute;
 		right: $margin;

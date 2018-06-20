@@ -63,7 +63,7 @@ class Kanban_Router {
 		// Get the "page" part of the url.
 		$slug = $matches[1];
 
-		$this->slugs = apply_filters( 'kanban_maybe_load_page_slugs', $this->slugs );
+		$this->slugs = apply_filters( 'kanban_router_maybe_load_page_slugs', $this->slugs );
 
 		if ( ! in_array( $slug, $this->slugs ) ) {
 			return;
@@ -74,7 +74,7 @@ class Kanban_Router {
 		add_filter( 'after_setup_theme', array( self::$instance, 'disable_widgets' ) );
 
 		$app_file_path = apply_filters(
-			'kanban_maybe_load_page_app_file_path',
+			'kanban_router_maybe_load_page_app_file_path',
 			sprintf(
 				'%s%s/index.php',
 				Kanban::instance()->settings()->path,
@@ -174,13 +174,17 @@ class Kanban_Router {
 	}
 
 	public function get_uri( $page = 'board' ) {
-		$template_file = sprintf(
-			'%s%s/',
-			Kanban::instance()->settings()->uri,
+		$path = apply_filters(
+			'kanban_router_get_uri_path',
+			sprintf(
+				'%s%s/',
+				Kanban::instance()->settings()->uri,
+				$page
+			),
 			$page
 		);
 
-		return  $template_file;
+		return  $path;
 	}
 
 	public function get_path( $page = 'board' ) {

@@ -1,64 +1,54 @@
 .form-group-todo {
-	//> label {
-	//	margin-bottom: $label-margin-bottom;
-	//}
 
-	ul {
-		margin: 0;
+	.panel {
+		border-top: 2px solid $color-core-100;
+		.panel-heading {
+			background: none;
+		}
+
+		&:last-child {
+			border-bottom: 2px solid $color-core-100;
+		}
 	}
 
-	li {
-		clear: both;
+	.panel-title {
+		margin: 0 $margin;
+
+		[type="checkbox"] {
+			display: none;
+
+			+ .todo-checkbox {
+				display: inline-block;
+				+ .todo-checkbox {
+					display: none;
+				}
+			}
+
+			&:checked + .todo-checkbox {
+				display: none;
+				+ .todo-checkbox {
+					display: inline-block;
+					+ .todo {
+						text-decoration: line-through;
+					}
+				}
+			}
+
+		}
+	}
+
+	.todo {
+		text-align: justify;
 	}
 
 	.todo-checkbox {
-		display: inline-block;
 		float: left;
-		margin-left: -.618em;
-		margin-top: -.236em;
+		font-size: $margin*1.5;
+		margin-left: (-$margin)*2;
 	}
 
-	.ei {
-		color: $color-core-800;
-		font-size: 2em;
-	}
-
-	[type="checkbox"] {
-		display: none;
-
-		~ .btn {
-			.form-group-todo-unchecked {
-				display: inline-block;
-			}
-
-			.form-group-todo-checked {
-				display: none;
-			}
-		}
-
-
-		&:checked {
-			~ .btn { // checkbox followed by btn
-				.form-group-todo-unchecked {
-					display: none;
-				}
-
-				.form-group-todo-checked {
-					display: inline-block;
-				}
-
-				~ [contenteditable] { // checkbox followed by btn followed by contenteditable
-						border: 0;
-						opacity: .618;
-						text-decoration: line-through;
-					}
-			}
-		}
-
-	}
-
-	.form-control {
-		border: 0;
-		margin-left: 2em;
+	.todo-move-handle {
+		margin-right: (-$margin)*2;
+		margin-top: (-$margin)/2;
 	}
 }

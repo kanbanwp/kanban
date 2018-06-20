@@ -7,10 +7,10 @@
 		<div class="row wrapper-form-group">
 			{{=fields}}
 		</div><!--row-->
+
 		<div class="card-menu">
 			{{isCardWrite}}
-			<button class="btn btn-sm btn-fade btn-empty card-move-handle">
-				<i class="ei ei-menu" style="color: {{%lane.color}}"></i>
+			<button class="btn btn-sm btn-fade btn-empty card-move-handle ei ei-menu" style="color: {{%lane.color}}">
 			</button>
 			{{/isCardWrite}}
 

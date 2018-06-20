@@ -1,18 +1,8 @@
 {
-  "name": "kanbanwp",
-  "version": "3.0.0",
-  "description": "Kanban for WordPress 3.0",
   "main": "src/init.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/gelform/kanban.git"
-  },
-  "author": "",
-  "license": "ISC",
-  "homepage": "https://github.com/gelform/kanban",
   "devDependencies": {
     "bootstrap-datepicker": "^1.7.1",
     "css-loader": "^0.28.7",

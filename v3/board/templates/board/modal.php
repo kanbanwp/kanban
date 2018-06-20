@@ -298,6 +298,8 @@
 									       data-field-type="time"><?php _e( 'Time tracking', 'kanban'); ?></a></li>
 									<li><a href="javascript:void(0);" onclick="kanban.boards[{{%board.id}}].modal.fieldAdd(this);"
 									       data-field-type="colorpicker"><?php _e( 'Color picker', 'kanban'); ?></a></li>
+									<li><a href="javascript:void(0);" onclick="kanban.boards[{{%board.id}}].modal.fieldAdd(this);"
+									       data-field-type="todo"><?php _e( 'To-do list', 'kanban'); ?></a></li>
 								</ul>
 							</div>
 							{{fieldsHtml}}

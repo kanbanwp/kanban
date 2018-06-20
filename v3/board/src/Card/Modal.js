@@ -71,9 +71,9 @@ Card_Modal = function (card) {
 			lanesSelector: lanesSelectorHtml
 		});
 
-		$('#modal').html(modalHtml);
+		var $modal = $('#modal').html(modalHtml);
 
-		$('#modal').modal({
+		$modal.modal({
 			backdrop: 'static',
 			keyboard: false,
 			show: true
@@ -81,6 +81,18 @@ Card_Modal = function (card) {
 
 		kanban.app.prepareContenteditable($('#card-modal-comment-form'));
 
+		var fieldsOrder = self.card().fieldsOrder();
+		for (var i in fieldsOrder) {
+			var fieldId = fieldsOrder[i];
+
+			if ( 'undefined' === typeof kanban.fields[fieldId] ) {
+				continue;
+			}
+
+			var $field = $('.field-' + fieldId, $modal);
+
+			kanban.fields[fieldId].addFunctionality($field);
+		}
 
 		// Get all comments.
 		if ( self.card().isCommentsLoaded() ) {

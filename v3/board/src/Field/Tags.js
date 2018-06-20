@@ -81,8 +81,9 @@ function Field_Tags(record) {
 			var fieldvalue = kanban.fieldvalues[fieldvalueId];
 			items = fieldvalue.content();
 		}
+		console.log(self.options().add_new_on_field);
 
-		var $selectize =  $('.field-tags-form-control', $field).selectize({
+		var selectizeOptions = {
 			// delimiter: ',',
 			valueField: 'id',
 			labelField: 'content',
@@ -90,7 +91,6 @@ function Field_Tags(record) {
 			persist: false,
 			options: self.getTags(),
 			items: items,
-			create: self.options().add_new_on_field,
 			maxItems: self.options().select_multiple ? null : 1,
 			onFocus: function () {
 				$field.addClass('is-editing');
@@ -102,7 +102,16 @@ function Field_Tags(record) {
 				$field.closest('.card').removeClass('is-editing');
 				$field.closest('.lane').removeClass('is-editing');
 			},
-			create: function (input) {
+			onChange: function (value) {
+
+				var content = value.split(',');
+
+				self.updateValue($field, content);
+			}
+		};
+
+		if ( self.options().add_new_on_field ) {
+			selectizeOptions.create = function (input) {
 
 				var tag = {
 					id: Date.now(),
@@ -117,14 +126,10 @@ function Field_Tags(record) {
 				self.optionUpdate('tags', tags);
 
 				return tag;
-			},
-			onChange: function (value) {
+			};
+		}
 
-				var content = value.split(',');
-
-				self.updateValue($field, content);
-			}
-		});
+		var $selectize =  $('.field-tags-form-control', $field).selectize(selectizeOptions);
 
 	}; // addFunctionality
 	

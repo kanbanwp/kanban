@@ -204,7 +204,7 @@ function Card(record) {
 		var self = this;
 
 		var $el = self.$el();
-		var $lane = $el.closest('.lane');
+		// var $lane = $el.closest('.lane');
 
 		var fieldsOrder = self.fieldsOrder();
 		for (var i in fieldsOrder) {

@@ -81,7 +81,6 @@ function Field_Tags(record) {
 			var fieldvalue = kanban.fieldvalues[fieldvalueId];
 			items = fieldvalue.content();
 		}
-		console.log(self.options().add_new_on_field);
 
 		var selectizeOptions = {
 			// delimiter: ',',

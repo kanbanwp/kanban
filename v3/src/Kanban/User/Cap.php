@@ -403,7 +403,7 @@ class Kanban_User_Cap extends Kanban_User {
 		// If user created the board, treat them like a board admin.
 		$board = Kanban_Board::instance()->get_row( $board_id );
 
-		if ( $board->created_user_id == $user->id && $capArr[0] == 'board' ) {
+		if ( $board->created_user_id == $user->id && ($capArr[0] == 'board' || $capArr[0] == 'card' || $capArr[0] == 'comment') ) {
 			return true;
 		}
 

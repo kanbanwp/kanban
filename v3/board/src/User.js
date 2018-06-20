@@ -240,7 +240,7 @@ function User(record) {
 		if ( 'undefined' !== typeof kanban.app.current_board() && kanban.app.current_board() != null ) {
 			var board = kanban.app.current_board();
 
-			if ( board.record().created_user_id == self.id() && capSection == 'board' ) {
+			if ( board.record().created_user_id == self.id() && (capSection == 'board' || capSection == 'card' || capSection == 'comment') ) {
 				return true;
 			}
 		}

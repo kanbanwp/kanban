@@ -252,7 +252,7 @@ function Lane(record) {
 			lane: self.record(),
 			sidebar: sidebar,
 			active: active,
-			isCreateCard: kanban.app.current_user().hasCap('card-create') || kanban.app.current_user().hasCap('board')
+			isCreateCard: kanban.app.current_user().hasCap('card-create')
 		});
 
 	}; // render
@@ -302,6 +302,7 @@ function Lane(record) {
 	}; // rerender
 
 	this.cardAdd = function (el) {
+
 		var self = this;
 
 		if ( !kanban.app.current_user().hasCap( 'card-create') ) {

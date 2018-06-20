@@ -79,12 +79,14 @@ function User(record) {
 			boardId = kanban.app.current_board_id();
 		}
 
-		// if ( 'undefined' === typeof _self.record.options.boards[boardId] ) {
-		// 	_self.record.options.boards[boardId] = [];
-		// }
-		//
-		// _self.record.options.boards[boardId][option] = value;
+		if ( 'undefined' === typeof _self.record.options.boards[boardId] ) {
+			_self.record.options.boards[boardId] = [];
+		}
 
+		// Gets overwritten on ajax done below, but this allows immediate rerendering.
+		_self.record.options.boards[boardId][option] = value;
+
+		// Ajax won't send empty arrays, so convert to string.
 		if ( Array.isArray(value) && value.length == 0 ) {
 			value = '';
 		}
@@ -118,8 +120,10 @@ function User(record) {
 			return false;
 		}
 
-		// _self.record.options.app[option] = value;
+		// Gets overwritten on ajax done below, but this allows immediate rerendering.
+		_self.record.options.app[option] = value;
 
+		// Ajax won't send empty arrays, so convert to string.
 		if ( Array.isArray(value) && value.length == 0 ) {
 			value = '';
 		}

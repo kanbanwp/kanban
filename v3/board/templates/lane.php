@@ -41,7 +41,9 @@
 
 	{{sidebar}}
 	<?php // MUST BE SPAN TO ALLOW ODD LANE BACKGROUND COLORS ?>
-	<span class="sidebar-toggle sidebar-toggle-{{%sidebar}} hidden-sm hidden-xs" data-direction="{{%sidebar}}"
+	<span class="sidebar-toggle sidebar-toggle-{{%sidebar}} hidden-sm hidden-xs"
+	      id="sidebar-toggle-{{%sidebar}}"
+	      data-direction="{{%sidebar}}"
 	     onclick="kanban.boards[{{%lane.board_id}}].sidebarToggle(this);">
 		<i class="ei ei-arrow_carrot-{{%sidebar}}" style="color: {{%lane.options.color}}"></i>
 	</span>

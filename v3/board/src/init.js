@@ -134,6 +134,12 @@ $(function () {
 				return false;
 			}
 
+			// shift + c: toggle compact view
+			if ( e.keyCode === 67 && $any_input.length === 0 ) {
+				$( '#footer-menu-board-view-compact' ).trigger( 'click' );
+				return false;
+			}
+
 			// shift + b: show current board options
 			if ( e.keyCode === 66 ) {
 
@@ -156,55 +162,20 @@ $(function () {
 				return false;
 			}
 
-			/*
+			// shift + <-: left
+			if ( e.keyCode === 37 && $any_input.length === 0 ) {
+				$('#sidebar-toggle-left').trigger( 'click' );
+			}
 
-						// shift + <-: left
-						if ( e.keyCode === 37 && $any_input.length === 0 ) {
-							if ( e.shiftKey ) {
-								if ( $( '.col-tasks-sidebar-right', board.$el ).hasClass( 'opened' ) ) {
-									$( '.col-tasks-sidebar-right', board.$el ).trigger( 'click' );
-								}
-								else if ( !$( '.col-tasks-sidebar-left', board.$el ).hasClass( 'opened' ) ) {
-									$( '.col-tasks-sidebar-left', board.$el ).trigger( 'click' );
-								}
-							}
-						}
-
-						// shift + ->: right
-						if ( e.keyCode === 39 && $any_input.length === 0 ) {
-							if ( e.shiftKey ) {
-								if ( $( '.col-tasks-sidebar-left', board.$el ).hasClass( 'opened' ) ) {
-									$( '.col-tasks-sidebar-left', board.$el ).trigger( 'click' );
-								}
-								else if ( !$( '.col-tasks-sidebar-right', board.$el ).hasClass( 'opened' ) ) {
-									$( '.col-tasks-sidebar-right', board.$el ).trigger( 'click' );
-								}
-							}
-						}
+			// shift + ->: right
+			if ( e.keyCode === 39 && $any_input.length === 0 ) {
+				$('#sidebar-toggle-right').trigger( 'click' );
+			}
 
 
 
-						// shift + c: toggle compact view
-						if ( e.keyCode === 67 && $any_input.length === 0 ) {
-							if ( e.shiftKey ) {
-								$( '#btn-view-compact' ).trigger( 'click' );
-								return false;
-							}
-						}
+/*
 
-
-
-
-
-
-
-						// shift + u: toggle full screen
-						if ( e.keyCode === 85 && $any_input.length === 0 ) {
-							if ( e.shiftKey ) {
-								$( '#btn-view-fullscreen' ).trigger( 'click' );
-								return false;
-							}
-						}
 
 
 
@@ -228,25 +199,14 @@ $(function () {
 
 
 
-						// shift + p: open projects modal
-						if ( e.keyCode === 80 && $any_input.length === 0 ) {
-							if ( e.shiftKey ) {
-								$( '#modal-projects' ).modal( 'toggle' );
-								return false;
-							}
-						}
-
-*/
-
-						// shift + k: open kaybord shortcuts modal
+						// shift + k: open keybord shortcuts modal
 						if ( e.keyCode === 75 && $any_input.length === 0 ) {
 							if ( e.shiftKey ) {
 								kanban.app.toggleKeyboardShortcutsModal();
 								return false;
 							}
 						}
-
-
+*/
 		}
 	); // body keydown
 

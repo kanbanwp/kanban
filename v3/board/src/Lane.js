@@ -252,7 +252,7 @@ function Lane(record) {
 			lane: self.record(),
 			sidebar: sidebar,
 			active: active,
-			isCreateCard: kanban.app.current_user().hasCap('card-create')
+			isCreateCard: kanban.app.current_user().hasCap('card-create') || kanban.app.current_user().hasCap('board')
 		});
 
 	}; // render

@@ -713,6 +713,26 @@ function App(record) {
 		kanban.app.current_board().modal.show();
 	}; // currentBoardModalShow
 
+	this.fililterModalToggle = function (el) {
+
+		if (null === kanban.app.current_board()) {
+			$(el).hide();
+			return false;
+		}
+
+
+		var modalHtml = kanban.templates['filters-modal'].render();
+
+		$('#modal').html(modalHtml);
+
+		$('#modal').modal({
+			backdrop: 'static',
+			keyboard: false,
+			show: true
+		});
+
+	}; // currentBoardModalShow
+
 	this.viewToggleCompact = function (el) {
 
 		if (null === kanban.app.current_board()) {

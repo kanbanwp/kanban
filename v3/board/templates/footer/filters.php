@@ -1,40 +1,44 @@
-<script class="template" type="t/template" data-id="footer-filters">
+<script class="template" type="t/template" data-id="filters-modal">
 
-	<div class="modal-dialog modal-lg" id="modal-filters">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
-				</button>
-				<h4 class="modal-title">Filters</h4>
+	<div class="modal-dialog modal-lg" id="filters-modal">
+		<div class="modal-content" data-label="<?php _e( 'Filters', 'kanban' ); ?>">
+
+			<div id="modal-header">
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#modal-navbar">
+						<span class="sr-only"><?php _e( 'Toggle navigation', 'kanban'); ?></span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+					</button>
+
+					<span class="navbar-brand visible-xs visible-sm"><?php _e( 'Filters', 'kanban' ); ?></span>
+				</div>
+				<div id="modal-navbar" class="collapse navbar-collapse">
+
+					<ul class="nav navbar-nav">
+						<li class="pull-right">
+							<a href="javascript:void(0);"
+							   onclick="kanban.app.modal.close(this);">
+								<span class="visible-xs-inline-block"><?php _e( 'Close this window', 'kanban'); ?></span>
+								<i class="ei ei-close hidden-xs"></i>
+							</a>
+						</li>
+					</ul>
+
+				</div><!--/.nav-collapse -->
 			</div>
+
 			<div class="modal-body">
-				<p>
-					<!-- Standard button -->
-					<button type="button" class="btn btn-default">Default</button>
+<h3><?php _e( 'Filters', 'kanban' ); ?></h3>
+				<div class="tab-content" >
+					<div class="tab-pane active" id="modal-tab-pane-options">
+<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus aliquam aperiam architecto consequatur, dignissimos, enim esse ex magni minima natus officia pariatur porro quibusdam rem sequi unde ut veniam voluptates.</p>
 
-					<!-- Provides extra visual weight and identifies the primary action in a set of buttons -->
-					<button type="button" class="btn btn-primary">Primary</button>
-
-					<!-- Indicates a successful or positive action -->
-					<button type="button" class="btn btn-success">Success</button>
-
-					<!-- Contextual button for informational alert messages -->
-					<button type="button" class="btn btn-info">Info</button>
-
-					<!-- Indicates caution should be taken with this action -->
-					<button type="button" class="btn btn-warning">Warning</button>
-
-					<!-- Indicates a dangerous or potentially negative action -->
-					<button type="button" class="btn btn-danger">Danger</button>
-
-					<!-- Deemphasize a button by making it look like a link while maintaining button behavior -->
-					<button type="button" class="btn btn-link">Link</button>
-
-				</p>
-
-			</div>
+					</div><!--tab-options-->
+				</div><!--tab-panes-->
+			</div><!--modal-body-->
 		</div><!-- /.modal-content -->
 	</div><!-- /.modal-dialog -->
-
 
 </script>

@@ -12,6 +12,8 @@ function Card(record) {
 
 	_self.isCommentsLoaded = false;
 
+	_self.timerEditMenu;
+
 	this.modal = new Card_Modal(this);
 
 	this.record = function () {
@@ -220,21 +222,17 @@ function Card(record) {
 		$el.one(
 			'mouseover',
 			function () {
-				$('.card-edit', $el)
-				.on(
-					'mouseover',
-					function () {
-						$el.addClass('is-active');
-						$lane.addClass('is-active');
-					}
-				)
-				.on(
-					'mouseout',
-					function () {
-						$el.removeClass('is-active');
-						$lane.removeClass('is-active');
-					}
-				);
+				$('.card-edit', $el).popover({
+					container: 'body',
+					content: ' ',
+					html: true,
+					placement: 'right auto',
+					trigger: 'manual',
+					animation: false,
+					template: kanban.templates['card-menu'].render({
+						card: self.record()
+					})
+				});
 			}
 		);
 
@@ -370,6 +368,42 @@ function Card(record) {
 	this.toggleHiddenFields = function (id) {
 		$('#' + id).toggle();
 	}; // toggleHiddenFields
+
+	this.menuShow = function (el) {
+		// console.log('menuShow');
+		var self = this;
+
+		var $popover = $('#popover-card-edit-menu-' + self.id());
+
+		clearTimeout(_self.timerEditMenu);
+
+		if ($popover.length == 0) {
+			$('.card-edit', self.$el()).popover('show');
+		}
+	}; // menuShow
+
+	this.menuHide = function (el) {
+		// console.log('menuHide');
+		var self = this;
+
+		$('.card-edit', self.$el()).popover('hide');
+	}; // menuShow
+
+	this.menuHideDelay = function (el) {
+		// console.log('menuHideDelay');
+		var self = this;
+
+		clearTimeout(_self.timerEditMenu);
+		_self.timerEditMenu = setTimeout(self.menuHide.bind(self), 500);
+
+	}; // menuShow
+
+	this.editButtonOnclick = function (el) {
+		// console.log('editButtonOnclick');
+		var self = this;
+		$('.card-edit', self.$el()).popover('hide');
+		self.modal.show(this)
+	}; // editButtonClick
 
 	this.lane = function () {
 		var self = this;

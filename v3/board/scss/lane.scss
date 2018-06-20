@@ -4,10 +4,10 @@
 	position: relative;
 	z-index: 0;
 
-	&.is-editing,
-	&.is-active {
-		z-index: 1;
-	}
+	//&.is-editing,
+	//&.is-active {
+	//	z-index: 1;
+	//}
 
 	// Mobile view
 	@media screen and (max-width: $screen-sm-max) {

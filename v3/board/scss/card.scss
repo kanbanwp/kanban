@@ -9,10 +9,10 @@
 	-moz-box-shadow: 0px 0px 0px 1px $color-core-100;
 	box-shadow: 0px 0px 0px 1px $color-core-100;
 
-	&.is-editing,
-	&.is-active {
-		z-index: 1;
-	}
+	//&.is-editing,
+	//&.is-active {
+	//	z-index: 1;
+	//}
 
 	&.show-card-id:before {
 		bottom: $margin/3;
@@ -52,9 +52,10 @@
 
 	}
 
-	@import "./card/menu";
 	@import "./card/expand";
 
 }
+
+@import "./card/menu"; // Must be outside card, because it's added to the body
 
 @import './card/modal';

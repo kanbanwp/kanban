@@ -32,42 +32,6 @@
 
 			}
 		}
-
-		.card-edit-menu {
-			height: 0;
-			left: 100%;
-			padding-left: $margin/2;
-			position: absolute;
-			top: 0;
-			z-index: 1;
-			width: 0;
-
-			opacity: 0;
-			transition: opacity 0s;
-
-			&:before {
-				content: '';
-				display: block;
-				width: 0;
-				height: 0;
-				border: 0 solid transparent;
-				border-width: $margin/2 $margin/2 $margin/2 0;
-				border-right-color: $color-core-300;
-				left: 0;
-				position: absolute;
-				top: $margin/3;
-			}
-
-			.btn {
-				background: white;
-
-				margin-bottom: $margin/3;
-			}
-
-			@media screen and (max-width: $screen-sm-max) {
-				display: none;
-			}
-		}
 	}
 
 	.card-move-handle {
@@ -103,4 +67,11 @@
 		}
 	}
 
+}
+
+
+.card-actions {
+	.btn {
+		margin-bottom: 2px;
+	}
 }

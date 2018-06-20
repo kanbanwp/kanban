@@ -16,25 +16,10 @@
 
 			<a href="javascript:void(0);" class="btn btn-sm btn-fade btn-empty card-edit"
 			        type="button"
-			        onclick="kanban.cards[{{%card.id}}].modal.show(this);"
-			        data-title="<?php _e( 'Edit card', 'kanban'); ?> {{%card.id}}">
+			        onclick="kanban.cards[{{%card.id}}].editButtonOnclick(this);"
+			        onmouseenter="kanban.cards[{{%card.id}}].menuShow(this);"
+			        onmouseleave="kanban.cards[{{%card.id}}].menuHideDelay(this);">
 				<i class="ei ei-pencil" style="color: {{%lane.color}}"></i>
-
-				<span class="btn-group-vertical card-edit-menu">
-					<button type="button" class="btn btn-default btn-sm" onclick="event.stopPropagation(); kanban.cards[{{%card.id}}].copy(this); return false;">
-						<?php _e( 'Copy', 'kanban'); ?>
-					</button>
-<?php /*
-					<button type="button" class="btn btn-default btn-sm" onclick="event.stopPropagation(); kanban.cards[{{%card.id}}].move(this); return false;">
-						<?php _e( 'Move', 'kanban'); ?>
-					</button>
- */ ?>
-					<button class="btn btn-default btn-sm" onclick="event.stopPropagation(); kanban.cards[{{%card.id}}].delete(this);">
-						<?php _e( 'Archive', 'kanban'); ?>
-						<i class="ei ei-loading show-on-loading" style="color: {{%lane.color}}"></i>
-					</button>
-				</span>
-
 			</a>
 
 			<button class="btn btn-sm btn-fade btn-empty card-comments"

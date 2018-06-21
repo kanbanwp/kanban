@@ -2,6 +2,7 @@
 
 	.list-group-item {
 		border: 0;
+		padding: $margin/3 $margin;
 	}
 
 	[type="checkbox"] {
@@ -27,7 +28,8 @@
 
 	}
 
-	.todo {
+	.form-control[contenteditable] {
+		display: block;
 		margin: 0 $margin;
 	}
 
@@ -35,6 +37,7 @@
 		float: left;
 		font-size: $margin*1.5;
 		margin-left: -$margin;
+		margin-top: $margin/5;
 	}
 
 	.todo-move-handle {

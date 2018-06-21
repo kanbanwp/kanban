@@ -1,50 +1,40 @@
 .form-group-todo {
 
-	.panel {
-		border-top: 2px solid $color-core-100;
-		.panel-heading {
-			background: none;
-		}
-
-		&:last-child {
-			border-bottom: 2px solid $color-core-100;
-		}
+	.list-group-item {
+		border: 0;
 	}
 
-	.panel-title {
-		margin: 0 $margin;
+	[type="checkbox"] {
+		display: none;
 
-		[type="checkbox"] {
+		+ .todo-checkbox {
+			display: inline-block;
+			+ .todo-checkbox {
+				display: none;
+			}
+		}
+
+		&:checked + .todo-checkbox {
 			display: none;
-
 			+ .todo-checkbox {
 				display: inline-block;
-				+ .todo-checkbox {
-					display: none;
+				+ .todo {
+					opacity: .618;
+					text-decoration: line-through;
 				}
 			}
-
-			&:checked + .todo-checkbox {
-				display: none;
-				+ .todo-checkbox {
-					display: inline-block;
-					+ .todo {
-						text-decoration: line-through;
-					}
-				}
-			}
-
 		}
+
 	}
 
 	.todo {
-		text-align: justify;
+		margin: 0 $margin;
 	}
 
 	.todo-checkbox {
 		float: left;
 		font-size: $margin*1.5;
-		margin-left: (-$margin)*2;
+		margin-left: -$margin;
 	}
 
 	.todo-move-handle {

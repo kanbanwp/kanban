@@ -442,6 +442,10 @@ body > #app-color-picker {
 		border: 0 !important;
 	}
 
+}
+
+.panel-group .panel {
+
 	&:last-child {
 		border-bottom: $margin/5 solid $color-core-400;
 	}

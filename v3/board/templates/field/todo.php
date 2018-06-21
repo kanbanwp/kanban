@@ -8,44 +8,32 @@
 		<label>{{=field.label}}:</label>
 		{{/field.label}}
 
-		<div class="panel-group">
-			<div class="panel panel-default">
-				<div class="panel-heading">
+		<div class="list-group">
+			<div class="list-group-item">
 					<a href="javascript:void(0);" class="todo-move-handle btn btn-empty pull-right ei ei-menu"></a>
-					<div class="panel-title">
 						<input type="checkbox" id="checkbox-1">
 						<label for="checkbox-1" class="todo-checkbox ei ei-box-empty"></label>
 						<label for="checkbox-1" class="todo-checkbox ei ei-box-checked"></label>
 						<div class="todo" contenteditable="true">
-							Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+							Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla a ornare purus. Ut eu ante odio. Interdum et malesuada fames ac ante ipsum primis in faucibus. Proin ac mi urna. Quisque maximus quam sit amet auctor laoreet. Aenean sed porttitor nisi. Aenean pretium turpis ante, et fringilla sapien congue eu.
 						</div>
-					</div>
+			</div>
+			<div class="list-group-item">
+				<a href="javascript:void(0);" class="todo-move-handle btn btn-empty pull-right ei ei-menu"></a>
+				<input type="checkbox" id="checkbox-2">
+				<label for="checkbox-2" class="todo-checkbox ei ei-box-empty"></label>
+				<label for="checkbox-2" class="todo-checkbox ei ei-box-checked"></label>
+				<div class="todo" contenteditable="true">
+					Lorem ipsum dolor sit amet, consectetur adipiscing elit.
 				</div>
 			</div>
-			<div class="panel panel-default">
-				<div class="panel-heading">
-					<a href="javascript:void(0);" class="todo-move-handle btn btn-empty pull-right ei ei-menu"></a>
-					<div class="panel-title">
-						<input type="checkbox" id="checkbox-2">
-						<label for="checkbox-2" class="todo-checkbox ei ei-box-empty"></label>
-						<label for="checkbox-2" class="todo-checkbox ei ei-box-checked"></label>
-						<div class="todo" contenteditable="true">
-							Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="panel panel-default">
-				<div class="panel-heading">
-					<a href="javascript:void(0);" class="todo-move-handle btn btn-empty pull-right ei ei-menu"></a>
-					<div class="panel-title">
-						<input type="checkbox" id="checkbox-3">
-						<label for="checkbox-3" class="todo-checkbox ei ei-box-empty"></label>
-						<label for="checkbox-3" class="todo-checkbox ei ei-box-checked"></label>
-						<div class="todo" contenteditable="true">
-							Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-						</div>
-					</div>
+			<div class="list-group-item">
+				<a href="javascript:void(0);" class="todo-move-handle btn btn-empty pull-right ei ei-menu"></a>
+				<input type="checkbox" id="checkbox-3">
+				<label for="checkbox-3" class="todo-checkbox ei ei-box-empty"></label>
+				<label for="checkbox-3" class="todo-checkbox ei ei-box-checked"></label>
+				<div class="todo" contenteditable="true">
+					Lorem ipsum dolor sit amet, consectetur adipiscing elit.
 				</div>
 			</div>
 		</div>

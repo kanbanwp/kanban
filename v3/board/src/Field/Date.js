@@ -39,6 +39,8 @@ function Field_Date(record) {
 			}			
 		}
 
+		fieldRecord.options.showCount = fieldRecord.options.show_datecount == 1;
+
 		return kanban.templates['field-date'].render({
 			field: fieldRecord,
 			fieldvalue: fieldvalueRecord,

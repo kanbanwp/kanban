@@ -16,6 +16,7 @@ class Kanban_Router {
 	private $slugs = array(
 		'login', // Redirect old version 2 url.
 		'board',
+		'calendar',
 		'ajax'
 	);
 

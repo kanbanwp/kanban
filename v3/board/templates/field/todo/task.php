@@ -1,6 +1,6 @@
 <script class="template" type="t/template" data-id="field-todo-task">
 	<div class="list-group-item">
-		<a href="javascript:void(0);" class="todo-move-handle btn btn-empty pull-right ei ei-menu"></a>
+<!--		<a href="javascript:void(0);" class="todo-move-handle btn btn-empty pull-right ei ei-menu"></a>-->
 		<input type="checkbox" class="task-checkbox"
 		       onchange="kanban.fields[{{%field.id}}].onCheck(this, event);"
 		       id="checkbox-{{%card_id}}-{{%field.id}}-{{%todo.index}}"

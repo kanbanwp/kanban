@@ -19,11 +19,11 @@
 			   data-onchange="kanban.fields[{{%field.id}}].onChange(this);"
 			   value="{{%fieldvalue.content}}">
 			   
-			
-			<span class="datetimeago"
-			  data-datetime="{{=field.timeago_dt_gmt}}">
+			{{field.options.showCount}}
+			<span class="datetimeago" data-datetime="{{=field.timeago_dt_gmt}}">
 				{{=field.timeago_dt}}
 			</span>
+			{{/field.options.showCount}}
 			
 		</div>
 	</div>

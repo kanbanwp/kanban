@@ -23,20 +23,44 @@ function Field_Todo(record) {
 
 		var fieldvalueRecord = 'undefined' === typeof fieldvalue.record ? {} : fieldvalue.record();
 
-		if ( 'undefined' !== typeof fieldvalueRecord.content ) {
-			fieldvalueRecord.content = fieldvalueRecord.content.formatForApp();
+		if ( 'undefined' === typeof fieldvalueRecord.content ) {
+			fieldvalueRecord.content = [];
+		}
+
+		var todosHtml = "";
+		for(var i = 0; i < fieldvalueRecord.content.length; i++) {
+			var todoItem  = fieldvalueRecord.content[i];
+
+			//string boolean values coming from backend, JSON.parse will convert it to true boolean
+			todoItem.is_active = JSON.parse(todoItem.is_active);
+			todoItem.index = i + 1;
+			todosHtml += kanban.templates['field-todo-item'].render({
+				todo: todoItem,
+				field: self.record(),
+				card: 'undefined' === typeof card.record ? {} : card.record()
+			});
 		}
 
 		return kanban.templates['field-todo'].render({
 			field: self.record(),
 			fieldvalue: fieldvalueRecord,
 			card: 'undefined' === typeof card.record ? {} : card.record(),
-			isCardWrite: kanban.app.current_user().hasCap('card-write')
+			isCardWrite: kanban.app.current_user().hasCap('card-write'),
+			todosHtml: todosHtml
 		});
 	}; // render
 
 	this.addFunctionality = function ($field) {
 		var self = this;
+
+		kanban.app.prepareContenteditable($field);
+		$field.find('.medium-editor-element').on('blur', function(){
+			self.updateValue($field);
+		});
+
+		$field.find('input[type="checkbox"]').on('click', function(){
+			self.updateValue($field);
+		})
 
 		if ( $field.hasClass('func-added') ) {
 			return false;
@@ -44,8 +68,8 @@ function Field_Todo(record) {
 
 		$field.one(
 			'mouseover',
-			function () {
-				kanban.app.prepareContenteditable($field);
+			function () {	
+				//kanban.app.prepareContenteditable($field);			
 			}
 		);
 
@@ -97,13 +121,37 @@ function Field_Todo(record) {
 
 		var self = this;
 
-		// return content;
+		var todos = [];
+		$field.find('.list-group-item').not('.add-new-todo').each(function(){
+			var todoText = $(this).find('.todo-item').text().trim();
+			if (todoText != "") {
+				todos.push({
+					is_active: $(this).find('input').get(0).checked,
+					content: todoText
+				});
+			}
+		});
+
+		var $newField = $field.find('.list-group-item.add-new-todo');
+		if ($newField.find('div.add-new-todo').text() != "") {
+			todos.push({
+				is_active: false,
+				content: $newField.find('div.add-new-todo').text().trim()
+			})
+		}
+
+		return todos;
 	}; // getValue
 
 	this.formatContentForComment = function (content) {
 		var self = this;
 		
+		var contentArr = [];
+		for(var i = 0; i < content.length; i++) {
+			contentArr.push(content[i].content);
+		}
 
+		return contentArr.join(', ');
 	}; // formatContentForComment
 
 } // Field_Todo

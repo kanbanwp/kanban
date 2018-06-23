@@ -429,11 +429,11 @@ class Kanban_Board extends Kanban_Abstract {
 			switch ( $key ) {
 				case 'lanes_order':
 					$value = $this->format_json_for_app($value);
-					$value = array_filter(array_unique($value));
+					$value = array_map('intval', array_filter(array_unique($value)));
 					break;
 				case 'fields_order':
 					$value = $this->format_json_for_app($value);
-					$value = array_filter(array_unique($value));
+					$value = array_map('intval', array_filter(array_unique($value)));
 					break;
 				case 'is_public':
 					$value = $this->format_bool_for_app($value);
@@ -460,11 +460,11 @@ class Kanban_Board extends Kanban_Abstract {
 		foreach ( $row as $key => &$value ) {
 			switch ( $key ) {
 				case 'lanes_order':
-					$value = array_filter(array_unique($value));
+					$value = array_map('strval', array_filter(array_unique($value)));
 					$value = $this->format_json_for_db($value);
 					break;
 				case 'fields_order':
-					$value = array_filter(array_unique($value));
+					$value = array_map('strval', array_filter(array_unique($value)));
 					$value = $this->format_json_for_db($value);
 					break;
 				case 'is_public':

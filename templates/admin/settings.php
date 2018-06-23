@@ -243,9 +243,8 @@
 							&nbsp;
 						</th>
 						<td>
-							<a href="<?php print wp_nonce_url(admin_url('options.php?page=kanban'), 'kanban2_to_3');?>" class="button">
-								Switch to version 3
-								(Extremely experimental)
+							<a href="<?php echo admin_url('admin.php?page=kanban_v3') ?>" class="button">
+								Learn more about version 3
 							</a>
 						</td>
 					</tr>

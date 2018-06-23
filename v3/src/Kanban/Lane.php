@@ -270,7 +270,7 @@ class Kanban_Lane extends Kanban_Abstract {
 			switch ( $key ) {
 				case 'cards_order':
 					$value = $this->format_json_for_app($value);
-					$value = array_filter(array_unique($value));
+					$value = array_map('intval', array_filter(array_unique($value)));
 					break;
 				case 'board_id':
 					$value = $this->format_int_for_app($value);
@@ -294,7 +294,7 @@ class Kanban_Lane extends Kanban_Abstract {
 		foreach ( $row as $key => &$value ) {
 			switch ( $key ) {
 				case 'cards_order':
-					$value = array_filter(array_unique($value));
+					$value = array_map('strval', array_filter(array_unique($value)));
 					$value = $this->format_json_for_db($value);
 					break;
 				case 'options':

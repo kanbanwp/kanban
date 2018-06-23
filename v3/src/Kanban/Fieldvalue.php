@@ -56,6 +56,12 @@ class Kanban_Fieldvalue extends Kanban_Abstract {
 
 		$row = $this->set_row( $data );
 
+		// Store the new fieldvalue.
+		Kanban_Fieldvalue_Log::instance()->set_row( array(
+			'fieldvalue_id' => $row->id,
+			'content' => $row->content
+		) );
+
 		return $row;
 	}
 

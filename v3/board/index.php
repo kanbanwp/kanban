@@ -1,7 +1,5 @@
 <?php
 
-define( 'DIR', dirname( __FILE__ ) );
-
 $app_data = Kanban_App::instance()->get_app_data();
 
 ?><!DOCTYPE html>
@@ -45,17 +43,10 @@ $app_data = Kanban_App::instance()->get_app_data();
 <div id="app-alert"></div>
 
 <?php
-
-$di = new RecursiveDirectoryIterator( DIR . '/templates/' );
-foreach ( new RecursiveIteratorIterator( $di ) as $filename => $file ) {
-	if ( substr( basename( $filename ), 0, 1 ) == '.' ) {
-		continue;
-	}
-
-	include_once $filename;
-
-}
-
+do_action(
+	'kanban_board_include_templates',
+	Kanban_Template::instance()->include_from_path(dirname( __FILE__ ) . '/templates/')
+);
 ?>
 
 

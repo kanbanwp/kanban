@@ -1,7 +1,7 @@
 <?php
 
 
-class Kanban_Card_Lane extends Kanban_Abstract {
+class Kanban_Card_Log extends Kanban_Abstract {
 
 	/**
 	 * @var array Database table fields and types for filtering.
@@ -21,7 +21,7 @@ class Kanban_Card_Lane extends Kanban_Abstract {
 	/**
 	 * @var string database table name.
 	 */
-	protected $table = 'card_lanes';
+	protected $table = 'card_log';
 
 
 	public function set_row( $data ) {

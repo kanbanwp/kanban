@@ -44,14 +44,8 @@ class Kanban_Card extends Kanban_Abstract {
 			'lane_id' => $data['lane_id']
 		) );
 
-
-		$row = $this->set_row( array(
-			'board_id' => $data['board_id'],
-			'lane_id' => $data['lane_id']
-		) );
-
 		// Store the initial card lane.
-		Kanban_Card_Lane::instance()->set_row( array(
+		Kanban_Card_Log::instance()->set_row( array(
 			'card_id' => $row->id,
 			'lane_id' => $row->lane_id
 		) );
@@ -80,7 +74,7 @@ class Kanban_Card extends Kanban_Abstract {
 
 		// If the card has moved lanes, store it.
 		if ( isset($data['lane_id']) && $data['lane_id'] != $card->lane_id ) {
-			Kanban_Card_Lane::instance()->set_row( array(
+			Kanban_Card_Log::instance()->set_row( array(
 				'card_id' => $data['card_id'],
 				'lane_id' => $data['lane_id']
 			) );

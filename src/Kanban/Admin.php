@@ -246,6 +246,12 @@ class Kanban_Admin {
 //	}
 
 
+	static function v3_page() {
+		$template = Kanban_Template::find_template( 'admin/v3' );
+
+		include_once $template;
+	}
+
 
 	static function contact_page() {
 		$template = Kanban_Template::find_template( 'admin/contact' );
@@ -624,6 +630,15 @@ class Kanban_Admin {
 			'manage_options',
 			'kanban_contact',
 			array( __CLASS__, 'contact_page' )
+		);
+
+		add_submenu_page(
+			null,
+			__( 'Version 3' ),
+			__( 'Version 3' ),
+			'manage_options',
+			'kanban_v3',
+			array( __CLASS__, 'v3_page' )
 		);
 
 	} // admin_menu

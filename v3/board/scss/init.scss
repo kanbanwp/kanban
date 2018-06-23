@@ -23,15 +23,16 @@ a {
 }
 
 @import "./../node_modules/selectize/dist/css/selectize.bootstrap3.css";
-//@import "./../node_modules/medium-editor/dist/css/medium-editor.min.css";
-//@import "./../node_modules/medium-editor/dist/css/themes/bootstrap.min.css";
+@import "./../node_modules/medium-editor/dist/css/medium-editor.min.css";
 @import "./../node_modules/at.js/dist/css/jquery.atwho.min.css";
 @import "./../node_modules/dropzone/dist/dropzone.css";
 @import "./../node_modules/bootstrap-datepicker/dist/css/bootstrap-datepicker3.standalone.min.css";
 
 @import './classes';
+@import './libraries/selectize';
+@import './libraries/bootstrap';
+@import './libraries/dropzone';
 @import '../../scss/buttons';
-@import './medium-editor';
 @import './app';
 @import './header';
 @import './board';

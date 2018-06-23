@@ -7,8 +7,11 @@ function Field_Text(record) {
 
 	Field.call(this, record);
 
-	this._self.options = $.extend(this._self.options, {
-	});
+	this._self.options = $.extend(
+		this._self.options,
+		{
+			allow_files: false
+		});
 
 	this.render = function (fieldvalue, card) {
 		var self = this;
@@ -46,6 +49,18 @@ function Field_Text(record) {
 			'mouseover',
 			function () {
 				kanban.app.prepareContenteditable($field);
+
+				$('.attachment', $field)
+				.on(
+					'click',
+					function () {
+						var href = $(this).attr('data-href');
+
+						window.open(href);
+
+						return false;
+					}
+				);
 			}
 		);
 

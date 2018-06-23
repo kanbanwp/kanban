@@ -1151,6 +1151,9 @@ function App(record) {
 
 				$('<p>&nbsp;</p>').appendTo($formControl);
 
+				// Should trigger saving most places.
+				$formControl.trigger('blur');
+
 				$(file.previewElement).slideUp(function () {
 					$(this).remove();
 				});

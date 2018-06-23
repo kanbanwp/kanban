@@ -19,6 +19,34 @@
 
 					<?php include KANBAN_APP_DIR . '/inc/board/modal/field/option-placeholder.php' ?>
 
+					<div class="form-group form-group-toggle col col-sm-12">
+						<label><?php _e( 'Allow file attachments:', 'kanban'); ?></label>
+
+						<div class="btn-group">
+							<input type="radio"
+							       onchange="kanban.fields[{{%field.id}}].optionOnChange(this);"
+							       data-name="allow_files"
+							       name="field-{{%field.id}}-allow_files"
+							       id="field-{{%field.id}}-allow_files-false"
+							       autocomplete="off"
+							       {{!fieldOptions.allow_files}}checked{{/!fieldOptions.allow_files}}
+							value="false">
+							<label for="field-{{%field.id}}-allow_files-false"
+							       class="btn"><?php _e( 'Yes', 'kanban'); ?></label>
+
+							<input type="radio"
+							       onchange="kanban.fields[{{%field.id}}].optionOnChange(this);"
+							       data-name="allow_files"
+							       name="field-{{%field.id}}-allow_files"
+							       id="field-{{%field.id}}-allow_files-true"
+							       autocomplete="off"
+							       {{fieldOptions.allow_files}}checked{{/fieldOptions.allow_files}}
+							value="true">
+							<label for="field-{{%field.id}}-allow_files-true"
+							       class="btn"><?php _e( 'No', 'kanban'); ?></label>
+						</div>
+					</div><!--form-group -->
+					
 					<?php include KANBAN_APP_DIR . '/inc/board/modal/field/option-hidden.php' ?>
 
 				</div><!--wrapper-form-group-->

@@ -105,12 +105,6 @@ function Field(record) {
 			return false;
 		}
 
-		// $field.one(
-		// 	'mouseover',
-		// 	function () {
-		// 	}
-		// );
-
 		$field.addClass('func-added');
 
 	}; // addFunctionality

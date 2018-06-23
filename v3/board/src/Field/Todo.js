@@ -54,16 +54,26 @@ function Field_Todo(record) {
 	this.addFunctionality = function ($field) {
 		var self = this;
 
-		kanban.app.prepareContenteditable($field);
-
 		if ( $field.hasClass('func-added') ) {
 			return false;
 		}
 
 		$field.one(
 			'mouseover',
-			function () {	
-				//kanban.app.prepareContenteditable($field);			
+			function () {
+				kanban.app.prepareContenteditable($field);
+
+				$('.attachment', $field)
+				.on(
+					'click',
+					function () {
+						var href = $(this).attr('data-href');
+
+						window.open(href);
+
+						return false;
+					}
+				);
 			}
 		);
 

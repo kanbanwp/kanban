@@ -1,0 +1,27 @@
+
+
+.selectize-control {
+
+	&.multi,
+	&.single {
+		.selectize-input {
+			background: transparent;
+			border: 0;
+			border-bottom: 2px solid $color-core-100;
+			border-radius: 0;
+			color: $color-text;
+			height: auto;
+			padding: $margin/3 $margin/3 $margin/3 0;
+			transition: none;
+
+			> div.selectize-item {
+				background: $color-core-200;
+				padding: 1px $margin/3;
+			}
+		}
+	}
+
+	.selectize-dropdown {
+		z-index: 1000;
+	}
+}

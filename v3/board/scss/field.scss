@@ -86,6 +86,11 @@
 		}
 	} // form-control
 
+	// Sanity check.
+	img {
+		max-width: 100%;
+	}
+
 	//.btn.ei {
 	//	padding-left: 0;
 	//}

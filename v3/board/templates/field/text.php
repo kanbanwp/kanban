@@ -8,7 +8,7 @@
 		<label>{{=field.label}}:</label>
 		{{/field.label}}
 
-		<div class="wrapper-contenteditable">
+		<div class="wrapper-contenteditable {{field.options.allow_files}}dropzone{{/field.options.allow_files}}">
 			<div class="contenteditable-prevent-click">&#8203;</div>
 			<div class="form-control"
 			     {{isCardWrite}}contenteditable="true"{{:isCardWrite}}readonly{{/isCardWrite}}

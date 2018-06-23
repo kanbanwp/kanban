@@ -200,7 +200,7 @@ function Card(record) {
 	}; // render
 
 	this.addFunctionality = function () {
-
+		// console.log('card.addFunctionality');
 		var self = this;
 
 		var $el = self.$el();

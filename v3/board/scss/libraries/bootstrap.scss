@@ -1,0 +1,159 @@
+.panel-group .panel,
+.panel {
+	border-radius: 0;
+	border: 0;
+	border-top: $margin/5 solid $color-core-400;
+	box-shadow: none;
+
+	.panel-heading {
+		border-radius: 0;
+		border: 0;
+	}
+
+	.panel-body {
+		border: 0 !important;
+	}
+
+}
+
+.panel-group .panel {
+
+	&:last-child {
+		border-bottom: $margin/5 solid $color-core-400;
+	}
+}
+
+.list-group {
+	.list-group-item {
+		border-radius: 0;
+		border-width: 0 0 2px;
+		border-color: $color-core-100;
+	}
+}
+
+.tab-pane {
+	padding-top: $margin;
+}
+
+
+.navbar-collapse {
+	@media screen and (max-width: $screen-sm-max) {
+		padding: 0 0 $margin/3; // leave room for the shadow at the bottom.
+
+		-webkit-box-shadow: inset 0px $margin/3 0px 0px $color-core-500;
+		-moz-box-shadow: inset 0px $margin/3 0px 0px $color-core-500;
+		box-shadow: inset 0px (-$margin/3) 0px 0px $color-core-500;
+	}
+}
+
+.nav {
+	background: $color-core-100;
+	margin: 0;
+
+	> li {
+		a {
+			color: $color-text;
+		}
+
+		&.active {
+			> a {
+				background: white; // $color-core-50;
+
+				-webkit-box-shadow: inset 0px $margin/3 0px 0px $color-core-500;
+				-moz-box-shadow: inset 0px $margin/3 0px 0px $color-core-500;
+				box-shadow: inset 0px $margin/3 0px 0px $color-core-500;
+
+			}
+		}
+
+		&:focus:not(.active),
+		&:hover:not(.active) {
+			> a {
+				background: $color-core-200;
+
+				-webkit-box-shadow: inset 0px $margin/3 0px 0px $color-core-400;
+				-moz-box-shadow: inset 0px $margin/3 0px 0px $color-core-400;
+				box-shadow: inset 0px $margin/3 0px 0px $color-core-400;
+
+			}
+		}
+	}
+
+	@media screen and (max-width: $screen-sm-max) {
+		background: white;
+
+		> li {
+			&.active {
+				> a {
+					background: white; // $color-core-50;
+
+					-webkit-box-shadow: inset $margin/3 0px 0px 0px $color-core-500;
+					-moz-box-shadow: inset $margin/3 0px 0px 0px $color-core-500;
+					box-shadow: inset $margin/3 0px 0px 0px $color-core-500;
+
+				}
+			}
+
+			&:focus:not(.active),
+			&:hover:not(.active) {
+				> a {
+					background: $color-core-100;
+
+					-webkit-box-shadow: inset $margin/3 0px 0px 0px $color-core-400;
+					-moz-box-shadow: inset $margin/3 0px 0px 0px $color-core-400;
+					box-shadow: inset $margin/3 0px 0px 0px $color-core-400;
+
+				}
+			}
+
+			&.pull-left,
+			&.pull-right {
+				float: none !important;
+			}
+		}
+	}
+}
+
+
+.dropdown,
+.dropup {
+	.dropdown-menu {
+
+		li {
+			box-shadow: none;
+		}
+
+		a {
+			&.active {
+				-webkit-box-shadow: inset $margin/3 0px 0px 0px $color-green;
+				-moz-box-shadow: inset $margin/3 0px 0px 0px $color-green;
+				box-shadow: inset $margin/3 0px 0px 0px $color-green;
+			}
+
+			&:hover:not(.active) {
+				-webkit-box-shadow: inset $margin/3 0px 0px 0px rgba($color-core-300, .382);
+				-moz-box-shadow: inset $margin/3 0px 0px 0px rgba($color-core-300, .382);
+				box-shadow: inset $margin/3 0px 0px 0px rgba($color-core-300, .382);
+			}
+		}
+	}
+}
+
+.dropdown-menu > .active > a, .dropdown-menu > .active > a:focus, .dropdown-menu > .active > a:hover {
+	color: $color-text;
+	text-decoration: none;
+	background-color: $color-core-200;
+	outline: 0;
+}
+
+.progress {
+	background-color: $color-core-100;
+	box-shadow: none;
+	height: $margin/3;
+	margin-top: $margin;
+
+	.progress-bar {
+		background-color: $color-core-300;
+		box-shadow: none;
+	}
+}

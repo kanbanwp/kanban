@@ -42,6 +42,18 @@ function Field_Title(record) {
 			'mouseover',
 			function () {
 				kanban.app.prepareContenteditable($field);
+
+				$('.attachment', $field)
+				.on(
+					'click',
+					function () {
+						var href = $(this).attr('data-href');
+
+						window.open(href);
+
+						return false;
+					}
+				);
 			}
 		);
 

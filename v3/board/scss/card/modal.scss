@@ -87,11 +87,8 @@
 		padding-top: $margin;
 		flex-shrink: 0;
 
-		//-webkit-box-shadow: 0 0 ($margin/5) 0 $color-core-300;
-		//-moz-box-shadow: 0 0 ($margin/5) 0 $color-core-300;
-		//box-shadow: 0 0 ($margin/5) 0 $color-core-300;
-
 		.card-modal-comment-input {
+			background: $color-core-50;
 			min-height: 4em;
 		}
 

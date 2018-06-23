@@ -1,6 +1,7 @@
 var Field = require('../Field')
 var Field_Colorpicker = require('./Colorpicker')
 var Field_Date = require('./Date')
+var Field_File = require('./File')
 var Field_Tags = require('./Tags')
 var Field_Text = require('./Text')
 var Field_Todo = require('./Todo')
@@ -12,6 +13,7 @@ module.exports = {
 	Field: Field,
 	Field_Colorpicker: Field_Colorpicker,
 	Field_Date: Field_Date,
+	Field_File: Field_File,
 	Field_Tags: Field_Tags,
 	Field_Text: Field_Text,
 	Field_Todo: Field_Todo,

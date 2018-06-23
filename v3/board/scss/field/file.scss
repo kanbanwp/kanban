@@ -1,32 +1,17 @@
 .form-group-file {
-	//label {
-	//	//margin-bottom: 0;
-	//}
 
+	.list-group-item {
+		padding: $margin/3 0;
 
-	.btn {
-		//box-shadow: none;
-		//font-size: 14px;
-		padding-left: 0;
-	}
-
-
-	.dropdown-menu {
-		border-color: $color-core-full;
-		border-width: 0 1px 1px;
-		border-radius: 0;
-		left: $margin;
-		padding: 0;
-
-		a {
-			border-bottom: 1px solid $color-core-200;
-			padding: $margin/2;
+		.btn-delete {
+			display: none;
 		}
 
-		li:last-child {
-			a {
-				border: 0;
+		&:hover {
+			.btn-delete {
+				display: inline-block;
 			}
 		}
 	}
+
 }

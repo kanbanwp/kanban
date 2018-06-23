@@ -23,20 +23,38 @@ function Field_Todo(record) {
 
 		var fieldvalueRecord = 'undefined' === typeof fieldvalue.record ? {} : fieldvalue.record();
 
-		if ( 'undefined' !== typeof fieldvalueRecord.content ) {
-			fieldvalueRecord.content = fieldvalueRecord.content.formatForApp();
+		if ( 'undefined' === typeof fieldvalueRecord.content ) {
+			fieldvalueRecord.content = [];
+		}
+
+		var todosHtml = "";
+		for(var i = 0; i < fieldvalueRecord.content.length; i++) {
+			var todoItem  = fieldvalueRecord.content[i];
+
+			//string boolean values coming from backend, JSON.parse will convert it to true boolean
+			todoItem.is_checked = JSON.parse(todoItem.is_checked);
+
+			todoItem.index = i + 1;
+			todosHtml += kanban.templates['field-todo-task'].render({
+				todo: todoItem,
+				field: self.record(),
+				card_id: card.id()
+			});
 		}
 
 		return kanban.templates['field-todo'].render({
 			field: self.record(),
 			fieldvalue: fieldvalueRecord,
 			card: 'undefined' === typeof card.record ? {} : card.record(),
-			isCardWrite: kanban.app.current_user().hasCap('card-write')
+			isCardWrite: kanban.app.current_user().hasCap('card-write'),
+			todosHtml: todosHtml
 		});
 	}; // render
 
 	this.addFunctionality = function ($field) {
 		var self = this;
+
+		kanban.app.prepareContenteditable($field);
 
 		if ( $field.hasClass('func-added') ) {
 			return false;
@@ -44,8 +62,8 @@ function Field_Todo(record) {
 
 		$field.one(
 			'mouseover',
-			function () {
-				kanban.app.prepareContenteditable($field);
+			function () {	
+				//kanban.app.prepareContenteditable($field);			
 			}
 		);
 
@@ -53,9 +71,28 @@ function Field_Todo(record) {
 
 	}; // addFunctionality
 
+	this.onCheck = function (el, e) {
+		var self = this;
+
+		var $el = $(el);
+		var $field = $el.closest('.field');
+		var content = self.getValue($field);
+
+		self.updateValue($field, content);
+
+	}; // onCheck
+
 	this.onBlur = function (el, e) {
 
 		var self = this;
+
+		var $el = $(el);
+		var $field = $el.closest('.field').removeClass('is-editing');
+		var $card = $el.closest('.card').removeClass('is-editing');
+		var $lane = $field.closest('.lane').removeClass('is-editing');
+		var content = self.getValue($field);
+
+		self.updateValue($field, content);
 
 	}; // onBlur
 
@@ -63,6 +100,20 @@ function Field_Todo(record) {
 
 		var self = this;
 
+		var $el = $(el);
+		var $field = $el.closest('.field').addClass('is-editing');
+		var $card = $el.closest('.card').addClass('is-editing');
+		var $lane = $field.closest('.lane').addClass('is-editing');
+
+		// Save the current value for restoring.
+		var value = self.getValue($field);
+		$el.data('prevValue', value);
+
+		// Unlink links.
+		$('a', $el).each(function () {
+			var $this = $(this);
+			$this.replaceWith($this.text());
+		});
 
 	}; // onFocus
 
@@ -84,7 +135,9 @@ function Field_Todo(record) {
 
 			case 27: // escape
 
-
+				var prevValue = $(el).data('prevValue');
+				var $contenteditable = $(el);
+				$contenteditable.html( prevValue );
 
 				el.blur();
 
@@ -97,13 +150,40 @@ function Field_Todo(record) {
 
 		var self = this;
 
-		// return content;
+		var todos = [];
+		$field.find('.list-group-item').not('.add-new-todo').each(function(){
+			var $task = $(this);
+			var todoText = $('.task-content', $task).html();
+			if (todoText != "") {
+				todos.push({
+					is_checked: $('.task-checkbox', $task).get(0).checked,
+					content: $.trim(todoText)
+				});
+			}
+		});
+
+		var $newField = $field.find('.list-group-item.add-new-todo');
+		var todoText = $('.task-content', $newField).html();
+
+		if (todoText != "") {
+			todos.push({
+				is_checked: false,
+				content: $.trim(todoText)
+			});
+		}
+
+		return todos;
 	}; // getValue
 
 	this.formatContentForComment = function (content) {
 		var self = this;
 		
+		var contentArr = [];
+		for(var i = 0; i < content.length; i++) {
+			contentArr.push(content[i].content);
+		}
 
+		return contentArr.join(', ');
 	}; // formatContentForComment
 
 } // Field_Todo

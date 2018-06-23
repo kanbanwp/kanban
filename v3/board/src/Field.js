@@ -134,6 +134,9 @@ function Field(record) {
 		var fieldHtml = self.render(fieldvalue, card);
 
 		$field.replaceWith(fieldHtml);
+		//get again the instance of field after it was replaced
+		$field = $('.field-' + card.id() + '-' + self.id());
+
 		self.addFunctionality($field);
 	}; // rerender
 

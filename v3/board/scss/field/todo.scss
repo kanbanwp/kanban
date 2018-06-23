@@ -19,7 +19,7 @@
 			display: none;
 			+ .todo-checkbox {
 				display: inline-block;
-				+ .todo {
+				+ .task-content {
 					opacity: .618;
 					text-decoration: line-through;
 				}

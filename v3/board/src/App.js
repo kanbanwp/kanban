@@ -1056,7 +1056,6 @@ function App(record) {
 			// buttons: ['bold', 'italic', 'anchor', 'h2', 'h3', 'quote']
 		});
 
-
 		var users = kanban.app.current_board().usersListMention('array');
 
 		$formControl

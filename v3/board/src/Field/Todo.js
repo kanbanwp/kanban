@@ -32,12 +32,13 @@ function Field_Todo(record) {
 			var todoItem  = fieldvalueRecord.content[i];
 
 			//string boolean values coming from backend, JSON.parse will convert it to true boolean
-			todoItem.is_active = JSON.parse(todoItem.is_active);
+			todoItem.is_checked = JSON.parse(todoItem.is_checked);
+
 			todoItem.index = i + 1;
-			todosHtml += kanban.templates['field-todo-item'].render({
+			todosHtml += kanban.templates['field-todo-task'].render({
 				todo: todoItem,
 				field: self.record(),
-				card: 'undefined' === typeof card.record ? {} : card.record()
+				card_id: card.id()
 			});
 		}
 
@@ -54,13 +55,6 @@ function Field_Todo(record) {
 		var self = this;
 
 		kanban.app.prepareContenteditable($field);
-		$field.find('.medium-editor-element').on('blur', function(){
-			self.updateValue($field);
-		});
-
-		$field.find('input[type="checkbox"]').on('click', function(){
-			self.updateValue($field);
-		})
 
 		if ( $field.hasClass('func-added') ) {
 			return false;
@@ -77,9 +71,28 @@ function Field_Todo(record) {
 
 	}; // addFunctionality
 
+	this.onCheck = function (el, e) {
+		var self = this;
+
+		var $el = $(el);
+		var $field = $el.closest('.field');
+		var content = self.getValue($field);
+
+		self.updateValue($field, content);
+
+	}; // onCheck
+
 	this.onBlur = function (el, e) {
 
 		var self = this;
+
+		var $el = $(el);
+		var $field = $el.closest('.field').removeClass('is-editing');
+		var $card = $el.closest('.card').removeClass('is-editing');
+		var $lane = $field.closest('.lane').removeClass('is-editing');
+		var content = self.getValue($field);
+
+		self.updateValue($field, content);
 
 	}; // onBlur
 
@@ -87,6 +100,20 @@ function Field_Todo(record) {
 
 		var self = this;
 
+		var $el = $(el);
+		var $field = $el.closest('.field').addClass('is-editing');
+		var $card = $el.closest('.card').addClass('is-editing');
+		var $lane = $field.closest('.lane').addClass('is-editing');
+
+		// Save the current value for restoring.
+		var value = self.getValue($field);
+		$el.data('prevValue', value);
+
+		// Unlink links.
+		$('a', $el).each(function () {
+			var $this = $(this);
+			$this.replaceWith($this.text());
+		});
 
 	}; // onFocus
 
@@ -108,7 +135,9 @@ function Field_Todo(record) {
 
 			case 27: // escape
 
-
+				var prevValue = $(el).data('prevValue');
+				var $contenteditable = $(el);
+				$contenteditable.html( prevValue );
 
 				el.blur();
 
@@ -123,21 +152,24 @@ function Field_Todo(record) {
 
 		var todos = [];
 		$field.find('.list-group-item').not('.add-new-todo').each(function(){
-			var todoText = $(this).find('.todo-item').text().trim();
+			var $task = $(this);
+			var todoText = $('.task-content', $task).html();
 			if (todoText != "") {
 				todos.push({
-					is_active: $(this).find('input').get(0).checked,
-					content: todoText
+					is_checked: $('.task-checkbox', $task).get(0).checked,
+					content: $.trim(todoText)
 				});
 			}
 		});
 
 		var $newField = $field.find('.list-group-item.add-new-todo');
-		if ($newField.find('div.add-new-todo').text() != "") {
+		var todoText = $('.task-content', $newField).html();
+
+		if (todoText != "") {
 			todos.push({
-				is_active: false,
-				content: $newField.find('div.add-new-todo').text().trim()
-			})
+				is_checked: false,
+				content: $.trim(todoText)
+			});
 		}
 
 		return todos;

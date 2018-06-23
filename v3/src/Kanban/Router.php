@@ -102,6 +102,8 @@ class Kanban_Router {
 //			return;
 //		}
 
+		define( 'KANBAN_APP_DIR', dirname( $app_file_path ) );
+
 		require_once $app_file_path;
 		exit;
 	}

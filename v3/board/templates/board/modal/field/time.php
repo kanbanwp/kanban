@@ -15,7 +15,7 @@
 		<div id="board-modal-field-{{%field.id}}-settings" class="panel-collapse collapse {{open}}in{{/open}}">
 			<div class="panel-body">
 				<div class="wrapper-form-group row">
-					<?php include DIR . '/inc/board/modal/field/title.php' ?>
+					<?php include KANBAN_APP_DIR . '/inc/board/modal/field/title.php' ?>
 
 					<div class="form-group form-group-title col col-sm-12">
 						<label><?php _e( 'Step:', 'kanban'); ?></label>
@@ -59,14 +59,14 @@
 						</div>
 					</div><!--form-group -->
 
-					<?php include DIR . '/inc/board/modal/field/option-hidden.php' ?>
+					<?php include KANBAN_APP_DIR . '/inc/board/modal/field/option-hidden.php' ?>
 
 				</div><!--wrapper-form-group-->
 
-				<?php include DIR . '/inc/board/modal/field/more-options.php' ?>
+				<?php include KANBAN_APP_DIR . '/inc/board/modal/field/more-options.php' ?>
 
 				<div class="collapse" id="board-modal-field-{{%field.id}}-actions">
-					<?php include DIR . '/inc/board/modal/field/option-delete.php' ?>
+					<?php include KANBAN_APP_DIR . '/inc/board/modal/field/option-delete.php' ?>
 				</div><!--collapse-->
 
 			</div><!--panel-body-->

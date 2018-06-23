@@ -15,22 +15,22 @@
 		<div id="board-modal-field-{{%field.id}}-options" class="panel-collapse collapse {{open}}in{{/open}}">
 			<div class="panel-body">
 				<div class="wrapper-form-group row">
-					<?php include DIR . '/inc/board/modal/field/title.php' ?>
+					<?php include KANBAN_APP_DIR . '/inc/board/modal/field/title.php' ?>
 
 					<p style="left: 15px; position: relative; top: -10px;">
 						<?php _e( '(This title will not show on the card)', 'kanban'); ?>
 					</p>
 
-					<?php include DIR . '/inc/board/modal/field/option-placeholder.php' ?>
+					<?php include KANBAN_APP_DIR . '/inc/board/modal/field/option-placeholder.php' ?>
 
-					<?php include DIR . '/inc/board/modal/field/option-hidden.php' ?>
+					<?php include KANBAN_APP_DIR . '/inc/board/modal/field/option-hidden.php' ?>
 
 				</div><!--wrapper-form-group-->
 
-				<?php include DIR . '/inc/board/modal/field/more-options.php' ?>
+				<?php include KANBAN_APP_DIR . '/inc/board/modal/field/more-options.php' ?>
 
 				<div class="collapse" id="board-modal-field-{{%field.id}}-actions">
-					<?php include DIR . '/inc/board/modal/field/option-delete.php' ?>
+					<?php include KANBAN_APP_DIR . '/inc/board/modal/field/option-delete.php' ?>
 				</div><!--collapse-->
 
 			</div><!--panel-body-->

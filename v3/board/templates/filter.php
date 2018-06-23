@@ -1,4 +1,4 @@
-<script class="template" type="t/template" data-id="filters-modal">
+<script class="template" type="t/template" data-id="filter-modal">
 
 	<div class="modal-dialog modal-lg" id="filters-modal">
 		<div class="modal-content" data-label="<?php _e( 'Filters', 'kanban' ); ?>">
@@ -30,10 +30,23 @@
 			</div>
 
 			<div class="modal-body">
-<h3><?php _e( 'Filters', 'kanban' ); ?></h3>
+				<h3><?php _e( 'Filters', 'kanban' ); ?></h3>
 				<div class="tab-content" >
 					<div class="tab-pane active" id="modal-tab-pane-options">
-<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus aliquam aperiam architecto consequatur, dignissimos, enim esse ex magni minima natus officia pariatur porro quibusdam rem sequi unde ut veniam voluptates.</p>
+
+						<div class="list-group">
+						{{=fieldHtml}}
+						</div>
+
+						<p>
+							<button type="button" class="btn btn-primary">
+								<?php _e('Apply filters', 'kanban') ?>
+							</button>
+
+							<button type="button" class="btn btn-empty">
+								<?php _e('Clear filters', 'kanban') ?>
+							</button>
+						</p>
 
 					</div><!--tab-options-->
 				</div><!--tab-panes-->

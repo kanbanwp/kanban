@@ -45,7 +45,7 @@ $app_data = Kanban_App::instance()->get_app_data();
 <?php
 do_action(
 	'kanban_board_include_templates',
-	Kanban_Template::instance()->include_from_path(dirname( __FILE__ ) . '/templates/')
+	Kanban_Template::instance()->include_from_path(KANBAN_APP_DIR . '/templates/')
 );
 ?>
 

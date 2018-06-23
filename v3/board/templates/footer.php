@@ -32,7 +32,7 @@
 
 			<li>
 				<a href="javascript:void(0);"
-				   onclick="kanban.app.fililterModalToggle(); return false;"
+				   onclick="kanban.app.filterModalToggle(); return false;"
 				   class="btn btn-fade btn-empty">
 					<span class="visible-xs-inline-block"><?php _e( 'Filter', 'kanban'); ?></span>
 					<i class="ei ei-adjust-vert ei-2x hidden-xs"></i>

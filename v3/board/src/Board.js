@@ -480,6 +480,39 @@ function Board(record) {
 		});
 	}; // cardOrderRemove
 
+	this.toggleFilterModal = function () {
+
+		var self = this;
+
+		var fieldIds = self.fieldsOrder();
+
+		var fieldHtml = '';
+		for ( var i in fieldIds ) {
+
+			var fieldId = fieldIds[i];
+			var field = kanban.fields[fieldId];
+
+			if ( 'undefined' === typeof kanban.templates['filter-' + field.fieldType()] ) {
+				continue;
+			}
+
+			fieldHtml += kanban.templates['filter-' + field.fieldType()].render();
+		}
+
+		var modalHtml = kanban.templates['filter-modal'].render({
+			fieldHtml: fieldHtml
+		});
+
+		$('#modal').html(modalHtml);
+
+		$('#modal').modal({
+			backdrop: 'static',
+			keyboard: false,
+			show: true
+		});
+
+	}; // toggleFilterModal
+
 	this.usersListMention = function (format) {
 		var self = this;
 

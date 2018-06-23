@@ -451,6 +451,14 @@ body > #app-color-picker {
 	}
 }
 
+.list-group {
+	.list-group-item {
+		border-radius: 0;
+		border-width: 0 0 2px;
+		border-color: $color-core-100;
+	}
+}
+
 .tab-pane {
 	padding-top: $margin;
 }

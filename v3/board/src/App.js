@@ -713,25 +713,18 @@ function App(record) {
 		kanban.app.current_board().modal.show();
 	}; // currentBoardModalShow
 
-	this.fililterModalToggle = function (el) {
+	this.filterModalToggle = function (el) {
+
+		var self = this;
 
 		if (null === kanban.app.current_board()) {
 			$(el).hide();
 			return false;
 		}
 
+		self.current_board().toggleFilterModal();
 
-		var modalHtml = kanban.templates['filters-modal'].render();
-
-		$('#modal').html(modalHtml);
-
-		$('#modal').modal({
-			backdrop: 'static',
-			keyboard: false,
-			show: true
-		});
-
-	}; // currentBoardModalShow
+	}; // filterModalToggle
 
 	this.viewToggleCompact = function (el) {
 

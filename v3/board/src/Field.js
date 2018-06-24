@@ -110,6 +110,8 @@ function Field(record) {
 	}; // addFunctionality
 
 	this.rerender = function (fieldvalue, card) {
+		console.log('field.rerender');
+
 		var self = this;
 
 		// Find instances of field using class because it could be on card or modal.

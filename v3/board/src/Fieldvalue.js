@@ -39,6 +39,8 @@ function Fieldvalue(record) {
 	}; // allowedFields
 
 	this.rerenderField = function () {
+		console.log('fieldvalue.rerenderField');
+
 		var self = this;
 
 		if ( 'undefined' === typeof kanban.fields[self.fieldId()] ) {

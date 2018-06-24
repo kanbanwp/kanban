@@ -239,7 +239,7 @@ function Card(record) {
 	}; // addFunctionality
 
 	this.rerender = function () {
-		// console.log('rerender');
+		console.log('Card.rerender');
 
 		var self = this;
 

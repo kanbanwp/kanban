@@ -280,7 +280,8 @@ function Lane(record) {
 	}; // addFunctionality
 
 	this.rerender = function () {
-		// console.log('Lane.rerender');
+		console.log('Lane.rerender');
+
 		var self = this;
 
 		var $lane = $('#lane-' + self.id());

@@ -293,6 +293,8 @@ function App(record) {
 
 		if ('undefined' !== typeof newData.users) {
 			for (var userId in newData.users) {
+				console.log('processNewData.users');
+
 				var userRecord = newData.users[userId];
 
 				// If the record exists but is not updated, remove from new data and continue.
@@ -335,6 +337,7 @@ function App(record) {
 
 		if ('undefined' !== typeof newData.comments) {
 			for (var commentId in newData.comments) {
+				console.log('processNewData.comments');
 
 				// Get the new record.
 				var commentRecord = newData.comments[commentId];
@@ -403,7 +406,8 @@ function App(record) {
 
 		if ('undefined' !== typeof newData.fieldvalues) {
 			for (var fieldvalueId in newData.fieldvalues) {
-				// console.log('fieldvalue');
+				console.log('processNewData.fieldvalue');
+
 				var fieldvalueRecord = newData.fieldvalues[fieldvalueId];
 
 				// Companion records are included, just in case. If the record is not updated and already exists, remove from new data and continue.
@@ -416,6 +420,12 @@ function App(record) {
 
 				// Update the fieldvalue.
 				var fieldvalue = kanban.fieldvalues[fieldvalueId] = new Fieldvalue(fieldvalueRecord);
+
+				// If field doesn't exist yet, no point in rerendering it.
+				if ( 'undefined' === typeof kanban.fields[fieldvalue.fieldId()] ) {
+					delete newData.fieldvalues[fieldvalueId];
+					continue;
+				}
 
 				var success = fieldvalue.rerenderField();
 				if (success !== false) {
@@ -432,7 +442,7 @@ function App(record) {
 
 		if ('undefined' !== typeof newData.fields) {
 			for (var fieldId in newData.fields) {
-				// console.log('field');
+				console.log('processNewData.fields');
 				var fieldRecord = newData.fields[fieldId];
 
 				// Companion records are included, just in case. If the record is not updated and already exists, remove from new data and continue.
@@ -475,6 +485,7 @@ function App(record) {
 
 		if ('undefined' !== typeof newData.cards) {
 			for (var cardId in newData.cards) {
+				console.log('processNewData.cards');
 				var cardRecord = newData.cards[cardId];
 
 				// Determine if the record is new (already exists).
@@ -489,7 +500,7 @@ function App(record) {
 					continue;
 				}
 
-				// Create lane using "class" based on type.
+				// Update the card.
 				var card = kanban.cards[cardId] = new Card(cardRecord);
 
 				// If the record was deleted, remove it.
@@ -533,6 +544,8 @@ function App(record) {
 
 		if ('undefined' !== typeof newData.lanes) {
 			for (var laneId in newData.lanes) {
+				console.log('processNewData.lanes');
+
 				var laneRecord = newData.lanes[laneId];
 
 				// Determine if the record is new (already exists).
@@ -547,7 +560,7 @@ function App(record) {
 					continue;
 				}
 
-				// Create lane using "class" based on type.
+				// Update the lane.
 				var lane = kanban.lanes[laneId] = new Lane(laneRecord);
 
 				// If the record was deleted, remove it.
@@ -591,6 +604,7 @@ function App(record) {
 
 		if ('undefined' !== typeof newData.boards) {
 			for (var boardId in newData.boards) {
+				console.log('processNewData.boards');
 				var boardRecord = newData.boards[boardId];
 
 				// Determine if the record is new (already exists).

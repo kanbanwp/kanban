@@ -1,5 +1,26 @@
 .form-group-img {
 
+	.dropzone {
+		min-height: $margin*3;
 
+		.dz-message {
+			right: 51%;
+		}
+	}
 
+	.item {
+		//position: relative;
+		.btn-delete {
+			top: $margin/3;
+			display: none;
+			position: absolute;
+			left: 51%;
+		}
+
+		&:hover {
+			.btn-delete {
+				display: inline-block;
+			}
+		}
+	}
 }

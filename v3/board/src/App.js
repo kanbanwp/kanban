@@ -1031,7 +1031,7 @@ function App(record) {
 
 	this.prepareContenteditable = function ($field) {
 		var $formControl = $('.form-control[contenteditable="true"]', $field);
-		
+
 		var editor = new MediumEditor($formControl, {
 			targetBlank: true,
 			autoLink: false,

@@ -382,6 +382,15 @@ function Card(record) {
 		}
 	}; // menuShow
 
+	this.menuShowDelay = function (el) {
+		// console.log('menuHideDelay');
+		var self = this;
+
+		clearTimeout(_self.timerEditMenu);
+		_self.timerEditMenu = setTimeout(self.menuShow.bind(self), 500);
+
+	}; // menuShowDelay
+
 	this.menuHide = function (el) {
 		// console.log('menuHide');
 		var self = this;
@@ -396,7 +405,7 @@ function Card(record) {
 		clearTimeout(_self.timerEditMenu);
 		_self.timerEditMenu = setTimeout(self.menuHide.bind(self), 500);
 
-	}; // menuShow
+	}; // menuHideDelay
 
 	this.editButtonOnclick = function (el) {
 		// console.log('editButtonOnclick');

@@ -17,7 +17,7 @@
 			<a href="javascript:void(0);" class="btn btn-sm btn-fade btn-empty card-edit"
 			        type="button"
 			        onclick="kanban.cards[{{%card.id}}].editButtonOnclick(this);"
-			        onmouseenter="kanban.cards[{{%card.id}}].menuShow(this);"
+			        onmouseenter="kanban.cards[{{%card.id}}].menuShowDelay(this);"
 			        onmouseleave="kanban.cards[{{%card.id}}].menuHideDelay(this);">
 				<i class="ei ei-pencil" style="color: {{%lane.color}}"></i>
 			</a>

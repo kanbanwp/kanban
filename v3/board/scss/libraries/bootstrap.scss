@@ -35,7 +35,6 @@
 	padding-top: $margin;
 }
 
-
 .navbar-collapse {
 	@media screen and (max-width: $screen-sm-max) {
 		padding: 0 0 $margin/3; // leave room for the shadow at the bottom.
@@ -114,7 +113,6 @@
 	}
 }
 
-
 .dropdown,
 .dropup {
 	.dropdown-menu {
@@ -155,5 +153,17 @@
 	.progress-bar {
 		background-color: $color-core-300;
 		box-shadow: none;
+	}
+}
+
+.carousel {
+	.carousel-control {
+		background-image: none;
+	}
+
+	&:hover {
+		.carousel-control {
+			background: rgba($color-core-200, .382);
+		}
 	}
 }

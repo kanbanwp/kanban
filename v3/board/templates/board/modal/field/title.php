@@ -17,7 +17,7 @@
 				<div class="wrapper-form-group row">
 					<?php include KANBAN_APP_DIR . '/inc/board/modal/field/title.php' ?>
 
-					<p style="left: 15px; position: relative; top: -10px;">
+					<p style="margin-left: 15px; ">
 						<?php _e( '(This title will not show on the card)', 'kanban'); ?>
 					</p>
 

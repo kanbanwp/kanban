@@ -39,11 +39,11 @@
 						</div>
 
 						<p>
-							<button type="button" class="btn btn-primary">
+							<button type="button" class="btn btn-primary" onclick="kanban.app.applyFilters()">
 								<?php _e('Apply filters', 'kanban') ?>
 							</button>
 
-							<button type="button" class="btn btn-empty">
+							<button type="button" class="btn btn-empty" onclick="kanban.app.clearFilters()">
 								<?php _e('Clear filters', 'kanban') ?>
 							</button>
 						</p>

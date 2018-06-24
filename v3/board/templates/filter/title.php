@@ -1,6 +1,6 @@
 <script class="template" type="t/template" data-id="filter-title">
 
-	<div class="list-group-item">
+	<div class="list-group-item field-filter" data-id="{{%fieldId}}">
 		<div class="row">
 			<div class="col col-sm-4">
 				<?php _e( 'Title', 'kanban' ) ?>

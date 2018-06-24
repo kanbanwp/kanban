@@ -496,7 +496,9 @@ function Board(record) {
 				continue;
 			}
 
-			fieldHtml += kanban.templates['filter-' + field.fieldType()].render();
+			fieldHtml += kanban.templates['filter-' + field.fieldType()].render({
+				fieldId: fieldId
+			});
 		}
 
 		var modalHtml = kanban.templates['filter-modal'].render({
@@ -512,6 +514,107 @@ function Board(record) {
 		});
 
 	}; // toggleFilterModal
+
+	this.applyFilters = function(filters){	
+		var checkFilterMatch = function(fieldContent, filterElement) {
+			switch (filterElement.operator) {
+				case "includes":
+					return fieldContent.toLowerCase().indexOf(filterElement.value) !== -1
+				case "does not include":
+					return fieldContent.toLowerCase().indexOf(filterElement.value) === -1
+			}
+
+		} 
+		
+		var currentLanes = this.lanesOrder();
+		showCards = [];
+		for(var i = 0; i < currentLanes.length; i++) {
+			var laneId = currentLanes[i];
+
+			// Make sure there's a corresponding lane record.
+			if ('undefined' === typeof kanban.lanes[laneId]) {						
+				continue;
+			}
+
+			var lane = kanban.lanes[laneId];
+			var laneCards = lane.cardsOrder();
+			for (var j = 0; j < laneCards.length; j++) {
+				var cardId = laneCards[j];
+
+				// Make sure there's a corresponding card record.
+				if ( 'undefined' === typeof kanban.cards[cardId] ) {
+					continue;
+				}
+				
+				var card = kanban.cards[cardId];
+
+				var fieldValues = card.fieldvalues();
+				var fieldvaluesByField = card.fieldvaluesByField();
+				var cardMatches = true;
+				var filteredFieldCount = 0;
+				//check if all filter conditions are fulfilled by the fieldvalues of the card
+				for(var l = 0; l < filters.length && cardMatches; l++) {
+					for(var k = 0; k < fieldValues.length; k++) {
+						var fieldvalue = kanban.fieldvalues[fieldValues[k]];
+
+						if ('undefined' === typeof kanban.fields[fieldvalue.fieldId()]) {
+							continue;
+						}
+
+						if (filters[l].fieldId == fieldvalue.fieldId()) {
+							filteredFieldCount++;
+							var fieldContent = fieldvalue.field().formatContentForComment(fieldvalue.content());												
+							cardMatches = checkFilterMatch(fieldContent, filters[i]);
+							break;
+						}
+						
+					}
+				}
+				//store card id if all conditions matched
+				if (cardMatches && filters.length == filteredFieldCount) {
+					showCards.push(card.id());					
+				}
+			
+			}
+		}
+
+		this.showSelectedCardsOnly(showCards);
+	}
+
+	this.showSelectedCardsOnly = function(showCards){
+		//hide cards that are visible and not in the array of matching cards 
+		$("#board-" + this.id() + ' .card:visible').each(function () {
+			if (showCards.indexOf(Number($(this).attr('data-id'))) == -1) {
+				$(this)
+				.stop(true, false)
+				.animate({
+					height: "toggle",
+					opacity: "toggle"
+				}, 200);
+			}
+		});
+
+		//show invisible matching cards
+		for (var i = 0; i < showCards.length; i++) {
+			if (!$('#card-' + showCards[i]).is(':visible')) {
+				$('#card-' + showCards[i])
+				.stop(true, false)
+				.animate({
+					height: "toggle",
+					opacity: "toggle"
+				}, 200);
+			}
+		}
+	}
+
+	this.showAllCards = function(){
+		$("#board-" + this.id()).find('.card:not(:visible)')
+				.stop(true, false)
+				.animate({
+					height: "toggle",
+					opacity: "toggle"
+				}, 200);
+	}
 
 	this.usersListMention = function (format) {
 		var self = this;

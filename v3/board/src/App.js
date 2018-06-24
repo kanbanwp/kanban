@@ -731,7 +731,7 @@ function App(record) {
 		var self = this;
 
 		if (null === kanban.app.current_board()) {
-			$('#modal').modal('hide').empty();
+			self.modal.close();
 			return false;
 		}
 
@@ -749,7 +749,7 @@ function App(record) {
 
 		self.current_board().applyFilters(filters);
 
-		$('#modal').modal('hide').empty();
+		self.modal.close();
 
 	}; // applyFilters
 

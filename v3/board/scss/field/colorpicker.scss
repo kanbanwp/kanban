@@ -19,3 +19,21 @@
 		}
 	}
 }
+
+
+.field-colorpicker-corner {
+	height: 0;
+	opacity: .618;
+	pointer-events: none;
+	position: absolute;
+	right: -$margin*.5;
+	transform: rotate(-45deg);
+	top: -$margin*2.5;
+	width: 0;
+
+	border-color: transparent;
+	border-style: solid;
+	border-width: $margin*4 0 $margin*4 $margin*4;
+	width: 0;
+	height: 0;
+}

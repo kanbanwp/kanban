@@ -7,7 +7,7 @@ function Field_Colorpicker(record) {
 	this._self.options = $.extend(
 		this._self.options,
 		{
-			display: ''
+			view_card_corner: false
 		}
 	);
 

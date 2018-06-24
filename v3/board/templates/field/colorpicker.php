@@ -22,7 +22,7 @@
 		                {{fieldOptions.default_content}}
 		                    {{%fieldOptions.default_content}}
 	                    {{/fieldOptions.default_content}}
-                    {{/fieldvalue.content}}">
+                    {{/fieldvalue.content}};">
 			</button>
 			{{isCardWrite}}
 			<div class="dropdown-menu">
@@ -30,6 +30,11 @@
 			{{/isCardWrite}}
 		</div><!--dropdown-->
 	</div>
+
+	{{fieldOptions.view_card_corner}}
+	<div class="field-colorpicker-corner"
+	     style="border-left-color: {{fieldvalue.content}}{{%fieldvalue.content}}{{/fieldvalue.content}};"></div>
+	{{/fieldOptions.view_card_corner}}
 
 
 </script>

@@ -150,12 +150,12 @@
 														<input type="radio"
 														       onchange="kanban.app.modal.optionUserOnChange(this);"
 														       data-name="date_view_format"
-														       name="field-{{%field.id}}-options-format"
-														       id="field-{{%field.id}}-options-format-mm_dd_yyyy"
+														       name="field-{{%field.id}}-options-date-format"
+														       id="field-{{%field.id}}-options-date-format-mm_dd_yyyy"
 														       autocomplete="off"
 														       {{optionsUser.date_view_format-mm_dd_yyyy}}checked{{/optionsUser.date_view_format-mm_dd_yyyy}}
 														value="mm/dd/yyyy">
-														<label for="field-{{%field.id}}-options-format-mm_dd_yyyy" class="btn btn-default">
+														<label for="field-{{%field.id}}-options-date-format-mm_dd_yyyy" class="btn btn-default">
 															<?php echo date('m\/d\/Y') ?>
 															<?php _e( '(mm/dd/yyyy)', 'kanban'); ?>
 														</label>
@@ -163,12 +163,12 @@
 														<input type="radio"
 														       onchange="kanban.app.modal.optionUserOnChange(this);"
 														       data-name="date_view_format"
-														       name="field-{{%field.id}}-options-format"
-														       id="field-{{%field.id}}-options-format-dd_mm_yyyy"
+														       name="field-{{%field.id}}-options-date-format"
+														       id="field-{{%field.id}}-options-date-format-dd_mm_yyyy"
 														       autocomplete="off"
 														       {{optionsUser.date_view_format-dd_mm_yyyy}}checked{{/optionsUser.date_view_format-dd_mm_yyyy}}
 														value="dd/mm/yyyy">
-														<label for="field-{{%field.id}}-options-format-dd_mm_yyyy" class="btn btn-default">
+														<label for="field-{{%field.id}}-options-date-format-dd_mm_yyyy" class="btn btn-default">
 															<?php echo date('d\/m\/Y') ?>
 															<?php _e( '(dd/mm/yyyy)', 'kanban'); ?>
 														</label>
@@ -176,12 +176,12 @@
 														<input type="radio"
 														       onchange="kanban.app.modal.optionUserOnChange(this);"
 														       data-name="date_view_format"
-														       name="field-{{%field.id}}-options-format"
-														       id="field-{{%field.id}}-options-format-yyyy_mm_dd"
+														       name="field-{{%field.id}}-options-date-format"
+														       id="field-{{%field.id}}-options-date-format-yyyy_mm_dd"
 														       autocomplete="off"
 														       {{optionsUser.date_view_format-yyyy_mm_dd}}checked{{/optionsUser.date_view_format-yyyy_mm_dd}}
 														value="yyyy-mm-dd">
-														<label for="field-{{%field.id}}-options-format-yyyy_mm_dd" class="btn btn-default">
+														<label for="field-{{%field.id}}-options-date-format-yyyy_mm_dd" class="btn btn-default">
 															<?php echo date('Y-m-d') ?>
 															<?php _e( '(yyyy-mm-dd)', 'kanban'); ?>
 														</label>
@@ -189,12 +189,12 @@
 														<input type="radio"
 														       onchange="kanban.app.modal.optionUserOnChange(this);"
 														       data-name="date_view_format"
-														       name="field-{{%field.id}}-options-format"
-														       id="field-{{%field.id}}-options-format-Mdyyyy"
+														       name="field-{{%field.id}}-options-date-format"
+														       id="field-{{%field.id}}-options-date-format-Mdyyyy"
 														       autocomplete="off"
 														       {{optionsUser.date_view_format-M_d_yyyy}}checked{{/optionsUser.date_view_format-M_d_yyyy}}
 														value="M d, yyyy">
-														<label for="field-{{%field.id}}-options-format-Mdyyyy" class="btn btn-default">
+														<label for="field-{{%field.id}}-options-date-format-Mdyyyy" class="btn btn-default">
 															<?php echo date('M j, Y') ?>
 															<?php _e( '(M d, yyyy)', 'kanban'); ?>
 														</label>

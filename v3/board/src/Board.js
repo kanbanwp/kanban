@@ -16,6 +16,7 @@ function Board(record) {
 	_self.allowedFields = ['label', 'lanes_order', 'fields_order', 'options', 'is_public'];
 	_self.users = null;
 	_self.usersAsArray = null;
+	_self.filers = [];
 
 	_self.isLanesLoaded = false;
 

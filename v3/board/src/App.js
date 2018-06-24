@@ -1031,16 +1031,17 @@ function App(record) {
 
 	this.prepareContenteditable = function ($field) {
 		var $formControl = $('.form-control[contenteditable="true"]', $field);
-
+		
 		var editor = new MediumEditor($formControl, {
 			targetBlank: true,
 			autoLink: false,
 			imageDragging: false,
 			// disableExtraSpaces: true,
 			// disableDoubleReturn: true,
-			// placeholder: {
-			// 	text: 'Click to edit'
-			// },
+			placeholder: {
+				text: $formControl.attr('data-placeholder'),
+				hideOnClick: false
+			},
 			paste: {
 				forcePlainText: true,
 				cleanPastedHTML: true,

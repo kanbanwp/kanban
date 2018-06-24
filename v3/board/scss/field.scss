@@ -72,17 +72,18 @@
 				text-decoration: underline;
 			}
 
-			&:empty {
-
-				color: $color-core-300;
-
-				&:before {
-					content: attr(placeholder);
-					cursor: text;
-					font-size: .82em;
-					//display: block; /* For Firefox */
-				}
-			}
+			// Using medium editor placeholder.
+			//&:empty {
+			//
+			//	color: $color-core-300;
+			//
+			//	&:before {
+			//		content: attr(placeholder);
+			//		cursor: text;
+			//		font-size: .82em;
+			//		//display: block; /* For Firefox */
+			//	}
+			//}
 		}
 	} // form-control
 

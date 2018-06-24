@@ -61,6 +61,8 @@ function Field_Todo(record) {
 		$field.one(
 			'mouseover',
 			function () {
+
+				// We don't need a placeholder, so it can be late added.
 				kanban.app.prepareContenteditable($field);
 
 				$('.attachment', $field)

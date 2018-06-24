@@ -38,10 +38,12 @@ function Field_Title(record) {
 			return false;
 		}
 
+		// Not on hover, so we get the placeholder.
+		kanban.app.prepareContenteditable($field);
+
 		$field.one(
 			'mouseover',
 			function () {
-				kanban.app.prepareContenteditable($field);
 
 				$('.attachment', $field)
 				.on(

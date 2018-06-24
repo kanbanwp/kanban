@@ -75,7 +75,24 @@
 					</div><!--tab-fields-->
 
 					<div class="tab-pane" id="modal-tab-pane-comments">
-
+<?php /*
+						<div class="text-right">
+							<div class="btn-group" data-toggle="buttons">
+								<button type="button" class="btn btn-xs btn-default active">
+									<?php _e('All', 'kanban') ?>
+									<input type="radio" checked>
+								</button>
+								<button type="button" class="btn btn-xs btn-default">
+									<?php _e('User', 'kanban') ?>
+									<input type="radio">
+								</button>
+								<button type="button" class="btn btn-xs btn-default">
+									<?php _e('system', 'kanban') ?>
+									<input type="radio">
+								</button>
+							</div>
+						</div>
+*/ ?>
 						<div id="wrapper-card-modal-comments">
 
 							<div id="card-modal-comments-list">

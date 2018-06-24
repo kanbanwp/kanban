@@ -145,6 +145,12 @@ function User(record) {
 			var options = response.data.options;
 
 			_self.record.options.app = options;
+
+			// Stop live updates.
+			if ( !kanban.app.current_user().do_live_updates_check() ) {
+				clearInterval(kanban.app.timers.updates);
+				return false;
+			}
 		});
 
 		var board = kanban.app.current_board();
@@ -187,6 +193,13 @@ function User(record) {
 	this.optionsApp = function () {
 		return $.extend(true, {}, _self.optionsApp, _self.record.options.app);
 	}; // options
+
+	// Dedicated function to this, since we're calling it often.
+	this.do_live_updates_check = function () {
+
+		// Default to true.
+		return _self.record.options.app.do_live_updates_check === false ? false : true;
+	}; // do_live_updates_check
 
 	this.capsAdmin = function () {
 		var self = this;

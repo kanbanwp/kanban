@@ -283,6 +283,7 @@ Card_Modal = function (card) {
 		}
 
 		$('#card-modal-comments-list').html(commentHtml);
+		self.commentScrollBottom();
 
 	}; // rerender
 

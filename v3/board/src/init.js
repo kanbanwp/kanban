@@ -22,6 +22,16 @@ var timeago = require('timeago.js')
 
 "use strict";
 
+ // console shim https://stackoverflow.com/a/17153683
+(function () {
+	var f = function () {};
+	if (!window.console) {
+		window.console = {
+			log:f, info:f, warn:f, debug:f, error:f
+		};
+	}
+}());
+
 var templates = document.getElementsByClassName('template');
 
 for (var i = 0; i < templates.length; i++) {

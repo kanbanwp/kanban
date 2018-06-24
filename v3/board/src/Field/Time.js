@@ -52,7 +52,7 @@ function Field_Time(record) {
 
 		var fieldOptions = self.options();
 
-		return kanban.templates['field-time'].render({
+		kanban.templates['field-time'].render({
 			field: self.record(),
 			fieldvalue: fieldvalueRecord,
 			fieldOptions: fieldOptions,

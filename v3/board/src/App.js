@@ -1278,13 +1278,12 @@ function App(record) {
 	// $(document).trigger('/app/init/');
 
 	this.updatesInit = function () {
-		// @todo check settings
 
 		var self = this;
 
 		var options = kanban.app.current_user().optionsApp();
 
-		if (Boolean(options.do_live_updates_check)) {
+		if (options.do_live_updates_check) {
 			_self.timers.updates = setInterval(
 				function () {
 					self.updatesCheck();

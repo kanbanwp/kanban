@@ -65,7 +65,7 @@
 											<?php _e('Options', 'kanban') ?>
 											</a>
 									</div>
-									<div id="app-modal-options-options" class="panel-collapse collapse">
+									<div id="app-modal-options-options" class="panel-collapse collapse in">
 										<div class="panel-body">
 
 											<div class="wrapper-form-group row">
@@ -275,7 +275,7 @@
 										</div><!--body-->
 									</div><!--collapse-->
 								</div><!--panel-->
-
+								<?php /*
 								<div class="panel panel-default">
 									<div class="panel-heading">
 										<a class="h4 panel-title"
@@ -291,6 +291,7 @@
 										</div><!--body-->
 									</div><!--collapse-->
 								</div><!--colors panel-->
+ */ ?>
 							</div>
 
 						</div><!--tab-pane-->

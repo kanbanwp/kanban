@@ -300,6 +300,27 @@ Card_Modal = function (card) {
 
 	}; // rerender
 
+	this.commentsFilter = function (el) {
+		var self = this;
+
+		var $el = $(el);
+		var filter = $el.attr('data-filter');
+
+		switch (filter) {
+			case 'user':
+				$('#card-modal-comments-list .comment-user:hidden').slideDown('fast');
+				$('#card-modal-comments-list .comment-system:visible').slideUp('fast');
+				break;
+			case 'system':
+				$('#card-modal-comments-list .comment-system:hidden').slideDown('fast');
+				$('#card-modal-comments-list .comment-user:visible').slideUp('fast');
+				break;
+			default:
+				$('#card-modal-comments-list .comment:hidden').slideDown('fast');
+		} // switch
+
+	}; // commentsFilter
+
 	this.close = function () {
 		var self = this;
 

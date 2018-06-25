@@ -80,24 +80,30 @@
 
 					{{isCommentRead}}
 					<div class="tab-pane" id="modal-tab-pane-comments">
-<?php /*
+
 						<div class="text-right">
 							<div class="btn-group" data-toggle="buttons">
-								<button type="button" class="btn btn-xs btn-default active">
+								<button type="button" class="btn btn-xs btn-default active"
+							        onclick="kanban.cards[{{%card.id}}].modal.commentsFilter(this);"
+							        data-filter="all">
 									<?php _e('All', 'kanban') ?>
-									<input type="radio" checked>
+									<input type="radio" name="card-comments-filter" value="all" checked>
 								</button>
-								<button type="button" class="btn btn-xs btn-default">
+								<button type="button" class="btn btn-xs btn-default"
+								        onclick="kanban.cards[{{%card.id}}].modal.commentsFilter(this);"
+								        data-filter="user">
 									<?php _e('User', 'kanban') ?>
-									<input type="radio">
+									<input type="radio" name="card-comments-filter" value="user">
 								</button>
-								<button type="button" class="btn btn-xs btn-default">
+								<button type="button" class="btn btn-xs btn-default"
+								        onclick="kanban.cards[{{%card.id}}].modal.commentsFilter(this);"
+								        data-filter="system">
 									<?php _e('system', 'kanban') ?>
-									<input type="radio">
+									<input type="radio" name="card-comments-filter" value="system">
 								</button>
 							</div>
 						</div>
-*/ ?>
+
 						<div id="wrapper-card-modal-comments">
 
 							<div id="card-modal-comments-list">

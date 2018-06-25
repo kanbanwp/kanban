@@ -556,6 +556,12 @@ function Board(record) {
 
 			cap.classes = '';
 
+			// Every user can read cards. That's the point.
+			if (capName == 'card-read') {
+				cap.is_checked = true;
+				cap.is_readonly = true;
+			}
+
 			if (capName == 'board' && cap.is_checked) {
 				isAdmin = true;
 

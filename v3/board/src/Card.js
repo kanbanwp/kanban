@@ -193,6 +193,7 @@ function Card(record) {
 			fields_hidden: fieldHiddenHtml,
 			card: cardRecord,
 			lane: lane.record(),
+			isCommentRead: kanban.app.current_user().hasCap('comment-read') || kanban.app.current_user().hasCap('comment-write'),
 			isCardWrite: kanban.app.current_user().hasCap('card-write'),
 			showCardIdClass: showCardIdClass,
 			commentsCount: self.commentsCount(true) > 0 ? self.commentsCount(true) : null

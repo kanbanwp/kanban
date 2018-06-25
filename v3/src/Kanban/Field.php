@@ -173,6 +173,11 @@ class Kanban_Field extends Kanban_Abstract {
 
 		foreach ( $rows as $row_id => &$row ) {
 			$row = $this->format_data_for_app( $row );
+
+			// Remove hidden fields if current user does not have card-read.
+			if ( isset($row->options['is_hidden']) && $row->options['is_hidden'] && ! Kanban_User::instance()->current_user_has_cap('card-read') ) {
+				unset( $rows[$row_id]);
+			}
 		}
 
 		return $rows;

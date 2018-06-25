@@ -270,6 +270,15 @@ class Kanban_App {
 			$data->fieldvalues = Kanban_Fieldvalue::instance()->get_results_by_cards( $card_ids, $since_dt );
 		}
 
+		// Remove fieldvalues, if field isn't set (specifically hidden fields that have been removed).
+		if ( ! empty( $data->fieldvalues ) ) {
+			foreach ( $data->fieldvalues as &$fieldvalue ) {
+				if ( !isset($data->fields[$fieldvalue->field_id]) ) {
+					unset($data->fieldvalues[$fieldvalue->id]);
+				}
+			}
+		}
+
 		$data->comments = array();
 
 //		if ( isset( $_GET['tab'] ) && $_GET['tab'] == 'comments' ) {

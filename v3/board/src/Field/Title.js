@@ -150,6 +150,16 @@ function Field_Title(record) {
 		return $("<div>").html(content.formatForApp()).text();
 	}; // formatContentForComment
 
+	this.applyFilter = function(fieldValue, filterElement) {
+		var fieldContent = fieldValue.field().formatContentForComment(fieldValue.content());
+		switch (filterElement.operator) {
+			case "includes":
+				return fieldContent.toLowerCase().indexOf(filterElement.value) !== -1
+			case "does not include":
+				return fieldContent.toLowerCase().indexOf(filterElement.value) === -1
+		}
+	}
+
 } // Field_Title
 
 // inherit Field

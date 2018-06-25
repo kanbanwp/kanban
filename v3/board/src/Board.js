@@ -16,7 +16,7 @@ function Board(record) {
 	_self.allowedFields = ['label', 'lanes_order', 'fields_order', 'options', 'is_public'];
 	_self.users = null;
 	_self.usersAsArray = null;
-	_self.filers = [];
+	_self.filters = [];
 
 	_self.isLanesLoaded = false;
 
@@ -497,8 +497,16 @@ function Board(record) {
 				continue;
 			}
 
+			var storedValue = "";
+			for(var j in _self.filters) {
+				if (_self.filters[j].fieldId == fieldId) {
+					storedValue = _self.filters[j].value;
+				}
+			}
+
 			fieldHtml += kanban.templates['filter-' + field.fieldType()].render({
-				fieldId: fieldId
+				fieldId: fieldId,
+				storedValue: storedValue
 			});
 		}
 
@@ -516,17 +524,9 @@ function Board(record) {
 
 	}; // toggleFilterModal
 
-	this.applyFilters = function(filters){	
-		var checkFilterMatch = function(fieldContent, filterElement) {
-			switch (filterElement.operator) {
-				case "includes":
-					return fieldContent.toLowerCase().indexOf(filterElement.value) !== -1
-				case "does not include":
-					return fieldContent.toLowerCase().indexOf(filterElement.value) === -1
-			}
+	this.applyFilters = function(filters){			
+		_self.filters = filters;
 
-		} 
-		
 		var currentLanes = this.lanesOrder();
 		showCards = [];
 		for(var i = 0; i < currentLanes.length; i++) {
@@ -563,9 +563,8 @@ function Board(record) {
 						}
 
 						if (filters[l].fieldId == fieldvalue.fieldId()) {
-							filteredFieldCount++;
-							var fieldContent = fieldvalue.field().formatContentForComment(fieldvalue.content());												
-							cardMatches = checkFilterMatch(fieldContent, filters[i]);
+							filteredFieldCount++;							
+							cardMatches = fieldvalue.field().applyFilter(fieldvalue, filters[i]);
 							break;
 						}
 						
@@ -609,6 +608,8 @@ function Board(record) {
 	}
 
 	this.showAllCards = function(){
+		_self.filters = [];
+
 		$("#board-" + this.id()).find('.card:not(:visible)')
 				.stop(true, false)
 				.animate({

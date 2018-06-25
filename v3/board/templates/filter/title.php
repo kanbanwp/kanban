@@ -12,7 +12,7 @@
 				</select>
 			</div><!--col-->
 			<div class="col col-sm-4">
-				<input type="text" class="form-control">
+				<input type="text" class="form-control" value="{{%storedValue}}">
 			</div><!--col-->
 		</div><!--row-->
 	</div><!--list-group-item-->

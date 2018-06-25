@@ -61,6 +61,7 @@ class Kanban_User_Cap extends Kanban_User {
 			'user_email'   => $user->user_email,
 			'capabilities' => isset( $data['capabilities'] ) && is_array( $data['capabilities'] ) ? $data['capabilities'] : array(
 				'card',
+				'card-read',
 				'comment'
 			) // Default capabilities.
 		) );
@@ -660,6 +661,10 @@ class Kanban_User_Cap extends Kanban_User {
 			switch ( $key ) {
 				case 'capabilities':
 					$value = $this->format_json_for_app( $value );
+
+					// Every user must always have card-read.
+					$value[] = 'card-read';
+					$value = array_unique($value);
 					break;
 				case 'is_app':
 					$value = $this->format_bool_for_app( $value );
@@ -681,7 +686,10 @@ class Kanban_User_Cap extends Kanban_User {
 		foreach ( $row as $key => &$value ) {
 			switch ( $key ) {
 				case 'capabilities':
-					$value = $this->format_json_for_db( $value );
+
+					// Every user must always have card-read.
+					$value[] = 'card-read';
+					$value = $this->format_json_for_db( array_unique($value) );
 					break;
 				case 'user_id':
 					$value = $this->format_int_for_db( $value );

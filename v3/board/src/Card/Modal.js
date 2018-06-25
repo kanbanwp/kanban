@@ -22,6 +22,8 @@ Card_Modal = function (card) {
 		var fieldHtml = '';
 		var boardRecord = self.card().board().record();
 
+		var isCardRead = kanban.app.current_user().hasCap('card-read');
+
 		for (var i in boardRecord.fields_order) {
 
 			var field_id = boardRecord.fields_order[i];
@@ -38,7 +40,10 @@ Card_Modal = function (card) {
 				fieldvalue = kanban.fieldvalues[self.card().fieldvaluesByField()[field_id]];
 			}
 
-			fieldHtml += field.render(fieldvalue, self.card());
+			// Show non-hidden fields, and hidden fields only if they have card-read.
+			if ( !field.isHidden() || (field.isHidden() && isCardRead) ) {
+				fieldHtml += field.render(fieldvalue, self.card());
+			}
 		}
 
 		var commentFormHtml = '';

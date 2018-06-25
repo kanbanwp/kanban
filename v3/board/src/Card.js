@@ -162,6 +162,8 @@ function Card(record) {
 
 		var fieldvaluesByField = self.fieldvaluesByField();
 
+		var isCardRead = kanban.app.current_user().hasCap('card-read');
+
 		for (var i in self.board().fieldsOrder()) {
 
 			var field_id = self.board().fieldsOrder()[i];
@@ -179,7 +181,11 @@ function Card(record) {
 			}
 
 			if (field.isHidden()) {
-				fieldHiddenHtml += field.render(fieldvalue, self);
+
+				// Don't show hidden fields on public boards.
+				if ( isCardRead ) {
+					fieldHiddenHtml += field.render(fieldvalue, self);
+				}
 			}
 			else {
 				fieldHtml += field.render(fieldvalue, self);

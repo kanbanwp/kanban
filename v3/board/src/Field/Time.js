@@ -92,10 +92,10 @@ function Field_Time(record) {
 		});
 	}; // optionsRender
 
-	this.addFunctionality = function($field) {
-		var self = this;
-
-	}; // addFunctionality
+	// this.addFunctionality = function($field) {
+	// 	var self = this;
+	//
+	// }; // addFunctionality
 
 
 	/*

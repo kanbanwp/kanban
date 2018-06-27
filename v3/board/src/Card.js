@@ -202,7 +202,8 @@ function Card(record) {
 			isCommentRead: kanban.app.current_user().hasCap('comment-read') || kanban.app.current_user().hasCap('comment-write'),
 			isCardWrite: kanban.app.current_user().hasCap('card-write'),
 			showCardIdClass: showCardIdClass,
-			commentsCount: self.commentsCount(true) > 0 ? self.commentsCount(true) : null
+			commentsCount: self.commentsCount(true) > 0 ? self.commentsCount(true) : null,
+			currentUserFollowsCard: kanban.app.current_user().followsCard(self.id())
 		});
 	}; // render
 
@@ -211,7 +212,10 @@ function Card(record) {
 		var self = this;
 
 		var $el = self.$el();
-		// var $lane = $el.closest('.lane');
+
+		if ( $el.hasClass('func-added') ) {
+			return false;
+		}
 
 		var fieldsOrder = self.fieldsOrder();
 		for (var i in fieldsOrder) {
@@ -226,7 +230,7 @@ function Card(record) {
 			kanban.fields[fieldId].addFunctionality($field);
 		}
 
-		$el.one(
+		$el.on(
 			'mouseover',
 			function () {
 				$('.card-edit', $el).popover({
@@ -237,11 +241,14 @@ function Card(record) {
 					trigger: 'manual',
 					animation: false,
 					template: kanban.templates['card-menu'].render({
-						card: self.record()
+						card: self.record(),
+						isFollowed: kanban.app.current_user().followsCard(self.id())
 					})
 				});
 			}
 		);
+
+		$el.addClass('func-added');
 
 	}; // addFunctionality
 
@@ -265,6 +272,10 @@ function Card(record) {
 		var cardHtml = self.render(lane, board);
 
 		$el.replaceWith(cardHtml);
+
+		// Reget the el, since we replaced it.
+		var $el = self.$el();
+		self.addFunctionality($el);
 
 		// If the modal is open.
 		if ($('#card-modal').length == 1 && kanban.app.urlParamGet['card'] == self.id()) {
@@ -420,6 +431,40 @@ function Card(record) {
 		$('.card-edit', self.$el()).popover('hide');
 		self.modal.show(this)
 	}; // editButtonClick
+
+	this.currentUserToggleFollow = function (el) {
+		var self = this;
+
+		// var follows = kanban.app.current_user().follows();
+
+		if ( !kanban.app.current_user().followsCard(self.id()) ) {
+
+			$.ajax({
+				data: {
+					type: 'card_user',
+					action: 'add',
+					card_id: self.id()
+				}
+			})
+			.done(function (response) {
+				kanban.app.current_user().followCard(self.id());
+				self.rerender();
+			});
+
+		} else {
+			$.ajax({
+				data: {
+					type: 'card_user',
+					action: 'delete',
+					card_id: self.id()
+				}
+			})
+			.done(function (response) {
+				kanban.app.current_user().unfollowCard(self.id());
+				self.rerender();
+			});
+		}
+	}; // currentUserToggleFollow
 
 	this.lane = function () {
 		var self = this;

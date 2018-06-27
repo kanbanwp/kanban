@@ -54,7 +54,7 @@ function Field_File(record) {
 			return false;
 		}
 
-		$field.one(
+		$field.on(
 			'mouseover',
 			function () {
 

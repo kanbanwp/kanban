@@ -58,7 +58,7 @@ function Field_Todo(record) {
 			return false;
 		}
 
-		$field.one(
+		$field.on(
 			'mouseover',
 			function () {
 

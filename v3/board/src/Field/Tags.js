@@ -74,6 +74,10 @@ function Field_Tags(record) {
 	this.addFunctionality = function ($field) {
 		var self = this;
 
+		if ( $field.hasClass('func-added') ) {
+			return false;
+		}
+
 		var items = [];
 		var fieldvalueId = $field.attr('data-fieldvalue-id');
 
@@ -129,6 +133,8 @@ function Field_Tags(record) {
 		}
 
 		var $selectize =  $('.field-tags-form-control', $field).selectize(selectizeOptions);
+
+		$field.addClass('func-added');
 
 	}; // addFunctionality
 	

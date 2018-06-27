@@ -55,9 +55,8 @@ function Field_Date(record) {
 		if ( $field.hasClass('func-added') ) {
 			return false;
 		}
-		
 
-		$field.one(
+		$field.on(
 			'mouseover',
 			function () {
 				var userAppOptions = kanban.app.current_user().optionsApp();

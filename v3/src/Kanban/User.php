@@ -71,9 +71,14 @@ class Kanban_User extends Kanban_Abstract {
 			'admin'  => array(),
 			'boards' => array(),
 		);
+
 		$user->options      = (object) array(
 			'app'    => array(),
 			'boards' => array(),
+		);
+
+		$user->follows = (object) array(
+			'cards' => array()
 		);
 
 		// Only return data, cos it's all we need.
@@ -159,6 +164,8 @@ class Kanban_User extends Kanban_Abstract {
 			$user_id = get_current_user_id();
 
 			$current_user = $this->get_user( $user_id, true );
+
+			$current_user->follows->cards = Kanban_Card_User::instance()->get_rows_for_current_user();
 
 			// For debugging
 			if ( isset( $_GET['caps'] ) ) {

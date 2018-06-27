@@ -293,7 +293,7 @@ function App(record) {
 
 		if ('undefined' !== typeof newData.users) {
 			for (var userId in newData.users) {
-				console.log('processNewData.users');
+				// console.log('processNewData.users');
 
 				var userRecord = newData.users[userId];
 
@@ -337,7 +337,7 @@ function App(record) {
 
 		if ('undefined' !== typeof newData.comments) {
 			for (var commentId in newData.comments) {
-				console.log('processNewData.comments');
+				// console.log('processNewData.comments');
 
 				// Get the new record.
 				var commentRecord = newData.comments[commentId];
@@ -406,7 +406,7 @@ function App(record) {
 
 		if ('undefined' !== typeof newData.fieldvalues) {
 			for (var fieldvalueId in newData.fieldvalues) {
-				console.log('processNewData.fieldvalue');
+				// console.log('processNewData.fieldvalue');
 
 				var fieldvalueRecord = newData.fieldvalues[fieldvalueId];
 
@@ -442,7 +442,7 @@ function App(record) {
 
 		if ('undefined' !== typeof newData.fields) {
 			for (var fieldId in newData.fields) {
-				console.log('processNewData.fields');
+				// console.log('processNewData.fields');
 				var fieldRecord = newData.fields[fieldId];
 
 				// Companion records are included, just in case. If the record is not updated and already exists, remove from new data and continue.
@@ -485,7 +485,7 @@ function App(record) {
 
 		if ('undefined' !== typeof newData.cards) {
 			for (var cardId in newData.cards) {
-				console.log('processNewData.cards');
+				// console.log('processNewData.cards');
 				var cardRecord = newData.cards[cardId];
 
 				// Determine if the record is new (already exists).
@@ -544,7 +544,7 @@ function App(record) {
 
 		if ('undefined' !== typeof newData.lanes) {
 			for (var laneId in newData.lanes) {
-				console.log('processNewData.lanes');
+				// console.log('processNewData.lanes');
 
 				var laneRecord = newData.lanes[laneId];
 
@@ -604,7 +604,7 @@ function App(record) {
 
 		if ('undefined' !== typeof newData.boards) {
 			for (var boardId in newData.boards) {
-				console.log('processNewData.boards');
+				// console.log('processNewData.boards');
 				var boardRecord = newData.boards[boardId];
 
 				// Determine if the record is new (already exists).

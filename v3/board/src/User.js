@@ -72,6 +72,30 @@ function User(record) {
 		return functions.cloneArray(_self.allowedFields);
 	}; // allowedFields
 
+	this.follows = function (type) {
+
+		// For the future.
+		if ( 'undefined' !== typeof _self.record.follows[type] ) {
+			return functions.cloneArray(_self.record.follows[type]);
+		}
+
+		// Default to cards.
+		return functions.cloneArray(_self.record.follows.cards);
+
+	}; // follows
+
+	this.followsCard = function (cardId) {
+		return _self.record.follows.cards.indexOf(cardId) == -1 ? false : true;
+	}; // followsCard
+
+	this.followCard = function (cardId) {
+		_self.record.follows.cards.push(cardId);
+	}; // followsCard
+
+	this.unfollowCard = function (cardId) {
+		_self.record.follows.cards.remove(cardId);
+	}; // followsCard
+
 	this.optionBoardUpdate = function (option, value, boardId) {
 		var self = this;
 

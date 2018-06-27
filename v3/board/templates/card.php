@@ -23,6 +23,7 @@
 			   {{/isCardWrite}}>
 				<i class="ei ei-pencil" style="color: {{%lane.color}}"></i>
 			</a>
+
 			{{isCommentRead}}
 			<button class="btn btn-sm btn-fade btn-empty card-comments"
 			        type="button"

@@ -1,9 +1,9 @@
-<script class="template" type="t/template" data-id="filter-title">
+<script class="template" type="t/template" data-id="filter-text">
 
 	<div class="list-group-item field-filter" data-id="{{%fieldId}}">
 		<div class="row">
 			<div class="col col-sm-4">
-				<?php _e( 'Title', 'kanban' ) ?>
+				<?php _e( 'Text', 'kanban' ) ?>
 			</div><!--col-->
 			<div class="col col-sm-4">
 				<select class="form-control">

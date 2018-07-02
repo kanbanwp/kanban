@@ -181,6 +181,33 @@ function Field_Date(record) {
 
 		return content;
 	}; // formatContentForComment
+
+	this.applyFilter = function(fieldValue, filterElement) {		
+		var jsDate = Date.prototype.dateMysqlToJs(fieldValue.content());
+		var fieldDateValue = jsDate.getTime();
+		var filterDateValue = filterElement.value.getTime();
+		
+		switch (filterElement.operator) {
+			//Operator: =
+			case "0":
+				return fieldDateValue === filterDateValue;
+			//Operator: !=
+			case "1":
+				return fieldDateValue !== filterDateValue;
+			//Operator: <
+			case "2":
+				return fieldDateValue < filterDateValue;
+			//Operator: <=
+			case "3":
+				return fieldDateValue <= filterDateValue;
+			//Operator: >
+			case "4":
+				return fieldDateValue > filterDateValue;
+			//Operator: >=
+			case "5":
+				return fieldDateValue >= filterDateValue;			
+		}
+	}
 } // Field_Date
 
 // inherit Field

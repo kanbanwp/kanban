@@ -497,16 +497,27 @@ function Board(record) {
 				continue;
 			}
 
-			var storedValue = "";
+			var filterValue = "";
+			var filterOperator = "";
 			for(var j in _self.filters) {
 				if (_self.filters[j].fieldId == fieldId) {
-					storedValue = _self.filters[j].value;
+					filterValue = _self.filters[j].value;
+					filterOperator = _self.filters[j].operator;
 				}
 			}
 
+			if (filterValue && field.fieldType() === "date") {
+				var userAppOptions = kanban.app.current_user().optionsApp();
+				filterValue = Date.prototype.formatDate(filterValue, userAppOptions.date_view_format);
+			}
+
+			var storedFilter = {};
+			storedFilter.filterValue = filterValue;
+			storedFilter["filterOperator" + filterOperator] = true;
+
 			fieldHtml += kanban.templates['filter-' + field.fieldType()].render({
 				fieldId: fieldId,
-				storedValue: storedValue
+				storedFilter: storedFilter
 			});
 		}
 
@@ -521,6 +532,18 @@ function Board(record) {
 			keyboard: false,
 			show: true
 		});
+
+		$('#modal').find('.date-filter-value').one(
+			'mouseover',
+			function () {
+				var userAppOptions = kanban.app.current_user().optionsApp();
+				var weekStart = userAppOptions.first_day_of_week == "sunday" ? 0 : 1;
+				$(this).datepicker({
+					weekStart: weekStart,
+					todayHighlight: true,
+					format: userAppOptions.date_view_format
+				});
+			});
 
 	}; // toggleFilterModal
 
@@ -555,6 +578,10 @@ function Board(record) {
 				var filteredFieldCount = 0;
 				//check if all filter conditions are fulfilled by the fieldvalues of the card
 				for(var l = 0; l < filters.length && cardMatches; l++) {
+					if (!filters[l].value) {
+						filteredFieldCount++;
+						continue;
+					}
 					for(var k = 0; k < fieldValues.length; k++) {
 						var fieldvalue = kanban.fieldvalues[fieldValues[k]];
 
@@ -564,7 +591,7 @@ function Board(record) {
 
 						if (filters[l].fieldId == fieldvalue.fieldId()) {
 							filteredFieldCount++;							
-							cardMatches = fieldvalue.field().applyFilter(fieldvalue, filters[i]);
+							cardMatches = fieldvalue.field().applyFilter(fieldvalue, filters[l]);
 							break;
 						}
 						
@@ -572,7 +599,7 @@ function Board(record) {
 				}
 				//store card id if all conditions matched
 				if (cardMatches && filters.length == filteredFieldCount) {
-					showCards.push(card.id());					
+					showCards.push(card.id());
 				}
 			
 			}

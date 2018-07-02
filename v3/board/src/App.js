@@ -739,7 +739,13 @@ function App(record) {
 		$('#modal .field-filter').each(function(){
 			var fieldId = $(this).attr('data-id');
 			var operator = $(this).find('select').find(':selected').val();
-			var value = $(this).find('input').val();
+
+			var $valueInput = $(this).find('input');
+			if ($valueInput.hasClass('date-filter-value')) {
+				var value = $valueInput.datepicker('getUTCDate');				
+			} else {
+				var value = $valueInput.val();
+			}			
 
 			filters.push({
 				fieldId, operator, value

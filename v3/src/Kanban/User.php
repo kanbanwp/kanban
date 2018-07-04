@@ -28,6 +28,30 @@ class Kanban_User extends Kanban_Abstract {
 
 	}
 
+	public function find_mentions_in_string ($content, $return = 'id') {
+		preg_match_all( '/data-mention=\"([0-9]*)\"/',
+			$content,
+			$matches,
+			PREG_PATTERN_ORDER
+		);
+
+		$user_ids = array();
+
+		if ( isset( $matches[1] ) && ! empty( $matches[1] ) ) {
+			$user_ids = array_filter( array_unique( $matches[1] ) );
+		}
+
+		if ( empty($user_ids) ) {
+			return $user_ids;
+		}
+
+		if ( $return == 'user' ) {
+			return $this->get_users($user_ids);
+		}
+
+		return $user_ids;
+	}
+
 	public function format_user_for_app( $user ) {
 
 		// Remove passwords, just in case.
@@ -165,7 +189,7 @@ class Kanban_User extends Kanban_Abstract {
 
 			$current_user = $this->get_user( $user_id, true );
 
-			$current_user->follows->cards = Kanban_Card_User::instance()->get_rows_for_current_user();
+			$current_user->follows->cards = Kanban_Card_User::instance()->get_card_ids_for_current_user();
 
 			// For debugging
 			if ( isset( $_GET['caps'] ) ) {
@@ -232,6 +256,9 @@ class Kanban_User extends Kanban_Abstract {
 			'options'            => (object) array(
 				'app'    => array(),
 				'boards' => array()
+			),
+			'follows'            => (object) array(
+				'cards'    => array()
 			)
 		);
 	}

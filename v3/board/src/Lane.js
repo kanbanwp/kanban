@@ -34,7 +34,19 @@ function Lane(record) {
 	}; // id
 
 	this.cardsOrder = function () {
-		return _self.record.cards_order.slice();
+		var cardIds = [];
+		for (var i in _self.record.cards_order) {
+
+			var cardId = _self.record.cards_order[i];
+
+			if ('undefined' === typeof kanban.cards[cardId]) {
+				continue;
+			}
+
+			cardIds.push(cardId);
+		}
+
+		return cardIds;
 	}; // cardsOrder
 
 	this.allowedFields = function () {
@@ -248,7 +260,7 @@ function Lane(record) {
 				ui: board.ui()
 			},
 			cards: cardHtml,
-			cardCount: laneRecord.cards_order.length,
+			cardCount: self.cardsOrder().length,
 			lane: self.record(),
 			sidebar: sidebar,
 			active: active,
@@ -335,6 +347,9 @@ function Lane(record) {
 			var cardRecord = response.data;
 
 			var card = kanban.cards[cardId] = new Card(cardRecord);
+
+			// Add the card to the current users follows.
+			kanban.app.current_user().followCard(cardId);
 
 			var board = kanban.boards[self.board_id()];
 

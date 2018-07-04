@@ -130,6 +130,10 @@ function Comment(record) {
 
 		$el.replaceWith(commentHtml);
 
+		// Reget the el, since we replaced it.
+		var $el = self.$el();
+		self.addFunctionality($el);
+
 	}; // rerender
 
 	this.addFunctionality = function() {

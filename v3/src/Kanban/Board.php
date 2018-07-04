@@ -480,12 +480,17 @@ class Kanban_Board extends Kanban_Abstract {
 		return $row;
 	}
 
-	public function get_label ($row) {
-		if ( isset($row->label) && !empty($row->label) ) {
-			return $row->label;
+	public function get_label ($board) {
+
+		if ( is_numeric($board) ) {
+			$board = $this->get_row($board);
 		}
 
-		return __('unnamed');
+		if ( isset($board->label) && !empty($board->label) ) {
+			return $board->label;
+		}
+
+		return __('New board');
 	}
 
 

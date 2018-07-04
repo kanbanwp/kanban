@@ -58,6 +58,9 @@ class Kanban_Comment extends Kanban_Abstract {
 
 		$row = $this->set_row( $data );
 
+		// Make sure the user who created the comment is following the card.
+		Kanban_Card_User::instance()->add_current_user_to_card($data['card_id']);
+
 		return $row;
 	}
 

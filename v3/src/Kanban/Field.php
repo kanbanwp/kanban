@@ -340,13 +340,18 @@ class Kanban_Field extends Kanban_Abstract {
 		return $class;
 	}
 
-	public function get_label ($row) {
-		if ( isset($row->label) && !empty($row->label) ) {
-			return $row->label;
+	public function get_label ($field) {
+
+		if ( is_numeric($field) ) {
+			$field = $this->get_row($field);
 		}
 
-		if ( isset($row->field_type) && !empty($row->field_type) ) {
-			return $row->field_type;
+		if ( isset($field->label) && !empty($field->label) ) {
+			return $field->label;
+		}
+
+		if ( isset($field->field_type) && !empty($field->field_type) ) {
+			return $field->field_type;
 		}
 
 		return __('unnamed');

@@ -45,9 +45,7 @@ class Kanban_Card_User extends Kanban_Abstract {
 			return false;
 		}
 
-		$data['user_id'] = get_current_user_id();
-
-		$row = $this->set_row( $data );
+		$row = $this->add_current_user_to_card($data['card_id']);
 
 		return row;
 	}
@@ -87,44 +85,112 @@ class Kanban_Card_User extends Kanban_Abstract {
 
 	} // delete
 
-//	public function get_rows_by_card_id( $card_id ) {
-//
-//		if ( ! is_user_logged_in() ) {
-//			return (object) array();
-//		}
-//
-//		global $wpdb;
-//
-//		$table = Kanban_Db::instance()->prefix() . $this->get_table();
-//
-//		$rows = $wpdb->get_results(
-//			$wpdb->prepare("
-//					SELECT $table.user_id,
-//					$table.card_id
-//
-//					FROM $table
-//					WHERE 1=1
-//					AND $table.`user_id` = %d
-//					AND $table.`card_id` = %d
-//				;",
-//				get_current_user_id(),
-//				$card_id
-//			),
-//			OBJECT_K
-//		);
-//
-//		if ( empty( $rows ) ) {
-//			return array();
-//		}
-//
-//		foreach ( $rows as &$row ) {
-//			$row = $this->format_board_for_user( $row );
-//		}
-//
-//		return $rows;
-//	} // get_rows_by_card_id
+	public function add_current_user_to_card ($card_id) {
 
-	public function get_rows_for_current_user() {
+		$card_id = intval($card_id);
+
+		global $wpdb;
+
+		$table = Kanban_Db::instance()->prefix() . $this->get_table();
+
+		$row = $wpdb->get_row(
+			$wpdb->prepare("
+					SELECT $table.*
+					
+					FROM $table
+					WHERE 1=1
+					AND $table.`user_id` = %d
+					AND $table.`card_id` = %d
+					AND is_active = 1
+				;",
+				get_current_user_id(),
+				$card_id
+			)
+		);
+
+		if ( empty($row) ) {
+			$row = $this->set_row(array(
+				'card_id' => $card_id,
+				'user_id' => get_current_user_id()
+			));
+		}
+
+		return $row;
+	}
+
+	public function add_users_to_card ($user_ids, $card_id) {
+
+		$user_ids = array_map('intval', $user_ids);
+
+		global $wpdb;
+
+		$table = Kanban_Db::instance()->prefix() . $this->get_table();
+
+		$in = implode(',', $user_ids);
+
+		$rows = $wpdb->get_col(
+			$wpdb->prepare("
+					SELECT $table.`user_id`
+					
+					FROM $table
+					WHERE 1=1
+					AND $table.`user_id` IN $in
+					AND $table.`card_id` = %d
+					AND is_active = 1
+				;",
+				$card_id
+			)
+		);
+
+		if ( !empty($rows) ) {
+			$user_ids = array_diff( $user_ids, $rows );
+		}
+
+		if ( !empty($user_ids) ) {
+			foreach ($user_ids as $user_id ) {
+				$row = $this->set_row( array(
+					'card_id' => $card_id,
+					'user_id' => $user_id
+				) );
+			}
+		}
+
+		return $user_ids;
+	}
+
+	public function get_user_ids_by_card_id( $card_id ) {
+
+		global $wpdb;
+
+		$card_id = intval($card_id);
+
+		$table = Kanban_Db::instance()->prefix() . $this->get_table();
+
+		$rows = $wpdb->get_col(
+			$wpdb->prepare("
+					SELECT $table.user_id
+					
+					FROM $table
+					WHERE 1=1
+					AND $table.`card_id` = %d
+					AND is_active = 1
+				;",
+				$card_id
+			)
+		);
+
+		if ( empty( $rows ) ) {
+			return array();
+		}
+
+		return array_map('intval', $rows);
+	} // get_user_ids_by_card_id
+
+	public function set_row( $data ) {
+		return parent::set_row( $data );
+	}
+
+	public function get_card_ids_for_current_user() {
 
 		if ( ! is_user_logged_in() ) {
 			return (object) array();
@@ -152,7 +218,7 @@ class Kanban_Card_User extends Kanban_Abstract {
 		}
 
 		return array_map('intval', $rows);
-	} // get_rows_by_card_id
+	} // get_card_ids_for_current_user
 
 	public function get_row( $id ) {
 
@@ -182,7 +248,7 @@ class Kanban_Card_User extends Kanban_Abstract {
 			return (object) array();
 		}
 
-		$row = $this->format_board_for_user( $row );
+		$row = $this->format_data_for_app( $row );
 
 		return $row;
 	} // get_row

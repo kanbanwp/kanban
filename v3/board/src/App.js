@@ -740,6 +740,45 @@ function App(record) {
 
 	}; // filterModalToggle
 
+	this.applyFilters = function () {
+
+		var self = this;
+
+		if (null === kanban.app.current_board()) {
+			self.modal.close();
+			return false;
+		}
+
+		var filters = [];
+		$('#modal .field-filter').each(function(){
+			var fieldId = $(this).attr('data-id');
+			var operator = $(this).find('select').find(':selected').val();
+
+			var $valueInput = $(this).find('input');
+			if ($valueInput.hasClass('date-filter-value')) {
+				var value = $valueInput.datepicker('getUTCDate');				
+			} else {
+				var value = $valueInput.val();
+			}			
+
+			filters.push({
+				fieldId, operator, value
+			})
+		})
+
+
+		self.current_board().applyFilters(filters);
+
+		self.modal.close();
+
+	}; // applyFilters
+
+	this.clearFilters = function() {
+		kanban.app.current_board().showAllCards();
+		
+		$('#modal').modal('hide').empty();
+	}
+
 	this.viewToggleCompact = function (el) {
 
 		if (null === kanban.app.current_board()) {
@@ -1385,6 +1424,9 @@ function App(record) {
 						var fieldvaluesByField = card.fieldvaluesByField();
 						for(var k = 0; k < fieldValues.length; k++) {							
 							var fieldvalue = kanban.fieldvalues[fieldValues[k]];
+							if ('undefined' === typeof kanban.fields[fieldvalue.fieldId()]) {
+								continue;
+							}
 							var fieldContent = fieldvalue.field().formatContentForComment(fieldvalue.content());
 							if (fieldContent.toLowerCase().indexOf(val) !== -1) {
 								showCards.push(card.id());
@@ -1394,36 +1436,9 @@ function App(record) {
 					}
 				}
 
-				//hide cards that are visible and not in the array of matching cards 
-				$("#board-" + self.current_board_id() + ' .card:visible').each(function () {
-					if (showCards.indexOf(Number($(this).attr('data-id'))) == -1) {
-						$(this)
-						.stop(true, false)
-						.animate({
-							height: "toggle",
-							opacity: "toggle"
-						}, 200);
-					}
-				});
-
-				//show invisible matching cards
-				for (var i = 0; i < showCards.length; i++) {
-					if (!$('#card-' + showCards[i]).is(':visible')) {
-						$('#card-' + showCards[i])
-						.stop(true, false)
-						.animate({
-							height: "toggle",
-							opacity: "toggle"
-						}, 200);
-					}
-				}
+				currentBoard.showSelectedCardsOnly(showCards);
 			} else {
-				$("#board-" + self.current_board_id()).find('.card:not(:visible)')
-				.stop(true, false)
-				.animate({
-					height: "toggle",
-					opacity: "toggle"
-				}, 200);
+				kanban.app.current_board().showAllCards();
 			}
 		}, 1000);
 

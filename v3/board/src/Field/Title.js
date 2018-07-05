@@ -152,6 +152,38 @@ function Field_Title(record) {
 		return $("<div>").html(content.formatForApp()).text();
 	}; // formatContentForComment
 
+	this.applyFilter = function(fieldValue, filterElement) {		
+		var fieldContent = fieldValue.field().formatContentForComment(fieldValue.content());
+		var strContent = fieldContent.trim();
+		var strFilter = filterElement.value.trim();
+		switch (filterElement.operator) {
+			//Operator: =
+			case "0":
+				return strContent.localeCompare(strFilter) === 0;
+			//Operator: !=
+			case "1":
+				return strContent.localeCompare(strFilter) !== 0;
+			//Operator: <
+			case "2":
+				return strContent.localeCompare(strFilter) === -1;
+			//Operator: <=
+			case "3":
+				return strContent.localeCompare(strFilter) === -1 || strContent.localeCompare(strFilter) === 0;
+			//Operator: >
+			case "4":
+				return strContent.localeCompare(strFilter) === 1;
+			//Operator: >=
+			case "5":
+				return strContent.localeCompare(strFilter) === 1 || strContent.localeCompare(strFilter) === 0;
+			//Operator: includes
+			case "6":
+				return strContent.toLowerCase().indexOf(strFilter) !== -1;
+			//Operator: does not include
+			case "7":
+				return strContent.toLowerCase().indexOf(strFilter) === -1
+		}
+	}
+
 } // Field_Title
 
 // inherit Field

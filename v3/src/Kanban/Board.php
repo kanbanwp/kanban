@@ -493,7 +493,6 @@ class Kanban_Board extends Kanban_Abstract {
 		return __('New board');
 	}
 
-
 	// define the db schema
 	public function get_create_table_sql() {
 

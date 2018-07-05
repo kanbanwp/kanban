@@ -57,12 +57,14 @@ function Field_Colorpicker(record) {
 
 		$dropdownMenu.html($cp);
 
-		$cp.one(
+		$('b', $cp).one(
 			'click',
 			function (e) {
 
+				var $b = $(this);
+
 				// Get the color.
-				var color = kanban.app.colorPickerOnclick(e);
+				var color = $b.attr('data-color');
 
 				// Put the color picker back.
 				$cp.appendTo('body');
@@ -138,12 +140,14 @@ function Field_Colorpicker(record) {
 
 		$dropdownMenu.html($cp);
 
-		$cp.one(
+		$('b', $cp).one(
 			'click',
 			function (e) {
 
+				var $b = $(this);
+
 				// Get the color.
-				var color = kanban.app.colorPickerOnclick(e);
+				var color = $b.attr('data-color');
 
 				// Put the color picker back.
 				$cp.appendTo('body');

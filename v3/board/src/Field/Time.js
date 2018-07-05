@@ -52,7 +52,7 @@ function Field_Time(record) {
 
 		var fieldOptions = self.options();
 
-		kanban.templates['field-time'].render({
+		return kanban.templates['field-time'].render({
 			field: self.record(),
 			fieldvalue: fieldvalueRecord,
 			fieldOptions: fieldOptions,
@@ -73,23 +73,6 @@ function Field_Time(record) {
 			fieldOptions: fieldOptions
 		});
 
-		var fieldOptions = functions.optionsFormat(self.options());
-
-		var tagsHtml = "";
-		for(var tagId in fieldOptions.tags) {
-			var tag = fieldOptions.tags[tagId];
-			tagsHtml += kanban.templates['board-modal-field-tags-tag'].render({
-				tag: tag,
-				field_id: self.id()
-			});
-		}
-
-		return kanban.templates['board-modal-field-tags'].render({
-			board: self.board().record(),
-			field: self.record(),
-			fieldOptions: fieldOptions,
-			tagsHtml: tagsHtml
-		});
 	}; // optionsRender
 
 	// this.addFunctionality = function($field) {

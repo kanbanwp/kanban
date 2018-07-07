@@ -8,11 +8,7 @@
 			<div class="col col-sm-4">
 				<select class="form-control">
 					<option value="<?php _e( '0', 'kanban' ) ?>" {{storedFilter.filterOperator0}}selected="selected"{{/storedFilter.filterOperator0}}><?php _e( '=', 'kanban' ) ?></option>
-					<option value="<?php _e( '1', 'kanban' ) ?>" {{storedFilter.filterOperator1}}selected="selected"{{/storedFilter.filterOperator1}}><?php _e( '!=', 'kanban' ) ?></option>
-					<option value="<?php _e( '2', 'kanban' ) ?>" {{storedFilter.filterOperator2}}selected="selected"{{/storedFilter.filterOperator2}}><?php _e( '<', 'kanban' ) ?></option>
-					<option value="<?php _e( '3', 'kanban' ) ?>" {{storedFilter.filterOperator3}}selected="selected"{{/storedFilter.filterOperator3}}><?php _e( '<=', 'kanban' ) ?></option>
-					<option value="<?php _e( '4', 'kanban' ) ?>" {{storedFilter.filterOperator4}}selected="selected"{{/storedFilter.filterOperator4}}><?php _e( '>', 'kanban' ) ?></option>
-					<option value="<?php _e( '5', 'kanban' ) ?>" {{storedFilter.filterOperator5}}selected="selected"{{/storedFilter.filterOperator5}}><?php _e( '>=', 'kanban' ) ?></option>
+					<option value="<?php _e( '1', 'kanban' ) ?>" {{storedFilter.filterOperator1}}selected="selected"{{/storedFilter.filterOperator1}}><?php _e( '!=', 'kanban' ) ?></option>					
 					<option value="<?php _e( '6', 'kanban' ) ?>" {{storedFilter.filterOperator6}}selected="selected"{{/storedFilter.filterOperator6}}><?php _e( 'includes', 'kanban' ) ?></option>
 					<option value="<?php _e( '7', 'kanban' ) ?>" {{storedFilter.filterOperator7}}selected="selected"{{/storedFilter.filterOperator7}}><?php _e( 'does not include', 'kanban' ) ?></option>
 				</select>

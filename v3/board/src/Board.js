@@ -515,9 +515,12 @@ function Board(record) {
 			storedFilter.filterValue = filterValue;
 			storedFilter["filterOperator" + filterOperator] = true;
 
+			var fieldOptions = field.options();
+
 			fieldHtml += kanban.templates['filter-' + field.fieldType()].render({
 				fieldId: fieldId,
-				storedFilter: storedFilter
+				storedFilter: storedFilter,
+				fieldOptions: fieldOptions
 			});
 		}
 
@@ -533,6 +536,7 @@ function Board(record) {
 			show: true
 		});
 
+		//for date filter add datepicker
 		$('#modal').find('.date-filter-value').one(
 			'mouseover',
 			function () {
@@ -544,6 +548,42 @@ function Board(record) {
 					format: userAppOptions.date_view_format
 				});
 			});
+
+		//for users filter add selectize with the available users of the field
+		$('#modal').find('.users-filter-value').each(function() {
+			var available_users = $(this).attr('data-available-users');
+			var users = [];
+			if ( available_users == 'wp' ) {
+				users = kanban.app.getUsers('array');
+			} else {
+				users = self.getUsers('array');
+			}
+
+			var $selectize =  $(this).selectize({
+				valueField: 'id',
+				labelField: 'display_name',
+				searchField: ['email', 'display_name'],
+				persist: false,
+				options: users,
+				items: [],
+				maxItems: null,					
+				render: {
+					item: function(item, escape) {
+						return '<div class="selectize-item">' +
+							'' + escape(item.display_name) + '' +
+							'</div>';
+					},
+					option: function(item, escape) {
+						var label = item.display_name || item.user_email;
+						var caption = item.display_name ? item.user_email : null;
+						return '<div>' +
+							'' + escape(label) + '' +
+							(caption ? ' (' + escape(caption) + ')' : '') +
+							'</div>';
+					}
+				}
+			});		
+		});
 
 	}; // toggleFilterModal
 

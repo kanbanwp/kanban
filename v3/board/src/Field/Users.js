@@ -272,6 +272,65 @@ function Field_Users(record) {
 		return toReturn.join(', ');
 	}; // formatContentForComment
 
+	this.applyFilter = function(fieldValue, filterElement) {
+		var fieldUsers = fieldValue.content();
+		var filterUsers = filterElement.value.split(',');		
+		
+		switch (filterElement.operator) {
+			//Operator: =
+			case "0":
+				if (fieldUsers.length === filterUsers.length) {
+					for (userId of fieldUsers) {
+						if (filterUsers.indexOf(userId) === -1) {
+							return false;
+						}
+					}
+					return true;
+				} else {
+					return false;
+				}
+
+			//Operator: !=
+			case "1":
+				if (fieldUsers.length === filterUsers.length) {
+					for (userId of fieldUsers) {
+						if (filterUsers.indexOf(userId) === -1) {
+							return true;
+						}
+					}
+					return false;
+				} else {
+					return true;
+				}
+				
+			//Operator: includes
+			case "6":
+				for (userId of filterUsers) {
+					if (fieldUsers.indexOf(userId) === -1) {
+						return false;
+					}
+				}
+				return true;
+			//Operator: does not include
+			case "7":
+				for (userId of filterUsers) {
+					if (fieldUsers.indexOf(userId) !== -1) {
+						return false;
+					}
+				}
+				return true;
+
+			//Operator: one of
+			case "8":
+				for (userId of filterUsers) {
+					if (fieldUsers.indexOf(userId) !== -1) {
+						return true;
+					}
+				}
+				return false;
+		}
+	}
+
 } // Field_Userss
 
 Field_Users.prototype = Object.create(Field.prototype);

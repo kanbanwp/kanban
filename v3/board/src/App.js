@@ -742,7 +742,10 @@ function App(record) {
 
 			var $valueInput = $(this).find('input');
 			if ($valueInput.hasClass('date-filter-value')) {
-				var value = $valueInput.datepicker('getUTCDate');				
+				var value = $valueInput.datepicker('getUTCDate');	
+			}
+			else if ($valueInput.hasClass('users-filter-value')) {
+				var value =  $valueInput.get(0).selectize.getValue();
 			} else {
 				var value = $valueInput.val();
 			}			

@@ -4,7 +4,7 @@
 
 * `cd /board`
 * `npm install`
-* `node_modules/.bin/webpack -w
+* `node_modules/.bin/webpack -w`
 
 Javascript is compiled to /board/js/app.js.
 Css is compiled to /board/css/app.css.

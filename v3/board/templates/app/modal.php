@@ -271,6 +271,33 @@
 													       placeholder="<?php _e( 'From email', 'kanban'); ?>"
 													       value="{{%optionsApp.notification_from_email}}">
 												</div><!--form-group -->
+
+
+												<div class="form-group form-group-toggle col col-sm-12">
+													<label><?php _e('Send notification emails:', 'kanban'); ?></label><br>
+
+													<div class="btn-group">
+														<input type="radio"
+														       onchange="kanban.app.modal.optionUserOnChange(this);"
+														       data-name="do_notifications"
+														       name="app-do_notifications"
+														       id="app-do_notifications-false"
+														       autocomplete="off"
+														       {{!optionsUser.do_notifications}}checked{{/!optionsUser.do_notifications}}
+														value="false">
+														<label for="app-do_notifications-false" class="btn"><?php _e( 'Yes', 'kanban'); ?></label>
+														<input type="radio"
+														       onchange="kanban.app.modal.optionUserOnChange(this);"
+														       data-name="do_notifications"
+														       name="app-do_notifications"
+														       id="app-do_notifications-true"
+														       autocomplete="off"
+														       {{optionsUser.do_notifications}}checked{{/optionsUser.do_notifications}}
+														value="true">
+														<label for="app-do_notifications-true" class="btn"><?php _e( 'No', 'kanban'); ?></label>
+													</div>
+
+												</div><!--form-group -->
 											</div><!--wrapper-form-group-->
 										</div><!--body-->
 									</div><!--collapse-->

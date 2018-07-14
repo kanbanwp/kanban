@@ -105,7 +105,7 @@ class Kanban_Taskmeta extends Kanban_Db
 			id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
 			task_id bigint(20) unsigned NOT NULL DEFAULT '0',
 			created_dt_gmt datetime NOT NULL,
-			meta_key varchar(255) DEFAULT NULL,
+			meta_key varchar(128) DEFAULT NULL,
 			meta_value longtext,
 			UNIQUE KEY id (id),
 			KEY task_id (task_id),

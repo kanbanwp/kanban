@@ -388,6 +388,9 @@ class Kanban_User_Option extends Kanban_User {
 				case 'live_updates_check_interval':
 					$value = $this->format_int_for_db( $value );
 					break;
+				case 'do_notifications':
+					$value = $this->format_bool_for_db( $value );
+					break;
 				case 'first_day_of_week':
 					$value = $this->format_string_for_db( $value );
 					break;
@@ -415,6 +418,9 @@ class Kanban_User_Option extends Kanban_User {
 					break;
 				case 'live_updates_check_interval':
 					$value = $this->format_int_for_app( $value );
+					break;
+				case 'do_notifications':
+					$value = $this->format_bool_for_app( $value );
 					break;
 				case 'first_day_of_week':
 					$value = $this->format_string_for_app( $value );

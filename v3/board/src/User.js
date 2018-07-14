@@ -10,6 +10,7 @@ function User(record) {
 		first_day_of_week: 'sunday',
 		live_updates_check_interval: 10,
 		do_live_updates_check: true,
+		do_notifications: true,
 		date_view_format: 'M d, yyyy',
 		current_board: null
 	};

@@ -1,7 +1,7 @@
 <script class="template" type="t/template" data-id="app-modal">
 
 	<div id="app-modal" class="modal-dialog modal-lg">
-		<div class="modal-content" data-label="<?php _e( 'Edit the app', 'kanban' ); ?>">
+		<div class="modal-content" data-label="<?php _e( 'App settings', 'kanban' ); ?>">
 			<div id="modal-header">
 				<div class="navbar-header">
 					<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#modal-navbar">
@@ -11,7 +11,7 @@
 						<span class="icon-bar"></span>
 					</button>
 
-					<span class="navbar-brand visible-xs visible-sm"><?php _e( 'Edit the app', 'kanban'); ?></span>
+					<span class="navbar-brand visible-xs visible-sm"><?php _e( 'App settings', 'kanban'); ?></span>
 				</div>
 				<div id="modal-navbar" class="collapse navbar-collapse">
 					<ul class="nav navbar-nav">
@@ -21,12 +21,14 @@
 							   id="modal-tab-options"
 							   onclick="kanban.app.modal.tabChange(this);"><?php _e( 'Options', 'kanban'); ?></a></li>
 						</li>
+						{{currentUserIsAdmin}}
 						<li>
 							<a href="javascript:void(0);"
 							   data-target="users"
 							   id="modal-tab-users"
 							   onclick="kanban.app.modal.tabChange(this);"><?php _e( 'Users', 'kanban'); ?></a>
 						</li>
+						{{/currentUserIsAdmin}}
 						<li class="pull-right">
 							<a href="javascript:void(0);"
 							   onclick="kanban.app.modal.close(this);">
@@ -201,7 +203,7 @@
 													</div><!--btn-group-->
 												</div><!--form-group -->
 
-
+												{{currentUserIsAdmin}}
 												<div class="form-group form-group-toggle col col-sm-12">
 													<label><?php _e('Use Kanban for WordPress for the whole site:', 'kanban'); ?></label><br>
 
@@ -227,7 +229,7 @@
 													</div>
 
 												</div><!--form-group -->
-
+												{{/currentUserIsAdmin}}
 											</div><!--row-->
 										</div><!--body-->
 									</div><!--collapse-->
@@ -245,6 +247,8 @@
 									<div id="app-modal-options-notification" class="panel-collapse collapse">
 										<div class="panel-body">
 											<div class="wrapper-form-group row">
+
+												{{currentUserIsAdmin}}
 												<div class="form-group form-group-text col col-sm-12">
 													<label><?php _e( 'From name:', 'kanban'); ?></label>
 													<input type="text"
@@ -258,6 +262,9 @@
 													       placeholder="<?php _e( 'From name', 'kanban'); ?>"
 													       value="{{%optionsApp.notification_from_name}}">
 												</div><!--form-group -->
+												{{/currentUserIsAdmin}}
+
+												{{currentUserIsAdmin}}
 												<div class="form-group form-group-text col col-sm-12">
 													<label><?php _e( 'From email:', 'kanban'); ?></label>
 													<input type="text"
@@ -271,7 +278,7 @@
 													       placeholder="<?php _e( 'From email', 'kanban'); ?>"
 													       value="{{%optionsApp.notification_from_email}}">
 												</div><!--form-group -->
-
+												{{/currentUserIsAdmin}}
 
 												<div class="form-group form-group-toggle col col-sm-12">
 													<label><?php _e('Send notification emails:', 'kanban'); ?></label><br>
@@ -323,6 +330,7 @@
 
 						</div><!--tab-pane-->
 
+						{{currentUserIsAdmin}}
 						<div  class="tab-pane" id="modal-tab-pane-users">
 							<?php /*
 							<div class="text-right">
@@ -343,7 +351,7 @@
 							        autocomplete="off"></select>
 
 						</div><!--tab-pane-->
-
+						{{/currentUserIsAdmin}}
 
 						<div  class="tab-pane" id="modal-tab-pane-usergroups">
 							<div class="panel-group" id="app-modal-usergroups-accordion">

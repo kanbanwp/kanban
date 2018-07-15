@@ -296,12 +296,15 @@ function App(record) {
 
 		$('#header').html(headerHtml);
 
-		var footerMenuHtml = kanban.templates['footer'].render({
-			isAdmin: kanban.app.current_user().hasCap('admin-users'),
+		var footerMenuHtml = kanban.templates['footer-menu'].render({
 			isSeeBoardModal: kanban.app.current_user().hasCap('board-users') || kanban.app.current_user().hasCap('admin-board-create') ? true : false,
 		});
 
-		$('#footer').html(footerMenuHtml);
+		var footerHtml = kanban.templates['footer'].render({
+			footerMenuHtml: footerMenuHtml
+		});
+
+		$('#footer').html(footerHtml);
 
 		if ('undefined' === typeof kanban.boards[kanban.app.current_user().currentBoardId()]) {
 			var $placeholder = $('#board-placeholder');

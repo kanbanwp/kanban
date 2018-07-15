@@ -354,7 +354,7 @@ class Kanban_Field extends Kanban_Abstract {
 			return $field->field_type;
 		}
 
-		return __('unnamed');
+		return __('New field');
 	}
 
 

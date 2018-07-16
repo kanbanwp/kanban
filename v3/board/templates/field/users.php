@@ -8,7 +8,7 @@
 		<label>{{=field.label}}:</label>
 		{{/field.label}}
 
-		<input class="field-users-form-control" type="hidden" value="{{%fieldvalue.content}}"></input>
+		<input class="field-users-form-control" type="text" value="{{%fieldvalue.content}}"></input>
 	</div>
 
 </script>

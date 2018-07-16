@@ -1,4 +1,10 @@
-<p><?php echo sprintf(__('Card "%s" on the "%s" Kanban board has been updated:', 'kanban'), $card_name, $board_name) ?></p>
+<p><?php echo sprintf(
+	__( 'You\'ve been added to the "%s" field on card #%d on board "%s"', 'kanban'),
+	$field_label,
+	$card_id,
+	$board_label); ?>
+	<?php _e( ':', 'kanban') ?>
+</p>
 
 <div><?php echo $content ?></div>
 

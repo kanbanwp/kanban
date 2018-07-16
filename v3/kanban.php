@@ -138,6 +138,12 @@ class Kanban {
 			Kanban_Admin::instance();
 			Kanban_Router::instance();
 			Kanban_Db::instance();
+			Kanban_Field_Date::instance();
+			Kanban_Field_Colorpicker::instance();
+			Kanban_Field_Tags::instance();
+			Kanban_Field_Text::instance();
+			Kanban_Field_Title::instance();
+			Kanban_Field_Users::instance();
 
 
 //		Kanban_Board::init();

@@ -161,7 +161,7 @@ class Kanban_Field extends Kanban_Abstract {
 
 		$rows = $wpdb->get_results(
 			"
-					SELECT * 
+					SELECT $table.* 
 					FROM $table
 					WHERE 1=1
 					AND $table.is_active = 1
@@ -193,7 +193,7 @@ class Kanban_Field extends Kanban_Abstract {
 		$row = $wpdb->get_row(
 			$wpdb->prepare(
 				"
-					SELECT * 
+					SELECT $table.* 
 					FROM $table
 					WHERE 1=1
 					AND $table.id = %d

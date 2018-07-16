@@ -42,6 +42,7 @@
 		height: auto;
 		padding: $margin/3 $margin/3 $margin/3 0;
 		transition: none;
+		z-index: auto;
 
 		-webkit-box-shadow: -$margin/5 0px 0px 0px transparent;
 		-moz-box-shadow: -$margin/5 0px 0px 0px transparent;

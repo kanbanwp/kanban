@@ -152,9 +152,31 @@ class Kanban_Notification {
 		return $this->from;
 	}
 
+	public function notify_users_with_email_template ($user_ids, $subject, $message) {
+		$email = Kanban_Template::instance()->render(
+			Kanban::instance()->settings()->path . '/templates/email-inline.php',
+			array(
+				'subject'         => $subject,
+				'content'         => $message,
+				'preview'         => $subject,
+//				'unsubscribe_url' => '' // $unsubscribe_url
+			)
+		);
+
+		Kanban_Notification::instance()->notify_users( $user_ids, $subject, $email );
+	}
+
 	public function notify_users ($user_ids, $subject, $message, $format = 'html') {
 
-		$users = Kanban_User::instance()->get_users($user_ids);
+		// Get the new users, with options.
+		$users = Kanban_User::instance()->get_users($user_ids, false, true);
+
+		// If a user's do_notifications option is false, remove from notifications.
+		foreach ($users as $user_id => $user) {
+			if ( isset($user->options->app['do_notifications']) && ! (bool) $user->options->app['do_notifications'] ) {
+				unset($users[$user_id]);
+			}
+		}
 
 		if ( !empty($users) ) {
 

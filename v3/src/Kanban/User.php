@@ -132,7 +132,7 @@ class Kanban_User extends Kanban_Abstract {
 		return $users;
 	}
 
-	public function get_users( $user_ids, $with_boards = false ) {
+	public function get_users( $user_ids, $with_boards = false, $with_options = false ) {
 
 		if ( empty($user_ids) ) return array();
 
@@ -166,6 +166,25 @@ class Kanban_User extends Kanban_Abstract {
 
 			foreach ( $users_by_user_id as &$user ) {
 				$user = Kanban_User_Cap::instance()->add_caps_to_user( $user, $boards_by_user_id[ $user->id ] );
+			}
+
+		}
+
+		if ( $with_options ) {
+			$boards = Kanban_User_Option::instance()->get_boards_by_user_ids( $user_ids );
+
+			$boards_by_user_id = array();
+			foreach ( $boards as $board ) {
+
+				if ( ! is_array( $boards_by_user_id[ $board->user_id ] ) ) {
+					$boards_by_user_id[ $board->user_id ] = array();
+				}
+
+				$boards_by_user_id[ $board->user_id ][ $board->board_id ] = $board;
+			}
+
+			foreach ( $users_by_user_id as &$user ) {
+				$user = Kanban_User_Option::instance()->add_options_to_user( $user, $boards_by_user_id[ $user->id ] );
 			}
 
 		}

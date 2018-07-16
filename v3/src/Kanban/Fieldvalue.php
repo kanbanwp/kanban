@@ -69,47 +69,11 @@ class Kanban_Fieldvalue extends Kanban_Abstract {
 			'content' => $row->content
 		) );
 
-		// Find mentions in content.
-		$mention_user_ids = Kanban_User::instance()->find_mentions_in_string($row->content);
-
-		// Add any new mentioned users to card.
-		if ( !empty($mention_user_ids) ) {
-			Kanban_Card_User::instance()->add_users_to_card($mention_user_ids, $row->card_id);
-		}
-
-		// Now get all users who follow the card.
-		$user_ids = Kanban_Card_User::instance()->get_user_ids_by_card_id($row->card_id);
-
-		$board_id = Kanban_Card::instance()->get_board_id_by_card_id($row->card_id);
-
-		$subject = sprintf(
-			__( 'Card #%d has been updated on board "%s"' ),
-			$row->card_id,
-			Kanban_Board::instance()->get_label( $board_id )
+		do_action(
+			'kanban_fieldvalue_ajax_replace_set_row_after',
+			$row,
+			$prev_content
 		);
-
-		$message = Kanban_Template::instance()->render(
-			Kanban::instance()->settings()->path . '/board/emails/fieldvalue-update.php',
-			array (
-				'field_label' => Kanban_Field::instance()->get_label( $row->field_id ),
-				'card_id' => $row->card_id,
-				'content' => $row->content,
-				'card_url' => Kanban_Card::instance()->get_uri($row->card_id)
-			)
-		);
-
-		$email = Kanban_Template::instance()->render(
-			Kanban::instance()->settings()->path . '/templates/email-inline.php',
-			array (
-				'subject' => $subject,
-				'content' => $message,
-				'preview' => $subject,
-				'unsubscribe_url' => '' // $unsubscribe_url
-
-			)
-		);
-
-		Kanban_Notification::instance()->notify_users( $user_ids, $subject, $email );
 
 		return $row;
 	}
@@ -189,6 +153,38 @@ class Kanban_Fieldvalue extends Kanban_Abstract {
 //		}
 
 //		return $row;
+	}
+
+	public function get_row( $id ) {
+		global $wpdb;
+
+		$table = Kanban_Db::instance()->prefix() . $this->get_table();
+		$table_field = Kanban_Db::instance()->prefix() . Kanban_Field::instance()->get_table();
+
+		$row = $wpdb->get_row(
+			$wpdb->prepare(
+				"
+					SELECT $table.* ,
+					$table_field.`field_type`
+					
+					FROM $table
+					
+					LEFT JOIN $table_field
+					ON $table.`field_id` = $table_field.`id`
+					
+					WHERE 1=1
+					AND $table.id = %d
+				",
+				$id
+			),
+			OBJECT
+		);
+
+		if ( empty($row) ) return (object) array();
+
+		$row = $this->format_data_for_app( $row );
+
+		return $row;
 	}
 
 	public function get_results_by_cards( $card_ids, $since_dt = null ) {

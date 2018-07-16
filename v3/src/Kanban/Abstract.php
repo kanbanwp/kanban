@@ -136,7 +136,7 @@ abstract class Kanban_Abstract {
 		$row = $wpdb->get_row(
 			$wpdb->prepare(
 				"
-					SELECT * 
+					SELECT $table.* 
 					FROM $table
 					WHERE 1=1
 					AND $table.id = %d
@@ -175,7 +175,7 @@ abstract class Kanban_Abstract {
 //
 //		$rows = $wpdb->get_results(
 //			"
-//					SELECT *
+//					SELECT $table.*
 //					FROM $table
 //					WHERE 1=1
 //					AND $table.is_active = 1

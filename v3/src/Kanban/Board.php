@@ -275,7 +275,7 @@ class Kanban_Board extends Kanban_Abstract {
 
 		$rows = $wpdb->get_results(
 			"
-					SELECT *,
+					SELECT $table.*,
 					(
 						SELECT GROUP_CONCAT($table_users.user_id)
 						FROM $table_users
@@ -315,7 +315,7 @@ class Kanban_Board extends Kanban_Abstract {
 
 		$rows = $wpdb->get_results(
 			"
-					SELECT *,
+					SELECT $table.*,
 					(
 						SELECT GROUP_CONCAT($table_users.user_id)
 						FROM $table_users
@@ -347,7 +347,7 @@ class Kanban_Board extends Kanban_Abstract {
 		$row = $wpdb->get_row(
 			$wpdb->prepare(
 				"
-					SELECT *,
+					SELECT $table.*,
 					(
 						SELECT GROUP_CONCAT($table_users.user_id)
 						FROM $table_users

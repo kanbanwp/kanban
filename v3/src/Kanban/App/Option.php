@@ -98,7 +98,7 @@ class Kanban_App_Option extends Kanban_Abstract {
 
 		$row = $wpdb->get_row(
 			"
-					SELECT * 
+					SELECT $table.* 
 					FROM $table
 				;",
 			OBJECT

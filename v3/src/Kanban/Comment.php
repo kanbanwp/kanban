@@ -157,7 +157,7 @@ class Kanban_Comment extends Kanban_Abstract {
 
 		$rows = $wpdb->get_results(
 			"
-					SELECT * 
+					SELECT $table.* 
 					FROM $table
 					WHERE 1=1
 					$isActive
@@ -183,7 +183,7 @@ class Kanban_Comment extends Kanban_Abstract {
 		$row = $wpdb->get_row(
 			$wpdb->prepare(
 				"
-					SELECT * 
+					SELECT $table.* 
 					FROM $table
 					WHERE 1=1
 					AND $table.id = %d

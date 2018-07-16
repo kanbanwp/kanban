@@ -113,7 +113,7 @@ class Kanban_Field_File extends Kanban_Field {
 			$formatted_content[] = '<a href="' . $file->href. '" style="background: #DDDDDD; border-radius: 5px; color: black; padding: 2px 5px; text-decoration: none;">' . $file->name. '</a>';
 		}
 
-		return implode(', ', $formatted_content);
+		return implode(' ', $formatted_content);
 	}
 
 	public static function instance() {

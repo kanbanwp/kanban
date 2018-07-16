@@ -4,7 +4,9 @@
 		$card_id
 	) ?></p>
 
-<div><?php echo $content ?></div>
+<div style="background: #F6F6F6; color: black; padding: 15px 10px;">
+	<?php echo $content ?>
+</div>
 
 <hr>
 

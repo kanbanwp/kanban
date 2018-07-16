@@ -3,8 +3,8 @@
 Plugin Name:        Kanban Boards for WordPress
 Plugin URI:         https://kanbanwp.com/
 Description:        Add Kanban boards to your WordPress sites and get organized! Project management, CRM, sales tracking...
-Version:            2.5.2
-Release Date:       July 5, 2018
+Version:            2.5.3
+Release Date:       July 15, 2018
 Tested up to:	    4.9.7
 Requires at least:  4.0
 Requires PHP:       5.3

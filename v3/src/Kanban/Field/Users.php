@@ -154,10 +154,10 @@ class Kanban_Field_Users extends Kanban_Field {
 
 		$formatted_content = array();
 		foreach ($fieldvalue_users as $user) {
-			$formatted_content[] = $user->display_name;
+			$formatted_content[] = '<span style="background: #DDDDDD; border-radius: 5px; padding: 2px 5px;">' . $user->display_name . '</span>';
 		}
 
-		return implode(', ', $formatted_content);
+		return implode(' ', $formatted_content);
 	}
 
 	public static function instance() {

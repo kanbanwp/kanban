@@ -41,7 +41,7 @@ function Field_Title(record) {
 		// Not on hover, so we get the placeholder.
 		kanban.app.prepareContenteditable($field);
 
-		$field.on(
+		$field.one(
 			'mouseover',
 			function () {
 

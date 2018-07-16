@@ -256,7 +256,7 @@ class Kanban_Project extends Kanban_Db
 	static function db_table() {
 		return 'CREATE TABLE ' . self::table_name() . ' (
 					id bigint(20) NOT NULL AUTO_INCREMENT,
-					title varchar(256) NOT NULL,
+					title varchar(128) NOT NULL,
 					description text NOT NULL,
 					user_id_author bigint(20) NOT NULL,
 					created_dt_gmt datetime NOT NULL,

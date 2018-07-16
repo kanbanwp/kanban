@@ -55,7 +55,7 @@ function Field_Img(record) {
 			return false;
 		}
 
-		$field.on(
+		$field.one(
 			'mouseover',
 			function () {
 

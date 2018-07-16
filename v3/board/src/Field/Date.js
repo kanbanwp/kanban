@@ -56,7 +56,7 @@ function Field_Date(record) {
 			return false;
 		}
 
-		$field.on(
+		$field.one(
 			'mouseover',
 			function () {
 				var userAppOptions = kanban.app.current_user().optionsApp();

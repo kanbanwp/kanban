@@ -140,6 +140,8 @@ class Kanban {
 			Kanban_Db::instance();
 			Kanban_Field_Date::instance();
 			Kanban_Field_Colorpicker::instance();
+			Kanban_Field_File::instance();
+			Kanban_Field_Img::instance();
 			Kanban_Field_Tags::instance();
 			Kanban_Field_Text::instance();
 			Kanban_Field_Title::instance();

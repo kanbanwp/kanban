@@ -722,7 +722,7 @@ class Kanban_User_Cap extends Kanban_User {
 					modified_dt_gmt datetime DEFAULT '0000-00-00 00:00:00' NOT NULL,
 					modified_user_id bigint(20) DEFAULT '0' NOT NULL,
 					user_id bigint(20) DEFAULT '0' NOT NULL,
-					user_email varchar(256) DEFAULT '' NOT NULL,
+					user_email varchar(128) DEFAULT '' NOT NULL,
 					board_id bigint(20) DEFAULT '0' NOT NULL,
 					is_admin BOOLEAN DEFAULT FALSE NOT NULL,
 					capabilities text DEFAULT '' NOT NULL,

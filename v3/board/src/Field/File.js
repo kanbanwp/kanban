@@ -29,14 +29,17 @@ function Field_File(record) {
 		}
 
 		var attachmentsHtml = "";
-		for(var i in fieldvalueRecord.content ) {
-			var attachment = fieldvalueRecord.content[i];
 
-			attachmentsHtml += kanban.templates['field-file-attachment'].render({
-				attachment: attachment,
-				field: self.record(),
-				card: card.record()
-			});
+		if ( fieldvalueRecord.content.length > 0 ) {
+			for (var i in fieldvalueRecord.content) {
+				var attachment = fieldvalueRecord.content[i];
+
+				attachmentsHtml += kanban.templates['field-file-attachment'].render({
+					attachment: attachment,
+					field: self.record(),
+					card: card.record()
+				});
+			}
 		}
 
 		return kanban.templates['field-file'].render({
@@ -54,7 +57,7 @@ function Field_File(record) {
 			return false;
 		}
 
-		$field.on(
+		$field.one(
 			'mouseover',
 			function () {
 

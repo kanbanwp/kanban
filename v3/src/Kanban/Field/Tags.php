@@ -122,14 +122,14 @@ class Kanban_Field_Tags extends Kanban_Field {
 			return '';
 		}
 
-		$return = array();
+		$formatted_content = array();
 		foreach ($field->options['tags'] as $tag ) {
 			if ( in_array($tag->id, $content)) {
-				$return[] = '<span style="background: #DDDDDD; border-radius: 5px; padding: 2px 5px;">' . $tag->content . '</span>';
+				$formatted_content[] = '<span style="background: #DDDDDD; border-radius: 5px; padding: 2px 5px;">' . $tag->content . '</span>';
 			}
 		}
 
-		return implode(' ', $return);
+		return implode(' ', $formatted_content);
 	}
 
 	public static function instance() {

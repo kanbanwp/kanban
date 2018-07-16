@@ -94,8 +94,12 @@ function User(record) {
 	}; // followsCard
 
 	this.unfollowCard = function (cardId) {
-		_self.record.follows.cards.remove(cardId);
-	}; // followsCard
+		// https://stackoverflow.com/a/5767357
+		var index = _self.record.follows.cards.indexOf(cardId);
+		if (index > -1) {
+			_self.record.follows.cards.splice(index, 1);
+		}
+	}; // unfollowCard
 
 	this.optionBoardUpdate = function (option, value, boardId) {
 		var self = this;

@@ -490,39 +490,40 @@ function Board(record) {
 
 		var fieldHtml = '';
 		for ( var i in fieldIds ) {
+			if (Object.prototype.hasOwnProperty.call(fieldIds, i)) {
+				var fieldId = fieldIds[i];
+				var field = kanban.fields[fieldId];
 
-			var fieldId = fieldIds[i];
-			var field = kanban.fields[fieldId];
-
-			if ( 'undefined' === typeof kanban.templates['filter-' + field.fieldType()] ) {
-				continue;
-			}
-
-			var filterValue = "";
-			var filterOperator = "";
-			for(var j in _self.filters) {
-				if (_self.filters[j].fieldId == fieldId) {
-					filterValue = _self.filters[j].value;
-					filterOperator = _self.filters[j].operator;
+				if ( 'undefined' === typeof kanban.templates['filter-' + field.fieldType()] ) {
+					continue;
 				}
+
+				var filterValue = "";
+				var filterOperator = "";
+				for(var j in _self.filters) {
+					if (_self.filters[j].fieldId == fieldId) {
+						filterValue = _self.filters[j].value;
+						filterOperator = _self.filters[j].operator;
+					}
+				}
+
+				if (filterValue && field.fieldType() === "date") {
+					var userAppOptions = kanban.app.current_user().optionsApp();
+					filterValue = Date.prototype.formatDate(filterValue, userAppOptions.date_view_format);
+				}
+
+				var storedFilter = {};
+				storedFilter.filterValue = filterValue;
+				storedFilter["filterOperator" + filterOperator] = true;
+
+				var fieldOptions = field.options();
+
+				fieldHtml += kanban.templates['filter-' + field.fieldType()].render({
+					fieldId: fieldId,
+					storedFilter: storedFilter,
+					fieldOptions: fieldOptions
+				});
 			}
-
-			if (filterValue && field.fieldType() === "date") {
-				var userAppOptions = kanban.app.current_user().optionsApp();
-				filterValue = Date.prototype.formatDate(filterValue, userAppOptions.date_view_format);
-			}
-
-			var storedFilter = {};
-			storedFilter.filterValue = filterValue;
-			storedFilter["filterOperator" + filterOperator] = true;
-
-			var fieldOptions = field.options();
-
-			fieldHtml += kanban.templates['filter-' + field.fieldType()].render({
-				fieldId: fieldId,
-				storedFilter: storedFilter,
-				fieldOptions: fieldOptions
-			});
 		}
 
 		var modalHtml = kanban.templates['filter-modal'].render({
@@ -623,7 +624,11 @@ function Board(record) {
 						filteredFieldCount++;
 						continue;
 					}
-					for(var k = 0; k < fieldValues.length; k++) {
+					for(var k = 0; k < fieldValues.length; k++) {						
+						if ('undefined' === typeof kanban.fieldvalues[fieldValues[k]]) {
+							continue;
+						}
+
 						var fieldvalue = kanban.fieldvalues[fieldValues[k]];
 
 						if ('undefined' === typeof kanban.fields[fieldvalue.fieldId()]) {

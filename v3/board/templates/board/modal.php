@@ -254,7 +254,7 @@
 								</button>
 								{{lanesHtml}}
 								{{:lanesHtml}}
-								<span class="show-on-loading">
+								<span class="hide-on-loading">
 								<?php _e('Or', 'kanban') ?>
 								<button type="button"
 								        onclick="kanban.app.presetsToggleModal(this);"

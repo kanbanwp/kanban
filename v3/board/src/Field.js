@@ -17,7 +17,8 @@ function Field(record) {
 	this._self.options = {
 		placeholder: '',
 		is_hidden: false,
-		default_content: ''
+		default_content: '',
+		view_layout_width: '12'
 	};
 
 	this.record = function () {

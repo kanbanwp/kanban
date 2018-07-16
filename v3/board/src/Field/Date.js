@@ -110,51 +110,51 @@ function Field_Date(record) {
 
 	}; // onChange
 
-	this.optionsRender = function () {
-
-		var self = this;
-
-		var fieldRecord = self.record();
-
-		if ( 'undefined' === typeof fieldRecord.options.format || '' == fieldRecord.options.format )
-		{
-			fieldRecord.options.format = 'mm/dd/yyyy';
-		}
-
-		switch (fieldRecord.options.format) {
-			case 'mm/dd/yyyy':
-				fieldRecord.options['format-mmddyyyy'] = true;
-				break;
-			case 'dd/mm/yyyy':
-				fieldRecord.options['format-ddmmyyyy'] = true;
-				break;
-			case 'yyyy-mm-dd':
-				fieldRecord.options['format-yyyymmdd'] = true;
-				break;
-			case 'M d, yyyy':
-				fieldRecord.options['format-Mdyyyy'] = true;
-				break;
-		}
-
-		if ( 'undefined' === typeof fieldRecord.options.show_datecount || '' == fieldRecord.options.show_datecount )
-		{
-			fieldRecord.options.show_datecount = '0';
-		}
-
-		switch (fieldRecord.options.show_datecount) {
-			case '0':
-				fieldRecord.options['show_datecount'] = false;
-				break;
-			case '1':
-				fieldRecord.options['show_datecount'] = true;
-				break;			
-		}
-
-		return kanban.templates['board-modal-field-date'].render({
-			board: self.board().record(),
-			field: fieldRecord
-		});
-	}; // optionsRender
+	// this.optionsRender = function () {
+	//
+	// 	var self = this;
+	//
+	// 	var fieldRecord = self.record();
+	//
+	// 	if ( 'undefined' === typeof fieldRecord.options.format || '' == fieldRecord.options.format )
+	// 	{
+	// 		fieldRecord.options.format = 'mm/dd/yyyy';
+	// 	}
+	//
+	// 	switch (fieldRecord.options.format) {
+	// 		case 'mm/dd/yyyy':
+	// 			fieldRecord.options['format-mmddyyyy'] = true;
+	// 			break;
+	// 		case 'dd/mm/yyyy':
+	// 			fieldRecord.options['format-ddmmyyyy'] = true;
+	// 			break;
+	// 		case 'yyyy-mm-dd':
+	// 			fieldRecord.options['format-yyyymmdd'] = true;
+	// 			break;
+	// 		case 'M d, yyyy':
+	// 			fieldRecord.options['format-Mdyyyy'] = true;
+	// 			break;
+	// 	}
+	//
+	// 	if ( 'undefined' === typeof fieldRecord.options.show_datecount || '' == fieldRecord.options.show_datecount )
+	// 	{
+	// 		fieldRecord.options.show_datecount = '0';
+	// 	}
+	//
+	// 	switch (fieldRecord.options.show_datecount) {
+	// 		case '0':
+	// 			fieldRecord.options['show_datecount'] = false;
+	// 			break;
+	// 		case '1':
+	// 			fieldRecord.options['show_datecount'] = true;
+	// 			break;
+	// 	}
+	//
+	// 	return kanban.templates['board-modal-field-date'].render({
+	// 		board: self.board().record(),
+	// 		field: fieldRecord
+	// 	});
+	// }; // optionsRender
 
 	this.getValue = function ($field) {
 		// console.log('getValue');

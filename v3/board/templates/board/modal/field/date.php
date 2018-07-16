@@ -42,6 +42,8 @@
 							<label for="field-{{%field.id}}-show_datecount-1" class="btn btn-red"><?php _e( 'No', 'kanban'); ?></label>
 						</div><!--btn-group-->
 					</div><!--form-group -->
+
+					<?php include KANBAN_APP_DIR . '/inc/board/modal/field/option-layout-col.php' ?>
 					
 					<?php include KANBAN_APP_DIR . '/inc/board/modal/field/option-hidden.php' ?>
 

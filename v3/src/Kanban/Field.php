@@ -225,6 +225,9 @@ class Kanban_Field extends Kanban_Abstract {
 				case 'default_content':
 					$value = $this->format_string_for_db($value);
 					break;
+				case 'view_layout_width':
+					$value = $this->format_int_for_db($value);
+					break;
 				default:
 					unset($options[$key]);
 					break;
@@ -246,6 +249,9 @@ class Kanban_Field extends Kanban_Abstract {
 					break;
 				case 'default_content':
 					$value = $this->format_string_for_app($value);
+					break;
+				case 'view_layout_width':
+					$value = $this->format_int_for_app($value);
 					break;
 				default:
 					unset($options[$key]);

@@ -1,6 +1,7 @@
 <script class="template" type="t/template" data-id="field-colorpicker">
 
-	<div class="field field-{{%field.id}} field-{{%card.id}}-{{%field.id}} form-group form-group-colorpicker col col-sm-12"
+	<div class="field field-{{%field.id}} field-{{%card.id}}-{{%field.id}} form-group form-group-colorpicker col
+	col-sm-{{fieldOptions.view_layout_width}}{{%fieldOptions.view_layout_width}}{{:fieldOptions.view_layout_width}}12{{/fieldOptions.view_layout_width}}"
 	     id="field-{{%card.id}}-{{%field.id}}"
 	     data-id="{{%field.id}}"
 	     data-card-id="{{%card.id}}"

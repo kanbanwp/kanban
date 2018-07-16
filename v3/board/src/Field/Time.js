@@ -62,18 +62,18 @@ function Field_Time(record) {
 		});
 	}; // render
 
-	this.optionsRender = function () {
-		var self = this;
-		var fieldRecord = self.record();
-		var fieldOptions = functions.optionsFormat(self.options());
-
-		return kanban.templates['board-modal-field-time'].render({
-			board: self.board().record(),
-			field: fieldRecord,
-			fieldOptions: fieldOptions
-		});
-
-	}; // optionsRender
+	// this.optionsRender = function () {
+	// 	var self = this;
+	// 	var fieldRecord = self.record();
+	// 	var fieldOptions = functions.optionsFormat(self.options());
+	//
+	// 	return kanban.templates['board-modal-field-time'].render({
+	// 		board: self.board().record(),
+	// 		field: fieldRecord,
+	// 		fieldOptions: fieldOptions
+	// 	});
+	//
+	// }; // optionsRender
 
 	// this.addFunctionality = function($field) {
 	// 	var self = this;

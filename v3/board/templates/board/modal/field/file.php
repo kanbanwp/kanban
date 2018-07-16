@@ -17,6 +17,8 @@
 				<div class="wrapper-form-group row">
 					<?php include KANBAN_APP_DIR . '/inc/board/modal/field/title.php' ?>
 
+					<?php include KANBAN_APP_DIR . '/inc/board/modal/field/option-layout-col.php' ?>
+
 					<?php include KANBAN_APP_DIR . '/inc/board/modal/field/option-hidden.php' ?>
 
 				</div><!--wrapper-form-group-->

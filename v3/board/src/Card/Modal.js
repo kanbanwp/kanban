@@ -22,6 +22,8 @@ Card_Modal = function (card) {
 		var fieldHtml = '';
 		var boardRecord = self.card().board().record();
 
+		var isCardRead = kanban.app.current_user().hasCap('card-read');
+
 		for (var i in boardRecord.fields_order) {
 
 			var field_id = boardRecord.fields_order[i];
@@ -38,16 +40,23 @@ Card_Modal = function (card) {
 				fieldvalue = kanban.fieldvalues[self.card().fieldvaluesByField()[field_id]];
 			}
 
-			fieldHtml += field.render(fieldvalue, self.card());
+			// Show non-hidden fields, and hidden fields only if they have card-read.
+			if ( !field.isHidden() || (field.isHidden() && isCardRead) ) {
+				fieldHtml += field.render(fieldvalue, self.card());
+			}
 		}
 
-		var commentFormHtml = kanban.templates['card-modal-comment'].render({
-			cardId: self.card().id(),
-			isAuthor: false,
-			author: kanban.app.current_user().record(),
-			isEditing: true,
-			isForm: true
-		});
+		var commentFormHtml = '';
+		if ( kanban.app.current_user().hasCap('comment-write') ) {
+			commentFormHtml = kanban.templates['card-modal-comment'].render({
+				cardId: self.card().id(),
+				isAuthor: false,
+				author: kanban.app.current_user().record(),
+				isCardWrite: kanban.app.current_user().hasCap('card-write'),
+				isEditing: true,
+				isForm: true
+			});
+		}
 
 		var lanesSelectorHtml = '';
 		for (var i in boardRecord.lanes_order) {
@@ -66,6 +75,7 @@ Card_Modal = function (card) {
 			fields: fieldHtml,
 			commentForm: commentFormHtml,
 			card: self.card().record(),
+			isCommentRead: kanban.app.current_user().hasCap('comment-read') || kanban.app.current_user().hasCap('comment-write'),
 			isCardWrite: kanban.app.current_user().hasCap('card-write'),
 			currentUser: kanban.app.current_user().record(),
 			lanesSelector: lanesSelectorHtml
@@ -94,21 +104,23 @@ Card_Modal = function (card) {
 			kanban.fields[fieldId].addFunctionality($field);
 		}
 
-		// Get all comments.
-		if ( self.card().isCommentsLoaded() ) {
-			self.commentsRerender();
-		} else {
+		if ( kanban.app.current_user().hasCap('comment-read') || kanban.app.current_user().hasCap('comment-write') ) {
 
-			$.ajax({
-				data: {
-					type: 'comment',
-					action: 'get_by_card',
-					card_id: self.card().id()
-				}
-			})
+			// Get all comments.
+			if (self.card().isCommentsLoaded()) {
+				self.commentsRerender();
+			} else {
+
+				$.ajax({
+					data: {
+						type: 'comment',
+						action: 'get_by_card',
+						card_id: self.card().id()
+					}
+				})
 				.done(function (response) {
 
-					if ( 'undefined' === typeof response.data ) {
+					if ('undefined' === typeof response.data) {
 						kanban.app.notify(kanban.strings.comment.retrieve_error);
 						return false;
 					}
@@ -123,14 +135,15 @@ Card_Modal = function (card) {
 					self.card().setCommentsLoaded();
 
 				}); // done
+			}
 		}
 
 
 		// Attempt to reload tab
-		if ('undefined' !== typeof tab && '' != tab) {
+		if ('undefined' !== typeof tab && '' != tab && $('#modal-tab-' + tab).length == 1 ) {
 			$('#modal-tab-' + tab).trigger('click');
 		}
-		else if ('undefined' !== typeof kanban.app.url().params['tab']) {
+		else if ('undefined' !== typeof kanban.app.url().params['tab']  && $('#modal-tab-' + kanban.app.url().params['tab']).length == 1 ) {
 			$('#modal-tab-' + kanban.app.url().params['tab']).trigger('click');
 		}
 
@@ -283,8 +296,30 @@ Card_Modal = function (card) {
 		}
 
 		$('#card-modal-comments-list').html(commentHtml);
+		self.commentScrollBottom();
 
 	}; // rerender
+
+	this.commentsFilter = function (el) {
+		var self = this;
+
+		var $el = $(el);
+		var filter = $el.attr('data-filter');
+
+		switch (filter) {
+			case 'user':
+				$('#card-modal-comments-list .comment-user:hidden').slideDown('fast');
+				$('#card-modal-comments-list .comment-system:visible').slideUp('fast');
+				break;
+			case 'system':
+				$('#card-modal-comments-list .comment-system:hidden').slideDown('fast');
+				$('#card-modal-comments-list .comment-user:visible').slideUp('fast');
+				break;
+			default:
+				$('#card-modal-comments-list .comment:hidden').slideDown('fast');
+		} // switch
+
+	}; // commentsFilter
 
 	this.close = function () {
 		var self = this;

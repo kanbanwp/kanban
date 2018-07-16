@@ -36,6 +36,35 @@
 						</div><!--dropdown-->
 					</div><!--form-group -->
 
+					<div class="form-group form-group-toggle col col-sm-12">
+						<label><?php _e( 'Show in card corner:', 'kanban'); ?></label>
+
+						<div class="btn-group">
+							<input type="radio"
+							       onchange="kanban.fields[{{%field.id}}].optionOnChange(this);"
+							       data-name="view_card_corner"
+							       name="field-{{%field.id}}-view_card_corner"
+							       id="field-{{%field.id}}-view_card_corner-false"
+							       autocomplete="off"
+							       {{!fieldOptions.view_card_corner}}checked{{/!fieldOptions.view_card_corner}}
+							value="false">
+							<label for="field-{{%field.id}}-view_card_corner-false"
+							       class="btn"><?php _e( 'Yes', 'kanban'); ?></label>
+
+							<input type="radio"
+							       onchange="kanban.fields[{{%field.id}}].optionOnChange(this);"
+							       data-name="view_card_corner"
+							       name="field-{{%field.id}}-view_card_corner"
+							       id="field-{{%field.id}}-view_card_corner-true"
+							       autocomplete="off"
+							       {{fieldOptions.view_card_corner}}checked{{/fieldOptions.view_card_corner}}
+							value="true">
+							<label for="field-{{%field.id}}-view_card_corner-true"
+							       class="btn"><?php _e( 'No', 'kanban'); ?></label>
+						</div>
+					</div><!--form-group -->
+
+
 					<?php include KANBAN_APP_DIR . '/inc/board/modal/field/option-hidden.php' ?>
 				</div><!--wrapper-form-group-->
 

@@ -3,6 +3,13 @@
 	display: block;
 	position: relative;
 
+	&.is-editing {
+		.card-modal-comment-input {
+			background: $color-core-50;
+			min-height: 4em;
+		}
+	}
+
 	.card-modal-comment-input {
 		border-bottom-color: transparent;
 

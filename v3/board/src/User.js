@@ -10,6 +10,7 @@ function User(record) {
 		first_day_of_week: 'sunday',
 		live_updates_check_interval: 10,
 		do_live_updates_check: true,
+		do_notifications: true,
 		date_view_format: 'M d, yyyy',
 		current_board: null
 	};
@@ -71,6 +72,30 @@ function User(record) {
 	this.allowedFields = function () {
 		return functions.cloneArray(_self.allowedFields);
 	}; // allowedFields
+
+	this.follows = function (type) {
+
+		// For the future.
+		if ( 'undefined' !== typeof _self.record.follows[type] ) {
+			return functions.cloneArray(_self.record.follows[type]);
+		}
+
+		// Default to cards.
+		return functions.cloneArray(_self.record.follows.cards);
+
+	}; // follows
+
+	this.followsCard = function (cardId) {
+		return _self.record.follows.cards.indexOf(cardId) == -1 ? false : true;
+	}; // followsCard
+
+	this.followCard = function (cardId) {
+		_self.record.follows.cards.push(cardId);
+	}; // followsCard
+
+	this.unfollowCard = function (cardId) {
+		_self.record.follows.cards.remove(cardId);
+	}; // followsCard
 
 	this.optionBoardUpdate = function (option, value, boardId) {
 		var self = this;
@@ -145,6 +170,12 @@ function User(record) {
 			var options = response.data.options;
 
 			_self.record.options.app = options;
+
+			// Stop live updates.
+			if ( !kanban.app.current_user().do_live_updates_check() ) {
+				clearInterval(kanban.app.timers.updates);
+				return false;
+			}
 		});
 
 		var board = kanban.app.current_board();
@@ -187,6 +218,13 @@ function User(record) {
 	this.optionsApp = function () {
 		return $.extend(true, {}, _self.optionsApp, _self.record.options.app);
 	}; // options
+
+	// Dedicated function to this, since we're calling it often.
+	this.do_live_updates_check = function () {
+
+		// Default to true.
+		return _self.record.options.app.do_live_updates_check === false ? false : true;
+	}; // do_live_updates_check
 
 	this.capsAdmin = function () {
 		var self = this;

@@ -62,7 +62,7 @@ function Field_Tags(record) {
 		if ( 'undefined' !== typeof fieldvalue.record ) {
 			fieldvalueRecord = fieldvalue.record();
 		}
- 	
+
 		return kanban.templates['field-tags'].render({
 			field: fieldRecord,
 			fieldvalue: fieldvalueRecord,
@@ -73,6 +73,10 @@ function Field_Tags(record) {
 
 	this.addFunctionality = function ($field) {
 		var self = this;
+
+		if ( $field.hasClass('func-added') ) {
+			return false;
+		}
 
 		var items = [];
 		var fieldvalueId = $field.attr('data-fieldvalue-id');
@@ -130,6 +134,8 @@ function Field_Tags(record) {
 
 		var $selectize =  $('.field-tags-form-control', $field).selectize(selectizeOptions);
 
+		$field.addClass('func-added');
+
 	}; // addFunctionality
 	
 	// this.getSelectizeCreate = function() {
@@ -160,12 +166,14 @@ function Field_Tags(record) {
 		var fieldOptions = functions.optionsFormat(self.options());
 
 		var tagsHtml = "";
-		for(var tagId in fieldOptions.tags) {
-			var tag = fieldOptions.tags[tagId];
-			tagsHtml += kanban.templates['board-modal-field-tags-tag'].render({
-				tag: tag,
-				field_id: self.id()
-			});
+		if ( fieldOptions.tags.length > 0 ) {
+			for (var tagId in fieldOptions.tags) {
+				var tag = fieldOptions.tags[tagId];
+				tagsHtml += kanban.templates['board-modal-field-tags-tag'].render({
+					tag: tag,
+					field_id: self.id()
+				});
+			}
 		}
 
 		return kanban.templates['board-modal-field-tags'].render({
@@ -183,12 +191,9 @@ function Field_Tags(record) {
 			return false;
 		}
 
-		var timeId = Date.now();
-		var fieldRecord = self.record();
-
 		var optionHtml = kanban.templates['board-modal-field-tags-tag'].render({
 			tag: {
-				id: timeId
+				id: new Date().valueOf()
 			},
 			field_id: self.id()
 		});

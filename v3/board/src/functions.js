@@ -34,6 +34,27 @@ String.prototype.formatForApp = function () {
 // 	return new Date().valueOf() + (Math.floor((1 + Math.random()) * 0x10000));
 // };
 
+// Array.prototype.unique = function() {
+// 	var unique = [];
+// 	for (var i = 0; i < this.length; i++) {
+// 		if (unique.indexOf(this[i]) === -1) {
+// 			unique.push(this[i]);
+// 		}
+// 	}
+// 	return unique;
+// };
+
+Array.prototype.remove = function() {
+	var what, a = arguments, L = a.length, ax;
+	while (L && this.length) {
+		what = a[--L];
+		while ((ax = this.indexOf(what)) !== -1) {
+			this.splice(ax, 1);
+		}
+	}
+	return this;
+};
+
 Date.prototype.dateJsToMysql = function (dateObj, format) {
 	switch (format) {
 		case 'date':

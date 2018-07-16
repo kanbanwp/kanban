@@ -28,6 +28,30 @@ class Kanban_User extends Kanban_Abstract {
 
 	}
 
+	public function find_mentions_in_string ($content, $return = 'id') {
+		preg_match_all( '/data-mention=\"([0-9]*)\"/',
+			$content,
+			$matches,
+			PREG_PATTERN_ORDER
+		);
+
+		$user_ids = array();
+
+		if ( isset( $matches[1] ) && ! empty( $matches[1] ) ) {
+			$user_ids = array_filter( array_unique( $matches[1] ) );
+		}
+
+		if ( empty($user_ids) ) {
+			return $user_ids;
+		}
+
+		if ( $return == 'user' ) {
+			return $this->get_users($user_ids);
+		}
+
+		return $user_ids;
+	}
+
 	public function format_user_for_app( $user ) {
 
 		// Remove passwords, just in case.
@@ -71,9 +95,14 @@ class Kanban_User extends Kanban_Abstract {
 			'admin'  => array(),
 			'boards' => array(),
 		);
+
 		$user->options      = (object) array(
 			'app'    => array(),
 			'boards' => array(),
+		);
+
+		$user->follows = (object) array(
+			'cards' => array()
 		);
 
 		// Only return data, cos it's all we need.
@@ -103,7 +132,7 @@ class Kanban_User extends Kanban_Abstract {
 		return $users;
 	}
 
-	public function get_users( $user_ids, $with_boards = false ) {
+	public function get_users( $user_ids, $with_boards = false, $with_options = false ) {
 
 		if ( empty($user_ids) ) return array();
 
@@ -141,6 +170,25 @@ class Kanban_User extends Kanban_Abstract {
 
 		}
 
+		if ( $with_options ) {
+			$boards = Kanban_User_Option::instance()->get_boards_by_user_ids( $user_ids );
+
+			$boards_by_user_id = array();
+			foreach ( $boards as $board ) {
+
+				if ( ! is_array( $boards_by_user_id[ $board->user_id ] ) ) {
+					$boards_by_user_id[ $board->user_id ] = array();
+				}
+
+				$boards_by_user_id[ $board->user_id ][ $board->board_id ] = $board;
+			}
+
+			foreach ( $users_by_user_id as &$user ) {
+				$user = Kanban_User_Option::instance()->add_options_to_user( $user, $boards_by_user_id[ $user->id ] );
+			}
+
+		}
+
 		// If current user is included, make sure they have full caps.
 		if ( isset($users_by_user_id[get_current_user_id()]) ) {
 			$users_by_user_id[get_current_user_id()] = $this->get_current();
@@ -159,6 +207,8 @@ class Kanban_User extends Kanban_Abstract {
 			$user_id = get_current_user_id();
 
 			$current_user = $this->get_user( $user_id, true );
+
+			$current_user->follows->cards = Kanban_Card_User::instance()->get_card_ids_for_current_user();
 
 			// For debugging
 			if ( isset( $_GET['caps'] ) ) {
@@ -225,6 +275,9 @@ class Kanban_User extends Kanban_Abstract {
 			'options'            => (object) array(
 				'app'    => array(),
 				'boards' => array()
+			),
+			'follows'            => (object) array(
+				'cards'    => array()
 			)
 		);
 	}

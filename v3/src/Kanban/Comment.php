@@ -29,7 +29,7 @@ class Kanban_Comment extends Kanban_Abstract {
 
 	public function ajax_get_by_card ($data) {
 
-		if ( !Kanban_User::instance()->current_user_has_cap('comment-read') ) {
+		if ( !Kanban_User::instance()->current_user_has_cap('comment-read') && !Kanban_User::instance()->current_user_has_cap('comment-write') ) {
 			header( 'HTTP/1.1 401 Current user does not have cap' );
 			return false;
 		}
@@ -57,6 +57,9 @@ class Kanban_Comment extends Kanban_Abstract {
 		}
 
 		$row = $this->set_row( $data );
+
+		// Make sure the user who created the comment is following the card.
+		Kanban_Card_User::instance()->add_current_user_to_card($data['card_id']);
 
 		return $row;
 	}
@@ -154,7 +157,7 @@ class Kanban_Comment extends Kanban_Abstract {
 
 		$rows = $wpdb->get_results(
 			"
-					SELECT * 
+					SELECT $table.* 
 					FROM $table
 					WHERE 1=1
 					$isActive
@@ -180,7 +183,7 @@ class Kanban_Comment extends Kanban_Abstract {
 		$row = $wpdb->get_row(
 			$wpdb->prepare(
 				"
-					SELECT * 
+					SELECT $table.* 
 					FROM $table
 					WHERE 1=1
 					AND $table.id = %d

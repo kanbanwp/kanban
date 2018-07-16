@@ -291,6 +291,8 @@
 									<li><a href="javascript:void(0);" onclick="kanban.boards[{{%board.id}}].modal.fieldAdd(this);"
 									       data-field-type="file"><?php _e( 'File', 'kanban'); ?></a></li>
 									<li><a href="javascript:void(0);" onclick="kanban.boards[{{%board.id}}].modal.fieldAdd(this);"
+									       data-field-type="img"><?php _e( 'Image', 'kanban'); ?></a></li>
+									<li><a href="javascript:void(0);" onclick="kanban.boards[{{%board.id}}].modal.fieldAdd(this);"
 									       data-field-type="date"><?php _e( 'Date', 'kanban'); ?></a></li>
 									<li><a href="javascript:void(0);" onclick="kanban.boards[{{%board.id}}].modal.fieldAdd(this);"
 									       data-field-type="users"><?php _e( 'Users', 'kanban'); ?></a></li>

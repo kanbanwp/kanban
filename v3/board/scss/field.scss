@@ -1,7 +1,7 @@
 .form-group {
 	margin-bottom: $margin;
 	//position: relative;
-	z-index: 0;
+	//z-index: 0;
 
 	&.is-editing,
 	&.is-active {
@@ -42,6 +42,7 @@
 		height: auto;
 		padding: $margin/3 $margin/3 $margin/3 0;
 		transition: none;
+		z-index: auto;
 
 		-webkit-box-shadow: -$margin/5 0px 0px 0px transparent;
 		-moz-box-shadow: -$margin/5 0px 0px 0px transparent;
@@ -72,17 +73,18 @@
 				text-decoration: underline;
 			}
 
-			&:empty {
-
-				color: $color-core-300;
-
-				&:before {
-					content: attr(placeholder);
-					cursor: text;
-					font-size: .82em;
-					//display: block; /* For Firefox */
-				}
-			}
+			// Using medium editor placeholder.
+			//&:empty {
+			//
+			//	color: $color-core-300;
+			//
+			//	&:before {
+			//		content: attr(placeholder);
+			//		cursor: text;
+			//		font-size: .82em;
+			//		//display: block; /* For Firefox */
+			//	}
+			//}
 		}
 	} // form-control
 

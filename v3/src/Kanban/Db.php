@@ -27,6 +27,7 @@ class Kanban_Db {
 			'Kanban_Lane',
 			'Kanban_Card',
 			'Kanban_Card_Log',
+			'Kanban_Card_User',
 			'Kanban_Field',
 			'Kanban_Fieldvalue',
 			'Kanban_Fieldvalue_Log',

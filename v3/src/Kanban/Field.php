@@ -161,7 +161,7 @@ class Kanban_Field extends Kanban_Abstract {
 
 		$rows = $wpdb->get_results(
 			"
-					SELECT * 
+					SELECT $table.* 
 					FROM $table
 					WHERE 1=1
 					AND $table.is_active = 1
@@ -173,6 +173,11 @@ class Kanban_Field extends Kanban_Abstract {
 
 		foreach ( $rows as $row_id => &$row ) {
 			$row = $this->format_data_for_app( $row );
+
+			// Remove hidden fields if current user does not have card-read.
+			if ( isset($row->options['is_hidden']) && $row->options['is_hidden'] && ! Kanban_User::instance()->current_user_has_cap('card-read') ) {
+				unset( $rows[$row_id]);
+			}
 		}
 
 		return $rows;
@@ -188,7 +193,7 @@ class Kanban_Field extends Kanban_Abstract {
 		$row = $wpdb->get_row(
 			$wpdb->prepare(
 				"
-					SELECT * 
+					SELECT $table.* 
 					FROM $table
 					WHERE 1=1
 					AND $table.id = %d
@@ -335,16 +340,21 @@ class Kanban_Field extends Kanban_Abstract {
 		return $class;
 	}
 
-	public function get_label ($row) {
-		if ( isset($row->label) && !empty($row->label) ) {
-			return $row->label;
+	public function get_label ($field) {
+
+		if ( is_numeric($field) ) {
+			$field = $this->get_row($field);
 		}
 
-		if ( isset($row->field_type) && !empty($row->field_type) ) {
-			return $row->field_type;
+		if ( isset($field->label) && !empty($field->label) ) {
+			return $field->label;
 		}
 
-		return __('unnamed');
+		if ( isset($field->field_type) && !empty($field->field_type) ) {
+			return $field->field_type;
+		}
+
+		return __('New field');
 	}
 
 

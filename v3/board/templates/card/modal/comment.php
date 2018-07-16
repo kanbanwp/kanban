@@ -1,6 +1,6 @@
 <script class="template" type="t/template" data-id="card-modal-comment">
 
-	<div class="comment comment-{{%comment.id}} clearfix {{isEditing}}is-editing{{/isEditing}}"
+	<div class="comment comment-{{%comment.id}} comment-{{%comment.comment_type}} clearfix {{isEditing}}is-editing{{/isEditing}}"
 	     {{isForm}}id="card-modal-comment-form"{{/isForm}}
 	     data-id="{{%comment.id}}"
 	     data-card-id="{{%cardId}}">

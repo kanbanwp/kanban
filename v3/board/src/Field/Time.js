@@ -73,29 +73,12 @@ function Field_Time(record) {
 			fieldOptions: fieldOptions
 		});
 
-		var fieldOptions = functions.optionsFormat(self.options());
-
-		var tagsHtml = "";
-		for(var tagId in fieldOptions.tags) {
-			var tag = fieldOptions.tags[tagId];
-			tagsHtml += kanban.templates['board-modal-field-tags-tag'].render({
-				tag: tag,
-				field_id: self.id()
-			});
-		}
-
-		return kanban.templates['board-modal-field-tags'].render({
-			board: self.board().record(),
-			field: self.record(),
-			fieldOptions: fieldOptions,
-			tagsHtml: tagsHtml
-		});
 	}; // optionsRender
 
-	this.addFunctionality = function($field) {
-		var self = this;
-
-	}; // addFunctionality
+	// this.addFunctionality = function($field) {
+	// 	var self = this;
+	//
+	// }; // addFunctionality
 
 
 	/*

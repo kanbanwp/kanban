@@ -296,15 +296,15 @@ function Board(record) {
 	}; // tabToBoard
 
 	this.show = function (isBoardChange) {
-		// console.log('show');
+		console.log('board.show');
+
+		var self = this;
 
 		//reset search when board is changed by user
 		if (isBoardChange === true) {
 			$('#footer input[type=search]').val('');
 			kanban.app.urlParamRemove('search');
 		}
-
-		var self = this;
 
 		if (!self.isLanesLoaded()) {
 			// $('#wrapper-board').html(`<div class="container" id="board-placeholder">
@@ -398,8 +398,9 @@ function Board(record) {
 		self.addDragAndDrop();
 
 		setTimeout(function () {
-			for (var i in self.lanesOrder()) {
-				var laneId = self.lanesOrder()[i];
+			var lanesOrder = self.lanesOrder();
+			for (var i in lanesOrder) {
+				var laneId = lanesOrder[i];
 
 				if ('undefined' !== typeof kanban.lanes[laneId]) {
 					kanban.lanes[laneId].addFunctionality();
@@ -726,6 +727,12 @@ function Board(record) {
 			cap.is_readonly = false;
 
 			cap.classes = '';
+
+			// Every user can read cards. That's the point.
+			if (capName == 'card-read') {
+				cap.is_checked = true;
+				cap.is_readonly = true;
+			}
 
 			if (capName == 'board' && cap.is_checked) {
 				isAdmin = true;

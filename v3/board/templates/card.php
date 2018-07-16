@@ -17,11 +17,14 @@
 			<a href="javascript:void(0);" class="btn btn-sm btn-fade btn-empty card-edit"
 			        type="button"
 			        onclick="kanban.cards[{{%card.id}}].editButtonOnclick(this);"
-			        onmouseenter="kanban.cards[{{%card.id}}].menuShow(this);"
-			        onmouseleave="kanban.cards[{{%card.id}}].menuHideDelay(this);">
+			   {{isCardWrite}}
+			        onmouseenter="kanban.cards[{{%card.id}}].menuShowDelay(this);"
+			        onmouseleave="kanban.cards[{{%card.id}}].menuHideDelay(this);"
+			   {{/isCardWrite}}>
 				<i class="ei ei-pencil" style="color: {{%lane.color}}"></i>
 			</a>
 
+			{{isCommentRead}}
 			<button class="btn btn-sm btn-fade btn-empty card-comments"
 			        type="button"
 			        onclick="kanban.cards[{{%card.id}}].modal.show(this, 'comments');"
@@ -33,7 +36,7 @@
 				</span>
 
 			</button>
-
+			{{/isCommentRead}}
 		</div>
 
 		{{fields_hidden}}

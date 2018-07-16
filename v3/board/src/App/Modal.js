@@ -15,16 +15,17 @@ App_Modal = function (app) {
 
 		var self = this;
 
-		if ( !kanban.app.current_user().hasCap('admin-users') ) {
-			kanban.app.urlParamRemove('modal');
-			kanban.app.urlReplace();
-			return false;
-		}
+		// if ( !kanban.app.current_user().hasCap('admin-users') ) {
+		// 	kanban.app.urlParamRemove('modal');
+		// 	kanban.app.urlReplace();
+		// 	return false;
+		// }
 
 		var optionsApp = functions.optionsFormat(kanban.app.options());
 		var optionsUser = functions.optionsFormat(kanban.app.current_user().optionsApp());
 
 		var appModalHtml = kanban.templates['app-modal'].render({
+			currentUserIsAdmin: kanban.app.current_user().hasCap('admin-users'),
 			optionsUser: optionsUser,
 			optionsApp: optionsApp
 		});
@@ -45,88 +46,90 @@ App_Modal = function (app) {
 			$('#modal-tab-' + kanban.app.url().params['tab']).trigger('click');
 		}
 
-		// Get all users for searching
-		$.when($.ajax({
-			data: {
-				type: 'user',
-				action: 'get_admin'
-			}
-		}), $.ajax({
-			data: {
-				type: 'user',
-				action: 'get_wp_users'
-			}
-		}))
-		.done(function(response_admin_users, response_wp_users){
+		if ( kanban.app.current_user().hasCap('admin-users') ) {
+			// Get all users for searching
+			$.when($.ajax({
+				data: {
+					type: 'user',
+					action: 'get_admin'
+				}
+			}), $.ajax({
+				data: {
+					type: 'user',
+					action: 'get_wp_users'
+				}
+			}))
+			.done(function (response_admin_users, response_wp_users) {
 
-			if ( 'undefined' === typeof response_admin_users || 'undefined' === typeof response_admin_users[0] || 'undefined' === typeof response_admin_users[0].data ) {
-				return false;
-			}
-
-			if ( 'undefined' === typeof response_wp_users || 'undefined' === typeof response_wp_users[0] || 'undefined' === typeof response_wp_users[0].data ) {
-				return false;
-			}
-
-			var response_admin_users = response_admin_users[0].data;
-			var response_wp_users = response_wp_users[0].data;
-
-			// Build admin users html.
-			var usersHtml = '';
-			for (var userId in response_admin_users ) {
-
-				var userRecord = response_admin_users[userId];
-
-				// Replace to ensure they have caps.
-				var user = kanban.users[userId] = new User(userRecord);
-
-				usersHtml += self.userRender(user);
-			}
-
-			// Populate user users html.
-			$('#app-modal-users-accordion').html(usersHtml);
-
-
-			var values = [];
-			for ( var userId in response_wp_users ) {
-
-				// Skip users already added.
-				if ( 'undefined' !== typeof response_admin_users[userId] ) {
-					continue;
+				if ('undefined' === typeof response_admin_users || 'undefined' === typeof response_admin_users[0] || 'undefined' === typeof response_admin_users[0].data) {
+					return false;
 				}
 
-				if ( 'undefined' === typeof kanban.users[userId] ) {
-					kanban.users[userId] = response_wp_users[userId];
+				if ('undefined' === typeof response_wp_users || 'undefined' === typeof response_wp_users[0] || 'undefined' === typeof response_wp_users[0].data) {
+					return false;
 				}
 
-				values.push(response_wp_users[userId]);
-			}
+				var response_admin_users = response_admin_users[0].data;
+				var response_wp_users = response_wp_users[0].data;
 
-			$('#app-modal-user-find-control').selectize({
-				placeholder: 'Enter a name or email address to find a user',
-				options: values,
-				valueField: 'id',
-				searchField: ['display_name', 'user_email'],
-				closeAfterSelect: true,
-				render: {
-					option: function(item, escape) {
-						var label = item.display_name || item.user_email;
-						var caption = item.display_name ? item.user_email : null;
-						return '<div>' +
-							'<span class="b">' + escape(label) + '</span> ' +
-							(caption ? '(' + escape(caption) + ')' : '') +
-							'</div>';
+				// Build admin users html.
+				var usersHtml = '';
+				for (var userId in response_admin_users) {
+
+					var userRecord = response_admin_users[userId];
+
+					// Replace to ensure they have caps.
+					var user = kanban.users[userId] = new User(userRecord);
+
+					usersHtml += self.userRender(user);
+				}
+
+				// Populate user users html.
+				$('#app-modal-users-accordion').html(usersHtml);
+
+
+				var values = [];
+				for (var userId in response_wp_users) {
+
+					// Skip users already added.
+					if ('undefined' !== typeof response_admin_users[userId]) {
+						continue;
 					}
-				},
-				onChange: function (value) {
-					self.userAdd(value);
-					this.removeOption(value, true);
-					this.clear(true);
+
+					if ('undefined' === typeof kanban.users[userId]) {
+						kanban.users[userId] = response_wp_users[userId];
+					}
+
+					values.push(response_wp_users[userId]);
 				}
+
+				$('#app-modal-user-find-control').selectize({
+					placeholder: 'Enter a name or email address to find a user',
+					options: values,
+					valueField: 'id',
+					searchField: ['display_name', 'user_email'],
+					closeAfterSelect: true,
+					render: {
+						option: function (item, escape) {
+							var label = item.display_name || item.user_email;
+							var caption = item.display_name ? item.user_email : null;
+							return '<div>' +
+								'<span class="b">' + escape(label) + '</span> ' +
+								(caption ? '(' + escape(caption) + ')' : '') +
+								'</div>';
+						}
+					},
+					onChange: function (value) {
+						self.userAdd(value);
+						this.removeOption(value, true);
+						this.clear(true);
+					}
+				});
+
+				$('#modal-tab-pane-users').removeClass('loading');
+
 			});
-
-			$('#modal-tab-pane-users').removeClass('loading');
-
-		});
+		}
 		
 		kanban.app.urlParamUpdate('modal', 'app');
 		kanban.app.urlReplace();

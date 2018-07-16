@@ -1,7 +1,7 @@
 <script class="template" type="t/template" data-id="app-modal">
 
 	<div id="app-modal" class="modal-dialog modal-lg">
-		<div class="modal-content" data-label="<?php _e( 'Edit the app', 'kanban' ); ?>">
+		<div class="modal-content" data-label="<?php _e( 'App settings', 'kanban' ); ?>">
 			<div id="modal-header">
 				<div class="navbar-header">
 					<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#modal-navbar">
@@ -11,7 +11,7 @@
 						<span class="icon-bar"></span>
 					</button>
 
-					<span class="navbar-brand visible-xs visible-sm"><?php _e( 'Edit the app', 'kanban'); ?></span>
+					<span class="navbar-brand visible-xs visible-sm"><?php _e( 'App settings', 'kanban'); ?></span>
 				</div>
 				<div id="modal-navbar" class="collapse navbar-collapse">
 					<ul class="nav navbar-nav">
@@ -21,12 +21,14 @@
 							   id="modal-tab-options"
 							   onclick="kanban.app.modal.tabChange(this);"><?php _e( 'Options', 'kanban'); ?></a></li>
 						</li>
+						{{currentUserIsAdmin}}
 						<li>
 							<a href="javascript:void(0);"
 							   data-target="users"
 							   id="modal-tab-users"
 							   onclick="kanban.app.modal.tabChange(this);"><?php _e( 'Users', 'kanban'); ?></a>
 						</li>
+						{{/currentUserIsAdmin}}
 						<li class="pull-right">
 							<a href="javascript:void(0);"
 							   onclick="kanban.app.modal.close(this);">
@@ -65,7 +67,7 @@
 											<?php _e('Options', 'kanban') ?>
 											</a>
 									</div>
-									<div id="app-modal-options-options" class="panel-collapse collapse">
+									<div id="app-modal-options-options" class="panel-collapse collapse in">
 										<div class="panel-body">
 
 											<div class="wrapper-form-group row">
@@ -150,12 +152,12 @@
 														<input type="radio"
 														       onchange="kanban.app.modal.optionUserOnChange(this);"
 														       data-name="date_view_format"
-														       name="field-{{%field.id}}-options-format"
-														       id="field-{{%field.id}}-options-format-mm_dd_yyyy"
+														       name="field-{{%field.id}}-options-date-format"
+														       id="field-{{%field.id}}-options-date-format-mm_dd_yyyy"
 														       autocomplete="off"
 														       {{optionsUser.date_view_format-mm_dd_yyyy}}checked{{/optionsUser.date_view_format-mm_dd_yyyy}}
 														value="mm/dd/yyyy">
-														<label for="field-{{%field.id}}-options-format-mm_dd_yyyy" class="btn btn-default">
+														<label for="field-{{%field.id}}-options-date-format-mm_dd_yyyy" class="btn btn-default">
 															<?php echo date('m\/d\/Y') ?>
 															<?php _e( '(mm/dd/yyyy)', 'kanban'); ?>
 														</label>
@@ -163,12 +165,12 @@
 														<input type="radio"
 														       onchange="kanban.app.modal.optionUserOnChange(this);"
 														       data-name="date_view_format"
-														       name="field-{{%field.id}}-options-format"
-														       id="field-{{%field.id}}-options-format-dd_mm_yyyy"
+														       name="field-{{%field.id}}-options-date-format"
+														       id="field-{{%field.id}}-options-date-format-dd_mm_yyyy"
 														       autocomplete="off"
 														       {{optionsUser.date_view_format-dd_mm_yyyy}}checked{{/optionsUser.date_view_format-dd_mm_yyyy}}
 														value="dd/mm/yyyy">
-														<label for="field-{{%field.id}}-options-format-dd_mm_yyyy" class="btn btn-default">
+														<label for="field-{{%field.id}}-options-date-format-dd_mm_yyyy" class="btn btn-default">
 															<?php echo date('d\/m\/Y') ?>
 															<?php _e( '(dd/mm/yyyy)', 'kanban'); ?>
 														</label>
@@ -176,12 +178,12 @@
 														<input type="radio"
 														       onchange="kanban.app.modal.optionUserOnChange(this);"
 														       data-name="date_view_format"
-														       name="field-{{%field.id}}-options-format"
-														       id="field-{{%field.id}}-options-format-yyyy_mm_dd"
+														       name="field-{{%field.id}}-options-date-format"
+														       id="field-{{%field.id}}-options-date-format-yyyy_mm_dd"
 														       autocomplete="off"
 														       {{optionsUser.date_view_format-yyyy_mm_dd}}checked{{/optionsUser.date_view_format-yyyy_mm_dd}}
 														value="yyyy-mm-dd">
-														<label for="field-{{%field.id}}-options-format-yyyy_mm_dd" class="btn btn-default">
+														<label for="field-{{%field.id}}-options-date-format-yyyy_mm_dd" class="btn btn-default">
 															<?php echo date('Y-m-d') ?>
 															<?php _e( '(yyyy-mm-dd)', 'kanban'); ?>
 														</label>
@@ -189,19 +191,19 @@
 														<input type="radio"
 														       onchange="kanban.app.modal.optionUserOnChange(this);"
 														       data-name="date_view_format"
-														       name="field-{{%field.id}}-options-format"
-														       id="field-{{%field.id}}-options-format-Mdyyyy"
+														       name="field-{{%field.id}}-options-date-format"
+														       id="field-{{%field.id}}-options-date-format-Mdyyyy"
 														       autocomplete="off"
 														       {{optionsUser.date_view_format-M_d_yyyy}}checked{{/optionsUser.date_view_format-M_d_yyyy}}
 														value="M d, yyyy">
-														<label for="field-{{%field.id}}-options-format-Mdyyyy" class="btn btn-default">
+														<label for="field-{{%field.id}}-options-date-format-Mdyyyy" class="btn btn-default">
 															<?php echo date('M j, Y') ?>
 															<?php _e( '(M d, yyyy)', 'kanban'); ?>
 														</label>
 													</div><!--btn-group-->
 												</div><!--form-group -->
 
-
+												{{currentUserIsAdmin}}
 												<div class="form-group form-group-toggle col col-sm-12">
 													<label><?php _e('Use Kanban for WordPress for the whole site:', 'kanban'); ?></label><br>
 
@@ -227,7 +229,7 @@
 													</div>
 
 												</div><!--form-group -->
-
+												{{/currentUserIsAdmin}}
 											</div><!--row-->
 										</div><!--body-->
 									</div><!--collapse-->
@@ -245,6 +247,8 @@
 									<div id="app-modal-options-notification" class="panel-collapse collapse">
 										<div class="panel-body">
 											<div class="wrapper-form-group row">
+
+												{{currentUserIsAdmin}}
 												<div class="form-group form-group-text col col-sm-12">
 													<label><?php _e( 'From name:', 'kanban'); ?></label>
 													<input type="text"
@@ -258,6 +262,9 @@
 													       placeholder="<?php _e( 'From name', 'kanban'); ?>"
 													       value="{{%optionsApp.notification_from_name}}">
 												</div><!--form-group -->
+												{{/currentUserIsAdmin}}
+
+												{{currentUserIsAdmin}}
 												<div class="form-group form-group-text col col-sm-12">
 													<label><?php _e( 'From email:', 'kanban'); ?></label>
 													<input type="text"
@@ -271,11 +278,38 @@
 													       placeholder="<?php _e( 'From email', 'kanban'); ?>"
 													       value="{{%optionsApp.notification_from_email}}">
 												</div><!--form-group -->
+												{{/currentUserIsAdmin}}
+
+												<div class="form-group form-group-toggle col col-sm-12">
+													<label><?php _e('Send notification emails:', 'kanban'); ?></label><br>
+
+													<div class="btn-group">
+														<input type="radio"
+														       onchange="kanban.app.modal.optionUserOnChange(this);"
+														       data-name="do_notifications"
+														       name="app-do_notifications"
+														       id="app-do_notifications-false"
+														       autocomplete="off"
+														       {{!optionsUser.do_notifications}}checked{{/!optionsUser.do_notifications}}
+														value="false">
+														<label for="app-do_notifications-false" class="btn"><?php _e( 'Yes', 'kanban'); ?></label>
+														<input type="radio"
+														       onchange="kanban.app.modal.optionUserOnChange(this);"
+														       data-name="do_notifications"
+														       name="app-do_notifications"
+														       id="app-do_notifications-true"
+														       autocomplete="off"
+														       {{optionsUser.do_notifications}}checked{{/optionsUser.do_notifications}}
+														value="true">
+														<label for="app-do_notifications-true" class="btn"><?php _e( 'No', 'kanban'); ?></label>
+													</div>
+
+												</div><!--form-group -->
 											</div><!--wrapper-form-group-->
 										</div><!--body-->
 									</div><!--collapse-->
 								</div><!--panel-->
-
+								<?php /*
 								<div class="panel panel-default">
 									<div class="panel-heading">
 										<a class="h4 panel-title"
@@ -291,10 +325,12 @@
 										</div><!--body-->
 									</div><!--collapse-->
 								</div><!--colors panel-->
+ */ ?>
 							</div>
 
 						</div><!--tab-pane-->
 
+						{{currentUserIsAdmin}}
 						<div  class="tab-pane" id="modal-tab-pane-users">
 							<?php /*
 							<div class="text-right">
@@ -315,7 +351,7 @@
 							        autocomplete="off"></select>
 
 						</div><!--tab-pane-->
-
+						{{/currentUserIsAdmin}}
 
 						<div  class="tab-pane" id="modal-tab-pane-usergroups">
 							<div class="panel-group" id="app-modal-usergroups-accordion">

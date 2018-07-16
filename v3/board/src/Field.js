@@ -110,6 +110,8 @@ function Field(record) {
 	}; // addFunctionality
 
 	this.rerender = function (fieldvalue, card) {
+		console.log('field.rerender');
+
 		var self = this;
 
 		// Find instances of field using class because it could be on card or modal.
@@ -128,6 +130,7 @@ function Field(record) {
 		var fieldHtml = self.render(fieldvalue, card);
 
 		$field.replaceWith(fieldHtml);
+
 		//get again the instance of field after it was replaced
 		$field = $('.field-' + card.id() + '-' + self.id());
 

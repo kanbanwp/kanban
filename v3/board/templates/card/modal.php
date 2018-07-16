@@ -26,12 +26,14 @@
 								<?php _e( 'Fields', 'kanban'); ?>
 							</a></li>
 						</li>
+						{{isCommentRead}}
 						<li>
 							<a href="javascript:void(0);"
 							   data-target="comments"
 							   id="modal-tab-comments"
 							   onclick="kanban.app.modal.tabChange(this);"><?php _e( 'Comments', 'kanban'); ?></a>
 						</li>
+						{{/isCommentRead}}
 						<li class="pull-right">
 							<a href="javascript:void(0);"
 						        onclick="kanban.cards[{{%card.id}}].modal.close(this);">
@@ -39,6 +41,7 @@
 								<i class="ei ei-close hidden-xs"></i>
 							</a>
 						</li>
+						{{isCardWrite}}
 						<li class="pull-right">
 							<a href="javascript:void(0);"
 							   data-target="actions"
@@ -48,6 +51,7 @@
 								<i class="ei ei-cog hidden-xs"></i>
 							</a>
 						</li>
+						{{/isCardWrite}}
 					</ul>
 				</div><!--/.nav-collapse -->
 			</div><!--modal-header-->
@@ -74,7 +78,31 @@
 
 					</div><!--tab-fields-->
 
+					{{isCommentRead}}
 					<div class="tab-pane" id="modal-tab-pane-comments">
+
+						<div class="text-right">
+							<div class="btn-group" data-toggle="buttons">
+								<button type="button" class="btn btn-xs btn-default active"
+							        onclick="kanban.cards[{{%card.id}}].modal.commentsFilter(this);"
+							        data-filter="all">
+									<?php _e('All', 'kanban') ?>
+									<input type="radio" name="card-comments-filter" value="all" checked>
+								</button>
+								<button type="button" class="btn btn-xs btn-default"
+								        onclick="kanban.cards[{{%card.id}}].modal.commentsFilter(this);"
+								        data-filter="user">
+									<?php _e('User', 'kanban') ?>
+									<input type="radio" name="card-comments-filter" value="user">
+								</button>
+								<button type="button" class="btn btn-xs btn-default"
+								        onclick="kanban.cards[{{%card.id}}].modal.commentsFilter(this);"
+								        data-filter="system">
+									<?php _e('system', 'kanban') ?>
+									<input type="radio" name="card-comments-filter" value="system">
+								</button>
+							</div>
+						</div>
 
 						<div id="wrapper-card-modal-comments">
 
@@ -88,6 +116,7 @@
 						</div><!--wrapper-card-modal-comments-->
 
 					</div><!--tab-comments-->
+					{{/isCommentRead}}
 
 					<div  class="tab-pane" id="modal-tab-pane-actions">
 						<p>

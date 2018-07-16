@@ -29,9 +29,29 @@ class Kanban_Template {
 			include_once $filename;
 
 		}
-
 	}
 
+
+	public function render( $file, $tags = array() ) {
+
+		if ( !file_exists( $file ) ) {
+			die ( 'Error:Template file ' . $file . ' not found' );
+		}
+
+		if ( !empty($tags) ) {
+			extract($tags);
+		}
+
+		ob_start();
+
+		include( $file );
+
+		$content = ob_get_contents();
+
+		ob_end_clean();
+
+		return $content;
+	}
 
 	/**
 	 * get the instance of this class

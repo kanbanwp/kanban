@@ -129,7 +129,23 @@ body > #app-color-picker {
 }
 
 #app-color-picker {
-	margin: $margin/3 $margin/2;
+	margin: 0 $margin/3;
+
+	.row {
+		margin: 0;
+	}
+
+	.col {
+		padding: $margin/5;
+		text-align: center;
+
+		b {
+			border-radius: 50%;
+			display: inline-block;
+			height: 2em;
+			width: 2em;
+		}
+	}
 }
 
 

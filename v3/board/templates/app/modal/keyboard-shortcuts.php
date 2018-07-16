@@ -11,7 +11,7 @@
 						<span class="icon-bar"></span>
 					</button>
 
-					<span class="navbar-brand visible-xs visible-sm"><?php _e( 'Edit the app', 'kanban'); ?></span>
+					<span class="navbar-brand visible-xs visible-sm"><?php _e( 'App settings', 'kanban'); ?></span>
 				</div>
 				<div id="modal-navbar" class="collapse navbar-collapse">
 					<ul class="nav navbar-nav">

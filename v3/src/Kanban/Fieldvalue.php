@@ -50,8 +50,15 @@ class Kanban_Fieldvalue extends Kanban_Abstract {
 			return false;
 		}
 
+		$row_prev = (object) array();
 		if ( isset( $data['fieldvalue_id'] ) ) {
 			$data['id'] = $data['fieldvalue_id'];
+			$row_prev = Kanban_Fieldvalue::get_row( $data['fieldvalue_id'] );
+		}
+
+		$prev_content = '';
+		if ( isset( $row_prev->content ) ) {
+			$prev_content = $row_prev->content;
 		}
 
 		$row = $this->set_row( $data );
@@ -62,82 +69,120 @@ class Kanban_Fieldvalue extends Kanban_Abstract {
 			'content' => $row->content
 		) );
 
+		do_action(
+			'kanban_fieldvalue_ajax_replace_set_row_after',
+			$row,
+			$prev_content
+		);
+
 		return $row;
 	}
 
 	public function set_row( $data ) {
 
-		$row = (object) array();
-		if ( isset( $data['fieldvalue_id'] ) ) {
-			$row = Kanban_Fieldvalue::get_row( $data['fieldvalue_id'] );
-		}
+//		$row = (object) array();
+//		if ( isset( $data['fieldvalue_id'] ) ) {
+//			$row = Kanban_Fieldvalue::get_row( $data['fieldvalue_id'] );
+//		}
+//
+//		$prev_content = '';
+//		if ( isset( $row->content ) ) {
+//			$prev_content = $row->content;
+//		}
 
-		$prev_content = '';
-		if ( isset( $row->content ) ) {
-			$prev_content = $row->content;
-		}
+		return parent::set_row( $data );
 
-		$row = parent::set_row( $data );
+//		$field = Kanban_Field::instance()->get_row( $row->field_id );
+//
+//		$class = Kanban_Field::instance()->get_fieldtype_class( $field->field_type );
+//
+//		$data['content'] = $class::instance()->format_content_for_app( $data['content'] );
 
-		$field = Kanban_Field::instance()->get_row( $row->field_id );
+//		if ( isset( $data['content'] ) && !empty($data['content']) && is_string($data['content']) && $data['content'] != $prev_content )  {
+//
+//			preg_match_all( '/data-mention=\"([0-9]*)\"/',
+//				$data['content'],
+//				$matches,
+//				PREG_PATTERN_ORDER
+//			);
+//
+//			if ( isset( $matches[1] ) && ! empty( $matches[1] ) ) {
+//				$user_ids = array_filter( array_unique( $matches[1] ) );
+//
+//				// Remove the user that last modified it, so they don't notify themselves.
+//				if (($key = array_search( $row->modified_user_id, $user_ids)) !== false) {
+//					unset($user_ids[$key]);
+//				}
+//
+//				if ( ! empty( $user_ids ) ) {
+//					$board = Kanban_Board::instance()->get_row( $field->board_id );
+//
+//					$subject = sprintf(
+//						__( 'Board "%s": You were mentioned in field "%s" (card "%d")' ),
+//						Kanban_Board::instance()->get_label( $board ),
+//						Kanban_Field::instance()->get_label( $field ),
+//						$row->card_id
+//					);
+//
+//					$message = sprintf(
+//						'%s' . "\n\n"
+//						. '%s' . "\n\n"
+//						. '%s' . "\n"
+//						. '%s',
+//						__( 'Heads up!' ),
+//						sprintf(
+//							__( 'You were mentioned in the "%s" field on card "%d".' ),
+//							Kanban_Field::instance()->get_label( $field ),
+//							$row->card_id,
+//							Kanban_Board::instance()->get_label( $board )
+//						),
+//						__( 'Follow this link to read more:' ),
+//						add_query_arg(
+//							array(
+//								'board' => $field->board_id,
+//								'modal' => 'card',
+//								'card'  => $row->card_id
+//							),
+//							Kanban_Router::instance()->get_page_uri( 'board' )
+//						)
+//					);
+//
+//					Kanban_Notification::instance()->notify_users( $user_ids, $subject, $message );
+//				}
+//			}
+//		}
 
-		$class = Kanban_Field::instance()->get_fieldtype_class( $field->field_type );
+//		return $row;
+	}
 
-		$data['content'] = $class::instance()->format_content_for_app( $data['content'] );
+	public function get_row( $id ) {
+		global $wpdb;
 
-		if ( isset( $data['content'] ) && !empty($data['content']) && is_string($data['content']) && $data['content'] != $prev_content )  {
+		$table = Kanban_Db::instance()->prefix() . $this->get_table();
+		$table_field = Kanban_Db::instance()->prefix() . Kanban_Field::instance()->get_table();
 
-			preg_match_all( '/data-mention=\"([0-9]*)\"/',
-				$data['content'],
-				$matches,
-				PREG_PATTERN_ORDER
-			);
+		$row = $wpdb->get_row(
+			$wpdb->prepare(
+				"
+					SELECT $table.* ,
+					$table_field.`field_type`
+					
+					FROM $table
+					
+					LEFT JOIN $table_field
+					ON $table.`field_id` = $table_field.`id`
+					
+					WHERE 1=1
+					AND $table.id = %d
+				",
+				$id
+			),
+			OBJECT
+		);
 
-			if ( isset( $matches[1] ) && ! empty( $matches[1] ) ) {
-				$user_ids = array_filter( array_unique( $matches[1] ) );
+		if ( empty($row) ) return (object) array();
 
-				// Remove the user that last modified it, so they don't notify themselves.
-				if (($key = array_search( $row->modified_user_id, $user_ids)) !== false) {
-					unset($user_ids[$key]);
-				}
-
-				if ( ! empty( $user_ids ) ) {
-					$board = Kanban_Board::instance()->get_row( $field->board_id );
-
-					$subject = sprintf(
-						__( 'Board "%s": You were mentioned in field "%s" (card "%d")' ),
-						Kanban_Board::instance()->get_label( $board ),
-						Kanban_Field::instance()->get_label( $field ),
-						$row->card_id
-					);
-
-					$message = sprintf(
-						'%s' . "\n\n"
-						. '%s' . "\n\n"
-						. '%s' . "\n"
-						. '%s',
-						__( 'Heads up!' ),
-						sprintf(
-							__( 'You were mentioned in the "%s" field on card "%d".' ),
-							Kanban_Field::instance()->get_label( $field ),
-							$row->card_id,
-							Kanban_Board::instance()->get_label( $board )
-						),
-						__( 'Follow this link to read more:' ),
-						add_query_arg(
-							array(
-								'board' => $field->board_id,
-								'modal' => 'card',
-								'card'  => $row->card_id
-							),
-							Kanban_Router::instance()->get_page_uri( 'board' )
-						)
-					);
-
-					Kanban_Notification::instance()->notify_users( $user_ids, $subject, $message );
-				}
-			}
-		}
+		$row = $this->format_data_for_app( $row );
 
 		return $row;
 	}

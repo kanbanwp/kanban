@@ -34,7 +34,19 @@ function Lane(record) {
 	}; // id
 
 	this.cardsOrder = function () {
-		return _self.record.cards_order.slice();
+		var cardIds = [];
+		for (var i in _self.record.cards_order) {
+
+			var cardId = _self.record.cards_order[i];
+
+			if ('undefined' === typeof kanban.cards[cardId]) {
+				continue;
+			}
+
+			cardIds.push(cardId);
+		}
+
+		return cardIds;
 	}; // cardsOrder
 
 	this.allowedFields = function () {
@@ -248,7 +260,7 @@ function Lane(record) {
 				ui: board.ui()
 			},
 			cards: cardHtml,
-			cardCount: laneRecord.cards_order.length,
+			cardCount: self.cardsOrder().length,
 			lane: self.record(),
 			sidebar: sidebar,
 			active: active,
@@ -280,7 +292,8 @@ function Lane(record) {
 	}; // addFunctionality
 
 	this.rerender = function () {
-		// console.log('Lane.rerender');
+		console.log('Lane.rerender');
+
 		var self = this;
 
 		var $lane = $('#lane-' + self.id());
@@ -335,6 +348,9 @@ function Lane(record) {
 
 			var card = kanban.cards[cardId] = new Card(cardRecord);
 
+			// Add the card to the current users follows.
+			kanban.app.current_user().followCard(cardId);
+
 			var board = kanban.boards[self.board_id()];
 
 			// @todo focus on first field. Not sure why this doesn't work.
@@ -375,12 +391,14 @@ function Lane(record) {
 		var $cp = kanban.app.getColorPicker();
 		$dropdownMenu.html($cp);
 
-		$cp.one(
+		$('b', $cp).one(
 			'click',
 			function (e) {
 
+				var $b = $(this);
+
 				// Get the color.
-				var color = kanban.app.colorPickerOnclick(e);
+				var color = $b.attr('data-color');
 
 				// Put the color picker back.
 				$cp.appendTo('body');

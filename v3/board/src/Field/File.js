@@ -8,7 +8,7 @@ function Field_File(record) {
 	this._self.options = $.extend(
 		this._self.options,
 		{
-			allow_files: false
+			allow_multiple: false
 		});
 
 	this.render = function (fieldvalue, card) {
@@ -54,7 +54,7 @@ function Field_File(record) {
 			return false;
 		}
 
-		$field.one(
+		$field.on(
 			'mouseover',
 			function () {
 

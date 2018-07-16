@@ -1,17 +1,16 @@
 
+<link rel='stylesheet' href='<?php echo Kanban::get_instance()->settings->uri ?>v3/admin/css/admin.css' type='text/css' media='all' />
 
 <div class="wrap">
-	<p>
-	<a href="<?php echo Kanban_Template::get_uri() ?>" class="page-title-action" target="_blank" id="btn-go-to-board" onclick="window.open('<?php echo Kanban_Template::get_uri() ?>', 'kanbanboard'); return false;">
-		<?php echo __( 'Go to your board', 'kanban' ); ?>
-	</a>
-	</p>
 
-	<h1>
-		<?php echo __( 'Introducing the Version 3 beta', 'kanban' ); ?>
-	</h1>
 
-	<hr>
+	<header id="kanban-header">
+
+		<img src="<?php echo Kanban::get_instance()->settings->uri ?>/v3/img/kanbanwp-sq-black.svg" id="kanban-logo">
+
+		<h2>Introducing the Version 3 beta</h2>
+
+	</header>
 
 	<h3>
 		<b>Version 3 of Kanban for WordPress is all about customization.</b>
@@ -70,12 +69,25 @@
 		Shoot us a note with as much detail as you can, and we'll fix it as soon as possible.
 	</p>
 
+	<hr>
 
-	<p>
-		<a href="<?php print wp_nonce_url(admin_url('options.php?page=kanban'), 'kanban2_to_3');?>" class="button">
+	<p style="font-size: 1.382em;  text-align: center;">
+		Ready to give it a try?
+		<b style="background: yellow;">
+			Backup your site
+		</b>
+		and then...
+	</p>
+
+	<p style="margin-top: 90px; text-align: center;">
+		<a href="<?php print wp_nonce_url(admin_url('options.php?page=kanban'), 'kanban2_to_3');?>"
+		   style="position: relative"
+		   class="button button-primary">
 			Switch to version 3
 			(Extremely experimental)
+			<img src="<?php echo Kanban::get_instance()->settings->uri ?>/v3/img/bird 2-125.png" style="left: 20px; position: absolute; top: -77px;">
 		</a>
+
 	</p>
 
 

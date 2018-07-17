@@ -68,6 +68,11 @@ Date.prototype.dateJsToMysql = function (dateObj, format) {
 };
 
 Date.prototype.dateMysqlToJs = function (dateStr) {
+
+	if ( 'undefined' === typeof dateStr || dateStr.length == 0 ) {
+		return false;
+	}
+
 	var dateArr = dateStr.split('-');
 
 	//convert date string to UTC date

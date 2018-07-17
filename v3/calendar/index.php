@@ -1,6 +1,6 @@
 <?php
 
-$app_data = Kanban_App::instance()->get_app_data();
+$app_data = Kanban_App::instance()->get_calendar_data();
 
 ?><!DOCTYPE html>
 <html lang="en">
@@ -21,8 +21,29 @@ $app_data = Kanban_App::instance()->get_app_data();
 <div id="calendar"></div>
 </div>
 
+<script>
 
-<script src="/wp-content/plugins/kanban-pro/v3/calendar/js/app.js"></script>
+	//var eventData = <?php //echo json_encode($app_data) ?>//;
+
+	var kanban = {};
+
+	kanban.app = null;
+	kanban.boards = {};
+	kanban.lanes = {};
+	kanban.cards = {};
+	kanban.fields = {};
+	kanban.fieldvalues = {};
+	kanban.ajax = {
+		nonce: function () {
+			return '<?php echo wp_create_nonce( 'kanban' ) ?>';
+		},
+		url: function () {
+			return '<?php echo Kanban_Router::instance()->get_page_uri( 'ajax' ) ?>';
+		}
+	};
+</script>
+
+<script src="<?php echo Kanban_Router::instance()->get_uri('calendar') ?>/js/app.js"></script>
 
 </body>
 </html>

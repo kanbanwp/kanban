@@ -2,6 +2,14 @@
 	.form-control {
 		background: transparent;
 	}
+
+	.col-divider {
+		color: $color-core-300;
+		font-size: 1.618em;
+		line-height: 1;
+		padding: 0;
+	}
+
 	
 	.horizContainer {
 		position: relative;

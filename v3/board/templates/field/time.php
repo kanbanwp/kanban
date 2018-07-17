@@ -1,6 +1,7 @@
 <script class="template" type="t/template" data-id="field-time">
 
-	<div class="field field-{{%field.id}} field-{{%card.id}}-{{%field.id}} form-group form-group-time col col-sm-12"
+	<div class="field field-{{%field.id}} field-{{%card.id}}-{{%field.id}} form-group form-group-time col
+col-sm-{{field.options.view_layout_width}}{{%field.options.view_layout_width}}{{:field.options.view_layout_width}}12{{/field.options.view_layout_width}}"
 	     data-id="{{%field.id}}"
 	     data-card-id="{{%card.id}}"
 	     data-fieldvalue-id="{{%fieldvalue.id}}">
@@ -8,8 +9,8 @@
 		<label>{{=field.label}}:</label>
 		{{/field.label}}
 
-		<div class="clearfix">
-			<div class="col xxcol-sm-6 col-hours" data-label="<?php _e('h', 'kanban') ?>">
+		<div class="row">
+			<div class="col col-xs-5 col-hours" data-label="<?php _e('h', 'kanban') ?>">
 
 				<input class="form-control form-control-hours" type="number" step="{{%fieldOptions.step}}"
 				       min="0"
@@ -33,16 +34,14 @@
 						<i class=" ei ei-minus-06"></i>
 					</a>
 				</div>
-
 			</div>
 
 			{{fieldOptions.show_estimate}}
-
-			<div class="col">
+			<div class="col col-xs-1 col-divider">
 				/
 			</div>
 
-			<div class="col xxcol-sm-6 col-estimate" data-label="<?php _e('h', 'estimate') ?>">
+			<div class="col col-xs-5 col-estimate" data-label="<?php _e('h', 'estimate') ?>">
 
 				<input class="form-control form-control-estimate" type="number" step="{{%fieldOptions.step}}"
 				       min="0"
@@ -67,7 +66,6 @@
 					</a>
 				</div>
 			</div>
-
 			{{/fieldOptions.show_estimate}}
 
 		</div><!--row-->
@@ -79,6 +77,6 @@
 		</div>
 		{{/fieldOptions.show_estimate}}
 
-	</div>
+	</div><!--field-->
 
 </script>

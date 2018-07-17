@@ -1,8 +1,6 @@
 .form-group-time {
+
 	.col {
-		float: left;
-		line-height: 2.5;
-		margin-right: $margin;
 		position: relative;
 
 		&:hover .btn-group {
@@ -21,16 +19,21 @@
 		}
 	}
 
-	.form-control {
-		width: 4em;
+	.col-divider {
+		color: $color-core-300;
+		font-size: 1.618em;
+		line-height: 1.236;
+		padding-right: 0;
 	}
 
 	.btn-group {
 		display: none;
-		left: 0;
+		left: $margin;
 		position: absolute;
+		right: $margin;
 		top: 100%;
 		min-width: 6em;
 		width: auto;
 	}
+
 }

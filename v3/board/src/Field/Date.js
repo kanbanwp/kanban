@@ -8,7 +8,8 @@ function Field_Date(record) {
 	this._self.options = $.extend(
 		this._self.options,
 		{
-			show_datecount: false
+			show_datecount: false,
+			is_date_range: true
 		}
 	);
 
@@ -24,14 +25,25 @@ function Field_Date(record) {
 		}
 
 		var fieldRecord = self.record();
+		var fieldOptions = self.options();
+
 		var userAppOptions = kanban.app.current_user().optionsApp();
 
 		var fieldvalueRecord = {};
 		if ( 'undefined' !== typeof fieldvalue.record ) {
 			fieldvalueRecord = fieldvalue.record();
 
-			var jsDate = Date.prototype.dateMysqlToJs(fieldvalue.content());
-			fieldvalueRecord.content = Date.prototype.formatDate(jsDate, userAppOptions.date_view_format);
+			var jsDate = Date.prototype.dateMysqlToJs(fieldvalue.content().start);
+
+			if ( jsDate ) {
+				fieldvalueRecord.content.start = Date.prototype.formatDate(jsDate, userAppOptions.date_view_format);
+			}
+
+			var jsDate = Date.prototype.dateMysqlToJs(fieldvalue.content().end);
+
+			if ( jsDate ) {
+				fieldvalueRecord.content.end = Date.prototype.formatDate(jsDate, userAppOptions.date_view_format);
+			}
 			
 			if (fieldRecord.options.show_datecount == 1) {
 				fieldRecord.timeago_dt_gmt = jsDate;
@@ -39,7 +51,7 @@ function Field_Date(record) {
 			}			
 		}
 
-		fieldRecord.options.showCount = fieldRecord.options.show_datecount == 1;
+		// fieldRecord.options.showCount = fieldRecord.options.show_datecount == 1;
 
 		return kanban.templates['field-date'].render({
 			field: fieldRecord,
@@ -161,24 +173,52 @@ function Field_Date(record) {
 
 		var self = this;
 
-		var $input = $('.form-control', $field);
+		var $inputs = $('.form-control', $field);
 
-		// Use local (not gmt) to get actual date selected.
-		var content = $input.datepicker('getUTCDate');
+		var content = {
+			start: '',
+			end: ''
+		};
+		$inputs.each(function() {
+			var $input = $(this);
+			var dateName = $input.attr('data-name');
+
+			// Use local (not gmt) to get actual date selected.
+			content[dateName] = $input.datepicker('getUTCDate');
+			if ( null !== content[dateName] ) {
+				content[dateName] = Date.prototype.dateJsToMysql(content[dateName], 'date');
+			}
+		});
 
 		// Convert to mysql date.
-		return Date.prototype.dateJsToMysql(content, 'date');
+		return content;
 	}; // getValue
 
 	this.formatContentForComment = function (content) {
 		var self = this;
 
 		var userAppOptions = kanban.app.current_user().optionsApp();
+		var fieldOptions = self.options();
 
-		var jsDate = Date.prototype.dateMysqlToJs(content);
-		content = Date.prototype.formatDate(jsDate, userAppOptions.date_view_format);
+		var formatted_content = '';
 
-		return content;
+		var jsDate = Date.prototype.dateMysqlToJs(content.start);
+
+		if ( jsDate ) {
+			formatted_content += Date.prototype.formatDate(jsDate, userAppOptions.date_view_format);
+		}
+
+		if ( fieldOptions.is_date_range ) {
+			formatted_content += ' -> ';
+
+			var jsDate = Date.prototype.dateMysqlToJs(content.end);
+
+			if (jsDate) {
+				formatted_content += Date.prototype.formatDate(jsDate, userAppOptions.date_view_format);
+			}
+		}
+
+		return formatted_content;
 	}; // formatContentForComment
 
 	this.applyFilter = function(fieldValue, filterElement) {		

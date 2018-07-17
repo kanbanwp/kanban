@@ -208,6 +208,35 @@ class Kanban_Field extends Kanban_Abstract {
 		return $row;
 	}
 
+	public function get_row_by_fieldvalue_id ($fieldvalue_id ) {
+
+		global $wpdb;
+
+		$table = Kanban_Db::instance()->prefix() . $this->get_table();
+		$fieldvalue_table = Kanban_Db::instance()->prefix() . Kanban_Fieldvalue::instance()->get_table();
+
+		$row = $wpdb->get_row(
+			$wpdb->prepare(
+				"
+					SELECT $table.* 
+					FROM $table
+					
+					JOIN $fieldvalue_table
+					ON $table.id = $fieldvalue_table.field_id
+					
+					WHERE 1=1
+					AND $fieldvalue_table.id = %d
+				;",
+				$fieldvalue_id
+			),
+			OBJECT
+		);
+
+		$row = $this->format_data_for_app( $row );
+
+		return $row;
+	}
+
 	public function set_row( $data ) {
 		return parent::set_row( $data );
 	}

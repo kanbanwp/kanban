@@ -237,19 +237,11 @@ class Kanban_Fieldvalue extends Kanban_Abstract {
 		);
 
 		foreach ( $rows as $row_id => &$row ) {
-
-//			$class = __CLASS__;
-//			if ( class_exists(__CLASS__ . '_' . ucwords($row->field_type)) ) {
-//				$class = __CLASS__ . '_' . ucwords($row->field_type);
-//			}
-//
-//			$row = $class::instance()->format_data_for_app( $row );
-
 			$row = $this->format_data_for_app( $row );
 		}
 
 		return $rows;
-	}
+	} // get_results_by_cards
 
 	public function format_data_for_app( $row ) {
 

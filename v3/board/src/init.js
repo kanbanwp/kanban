@@ -1,10 +1,4 @@
-/**
- * @link http://www.webreference.com/programming/javascript/object-oriented_javascript3/2.html
- */
-
-// Hacky but probably best way to shim these modules
 // Note: jQuery is injected as a global by Webpack (see webpack.config.js)
-// We should add minify to Webpack to reduce the size of our bundle.
 require('../../js/t.min.js')
 require('bootstrap')
 require('bootstrap-datepicker')
@@ -52,7 +46,8 @@ $(function () {
 
 	$.ajaxSetup({
 		url: kanban.ajax.url(),
-		type: "POST"
+		type: "POST",
+		dataType: 'json'
 	});
 
 	$( document ).ajaxStart(function () {

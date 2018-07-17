@@ -236,7 +236,7 @@ function Field_Time(record) {
 
 		var percentage = self.getPercentage(val.hours, val.estimate);
 
-		$('.progress-bar').css('width', percentage + '%');
+		$('.progress-bar', $field).css('width', percentage + '%');
 
 	}; // updateProgressBar
 

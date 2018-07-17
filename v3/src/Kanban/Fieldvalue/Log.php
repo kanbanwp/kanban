@@ -67,7 +67,7 @@ class Kanban_Fieldvalue_Log extends Kanban_Abstract {
 			switch ( $key ) {
 				case 'content':
 
-					$field = Kanban_Field::instance()->get_row( $row['field_id'] );
+					$field = Kanban_Field::instance()->get_row_by_fieldvalue_id( $row['fieldvalue_id'] );
 					$class = Kanban_Field::instance()->get_fieldtype_class( $field->field_type );
 
 					$value = $class::instance()->format_content_for_db( $value );

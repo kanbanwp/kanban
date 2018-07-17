@@ -1,6 +1,6 @@
 
-<div class="form-group form-group-radio col col-sm-12">
-	<label><?php _e( 'Width on the card:', 'kanban'); ?></label><br>
+<div class="form-group form-group-radio">
+	<label><?php _e( 'Width on the card:', 'kanban'); ?></label>
 
 	<div class="btn-group-vertical">
 		<input type="radio"

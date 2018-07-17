@@ -9,7 +9,9 @@ class Kanban_Field_Date extends Kanban_Field {
 
 		if ( $fieldvalue->field_type != 'date') return;
 
-		$formatted_content = $this->format_content_for_emails($fieldvalue->content);
+		$field = Kanban_Field::instance()->get_row($fieldvalue->field_id);
+
+		$formatted_content = $this->format_content_for_emails($fieldvalue->content, $field);
 
 		$board_id = Kanban_Card::instance()->get_board_id_by_card_id($fieldvalue->card_id);
 
@@ -43,6 +45,58 @@ class Kanban_Field_Date extends Kanban_Field {
 		}
 	}
 
+	public function get_results_by_fields_between_dates( $field_ids, $start, $end) {
+
+		if ( !isset($start) || DateTime::createFromFormat( 'Y-m-d', $start ) === false ) {
+			$start = Date('Y-m-01');
+		}
+
+		if ( !isset($end) || DateTime::createFromFormat( 'Y-m-d', $end ) === false ) {
+			$end = Date('Y-m-t');
+		}
+
+		global $wpdb;
+
+		$table       = Kanban_Db::instance()->prefix() . Kanban_Fieldvalue::instance()->get_table();
+		$table_field = Kanban_Db::instance()->prefix() . Kanban_Field::instance()->get_table();
+
+		if ( is_numeric( $field_ids ) || is_string( $field_ids ) ) {
+			$field_ids = array( $field_ids );
+		}
+
+		$in = sprintf(
+			" AND $table.`field_id` IN (%s) ",
+			implode( ',', $field_ids )
+		);
+
+		$rows = $wpdb->get_results(
+			"
+				SELECT $table.*,
+				$table_field.`field_type`
+				 
+				FROM $table
+				
+				LEFT JOIN $table_field
+				ON $table.`field_id` = $table_field.`id`
+				
+				WHERE 1=1
+				AND $table.is_active = 1
+				$in
+				
+				AND DATE($table.`content`) >= '$start'
+				AND DATE($table.`content`) >= '$end'
+			;",
+			OBJECT_K
+		);
+//		echo $wpdb->last_query . ' - LINE ' . __LINE__ . "\n<br />";
+//		exit;
+		foreach ( $rows as $row_id => &$row ) {
+			$row = Kanban_Fieldvalue::instance()->format_data_for_app( $row );
+		}
+
+		return $rows;
+	} // get_results_by_fields
+
 	public function format_options_for_db($options) {
 
 		$field_options = parent::format_options_for_db($options);
@@ -50,6 +104,9 @@ class Kanban_Field_Date extends Kanban_Field {
 		foreach ( $options as $key => &$value ) {
 			switch ( $key ) {
 				case 'show_datecount':
+					$value = $this->format_bool_for_db($value);
+					break;
+				case 'is_date_range':
 					$value = $this->format_bool_for_db($value);
 					break;
 				default:
@@ -71,6 +128,9 @@ class Kanban_Field_Date extends Kanban_Field {
 				case 'show_datecount':
 					$value = $this->format_bool_for_app($value);
 					break;
+				case 'is_date_range':
+					$value = $this->format_bool_for_app($value);
+					break;
 				default:
 					unset($options[$key]);
 					break;
@@ -83,16 +143,52 @@ class Kanban_Field_Date extends Kanban_Field {
 		return (array) $options;
 	}
 
-	public function format_content_for_emails ($content) {
+	public function format_content_for_db($content) {
+
+		$content = $this->format_json_for_db($content);
+
+		return $content;
+	}
+
+	public function format_content_for_app($content) {
+
+		$content = $this->format_json_for_app($content);
+
+		return $content;
+	}
+
+	public function format_content_for_emails ($content, $field) {
 
 		if ( '' == $content ) {
 			return $content;
 		}
 
-		if ( DateTime::createFromFormat('Y-m-d', $content) !== FALSE ) {
-			$dt = DateTime::createFromFormat('Y-m-d', $content);
+		$current_user = Kanban_User::instance()->get_current();
+
+		if ( !isset($current_user->options->app['date_view_format']) ) {
+			$current_user->options->app['date_view_format'] = 'M d, yyyy';
 		}
 
+		$formatted_content = '';
+		if ( DateTime::createFromFormat('Y-m-d', $content->start) !== FALSE ) {
+			$dt = DateTime::createFromFormat('Y-m-d', $content->start);
+
+			$formatted_content .= $this->format_datetime_for_current_user($dt);
+		}
+
+		if ( $field->options['is_date_range'] ) {
+			$formatted_content .= ' -> ';
+
+			if ( DateTime::createFromFormat('Y-m-d', $content->end) !== FALSE ) {
+				$dt = DateTime::createFromFormat('Y-m-d', $content->end);
+				$formatted_content .= $this->format_datetime_for_current_user($dt);
+			}
+		}
+
+		return $formatted_content;
+	}
+
+	public function format_datetime_for_current_user ($dt) {
 		$current_user = Kanban_User::instance()->get_current();
 
 		if ( !isset($current_user->options->app['date_view_format']) ) {

@@ -68,9 +68,17 @@ Date.prototype.dateJsToMysql = function (dateObj, format) {
 };
 
 Date.prototype.dateMysqlToJs = function (dateStr) {
-	//convert date string to UTC date
 	var dateArr = dateStr.split('-');
-	return new Date(Date.UTC(dateArr[0], dateArr[1] - 1, dateArr[2], 0, 0, 0));
+
+	//convert date string to UTC date
+	var d = new Date(Date.UTC(dateArr[0], dateArr[1] - 1, dateArr[2], 0, 0, 0));
+
+	// Test for invalid date obj.
+	if ( d instanceof Date && !isNaN(d) ) {
+		return d;
+	}
+
+	return false;
 };
 
 Date.prototype.parseFormat = function (format) {

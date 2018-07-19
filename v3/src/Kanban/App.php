@@ -299,80 +299,118 @@ class Kanban_App {
 		return $data;
 	}
 
-	public function ajax_get_calendar_data() {
-
-		if ( !isset($_POST['start']) || DateTime::createFromFormat( 'Y-m-d', $_POST['start'] ) === false ) {
-			$_POST['start'] = Date('Y-m-01');
-		}
-
-		if ( !isset($_POST['end']) || DateTime::createFromFormat( 'Y-m-d', $_POST['end'] ) === false ) {
-			$_POST['end'] = Date('Y-m-t');
-		}
-
-		$app_data = $this->get_calendar_data( $_POST['start'], $_POST['end'] );
-
-		return $app_data;
-	}
-
-	public function get_calendar_data ($start = null, $end = null) {
-
-		if ( !isset($start) || DateTime::createFromFormat( 'Y-m-d', $start ) === false ) {
-			$start = Date('Y-m-01');
-		}
-
-		if ( !isset($end) || DateTime::createFromFormat( 'Y-m-d', $end ) === false ) {
-			$end = Date('Y-m-t');
-		}
-
-
-		$data = (object) array();
-
-		$current_user = Kanban_User::instance()->get_current();
-
-		$data->boards = Kanban_Board::instance()->get_results( );
-
-		// If user doesn't have current board.
-		if ( ! isset( $current_user->options->app['current_board'] ) || empty( $current_user->options->app['current_board'] ) || ! isset( $data->boards[ $current_user->options->app['current_board'] ] ) ) {
-
-			if ( ! empty( $data->boards ) ) {
-
-				// Get the first board.
-				reset( $data->boards );
-
-				// Set it.
-				$current_user->options->app['current_board'] = key( $data->boards );
-
-				// Save it.
-				Kanban_User_Option::instance()->replace_app ('current_board', key( $data->boards ));
-			}
-		}
-
-		$data->app               = Kanban_App_Option::instance()->get_row();
-		$data->app->current_user = $current_user->id;
-		$data->app->boards       = array_keys( $data->boards );
-
-		$data->fields = array();
-
-		if ( ! empty( $data->boards ) ) {
-			$board_ids    = array_keys( $data->boards );
-			$data->fields = Kanban_Field::instance()->get_results_by_boards( $board_ids );
-		}
-
-		foreach ($data->fields as $field_id => $field) {
-			if ( $field->field_type != 'date' ) {
-				unset($data->fields[$field_id]);
-			}
-		}
-
-		$data->fieldvalues = array();
-
-		if ( ! empty( $data->fields ) ) {
-			$field_ids          = array_keys( $data->fields );
-			$data->fieldvalues = Kanban_Field_Date::instance()->get_results_by_fields_between_dates( $field_ids, $start, $end );
-		}
-
-		return $data;
-	}
+//	public function ajax_get_calendar_data() {
+//
+//		if ( !isset($_POST['start']) || DateTime::createFromFormat( 'Y-m-d', $_POST['start'] ) === false ) {
+//			$_POST['start'] = Date('Y-m-01');
+//		}
+//
+//		if ( !isset($_POST['end']) || DateTime::createFromFormat( 'Y-m-d', $_POST['end'] ) === false ) {
+//			$_POST['end'] = Date('Y-m-t');
+//		}
+//
+//		$app_data = $this->get_calendar_data( $_POST['start'], $_POST['end'] );
+//
+//		return $app_data;
+//	}
+//
+//	public function get_calendar_data ($start = null, $end = null) {
+//
+//		if ( !isset($start) || DateTime::createFromFormat( 'Y-m-d', $start ) === false ) {
+//			$start = Date('Y-m-01');
+//		}
+//
+//		if ( !isset($end) || DateTime::createFromFormat( 'Y-m-d', $end ) === false ) {
+//			$end = Date('Y-m-t');
+//		}
+//
+//
+//		$data = (object) array();
+//
+//		$current_user = Kanban_User::instance()->get_current();
+//
+//		$data->boards = Kanban_Board::instance()->get_results( );
+//
+//		// If user doesn't have current board.
+//		if ( ! isset( $current_user->options->app['current_board'] ) || empty( $current_user->options->app['current_board'] ) || ! isset( $data->boards[ $current_user->options->app['current_board'] ] ) ) {
+//
+//			if ( ! empty( $data->boards ) ) {
+//
+//				// Get the first board.
+//				reset( $data->boards );
+//
+//				// Set it.
+//				$current_user->options->app['current_board'] = key( $data->boards );
+//
+//				// Save it.
+//				Kanban_User_Option::instance()->replace_app ('current_board', key( $data->boards ));
+//			}
+//		}
+//
+//		$data->app               = Kanban_App_Option::instance()->get_row();
+//		$data->app->current_user = $current_user->id;
+//		$data->app->boards       = array_keys( $data->boards );
+//
+//		$data->fields = array();
+//
+//		if ( ! empty( $data->boards ) ) {
+//			$board_ids    = array_keys( $data->boards );
+//			$data->fields = Kanban_Field::instance()->get_results_by_boards( array(1) ); // $board_ids
+//		}
+//
+//		$fields = array(
+//			'title_field' => 0,
+//			'date_field' => 0
+//		);
+//
+//		foreach ($data->fields as $field_id => $field) {
+//			if ( $fields['date_field'] == 0 && $field->field_type == 'date' ) {
+//				$fields['date_field'] = $field_id;
+//			}
+//
+//			if ( $fields['title_field'] == 0 && $field->field_type == 'title' ) {
+//				$fields['title_field'] = $field_id;
+//			}
+//
+//			if ( $fields['title_field'] > 0 && $fields['date_field'] > 0 ) break;
+//		}
+//
+//		global $wpdb;
+//
+//		$records = $wpdb->get_results(
+//			$wpdb->prepare("
+//					SELECT
+//					`datefield`.card_id,
+//					`datefield`.content AS 'dates',
+//					`titlefield`.content AS 'title'
+//
+//					FROM wp_kanban3_fieldvalues AS datefield
+//
+//					JOIN wp_kanban3_fieldvalues AS titlefield
+//					ON datefield.card_id = titlefield.card_id
+//
+//					WHERE 1=1
+//					AND `datefield`.field_id = %d
+//					AND `titlefield`.field_id = %d
+//
+//					GROUP BY `datefield`.card_id
+//				;",
+//				$fields['date_field'],
+//				$fields['title_field']
+//			));
+//
+//		$data->events = array();
+//		if ( !empty($records ) ) {
+//			foreach ($records as $record) {
+//				$event = json_decode($record->dates);
+//				$event->title = $record->title;
+//
+//				$data->events[] = $event;
+//			}
+//		}
+//
+//		return $data;
+//	}
 
 	public function get_strings() {
 		return array(

@@ -287,7 +287,7 @@ abstract class Kanban_Abstract {
 	}
 
 	public function format_csv_for_app ($value) {
-		return is_array( $value ) ? $value : array_filter( array_map( 'trim', explode( ',', $value ) ) );
+		return is_array( $value ) ? $value : array_map('intval', array_filter( array_map( 'trim', explode( ',', $value ) ) ));
 	}
 
 	public function format_bool_for_app ($value) {

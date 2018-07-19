@@ -444,6 +444,7 @@ class Kanban_Board extends Kanban_Abstract {
 					break;
 				case 'users':
 					$value = $this->format_csv_for_app($value);
+					$value[] = $row->created_user_id;
 					break;
 			}
 		}

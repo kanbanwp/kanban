@@ -771,23 +771,14 @@ function Board(record) {
 		if (_self.users == null || rebuild) {
 
 			_self.users = [];
-			for (var userId in kanban.users) {
-
-				if (_self.record.users.indexOf(userId) == -1) {
-					continue;
-				}
-
-				var user = kanban.users[userId];
-				_self.users[userId] = user;
-			}
-
 			_self.usersAsArray = [];
-			for (var userId in _self.users) {
-				var user = kanban.users[userId];
 
-				_self.usersAsArray.push(user.record());
+			for ( var userId in _self.record.users ) {
+				if ( 'undefined' !== typeof kanban.users[userId] ) {
+					_self.users[userId] = kanban.users[userId];
+					_self.usersAsArray.push(kanban.users[userId].record());
+				}
 			}
-
 		}
 
 		if (format == 'array') {

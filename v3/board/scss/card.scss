@@ -17,9 +17,9 @@
 	&.show-card-id:before {
 		bottom: $margin/3;
 		content: 'card #' attr(data-id);
-		color: rgba($color-text, .142);
+		color: rgba($color-text, .236);
 		display: inline-block;
-		font-size: 1.382em;
+		font-size: .82em;
 		font-weight: bold;
 		left: $margin/3;
 		line-height: 1;

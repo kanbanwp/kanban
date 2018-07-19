@@ -773,7 +773,9 @@ function Board(record) {
 			_self.users = [];
 			_self.usersAsArray = [];
 
-			for ( var userId in _self.record.users ) {
+			for ( var i in _self.record.users ) {
+				var userId = _self.record.users[i];
+
 				if ( 'undefined' !== typeof kanban.users[userId] ) {
 					_self.users[userId] = kanban.users[userId];
 					_self.usersAsArray.push(kanban.users[userId].record());

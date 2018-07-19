@@ -24,4 +24,8 @@
 	.selectize-dropdown {
 		z-index: 1000;
 	}
+
+	.selectize-dropdown [data-selectable] {
+		padding: $margin/5 $margin/3;
+	}
 }

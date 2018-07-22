@@ -1,7 +1,5 @@
 <script class="template" type="t/template" data-id="header">
 
-
-<!--	<div class="container">-->
 		<div class="navbar-header">
 			<button type="button" class="navbar-toggle collapsed"
 			        data-toggle="collapse"
@@ -60,7 +58,6 @@
 				</li>
 			</ul>
 		</nav><!--/.nav-collapse -->
-<!--	</div>-->
 
 
 </script>

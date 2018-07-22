@@ -39,7 +39,7 @@ function kanban_check_kanban2_to_3 () {
 
 	if ( is_admin() && wp_verify_nonce( $_GET['_wpnonce'], 'kanban3_to_2' ) ) {
 
-		$kanban_installed_ver = update_option( 'kanban_db_version', '2.5.0' );
+		$kanban_installed_ver = update_option( 'kanban_db_version', '2.5.5' );
 
 		wp_redirect(
 			add_query_arg(array(
@@ -51,7 +51,7 @@ function kanban_check_kanban2_to_3 () {
 
 	if ( is_admin() && wp_verify_nonce( $_GET['_wpnonce'], 'kanban2_to_3' ) ) {
 
-		$kanban_installed_ver = update_option( 'kanban_db_version', '3.0.0' );
+		$kanban_installed_ver = update_option( 'kanban_db_version', '3.0.7' );
 
 		wp_redirect(
 			add_query_arg(array(
@@ -67,7 +67,7 @@ add_action( 'plugins_loaded', 'kanban_check_kanban2_to_3', 10);
 
 $kanban_installed_ver = get_option( 'kanban_db_version' );
 
-if ( version_compare( $kanban_installed_ver, '3.0.0' ) >= 0 ) {
+if ( version_compare( $kanban_installed_ver, '3.0.7' ) >= 0 ) {
 	include plugin_dir_path( __FILE__ ) . '/v3/kanban.php';
 	return;
 }

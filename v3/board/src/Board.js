@@ -587,6 +587,23 @@ function Board(record) {
 			});		
 		});
 
+		//for tags filter add selectize with the available tags of the field
+		$('#modal').find('.tags-filter-value').each(function() {
+			var fieldId = $(this).attr('data-field-id');
+			var field = kanban.fields[fieldId];
+			var tags = field.options().tags;
+
+			var $selectize =  $(this).selectize({
+				valueField: 'id',
+				labelField: 'content',
+				searchField: ['content'],
+				persist: false,
+				options: tags,
+				items: [],
+				maxItems: null
+			});
+		});
+
 	}; // toggleFilterModal
 
 	this.applyFilters = function(filters){			

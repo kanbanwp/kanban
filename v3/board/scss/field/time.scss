@@ -21,6 +21,10 @@
 		}
 	}
 
+	.col:last-child {
+		margin-right: 0;
+	}
+
 	.form-control {
 		width: 4em;
 	}

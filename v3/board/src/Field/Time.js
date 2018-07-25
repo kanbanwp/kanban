@@ -285,6 +285,36 @@ function Field_Time(record) {
 		return content.hours + 'h / ' + content.estimate + 'h';
 	}; // formatContentForComment
 
+	this.applyFilter = function(fieldValue, filterElement) {
+		var fieldContent = fieldValue.field().formatContentForComment(fieldValue.content());
+		var strContent = fieldContent.trim();
+		var strFilter = this.formatContentForComment(filterElement.value);
+
+		var contentHours = Number(fieldValue.content().hours);
+		var filterHours = Number(filterElement.value.hours);
+
+		switch (filterElement.operator) {
+			//Operator: =
+			case "0":
+				return strContent.localeCompare(strFilter) === 0;
+			//Operator: !=
+			case "1":
+				return strContent.localeCompare(strFilter) !== 0;			
+			//Operator: <
+			case "2":
+				return contentHours < filterHours;
+			//Operator: <=
+			case "3":
+				return contentHours <= filterHours;
+			//Operator: >
+			case "4":
+				return contentHours > filterHours;
+			//Operator: >=
+			case "5":
+				return contentHours >= filterHours;
+		}
+	}
+
 } // Field_Time
 
 // inherit Field

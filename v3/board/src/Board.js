@@ -512,6 +512,15 @@ function Board(record) {
 					filterValue = Date.prototype.formatDate(filterValue, userAppOptions.date_view_format);
 				}
 
+				if (field.fieldType() === "time") {
+					if (filterValue == "") {
+						filterValue = {
+							hours: "",
+							estimate: ""
+						}
+					}
+				}
+
 				var storedFilter = {};
 				storedFilter.filterValue = filterValue;
 				storedFilter["filterOperator" + filterOperator] = true;
@@ -604,6 +613,7 @@ function Board(record) {
 			});
 		});
 
+
 	}; // toggleFilterModal
 
 	this.applyFilters = function(filters){			
@@ -641,12 +651,12 @@ function Board(record) {
 						filteredFieldCount++;
 						continue;
 					}
-					for(var k = 0; k < fieldValues.length; k++) {						
-						if ('undefined' === typeof kanban.fieldvalues[fieldValues[k]]) {
+					for(var k = 0; k < fieldvaluesByField.length; k++) {						
+						if ('undefined' === typeof kanban.fieldvalues[fieldvaluesByField[k]]) {
 							continue;
 						}
 
-						var fieldvalue = kanban.fieldvalues[fieldValues[k]];
+						var fieldvalue = kanban.fieldvalues[fieldvaluesByField[k]];
 
 						if ('undefined' === typeof kanban.fields[fieldvalue.fieldId()]) {
 							continue;

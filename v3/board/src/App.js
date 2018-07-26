@@ -839,7 +839,7 @@ function App(record) {
 		}
 
 		var filters = [];
-		$('#modal .field-filter').not('.field-filter-time').each(function(){
+		$('#modal .field-filter').not('.field-filter-time, .field-filter-colorpicker').each(function(){
 			var fieldId = $(this).attr('data-id');
 			var operator = $(this).find('select').find(':selected').val();
 
@@ -888,11 +888,27 @@ function App(record) {
 				fieldId, 
 				operator, 
 				value: returnValue
-			});
-
-			
+			});			
 		})
 
+		//add colorpicker filters
+		$('#modal .field-filter-colorpicker').each(function(){
+			var fieldId = $(this).attr('data-id');
+			var operator = $(this).find('select').find(':selected').val();
+			var $field = $(this);
+
+			var returnValue = "";
+			if ($field.find('button.btn-color').attr('data-color')) {
+				returnValue = $field.find('button.btn-color').attr('data-color');
+			}
+
+			filters.push({
+				fieldId, 
+				operator, 
+				value: returnValue
+			});	
+		});
+		
 
 		self.current_board().applyFilters(filters);
 

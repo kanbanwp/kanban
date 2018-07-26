@@ -613,6 +613,37 @@ function Board(record) {
 			});
 		});
 
+		//add colorpicker
+		$('#modal').find('button.btn-color').on('click', function(e){			
+			var $el = $(this);
+			
+			var $dropdown = $el.closest('.dropdown');
+			var $dropdownMenu = $('.dropdown-menu', $dropdown);
+
+			var $cp = kanban.app.getColorPicker();
+
+			$dropdownMenu.html($cp);
+
+			$('b', $cp).one(
+				'click',
+				function (e) {
+
+					var $b = $(this);
+
+					// Get the color.
+					var color = $b.attr('data-color');
+
+					// Put the color picker back.
+					$cp.appendTo('body');
+
+					// Set the button color.
+					$el.css('background', color);
+
+					$el.attr('data-color', color);					
+				}
+			);
+		})
+
 
 	}; // toggleFilterModal
 
@@ -651,6 +682,7 @@ function Board(record) {
 						filteredFieldCount++;
 						continue;
 					}
+					var fieldValueFound = false;
 					for(var k = 0; k < fieldvaluesByField.length; k++) {						
 						if ('undefined' === typeof kanban.fieldvalues[fieldvaluesByField[k]]) {
 							continue;
@@ -663,11 +695,17 @@ function Board(record) {
 						}
 
 						if (filters[l].fieldId == fieldvalue.fieldId()) {
+							fieldValueFound = true;
 							filteredFieldCount++;							
 							cardMatches = fieldvalue.field().applyFilter(fieldvalue, filters[l]);
 							break;
-						}
-						
+						}						
+					}
+
+					//filter is matched when FieldValue is empty and filter operator is "Not equal" or "Does not contain"
+					if (!fieldValueFound && [1, 7].indexOf(Number(filters[l].operator)) != -1 ){
+						filteredFieldCount++;							
+						cardMatches = true;
 					}
 				}
 				//store card id if all conditions matched

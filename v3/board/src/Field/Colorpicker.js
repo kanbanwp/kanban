@@ -179,6 +179,21 @@ function Field_Colorpicker(record) {
 		return content.formatForApp();
 	}; // formatContentForComment
 
+	this.applyFilter = function(fieldValue, filterElement) {
+		var fieldContent = fieldValue.content();
+		var strContent = fieldContent.trim();
+		var strFilter = filterElement.value;
+
+		switch (filterElement.operator) {
+			//Operator: =
+			case "0":
+				return strContent.localeCompare(strFilter) === 0;
+			//Operator: !=
+			case "1":
+				return strContent.localeCompare(strFilter) !== 0;
+		}
+	}
+
 } // Field_Colorpicker
 
 // inherit Field

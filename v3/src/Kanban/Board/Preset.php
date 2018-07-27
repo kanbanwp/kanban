@@ -162,8 +162,6 @@ class Kanban_Board_Preset {
 	public static function instance() {
 		if ( ! self::$instance ) {
 			self::$instance = new self();
-
-			add_action( 'plugins_loaded', array( self::$instance, 'maybe_load_page' ) );
 		}
 
 		return self::$instance;

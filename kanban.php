@@ -37,7 +37,7 @@ function kanban_check_kanban2_to_3 () {
 		require_once( ABSPATH . 'wp-includes/pluggable.php' );
 	}
 
-	if ( is_admin() && wp_verify_nonce( $_GET['_wpnonce'], 'kanban3_to_2' ) ) {
+	if ( is_admin() && isset($_GET['_wpnonce']) && wp_verify_nonce( $_GET['_wpnonce'], 'kanban3_to_2' ) ) {
 
 		$kanban_installed_ver = update_option( 'kanban_db_version', '2.5.5' );
 
@@ -49,7 +49,7 @@ function kanban_check_kanban2_to_3 () {
 		exit;
 	}
 
-	if ( is_admin() && wp_verify_nonce( $_GET['_wpnonce'], 'kanban2_to_3' ) ) {
+	if ( is_admin() && isset($_GET['_wpnonce']) && wp_verify_nonce( $_GET['_wpnonce'], 'kanban2_to_3' ) ) {
 
 		$kanban_installed_ver = update_option( 'kanban_db_version', '3.0.7' );
 

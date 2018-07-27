@@ -1,6 +1,6 @@
 <?php
 
-$app_data = Kanban_App::instance()->get_calendar_data();
+$app_data = Kanban_App::instance()->get_app_data();
 
 ?><!DOCTYPE html>
 <html lang="en">

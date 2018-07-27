@@ -45,57 +45,59 @@ class Kanban_Field_Date extends Kanban_Field {
 		}
 	}
 
-	public function get_results_by_fields_between_dates( $field_ids, $start, $end) {
-
-		if ( !isset($start) || DateTime::createFromFormat( 'Y-m-d', $start ) === false ) {
-			$start = Date('Y-m-01');
-		}
-
-		if ( !isset($end) || DateTime::createFromFormat( 'Y-m-d', $end ) === false ) {
-			$end = Date('Y-m-t');
-		}
-
-		global $wpdb;
-
-		$table       = Kanban_Db::instance()->prefix() . Kanban_Fieldvalue::instance()->get_table();
-		$table_field = Kanban_Db::instance()->prefix() . Kanban_Field::instance()->get_table();
-
-		if ( is_numeric( $field_ids ) || is_string( $field_ids ) ) {
-			$field_ids = array( $field_ids );
-		}
-
-		$in = sprintf(
-			" AND $table.`field_id` IN (%s) ",
-			implode( ',', $field_ids )
-		);
-
-		$rows = $wpdb->get_results(
-			"
-				SELECT $table.*,
-				$table_field.`field_type`
-				 
-				FROM $table
-				
-				LEFT JOIN $table_field
-				ON $table.`field_id` = $table_field.`id`
-				
-				WHERE 1=1
-				AND $table.is_active = 1
-				$in
-				
-				AND DATE($table.`content`) >= '$start'
-				AND DATE($table.`content`) >= '$end'
-			;",
-			OBJECT_K
-		);
-//		echo $wpdb->last_query . ' - LINE ' . __LINE__ . "\n<br />";
-//		exit;
-		foreach ( $rows as $row_id => &$row ) {
-			$row = Kanban_Fieldvalue::instance()->format_data_for_app( $row );
-		}
-
-		return $rows;
-	} // get_results_by_fields
+//	public function get_results_by_fields( $field_ids) { // , $start, $end
+//
+//		if ( !isset($start) || DateTime::createFromFormat( 'Y-m-d', $start ) === false ) {
+//			$start = Date('Y-m-01');
+//		}
+//
+//		if ( !isset($end) || DateTime::createFromFormat( 'Y-m-d', $end ) === false ) {
+//			$end = Date('Y-m-t');
+//		}
+//
+//		global $wpdb;
+//
+//		$table       = Kanban_Db::instance()->prefix() . Kanban_Fieldvalue::instance()->get_table();
+//		$table_field = Kanban_Db::instance()->prefix() . Kanban_Field::instance()->get_table();
+//
+//		if ( is_numeric( $field_ids ) || is_string( $field_ids ) ) {
+//			$field_ids = array( $field_ids );
+//		}
+//
+//		$in = sprintf(
+//			" AND $table.`field_id` IN (%s) ",
+//			implode( ',', $field_ids )
+//		);
+//
+//		$rows = $wpdb->get_results(
+//			"
+//				SELECT $table.*,
+//				$table_field.`field_type`
+//
+//				FROM $table
+//
+//				LEFT JOIN $table_field
+//				ON $table.`field_id` = $table_field.`id`
+//
+//				WHERE 1=1
+//				AND $table.is_active = 1
+//				$in
+//
+//			;",
+//			OBJECT_K
+//		);
+////		-- AND DATE($table.`content`) >= '$start'
+////		-- AND DATE($table.`content`) >= '$end'
+//
+//
+////		echo $wpdb->last_query . ' - LINE ' . __LINE__ . "\n<br />";
+////		exit;
+//		foreach ( $rows as $row_id => &$row ) {
+//			$row = Kanban_Fieldvalue::instance()->format_data_for_app( $row );
+//		}
+//
+//		return $rows;
+//	} // get_results_by_fields
 
 	public function format_options_for_db($options) {
 

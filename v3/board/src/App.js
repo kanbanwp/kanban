@@ -822,6 +822,15 @@ function App(record) {
 
 	this.applyFilters = function () {
 
+		//helper function
+		var stringToFloat = function (s) {
+			if ( isNaN(s) || s == "" ) {
+				s = 0;
+			}
+	
+			return parseFloat(s);
+		}; // stringToFloat
+
 		var self = this;
 
 		if (null === kanban.app.current_board()) {
@@ -830,7 +839,7 @@ function App(record) {
 		}
 
 		var filters = [];
-		$('#modal .field-filter').each(function(){
+		$('#modal .field-filter').not('.field-filter-time, .field-filter-colorpicker').each(function(){
 			var fieldId = $(this).attr('data-id');
 			var operator = $(this).find('select').find(':selected').val();
 
@@ -849,6 +858,57 @@ function App(record) {
 			})
 		})
 
+		//add time filters - handled separately than other filter fields because it contains two inputs
+		$('#modal .field-filter-time').each(function(){
+			var fieldId = $(this).attr('data-id');
+			var operator = $(this).find('select').find(':selected').val();
+			var $field = $(this);
+
+			var $hours = $('.form-control-hours', $field);
+			var $estimate = $('.form-control-estimate', $field);
+
+			var hours = $hours.val();
+			hours = stringToFloat(hours);
+
+			var estimate = 0;
+			if ( $estimate.length == 1 ) {
+				var estimate = $estimate.val();
+				estimate = stringToFloat(estimate);
+			}
+
+			var returnValue = {
+				hours,
+				estimate
+			}
+			if ($hours.val() == "" && $estimate.val() == "") {
+				returnValue = ""
+			}
+
+			filters.push({
+				fieldId, 
+				operator, 
+				value: returnValue
+			});			
+		})
+
+		//add colorpicker filters
+		$('#modal .field-filter-colorpicker').each(function(){
+			var fieldId = $(this).attr('data-id');
+			var operator = $(this).find('select').find(':selected').val();
+			var $field = $(this);
+
+			var returnValue = "";
+			if ($field.find('button.btn-color').attr('data-color')) {
+				returnValue = $field.find('button.btn-color').attr('data-color');
+			}
+
+			filters.push({
+				fieldId, 
+				operator, 
+				value: returnValue
+			});	
+		});
+		
 
 		self.current_board().applyFilters(filters);
 

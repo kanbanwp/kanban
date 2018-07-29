@@ -328,6 +328,65 @@ function Field_Tags(record) {
 		return toReturn.join(', ');
 	}; // formatContentForComment
 
+	this.applyFilter = function(fieldValue, filterElement) {
+		var fieldTags = fieldValue.content();
+		var filterTags = filterElement.value.split(',');		
+		
+		switch (filterElement.operator) {
+			//Operator: =
+			case "0":
+				if (fieldTags.length === filterTags.length) {
+					for (tag of fieldTags) {
+						if (filterTags.indexOf(tag) === -1) {
+							return false;
+						}
+					}
+					return true;
+				} else {
+					return false;
+				}
+
+			//Operator: !=
+			case "1":
+				if (fieldTags.length === filterTags.length) {
+					for (tag of fieldTags) {
+						if (filterTags.indexOf(tag) === -1) {
+							return true;
+						}
+					}
+					return false;
+				} else {
+					return true;
+				}
+				
+			//Operator: includes
+			case "6":
+				for (tag of filterTags) {
+					if (fieldTags.indexOf(tag) === -1) {
+						return false;
+					}
+				}
+				return true;
+			//Operator: does not include
+			case "7":
+				for (tag of filterTags) {
+					if (fieldTags.indexOf(tag) !== -1) {
+						return false;
+					}
+				}
+				return true;
+
+			//Operator: one of
+			case "8":
+				for (tag of filterTags) {
+					if (fieldTags.indexOf(tag) !== -1) {
+						return true;
+					}
+				}
+				return false;
+		}
+	}
+
 } // Field_Tags
 
 Field_Tags.prototype = Object.create(Field.prototype);

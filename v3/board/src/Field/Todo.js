@@ -198,6 +198,47 @@ function Field_Todo(record) {
 		return contentArr.join(', ');
 	}; // formatContentForComment
 
+	this.applyFilter = function(fieldValue, filterElement) {
+		var fieldContent = fieldValue.content();
+		var filterContent = filterElement.value.split(',');
+				
+		switch (filterElement.operator) {
+			//Operator: includes
+			case "6":
+				for (filterTodo of filterContent) {
+					var found = false;
+					filterTodo = $.trim(filterTodo);
+					for(fieldTodo of fieldContent) {
+						if ($.trim($(fieldTodo.content).text()) == filterTodo) {
+							found = true;
+							break;
+						}
+					}
+					if (!found) {
+						return false;
+					}
+				}
+				return true;
+				
+			//Operator: does not include
+			case "7":
+				for (filterTodo of filterContent) {
+					var found = false;
+					filterTodo = $.trim(filterTodo);
+					for(fieldTodo of fieldContent) {
+						if ($.trim($(fieldTodo.content).text()) == filterTodo) {
+							found = true;
+							break;
+						}
+					}
+					if (found) {
+						return false;
+					}
+				}
+				return true;
+		}
+	}
+
 } // Field_Todo
 
 // inherit Field

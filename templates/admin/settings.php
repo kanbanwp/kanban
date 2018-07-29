@@ -52,7 +52,7 @@
 		<?php
 		echo apply_filters( 'kanban_settings_tabs', '' );
 		?>
-		<a href="#tab-help" id="tab-help-tab" class="nav-tab"><?php echo __( 'Diagnostics', 'kanban' ); ?></a>
+		<a href="#tab-help" id="tab-help-tab" class="nav-tab"><?php echo __( 'Utilities', 'kanban' ); ?></a>
 	</h2>
 
 
@@ -505,6 +505,77 @@
 
 
 		<div class="tab" id="tab-help" style="display: none;">
+
+			<h3><?php echo __( 'Import', 'kanban' ) ?></h3>
+
+			<div id="kanban-import" style="display:none;">
+
+				<div>
+					<p style="font-weight: bold;">
+						<?php echo __( '<b style="color: red;">Caution!</b> This will overwrite all data in the Kanban database tables!', 'kanban' ) ?>
+					</p>
+
+					<ol>
+						<li>
+							<?php echo __( 'Upload a Kanban data file (file type .kanbanwp) you exported from a Kanban install.', 'kanban' ) ?>
+						</li>
+						<li>
+							<?php echo __( 'Before importing begins, your current data will be downloaded to your computer 
+							(The file will also be saved to the "kanban-exports" folder in your "uploads" folder).
+							You can use this file to restore your data at a later date.', 'kanban' ) ?>
+						</li>
+						<li>
+							<?php echo __( 'Your current Kanban data will be deleted and replaced.
+							Please do not stop the importer or your import may be interrupted and some data may not be imported.', 'kanban' ) ?>
+						</li>
+					</ol>
+
+					<hr>
+
+					<p>
+						<label>
+							<?php echo __( 'Select your Kanban data file (file type .kanbanwp):', 'kanban' ) ?><br>
+							<input type="file" name="kanban_import">
+						</label>
+					</p>
+					<p>
+						<button type="submit" class="button">
+							<?php echo __( 'Begin your import', 'kanban' ) ?>
+						</button>
+					</p>
+				</div>
+			</div>
+
+			<script>
+				function kanban_import () {
+					tb_show("<?php echo __( 'Import Kanban data', 'kanban' ) ?><br>", "#TB_inline?width=600&height=400&inlineId=kanban-import", "");
+					jQuery('#TB_ajaxContent').wrapInner('<form action="<?php echo add_query_arg(array(Kanban_Utils::get_nonce() => wp_create_nonce( 'import' ))) ?>" method="post" enctype="multipart/form-data"></form>');
+				};
+			</script>
+
+			<a href="#" onclick="kanban_import(); return false;" class="button">
+				<?php echo __( 'Import Kanban data', 'kanban' ) ?>
+			</a>
+
+			<h3><?php echo __( 'Export', 'kanban' ) ?></h3>
+
+			<p>
+				<?php echo __( 'A Kanban data file (file type .kanbanwp) will download to your computer. 
+				The file will also be saved to the "kanban-exports" folder in your "uploads" folder.
+				Uploaded files (images, documents, etc) are <b>not</b> copied. 
+				Please copy them manually.', 'kanban' ) ?>
+			</p>
+
+			<p>
+				<a href="<?php echo add_query_arg(array(Kanban_Utils::get_nonce() => wp_create_nonce( 'export' ))) ?>" class="button">
+					<?php echo __( 'Export Kanban data', 'kanban' ) ?>
+				</a>
+			</p>
+
+			<hr>
+
+			<h3><?php echo __( 'Diagnostics', 'kanban' ) ?></h3>
+
 			<p>
 				<button type="button" class="button" id="button-load-diagnostic-info">
 					<?php echo __( 'Send diagnostic info to support', 'kanban' ) ?>

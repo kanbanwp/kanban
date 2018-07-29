@@ -56,6 +56,10 @@ class Kanban_Admin {
 		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'add_deactivate_thickbox' ) );
 
 		add_action( 'wp_ajax_kanban_diagnostic_info', array( __CLASS__, 'get_diagnostic_info' ) );
+
+		add_action('admin_init', array(__CLASS__, 'download_export_file'), 10);
+		add_action('admin_init', array(__CLASS__, 'upload_import_file'), 10);
+
 	}
 
 
@@ -259,6 +263,69 @@ class Kanban_Admin {
 		include_once $template;
 	}
 
+
+	static function import_page() {
+
+		if ( !isset($_GET[Kanban_Utils::get_nonce()]) || !wp_verify_nonce($_GET[Kanban_Utils::get_nonce()], 'import-process') || !isset($_GET['filename']) || !isset($_GET['current']) || !isset($_GET['max']) ) {
+			wp_redirect(add_query_arg(
+				array(
+					'page' => 'kanban_settings',
+					'message' => urlencode(__('Something went wrong with your import. Please try again.', 'kanban'))
+				),
+				admin_url('admin.php')
+			));
+			exit;
+		}
+
+		$done = false;
+		$backup = false;
+		$percentage = round($_GET['current'] == 0 ? 1 : ($_GET['current']/$_GET['max'])*100);
+		$template = Kanban_Template::find_template( 'admin/import' );
+
+		if ( isset($_GET['backup']) ) {
+			$backup = true;
+
+			$redirect = remove_query_arg('backup');
+
+			include_once $template;
+			exit;
+		} else if ( $_GET['current'] == $_GET['max'] ) {
+			$done = true;
+
+			$redirect = add_query_arg(array(
+				'page' => 'kanban_settings'
+			), admin_url('admin.php'));
+		} else {
+
+			$redirect = add_query_arg(array(
+				'current' => $_GET['current']+1
+			));
+		}
+
+		$file = self::exports_upload_dir() . '/' . $_GET['filename'] . '-' . $_GET['current'];
+
+		if ( !is_file($file) ) {
+			wp_redirect(add_query_arg(
+				array(
+					'page' => 'kanban_settings',
+					'message' => urlencode(__('Something went wrong with your import. Please try again.', 'kanban'))
+				),
+				admin_url('admin.php')
+			));
+			exit;
+		}
+
+		include $file;
+
+		if ( $_GET['current'] == $_GET['max'] ) {
+			// Cleanup chunk files AFTER running the last one.
+			foreach (glob(self::exports_upload_dir() . '/' . $_GET['filename'] . "-*") as $chfile) {
+				unlink($chfile);
+			}
+		}
+
+		include_once $template;
+	}
 
 
 	static function render_kanbanpro_page() {
@@ -489,7 +556,107 @@ class Kanban_Admin {
 		}
 	}
 
+	public static function exports_upload_dir()
+	{
+		$upload_dir   = wp_upload_dir();
+		$user_dirname = $upload_dir['basedir'] . '/kanban-exports';
+		if (!file_exists($user_dirname)) {
+			wp_mkdir_p($user_dirname);
+		}
 
+		return $user_dirname;
+	}
+
+	public static function upload_import_file()
+	{
+		if ( !isset($_GET['page']) || !isset($_GET[Kanban_Utils::get_nonce()]) || $_GET['page'] != 'kanban_settings' || !wp_verify_nonce($_GET[Kanban_Utils::get_nonce()], 'import') ) return;
+
+		if ( !isset($_FILES) || !isset($_FILES['kanban_import']) || empty($_FILES['kanban_import']['name']) ) return;
+
+		$data = json_decode(file_get_contents($_FILES['kanban_import']['tmp_name']));
+
+		$chunk_size = isset($_GET['size']) && is_numeric($_GET['size']) ? $_GET['size'] : 20;
+
+		$chunks = array_chunk($data, $chunk_size);
+
+		$filename = $_FILES['kanban_import']['name'];
+
+		foreach ($chunks as $i => $chunk) {
+			file_put_contents(
+				self::exports_upload_dir() . '/' . $filename . '-' . ($i+1),
+				'<?php ' . "\n"
+					. 'global $wpdb;' . "\n"
+					. implode($chunk, "\n")
+			);
+		}
+
+		wp_redirect(add_query_arg(
+			array(
+				'page' => 'kanban_import',
+				Kanban_Utils::get_nonce() => wp_create_nonce('import-process'),
+				'current' => 1,
+				'max' => count($chunks),
+				'filename' => urlencode($filename),
+				'backup' => 1
+			)
+		));
+		exit;
+
+	}
+
+
+	public static function download_export_file()
+	{
+		if ( !isset($_GET['page']) || !isset($_GET[Kanban_Utils::get_nonce()]) || $_GET['page'] != 'kanban_settings' || !wp_verify_nonce($_GET[Kanban_Utils::get_nonce()], 'export') ) return;
+
+		global $wpdb;
+
+		$tables = $wpdb->get_col(
+			$wpdb->prepare (
+				'show tables like %s;',
+				$wpdb->prefix . 'kanban%'
+			)
+		);
+
+		$return = array();
+
+		//cycle through
+		foreach ($tables as $table) {
+			$return[] = sprintf('$wpdb->query("TRUNCATE TABLE {$wpdb->prefix}%s;");',
+				str_replace($wpdb->prefix, '', $table)
+			);
+;
+
+			$result = $wpdb->get_results('SELECT * FROM ' . $table, ARRAY_A);
+
+			foreach ($result as $row) {
+
+				$return[] = sprintf(
+					'$wpdb->insert(%s, %s);',
+					'$wpdb->prefix . "' . str_replace($wpdb->prefix, '', $table) . '"',
+					var_export($row, true)
+				);
+			}
+		}
+
+		$prefix = isset($_GET['prefix']) ? $_GET['prefix'] : 'export';
+
+		$filename = sprintf(
+				'kb-%s-%s.kanbanwp',
+				$prefix,
+				Date('Y-m-d_H-i-s')
+		);
+
+		file_put_contents(
+			self::exports_upload_dir() . '/' . $filename,
+			json_encode($return)
+		);
+
+		header('Content-Type: text/plain');
+		header('Content-Disposition: attachment; filename="' . $filename . '"');
+
+		exit(json_encode($return));
+	}
 
 	static function ajax_register_user() {
 		if ( ! wp_verify_nonce( $_POST[ Kanban_Utils::get_nonce() ], 'kanban-new-user' ) ) {
@@ -639,6 +806,15 @@ class Kanban_Admin {
 			'manage_options',
 			'kanban_v3',
 			array( __CLASS__, 'v3_page' )
+		);
+
+		add_submenu_page(
+			null,
+			__( 'Import' ),
+			__( 'Import' ),
+			'manage_options',
+			'kanban_import',
+			array( __CLASS__, 'import_page' )
 		);
 
 	} // admin_menu

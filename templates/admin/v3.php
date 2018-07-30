@@ -80,7 +80,7 @@
 	</p>
 
 	<p style="margin-top: 90px; text-align: center;">
-		<a href="<?php print wp_nonce_url(admin_url('options.php?page=kanban'), 'kanban2_to_3');?>"
+		<a href="<?php print add_query_arg(array('page'=> 'kanban', Kanban_Utils::get_nonce()=>wp_create_nonce('kanban2_to_3')), admin_url('admin.php'));?>"
 		   style="position: relative"
 		   class="button button-primary">
 			Switch to version 3

@@ -3,7 +3,8 @@
 	<?php $h2 = 'Kanban Boards for WordPress'; include Kanban::instance()->settings()->path . 'admin/templates/header.php'; ?>
 
 	<p style="text-align: center;">
-		<a href="<?php print wp_nonce_url(admin_url('options.php?page=kanban'), 'kanban3_to_2');?>" class="button">
+		<a href="<?php print add_query_arg(array('page'=> 'kanban', 'kanban_nonce'=>wp_create_nonce('kanban3_to_2')), admin_url('admin.php'));?>"
+		   class="button">
 			Switch back version 2
 		</a>
 	</p>

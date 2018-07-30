@@ -46,7 +46,7 @@ class Kanban_Db {
 	static function check_for_updates() {
 
 		// See if we're out of sync.
-		if ( version_compare( self::installed_ver(), Kanban::instance()->settings()->plugin_data['Version'] ) < 0 ) {
+		if ( version_compare( self::installed_ver(), Kanban::instance()->settings()->plugin_data['Version'] ) == 0 ) {
 			return false;
 		}
 

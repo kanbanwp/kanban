@@ -541,10 +541,11 @@ class Kanban_Admin {
 				'support@kanbanwp.com',
 				stripcslashes( sprintf( '[kbwp] %s', $_POST[ 'request' ] ) ),
 				stripcslashes( sprintf(
-					"%s\n\n%s\n%s\n%s",
+					"%s\n\n%s\n%s v%s\n%s",
 					stripcslashes( $_POST[ 'message' ] ),
 					site_url(),
 					Kanban_Template::get_uri(),
+					Kanban_Db::installed_ver(),
 					$_SERVER[ 'HTTP_USER_AGENT' ]
 				) ),
 				sprintf( 'From: "%s" <%s>', get_option( 'blogname' ), $_POST[ 'from' ] )

@@ -52,7 +52,7 @@ Board_Modal = function (board) {
 				board_id: self.board().id(),
 				lane: lane.record(),
 				optionsLane: optionsLane,
-				colors: kanban.app.colors
+				colors: kanban.colors
 			});
 		}
 
@@ -430,7 +430,7 @@ Board_Modal = function (board) {
 
 			var laneModalHtml = kanban.templates['board-modal-lane'].render({
 				lane: lane.record(),
-				colors: kanban.app.colors
+				colors: kanban.colors
 			});
 
 			$(laneModalHtml)

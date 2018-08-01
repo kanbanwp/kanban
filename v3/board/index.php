@@ -54,6 +54,8 @@ do_action(
 	var kanban = {};
 
 	kanban.templates = {};
+	kanban.emojis = [];
+	kanban.colors = [];
 	kanban.app = null;
 	kanban.users = {};
 	kanban.usergroups = {};

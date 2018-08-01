@@ -118,6 +118,19 @@ $(function () {
 	window.addEventListener('online',  kanban.app.hideOfflineNotice);
 	window.addEventListener('offline', kanban.app.showOfflineNotice);
 
+	// Get colors.
+	$.ajax({
+		method: "POST",
+		url: kanban.ajax.url(),
+		dataType: "script",
+		data: {
+			kanban_nonce: kanban.ajax.nonce(),
+			type: 'template',
+			action: 'load',
+			path: 'board/inc/colors'
+		}
+	});
+
 	$( "body" ).on(
 		'keydown',
 		function ( e ) {

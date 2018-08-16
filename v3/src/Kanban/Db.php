@@ -94,12 +94,15 @@ class Kanban_Db {
 //			);
 //		}
 
-		// save db version to avoid updates
-		update_option(
-			'kanban_db_version',
-			Kanban::instance()->settings()->plugin_data['Version'],
-			true
-		);
+		// save db version to avoid updates.
+		// @todo Only updates if it's less than v3. Remove on release.
+		if ( version_compare( self::installed_ver(), '3.0.0' ) == -1 ) {
+			update_option(
+				'kanban_db_version',
+				Kanban::instance()->settings()->plugin_data['Version'],
+				true
+			);
+		}
 	}
 
 

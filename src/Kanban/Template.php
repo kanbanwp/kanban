@@ -57,8 +57,15 @@ class Kanban_Template
 		// get my id, and allowed id's
 		$current_user_id = get_current_user_id();
 
-		// $users_field_name = sprintf( '%s_user', Kanban::get_instance()->settings->basename );
-		$allowed_user_ids = array_keys( Kanban_User::get_allowed_users() );
+		$boards = Kanban_Board::get_all();
+
+		$allowed_user_ids = [];
+		foreach ($boards as $board_id => $board) {
+			$allowed_user_ids = array_merge(
+				$allowed_user_ids,
+				array_keys( Kanban_User::get_allowed_users($board_id) )
+			);
+		}
 
 		// return if I'm allowed on *any* board
 		if ( in_array( $current_user_id, $allowed_user_ids ) ) {

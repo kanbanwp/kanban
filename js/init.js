@@ -645,11 +645,12 @@ $( function () {
 
 
 	// Check for updates by other users every 5 seconds.
-	setInterval(
-		kanban.updates_task,
-		boards[current_board_id].record.settings().updates_check_interval_sec * 1000
-	);
-
+	if ( Board.prototype.get_current_board().record.settings().disable_sync_notifications != 1 ) {
+		setInterval(
+			kanban.updates_task,
+			boards[current_board_id].record.settings().updates_check_interval_sec * 1000
+		);
+	}
 
 
 } );

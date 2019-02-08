@@ -8,7 +8,7 @@
 		</a>
 	</h1>
 
-	<?php include __DIR__ . '/notice-v3.php'?>
+	<?php // include __DIR__ . '/notice-v3.php'?>
 
 
 <?php if ( isset( $_GET['alert'] ) ) : ?>

@@ -18,7 +18,7 @@
 		<?php echo sprintf( __( 'About %s', 'kanban' ), Kanban::get_instance()->settings->pretty_name ); ?>
 	</h1>
 
-	<?php include __DIR__ . '/notice-v3.php'?>
+	<?php // include __DIR__ . '/notice-v3.php'?>
 
 	<?php if ( isset( $_GET[ 'message' ] ) ) : ?>
 		<div class="updated">

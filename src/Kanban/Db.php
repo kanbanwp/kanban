@@ -181,10 +181,10 @@ abstract class Kanban_Db
 					break;
 
 				case 'float':
-					if ( ! is_numeric( $value ) ) { continue; }
+					if ( ! is_numeric( $value ) ) { continue 2; }
 
 					$value = floatval( $value );
-					if ( empty( $value ) ) { continue; }
+					if ( empty( $value ) ) { continue 2; }
 
 					$good_data[ $key ] = $value;
 					$format[] = '%f';
@@ -192,11 +192,11 @@ abstract class Kanban_Db
 					break;
 
 				case 'int':
-					if ( ! is_numeric( $value ) ) { continue; }
+					if ( ! is_numeric( $value ) ) { continue 2; }
 
 					$value = intval( $value );
 
-					if ( ! is_int( $value ) ) { continue; }
+					if ( ! is_int( $value ) ) { continue 2; }
 
 					$good_data[ $key ] = $value;
 					$format[] = '%d';

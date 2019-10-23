@@ -18,7 +18,7 @@
     "bootstrap": "^3.3.7",
     "dragula": "^3.7.2",
     "dropzone": "^5.3.0",
-    "jquery": "^1.12.4",
+    "jquery": "^3.4.1",
     "medium-editor": "^5.23.3",
     "notifyjs": "^3.0.0",
     "selectize": "^0.12.4",

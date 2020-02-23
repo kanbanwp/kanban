@@ -933,27 +933,20 @@ Task.prototype.update_status = function ( status_id ) {
 
 
 
-Task.prototype.update_position = function ( position, do_comment ) {
+Task.prototype.update_position = function ( position, do_comment, do_save ) {
 	if ( !this.board().current_user().has_cap( 'write' ) ) {
 		return false;
 	}
-
-
-
+	
 	if ( position == this.record.position ) {
 		return false;
 	}
 
-
-
 	// make sure it's a bool
 	do_comment = do_comment === 'true' || do_comment === true ? true : false;
-
-
+	do_save = do_save === 'false' || do_save === false ? false : true;
 
 	position = parseInt( position );
-
-
 
 	var comment = null;
 
@@ -974,10 +967,11 @@ Task.prototype.update_position = function ( position, do_comment ) {
 		}
 	}
 
-
-
 	this.record.position = position;
-	this.save( comment, false );
+
+	if ( do_save ) {
+		this.save( comment, false );
+	}
 }
 
 

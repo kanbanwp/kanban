@@ -662,6 +662,7 @@ Board.prototype.update_card_order = function () {
 Board.prototype.update_task_positions = function ( $el_moved ) {
 	var self = this;
 
+	var save = {};
 	$( '.col-tasks', this.$el ).each( function () {
 		var $col = $( this );
 		$( '.task', $col ).each( function ( i ) {
@@ -674,20 +675,33 @@ Board.prototype.update_task_positions = function ( $el_moved ) {
 
 			var task_id = $task.attr( 'data-id' );
 			var task = self.record.tasks[task_id];
+			var position = ("00000" + i).slice( -5 );
 
-			// Stagger the requests.
-			setTimeout(function () {
-				task.update_position( ("00000" + i).slice( -5 ), do_comment );
-				},
-				i * 100
-			);
+			if (parseInt(position) === parseInt(task.record.position)) {
+				return;
+			}
+
+			save[task_id] = position;
+
+			task.update_position( position, do_comment, false ); // don't save.
 		} );
 	} );
 
-	// growl('Order updated');
+	// Build single call.
+	var task_data = {
+		tasks: save,
+		action: 'save_task_positions',
+		kanban_nonce: $( '#kanban_nonce' ).val()
+	};
+
+	// Update all task positions.
+	$.ajax( {
+		method: "POST",
+		url: kanban.ajaxurl,
+		data: task_data
+	} );
+
 }; // updates_status_counts
-
-
 
 Board.prototype.match_col_h = function () {
 	$( '.col-tasks', this.$el ).matchHeight( {

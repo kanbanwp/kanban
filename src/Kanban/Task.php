@@ -69,6 +69,7 @@ class Kanban_Task extends Kanban_Db {
 	 * Set up this class.
 	 */
 	static function init() {
+		add_action( sprintf( 'wp_ajax_save_%s_positions', self::$slug ), array( __CLASS__, 'ajax_save_task_positions' ) );
 		add_action( sprintf( 'wp_ajax_save_%s', self::$slug ), array( __CLASS__, 'ajax_save' ) );
 		add_action( sprintf( 'wp_ajax_copy_%s', self::$slug ), array( __CLASS__, 'ajax_copy' ) );
 		add_action( sprintf( 'wp_ajax_delete_%s', self::$slug ), array( __CLASS__, 'ajax_delete' ) );
@@ -105,6 +106,48 @@ class Kanban_Task extends Kanban_Db {
 		);
 	}
 
+
+	static function ajax_save_task_positions() {
+		if ( ! isset( $_POST[ Kanban_Utils::get_nonce() ] ) || ! wp_verify_nonce( $_POST[ Kanban_Utils::get_nonce() ], 'kanban-save' ) || ! is_user_logged_in() ) {
+			wp_send_json_error();
+		}
+
+		if ( ! Kanban_User::current_user_has_cap( 'write' ) ) {
+			wp_send_json_error();
+		}
+
+		global $wpdb;
+		$table = static::table_name();
+
+		$when_arr = array();
+		$values = array();
+
+		foreach ($_POST['tasks'] as $task_id => $position) {
+			if ( !filter_var($task_id, FILTER_VALIDATE_INT) || !filter_var($task_id, FILTER_VALIDATE_INT) ) {
+				continue;
+			}
+
+			$when_arr[] = ' WHEN id = %d THEN %s ';
+			$values[] = (int) $task_id;
+			$values[] = (int) $position;
+		}
+
+		$when = implode("\n", $when_arr);
+
+		$sql = $wpdb->prepare(
+			"
+			UPDATE $table
+			SET position = CASE 
+			$when 
+			ELSE position END;
+			",
+			$values
+		);
+
+		$wpdb->query( $sql );
+
+		wp_send_json_success();
+	}
 
 
 	/**

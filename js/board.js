@@ -235,7 +235,7 @@ Board.prototype.dom = function () {
 			if ( wip_task_limit > 0 ) {
 				var status_task_count = $( '#status-' + status_id_new + ' .status-task-count' ).text();
 
-				if ( status_task_count >= wip_task_limit ) {
+				if ( parseInt(status_task_count) >= parseInt(wip_task_limit) ) {
 					$( ui.sender ).sortable( 'cancel' );
 					notify( kanban.text.status_wip_task_limit_error, 'warning' );
 					return false;
@@ -401,7 +401,7 @@ Board.prototype.dom = function () {
 
 			// if default estimate is set
 			if ( typeof self.record.settings().default_estimate !== 'undefined' ) {
-				// and default estimate exists 
+				// and default estimate exists
 				if ( typeof self.record.estimate_records()[self.record.settings().default_estimate] !== 'undefined' ) {
 					task_data.task.estimate_id = self.record.settings().default_estimate;
 				}

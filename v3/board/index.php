@@ -24,6 +24,33 @@ $app_data = Kanban_App::instance()->get_app_data();
 </head>
 <body>
 
+<div class="v3-warning modal" tabindex="-1" role="dialog" style="display: block;
+    background-color: rgba(0, 0, 0, .5);
+">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">Warning!</h5>
+			</div>
+			<div class="modal-body">
+				<p>
+					Thank you for trying out this beta version of the Kanban for WordPress plugin.
+					We've been hard at work on a new version, so it's time for this version to go away.
+				</p>
+				<p>
+					If you have data here, please move your data back to the live version as soon as possible.
+					This beta version will be removed March 1, 2020.
+					If you have any questions, please contact support at https://KanbanWP.com/support.
+				</p>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" onclick="hide_warnings()">Close</button>
+			</div>
+		</div>
+	</div>
+
+</div>
+
 
 <div id="wrapper-app">
 
@@ -75,6 +102,14 @@ do_action(
 	};
 	kanban.strings = <?php echo json_encode( Kanban_App::instance()->get_strings() ) ?>;
 	kanban.new_data = <?php echo json_encode( isset( $app_data ) ? $app_data : array() ) ?>;
+
+	function hide_warnings () {
+		var appBanners = document.getElementsByClassName('v3-warning');
+
+		for (var i = 0; i < appBanners.length; i ++) {
+			appBanners[i].parentNode.removeChild(appBanners[i]);
+		}
+	}
 </script>
 
 

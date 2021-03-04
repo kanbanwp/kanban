@@ -775,7 +775,10 @@ Task.prototype.save = function ( comment, do_growl ) {
 			return false;
 		}
 
-		self.board().update_UI();
+		var is_focused = $(':focus', this.$el).length > 0;
+		if ( !is_focused ) {
+			self.board().update_UI();
+		}
 	} );
 
 }; // save

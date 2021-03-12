@@ -38,12 +38,6 @@ kanban.text = <?php echo json_encode( apply_filters( 'kanban_board_text', $wp_qu
 kanban.templates = {};
 var window_w, window_h, screen_size, scrollbar_w;
 kanban.is_dragging = false;
-//kanban.current_user = {
-//	has_cap: function()
-//	{
-//		return false;
-//	}
-//};
 
 kanban.url_params = {
 	board_id: <?php echo $wp_query->query_vars['kanban']->current_board_id ?>

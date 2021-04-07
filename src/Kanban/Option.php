@@ -357,12 +357,7 @@ class Kanban_Option extends Kanban_Db {
 		}
 
 		wp_enqueue_style( 'wp-color-picker' );
-
-		wp_enqueue_script(
-			'jquery-ui',
-			'//code.jquery.com/ui/1.11.4/jquery-ui.js',
-			array()
-		);
+		wp_enqueue_style( 'jquery-ui-sortable' );
 
 		wp_enqueue_script(
 			't',
@@ -381,7 +376,7 @@ class Kanban_Option extends Kanban_Db {
 		wp_register_script(
 			'kanban-settings',
 			sprintf( '%s/js/admin-settings.min.js', Kanban::get_instance()->settings->uri ),
-			array( 'wp-color-picker' ),
+			array( 'wp-color-picker', 'jquery-ui-sortable' ),
 			false,
 			true
 		);

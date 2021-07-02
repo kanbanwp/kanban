@@ -337,6 +337,11 @@ body.board-view-compact .task:hover .row-task-actions,
 body.board-view-compact .task:hover .task-progress {
   display: block; }
 
+body.board-view-restrict-visibility #btn-restrict-visibility .glyphicon{
+display: inline-block;
+}
+
+
 body.board-view-all-cols .col-tasks-sidebar {
   display: none; }
 body.board-view-all-cols .board,

@@ -45,6 +45,13 @@
 							</a>
 						</li>
 
+						<li class="hidden-xs">
+							<a href="#" class="btn-view-toggle" id="btn-restrict-visibility">
+								<span class="glyphicon glyphicon-ok"></span>
+								<?php echo __( 'View only my cards', 'kanban' ) ?>
+							</a>
+						</li>
+
 						<li>
 							<a href="#" class="btn-view-toggle" id="btn-view-compact" title="shift + C">
 								<span class="glyphicon glyphicon-ok"></span>

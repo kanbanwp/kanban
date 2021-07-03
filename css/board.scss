@@ -342,19 +342,11 @@ sub {
 		}
 
 		@media screen and (min-width: $screen-sm-min) {
-			> .btn {
-				display: none;
-			}
-
 			&:hover,
 			&:active,
 			&:focus {
 				background: white;
 				border: 1px solid #EEE;
-
-				> .btn {
-					display: block;
-				}
 			}
 		}
 
@@ -560,6 +552,10 @@ body.board-view-all-cols {
 		width: 100% !important;
 	}
 
+}
+
+body.board-view-restrict-visibility #btn-restrict-visibility .glyphicon{
+	display: inline-block;
 }
 
 .col-tasks-sidebar {

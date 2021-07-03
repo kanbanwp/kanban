@@ -31,6 +31,7 @@ var kanban = {};
 kanban.ajaxurl = '<?php echo admin_url('admin-ajax.php'); ?>';
 kanban.favicon = '<?php echo Kanban::get_instance()->settings->uri ?>img/notify-favicon-250.png';
 
+kanban.current_user_id = '<?php echo get_current_user_id(); ?>';
 
 kanban.alert = "<?php echo esc_js($wp_query->query_vars['kanban']->alert); ?>";
 kanban.text = <?php echo json_encode( apply_filters( 'kanban_board_text', $wp_query->query_vars['kanban']->text) ); ?>;

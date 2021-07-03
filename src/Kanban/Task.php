@@ -584,7 +584,8 @@ class Kanban_Task extends Kanban_Db {
 
 			self::$records_by_board = apply_filters(
 				'kanban_task_get_all_records_by_board',
-				self::$records_by_board
+				self::$records_by_board,
+				$board_id
 			);
 		}
 

@@ -9,8 +9,6 @@ $( function () {
 		}
 	} );
 
-
-
 	//set scrollbar width
 	var parent = $( '<div style="width:50px;height:50px;overflow:auto"><div></div></div>' ).appendTo( 'body' );
 	var child = parent.children();
@@ -36,8 +34,6 @@ $( function () {
 		'/board/tasks/done/',
 		function ( e, board ) {
 			// populated_board_count++;
-
-
 			// Current board
 			if ( board.record.id() == current_board_id ) {
 
@@ -58,6 +54,11 @@ $( function () {
 					boards[current_board_id].record.filters = kanban.url_params['filters'];
 					boards[current_board_id].apply_filters();
 				}
+			}
+
+			if( $('body').hasClass('board-view-restrict-visibility') ) {
+				$('.board.active .task').hide();
+				$('.board.active .task[data-user_id-assigned="' + kanban.current_user_id + '"]').show();
 			}
 
 		}
@@ -185,8 +186,6 @@ $( function () {
 		}
 	);
 
-
-
 	$( '.btn-filter-reset' )
 	.on(
 		'click',
@@ -242,7 +241,26 @@ $( function () {
 		}
 	);
 
+	$( '#btn-restrict-visibility' ).on(
+		'click',
+		function () {
+			$( 'body' )
+			.addClass( 'board-view-set' )
+			.toggleClass( 'board-view-restrict-visibility' );
+			cookie_views();
 
+			// If body has the class now, hide cards that don't belong to the current user
+			if( $('body').hasClass('board-view-restrict-visibility') ) {
+				$('.board.active .task').hide();
+				$('.board.active .task[data-user_id-assigned="' + kanban.current_user_id + '"]').show();
+			} else {
+				$('.board.active .task').show();
+			}
+			// If body doesn't have the class now, show all cards
+			
+			return false;
+		}
+	);
 
 	$( '#btn-view-fullscreen' ).on(
 		'click',

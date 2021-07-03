@@ -1,3 +1,16 @@
+<?php
+
+	$settings = Kanban_Option::get_all();
+	$settings = $settings[$board_id];
+
+	$current_user = wp_get_current_user();
+
+	$display_visibility_toggle = false;
+
+	if( 'valid' == get_site_option( 'kanbanpro_license_status' ) && ( in_array( 'administrator', $current_user->roles ) || '1' === $settings['cards_fully_visible'] ) ) {
+		$display_visibility_toggle = true;
+	}
+?>
 <footer id="page-footer" class="navbar">
 	<div class="container">
 		<div class="navbar-header">
@@ -44,6 +57,15 @@
 								<?php echo __( 'Show all columns', 'kanban' ) ?>
 							</a>
 						</li>
+
+						<?php if( $display_visibility_toggle ) : ?>
+							<li class="hidden-xs">
+								<a href="#" class="btn-view-toggle" id="btn-restrict-visibility">
+									<span class="glyphicon glyphicon-ok"></span>
+									<?php echo __( 'View only my cards', 'kanban' ) ?>
+								</a>
+							</li>
+						<?php endif; ?>
 
 						<li>
 							<a href="#" class="btn-view-toggle" id="btn-view-compact" title="shift + C">

@@ -2,7 +2,7 @@
 
 Contributors: 		gelform, kkoppenhaver
 Tags:				kanban, boards, agile, scrum, project management, tasks, productivity, Trello, GTD, manage, planning, todo
-Version:            2.5.19
+Version:            2.5.20
 Release Date:       April 7, 2021
 Tested up to:	    5.7.1
 Requires at least:  4.0

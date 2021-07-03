@@ -342,19 +342,11 @@ sub {
 		}
 
 		@media screen and (min-width: $screen-sm-min) {
-			> .btn {
-				display: none;
-			}
-
 			&:hover,
 			&:active,
 			&:focus {
 				background: white;
 				border: 1px solid #EEE;
-
-				> .btn {
-					display: block;
-				}
 			}
 		}
 

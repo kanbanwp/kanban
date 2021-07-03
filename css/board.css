@@ -216,11 +216,6 @@ sub {
       .task .task-menu .dropdown:hover, .task .task-menu .dropdown.open {
         opacity: 1; }
     @media screen and (min-width: 768px) {
-      .task .task-menu > .btn {
-        display: none; }
-      .task .task-menu:hover, .task .task-menu:active, .task .task-menu:focus {
-        background: white;
-        border: 1px solid #EEE; }
         .task .task-menu:hover > .btn, .task .task-menu:active > .btn, .task .task-menu:focus > .btn {
           display: block; } }
     @media screen and (max-width: 767px) {

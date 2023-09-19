@@ -4,7 +4,7 @@ Contributors: 		kkoppenhaver
 Tags:				kanban, boards, agile, scrum, project management, tasks, productivity, Trello, GTD, manage, planning, todo
 Version:            2.5.21
 Release Date:       April 7, 2021
-Tested up to:	    6.1
+Tested up to:	    6.3
 Requires at least:  4.0
 Requires PHP:       5.3
 License: 			GPLv2 or later

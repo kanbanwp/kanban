@@ -1,6 +1,6 @@
 === Kanban Boards for WordPress ===
 
-Contributors: 		gelform, kkoppenhaver
+Contributors: 		kkoppenhaver
 Tags:				kanban, boards, agile, scrum, project management, tasks, productivity, Trello, GTD, manage, planning, todo
 Version:            2.5.21
 Release Date:       April 7, 2021
